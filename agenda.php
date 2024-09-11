@@ -89,19 +89,9 @@ if (!isset($_SESSION['nombre_usuario'])) {
                                                     <span class="input-group-text"><i class="fas fa-user"></i></span>
                                                 </div>
                                                 <input type="hidden" id="id_cliente2" value="0">
-                                                <input type="text" class="form-control" id="cliente" list="clientes" placeholder="Nombre del Cliente" autocomplete="off" onchange="buscar_cliente( this )" required>
+                                                <input type="text" class="form-control" id="cliente" list="clientes" placeholder="Nombre del Cliente" autocomplete="off" onchange="buscar_cliente( this )" onfocus="actualizar_lista_clientes()" required>
                                                 <datalist id="clientes">
-                                                    <?php
-                                                    $sql = "SELECT id_cliente, nombre_social FROM emisores_clientes;";
-                                                    $res = mysqli_query($conexion, $sql);
-                                                    if (mysqli_num_rows($res) == 0) {
-                                                        echo "<option value='No existen colonias' data-id='0'></option>";
-                                                    } else {
-                                                        while ($cliente = mysqli_fetch_array($res)) {
-                                                            echo "<option value='" . $cliente['nombre_social'] . "'></option>";
-                                                        }
-                                                    }
-                                                    ?>
+
                                                 </datalist>
                                             </div>
                                         </div>
@@ -263,117 +253,7 @@ if (!isset($_SESSION['nombre_usuario'])) {
 
 
 
-            <!-- Modal Nueva Cita -->
-            <div class="modal fade" id="modal_nueva_cita" role="dialog" style="overflow: scroll;">
-                <div class="modal-dialog modal-lg">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h4 class="modal-title text-success">Registrar Nueva Cita</h4>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <form id="form_nueva_cita">
-                                <div class="row">
-                                    <!-- Cliente -->
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label for="cliente">Cliente</label>
-                                            <div class="d-flex">
-                                                <input type="text" class="form-control" id="cliente_form" list="clientes" placeholder="Nombre del Cliente" autocomplete="off" onchange="buscar_cliente(this)" required>
-                                                <button type="button" class="btn btn-info ml-2">+</button>
-                                            </div>
-                                            <datalist id="clientes">
-                                                <?php
-                                                $sql = "SELECT id_cliente, nombre_social FROM emisores_clientes;";
-                                                $res = mysqli_query($conexion, $sql);
-                                                if (mysqli_num_rows($res) == 0) {
-                                                    echo "<option value='No existen clientes'></option>";
-                                                } else {
-                                                    while ($cliente = mysqli_fetch_array($res)) {
-                                                        echo "<option value='" . $cliente['nombre_social'] . "'></option>";
-                                                    }
-                                                }
-                                                ?>
-                                            </datalist>
-                                        </div>
-                                    </div>
-                                    <!-- Fecha y Hora de Cita -->
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label for="fecha_hora_cita">Fecha y Hora de Cita</label>
-                                            <input type="datetime-local" class="form-control" id="fecha_hora_cita_form" required onchange="cargar_datos();">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <!-- Terapeuta -->
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label for="terapeuta">Terapeuta</label>
-                                            <div class="d-flex">
-                                                <select class="form-control" id="terapeuta_form" required>
-                                                    <option value="" disabled selected>Selecciona Terapeuta</option>
-                                                    <?php
 
-                                                    ?>
-                                                </select>
-                                                <button type="button" class="btn btn-info ml-2">+</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- Tipo de Servicio -->
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label for="tipo_servicio">Tipo de Servicio</label>
-                                            <select class="form-control" id="tipo_servicio_form" onchange="tipo_servicio();" required>
-                                                <option value="" disabled selected>Selecciona Tipo de Servicio</option>
-                                                <option value="1">Consultorio</option>
-                                                <option value="2">Domicilio</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <!-- Tipo de Cita -->
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label for="tipo_cita">Tipo de Cita</label>
-                                            <select class="form-control" id="tipo_cita_form" required>
-                                                <option value="" disabled selected>Selecciona Tipo de Cita</option>
-                                                <option value="1">Seguimiento</option>
-                                                <option value="2">Primera vez</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <!-- Consultorio -->
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label for="consultorio">Consultorio</label>
-                                            <div class="d-flex">
-                                                <select class="form-control" id="consultorio_form" required>
-
-                                                </select>
-                                                <button type="button" class="btn btn-info ml-2">+</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- Observaciones -->
-                                <div class="form-group">
-                                    <label for="observaciones">Observaciones</label>
-                                    <textarea class="form-control" id="observaciones_form" rows="4" placeholder="Escribe aquí tus observaciones" required></textarea>
-                                </div>
-                            </form>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
-                            <button type="button" class="btn btn-primary" onclick="gestionar_cita()">Guardar</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
             <!--Modales-->
             <?php 

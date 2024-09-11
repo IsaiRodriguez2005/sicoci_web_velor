@@ -73,7 +73,7 @@ function gestionar_cita() {
 
         return;
     }
-    
+
     var tipo_cita = $("#tipo_cita_form").val();
     if (!tipo_cita) {
 
@@ -209,7 +209,7 @@ function cargar_datos() {
         url: "componentes/catalogos/cargar_consultorios.php",
         type: 'POST',
         dataType: 'html',
-        data: {'fecha_hora': fecha_hora_cita, },
+        data: { 'fecha_hora': fecha_hora_cita, },
     }).done(function (resultado) {
         $("#consultorio_form").html(resultado);
     })
@@ -227,24 +227,36 @@ function tipo_servicio() {
         $("#consultorio_form").prop('disabled', false);
     }
 
+}                                      
+
+function actualizar_lista_clientes() 
+{
+
+    $.ajax({
+        cache: false,
+
+        url: "componentes/catalogos/cargar_list_clientes.php",
+        type: 'POST',
+        dataType: 'html',
+    }).done(function (resultado) {
+        $("#clientes").html(resultado);
+    })
+
 }
 
-function mostrar_historial_citas()
-{
-    var id_cliente  = $("#id_cliente2").val();
-    var estatus  = $("#estatus").val();
+function mostrar_historial_citas() {
+    var id_cliente = $("#id_cliente2").val();
+    var estatus = $("#estatus").val();
     var terapeuta = $("#terapeutas").val();
     var consultorio = $("#consultorio").val();
     var finicial = $("#fecha_inicial").val();
     var ffinal = $("#fecha_final").val();
 
-    if(finicial.length == 0)
-    {
+    if (finicial.length == 0) {
         $("#fecha_inicial").addClass('is-invalid');
         return false;
     }
-    if(ffinal.length == 0)
-    {
+    if (ffinal.length == 0) {
         $("#fecha_final").addClass('is-invalid');
         return false;
     }
@@ -260,17 +272,16 @@ function mostrar_historial_citas()
 
     $.ajax({
         cache: false,
-        url : 'componentes/citas/historial_citas.php',
-        type : 'POST',
-        dataType : 'html',
-        data : { 'id_cliente': id_cliente, 'estatus': estatus, 'id_terapeuta': terapeuta, 'id_consultorio': consultorio, 'fecha_inicial': finicial, 'fecha_final' : ffinal},
-    }).done(function(resultado){
+        url: 'componentes/citas/historial_citas.php',
+        type: 'POST',
+        dataType: 'html',
+        data: { 'id_cliente': id_cliente, 'estatus': estatus, 'id_terapeuta': terapeuta, 'id_consultorio': consultorio, 'fecha_inicial': finicial, 'fecha_final': ffinal },
+    }).done(function (resultado) {
         $("#historial_citas").html(resultado);
         Swal.close();
-    }); 
+    });
 }
-function editar_cita(folio_cita, nombre_cliente, id_consultorio, id_terapeuta, tipo_servicio, tipo_cita, fecha_agenda, observaciones)
-{
+function editar_cita(folio_cita, nombre_cliente, id_consultorio, id_terapeuta, tipo_servicio, tipo_cita, fecha_agenda, observaciones) {
 
     $("#tipo_gestion").val(folio_cita);
     $("#cliente_form").val(nombre_cliente);
@@ -282,18 +293,26 @@ function editar_cita(folio_cita, nombre_cliente, id_consultorio, id_terapeuta, t
     $("#observaciones_form").val(observaciones);
 
     $("#modal_nueva_cita").modal("show");
+}
 
-    /* 
-    $.ajax({
-        cache: false,
-        url : 'componentes/citas/mostrar_citas.php',
-        type : 'POST',
-        dataType : 'html',
-        data : { 'id_folio': folio_cita},
-    }).done(function(resultado){
-        $("#e_ffactura").html(serie + " " + folio_factura);
-        $("#ver_factura").html(resultado);
-        $("#editar_factura").modal("show");
-    });
-    */
+
+
+
+// Peticiones 
+
+function abrir_modal(modal1, modal2) {
+    //ocultamos el modal de agendar cita
+    $('#' + modal1).modal('hide');
+
+    // abrimos el modal del cliente
+    $("#" + modal2).modal("show");
+}
+
+function cerrar_modal(modal1, modal2)
+{
+    //ocultamos el modal
+    $('#' + modal1).modal('hide');
+
+    // abrimos el modal
+    $("#" + modal2).modal("show");
 }

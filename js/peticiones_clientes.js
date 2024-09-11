@@ -172,8 +172,9 @@ function activar_forma()
     }
 }
 
-function gestionar_cliente()
+function gestionar_cliente( redireccion, modal_agenda = '', modal_cliente = '' )
 {
+
     var tipo_gestion = $('#tipo_gestion').val();
     var fiscal = "";
     var no_fisico = $('input:radio[id=no_fisico]:checked').val()
@@ -408,7 +409,13 @@ function gestionar_cliente()
                 showConfirmButton: false,
                 timer: 2000
             }).then(function() {
-                window.location = 'clientes.php';
+                if(redireccion){
+                    window.location = redireccion ;
+                }
+                if(modal_agenda && modal_cliente){
+                    $('#' + modal_cliente).modal('hide');
+                    $("#" + modal_agenda).modal("show");
+                }
             });
         }
         else

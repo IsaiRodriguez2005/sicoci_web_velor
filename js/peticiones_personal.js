@@ -1,47 +1,44 @@
-function buscar_cp()
-{
+function buscar_cp() {
     var codigo = $("#codigo_postal").val();
     var rfc = $("#rfc").val();
-    if(codigo.length == 5 && rfc != "XEXX010101000")
-    {
+    if (codigo.length == 5 && rfc != "XEXX010101000") {
         $.ajax({
             cache: false,
-            url : 'componentes/catalogos/buscar_colonia.php',
-            type : 'POST',
-            dataType : 'html',
-            data : { 'codigo': codigo},
-        }).done(function(resultado){
+            url: 'componentes/catalogos/buscar_colonia.php',
+            type: 'POST',
+            dataType: 'html',
+            data: { 'codigo': codigo },
+        }).done(function (resultado) {
             $("#colonia").html(resultado);
             $("#colonia").prop('disabled', false);
 
             $.ajax({
                 cache: false,
-                url : 'componentes/catalogos/buscar_estado.php',
-                type : 'POST',
-                dataType : 'html',
-                data : { 'codigo': codigo},
-            }).done(function(resultado){
+                url: 'componentes/catalogos/buscar_estado.php',
+                type: 'POST',
+                dataType: 'html',
+                data: { 'codigo': codigo },
+            }).done(function (resultado) {
                 $("#estado").html(resultado);
                 $("#estado").prop('disabled', false);
 
                 $.ajax({
                     cache: false,
-                    url : 'componentes/catalogos/buscar_municipio.php',
-                    type : 'POST',
-                    dataType : 'html',
-                    data : { 'codigo': codigo},
-                }).done(function(resultado){
+                    url: 'componentes/catalogos/buscar_municipio.php',
+                    type: 'POST',
+                    dataType: 'html',
+                    data: { 'codigo': codigo },
+                }).done(function (resultado) {
                     $("#municipio").html(resultado);
                     $("#municipio").prop('disabled', false);
 
                     $("#pais").html("<option value='MEX'>MEXICO</option>");
                     $("#pais").prop('disabled', false);
-                }); 
-            }); 
+                });
+            });
         });
     }
-    else
-    {
+    else {
         $("#colonia").html("<option value='0'>Colonia</option>");
         $("#colonia").prop('disabled', 'disabled');
         $("#estado").html("<option value='0'>Estado</option>");
@@ -54,8 +51,7 @@ function buscar_cp()
 }
 
 
-function colonia_text()
-{
+function colonia_text() {
     var cadena = "";
     cadena = '<div class="input-group-prepend"> <span class="input-group-text"><i class="fas fa-city"></i></span> </div>';
     cadena += '<input type="text" class="form-control" placeholder="Escribe colonia" id="colonia_text" maxlength="100" onfocus="resetear(&quot;colonia_text&quot;)">';
@@ -64,8 +60,7 @@ function colonia_text()
     $("#colonia_oculta").val("2");
 }
 
-function colonia_select()
-{
+function colonia_select() {
     var cadena = "";
     cadena = '<div class="input-group-prepend"> <span class="input-group-text"><i class="fas fa-city"></i></span> </div>';
     cadena += '<select class="form-control" id="colonia" onfocus="resetear(&quot;colonia&quot;)" disabled> <option value="0">Colonia</option> </select>';
@@ -74,35 +69,33 @@ function colonia_select()
     $("#colonia_oculta").val("1");
 }
 
-function gestionar_personal()
-{
+function gestionar_personal(redireccion, modal_agenda = '', modal_cliente = '') {
+    console.log(redireccion)
     var tipo_gestion = $('#tipo_gestion').val();
-    
+
     var fiscal = "";
     var no_fisico = $('input:radio[id=no_fisico]:checked').val()
     var fisico = $('input:radio[id=fisico]:checked').val()
-    if(no_fisico == 1)
-    {
+    if (no_fisico == 1) {
         fiscal = 1;
     }
-    else
-    {
+    else {
         fiscal = 2;
     }
-    
+
     var nombre_personal = $('#nombre_personal').val();
     var tipo_personal = $('#tipo_personal').val();
 
     // ojoooo ------------------------------------------
     if (!tipo_personal) {
-        
+
         $("#tipo_personal").addClass('is-invalid');
-            Swal.fire({
-                icon: "error",
-                title: "Debes especificar el tipo de personal",
-                showConfirmButton: false,
-                timer: 1500
-            });
+        Swal.fire({
+            icon: "error",
+            title: "Debes especificar el tipo de personal",
+            showConfirmButton: false,
+            timer: 1500
+        });
 
         return;
     }
@@ -113,12 +106,10 @@ function gestionar_personal()
     var no_interior = $('#no_interior').val();
     var codigo_postal = $('#codigo_postal').val();
     var tipo_colonia = $("#colonia_oculta").val();
-    if(tipo_colonia == 2)
-    {
+    if (tipo_colonia == 2) {
         var colonia = $('#colonia_text').val();
     }
-    else
-    {
+    else {
         var colonia = $('#colonia').val();
     }
     var estado = $('#estado').val();
@@ -130,10 +121,8 @@ function gestionar_personal()
 
 
 
-    if(fiscal == 1)
-    {
-        if(nombre_personal.length == 0)
-        {
+    if (fiscal == 1) {
+        if (nombre_personal.length == 0) {
             $("#nombre_personal").addClass('is-invalid');
             Swal.fire({
                 icon: "error",
@@ -145,10 +134,8 @@ function gestionar_personal()
             return false;
         }
     }
-    else
-    {
-        if(nombre_personal.length == 0)
-        {
+    else {
+        if (nombre_personal.length == 0) {
             $("#nombre_personal").addClass('is-invalid');
             Swal.fire({
                 icon: "error",
@@ -173,38 +160,44 @@ function gestionar_personal()
 
     $.ajax({
         cache: false,
-        url : "componentes/catalogos/registrar_personal.php",
-        type : 'POST',
-        dataType : 'html',
-        data : { 'nombre_personal': nombre_personal, 'tipo_personal': tipo_personal , 'calle': calle, 'no_exterior': no_exterior, 'no_interior': no_interior, 'codigo_postal': codigo_postal, 'colonia': colonia, 'estado': estado, 'municipio': municipio, 'pais': pais, 'correo': correo, 'telefono': telefono, 'estatus': estatus, 'id_personal': tipo_gestion},
-    }).done(function(resultado){
+        url: "componentes/catalogos/registrar_personal.php",
+        type: 'POST',
+        dataType: 'html',
+        data: { 'nombre_personal': nombre_personal, 'tipo_personal': tipo_personal, 'calle': calle, 'no_exterior': no_exterior, 'no_interior': no_interior, 'codigo_postal': codigo_postal, 'colonia': colonia, 'estado': estado, 'municipio': municipio, 'pais': pais, 'correo': correo, 'telefono': telefono, 'estatus': estatus, 'id_personal': tipo_gestion },
+    }).done(function (resultado) {
 
-        if(resultado == "ok")
-        {
+        if (resultado == "ok") {
             Swal.fire({
                 icon: "success",
                 title: "Personal Registrado",
                 html: "La informaci&oacute;n se registro exitosamente",
                 showConfirmButton: false,
                 timer: 2000
-            }).then(function() {
-                window.location = 'personal.php';
+            }).then(function () {
+                if (redireccion) {
+                    window.location = redireccion;
+                }
+
+                if (modal_agenda && modal_cliente) {
+                    $('#' + modal_cliente).modal('hide');
+                    $("#" + modal_agenda).modal("show");
+                }
+
             });
         }
-        else if(resultado == "actualizado")
-        {
+        else if (resultado == "actualizado") {
             Swal.fire({
                 icon: "success",
                 title: "Personal Actializado",
                 html: "La informaci&oacute;n se registro exitosamente",
                 showConfirmButton: false,
                 timer: 2000
-            }).then(function() {
+            }).then(function () {
+
                 window.location = 'personal.php';
             });
         }
-        else if(resultado == "error")
-        {
+        else if (resultado == "error") {
             Swal.fire({
                 icon: "warning",
                 title: "Personal No Registrado",
@@ -212,8 +205,7 @@ function gestionar_personal()
                 timer: 2000
             });
         }
-        else
-        {
+        else {
             Swal.fire({
                 icon: "warning",
                 title: "El Personal Ya Existe",
@@ -224,40 +216,37 @@ function gestionar_personal()
     });
 }
 
-function ver_catalogo()
-{
+function ver_catalogo() {
     $.ajax({
         cache: false,
-        url : 'componentes/catalogos/cargar_personal.php',
-        type : 'POST',
-        dataType : 'html',
-    }).done(function(resultado){
+        url: 'componentes/catalogos/cargar_personal.php',
+        type: 'POST',
+        dataType: 'html',
+    }).done(function (resultado) {
         $("#vista_personal").html(resultado);
         $("#modal_personal").modal("show");
-    }); 
+    });
 }
-function actualizar_estatus_personal(id_personal, estatus)
-{
+function actualizar_estatus_personal(id_personal, estatus) {
     $.ajax({
         cache: false,
-        url : 'componentes/catalogos/actualizar_estatus_personal.php',
-        type : 'POST',
-        dataType : 'html',
-        data : { 'id_personal': id_personal, 'estatus': estatus},
-    }).done(function(resultado){
+        url: 'componentes/catalogos/actualizar_estatus_personal.php',
+        type: 'POST',
+        dataType: 'html',
+        data: { 'id_personal': id_personal, 'estatus': estatus },
+    }).done(function (resultado) {
         Swal.fire({
             icon: 'success',
             title: 'Estatus actualizado!',
             showConfirmButton: false,
             timer: 2000
-        }).then(function() {
+        }).then(function () {
             window.location = 'personal.php';
         });
-    }); 
+    });
 }
 
-function editar_personal(id_personal, nombre_personal, tipo_personal, calle, exterior, interior, codigo_postal, colonia, municipio, estado, pais, correo, telefono)
-{
+function editar_personal(id_personal, nombre_personal, tipo_personal, calle, exterior, interior, codigo_postal, colonia, municipio, estado, pais, correo, telefono) {
 
     $("#leyenda").html("Modificar datos del personal");
     $("#tipo_gestion").val(id_personal);
@@ -271,24 +260,23 @@ function editar_personal(id_personal, nombre_personal, tipo_personal, calle, ext
     $("#municipio").val(municipio);
     $("#estado").val(estado);
     $("#pais").val(pais);
-    $("#correo").val(correo);   
-    $("#telefono").val(telefono);   
+    $("#correo").val(correo);
+    $("#telefono").val(telefono);
 
 
     // props
     $("#no_fisico").prop("checked", false);
     $("#fisico").prop("checked", "checked");
 
-    $("#correo").prop("disabled",false);
-    $("#calle").prop("disabled",false);
-    $("#no_exterior").prop("disabled",false);
-    $("#no_interior").prop("disabled",false);
-    $("#codigo_postal").prop("disabled",false);
-    $("#municipio").prop("disabled",false);
-    $("#estado").prop("disabled",false);
-    $("#pais").prop("disabled",false); 
-    if(colonia.length > 4)
-    {
+    $("#correo").prop("disabled", false);
+    $("#calle").prop("disabled", false);
+    $("#no_exterior").prop("disabled", false);
+    $("#no_interior").prop("disabled", false);
+    $("#codigo_postal").prop("disabled", false);
+    $("#municipio").prop("disabled", false);
+    $("#estado").prop("disabled", false);
+    $("#pais").prop("disabled", false);
+    if (colonia.length > 4) {
         var cadena = "";
         cadena = '<div class="input-group-prepend"> <span class="input-group-text"><i class="fas fa-city"></i></span> </div>';
         cadena += '<input type="text" class="form-control" placeholder="Escribe colonia" id="colonia_text" maxlength="100" onfocus="resetear(&quot;colonia_text&quot;)">';
@@ -297,52 +285,51 @@ function editar_personal(id_personal, nombre_personal, tipo_personal, calle, ext
         $("#colonia_text").val(colonia);
         $("#colonia_oculta").val("2");
     }
-    else
-    {
+    else {
         var cadena = "";
         cadena = '<div class="input-group-prepend"> <span class="input-group-text"><i class="fas fa-city"></i></span> </div>';
         cadena += '<select class="form-control" id="colonia" onfocus="resetear(&quot;colonia&quot;)" disabled> <option value="0">Colonia</option> </select>';
         cadena += '&nbsp; <button type="button" class="btn btn-info" onclick="colonia_text();" title="Capturar colonia"><i class="fas fa-edit"></i></button>';
         $("#dato_colonia").html(cadena);
-        $("#colonia_oculta").val("1");  
+        $("#colonia_oculta").val("1");
         $.ajax({
             cache: false,
-            url : 'componentes/catalogos/buscar_colonia.php',
-            type : 'POST',
-            dataType : 'html',
-            data : { 'codigo': codigo_postal},
-        }).done(function(resultado){
+            url: 'componentes/catalogos/buscar_colonia.php',
+            type: 'POST',
+            dataType: 'html',
+            data: { 'codigo': codigo_postal },
+        }).done(function (resultado) {
             $("#colonia").html(resultado);
             $("#colonia").prop('disabled', false);
         });
-        $("#colonia > option[value='"+colonia+"']").prop("selected","selected");
-    }   
+        $("#colonia > option[value='" + colonia + "']").prop("selected", "selected");
+    }
     var cadena_pais = "";
     cadena_pais = '<div class="input-group-prepend"> <span class="input-group-text"><i class="fas fa-city"></i></span> </div>';
     cadena_pais += '<select class="form-control" id="pais" onfocus="resetear(&quot;pais&quot;)" disabled><option value="0">Pais</option></select>';
-    $("#dato_pais").html(cadena_pais);  
+    $("#dato_pais").html(cadena_pais);
     $.ajax({
         cache: false,
-        url : 'componentes/catalogos/buscar_estado.php',
-        type : 'POST',
-        dataType : 'html',
-        data : { 'codigo': codigo_postal},
-    }).done(function(resultado){
+        url: 'componentes/catalogos/buscar_estado.php',
+        type: 'POST',
+        dataType: 'html',
+        data: { 'codigo': codigo_postal },
+    }).done(function (resultado) {
         $("#estado").html(resultado);
-        $("#estado").prop('disabled', false);   
+        $("#estado").prop('disabled', false);
         $.ajax({
             cache: false,
-            url : 'componentes/catalogos/buscar_municipio.php',
-            type : 'POST',
-            dataType : 'html',
-            data : { 'codigo': codigo_postal},
-        }).done(function(resultado){
+            url: 'componentes/catalogos/buscar_municipio.php',
+            type: 'POST',
+            dataType: 'html',
+            data: { 'codigo': codigo_postal },
+        }).done(function (resultado) {
             $("#municipio").html(resultado);
-            $("#municipio").prop('disabled', false);    
+            $("#municipio").prop('disabled', false);
             $("#pais").html("<option value='MEX'>MEXICO</option>");
             $("#pais").prop('disabled', false);
-        }); 
-    });     
+        });
+    });
 
     $("#modal_personal").modal("hide");
 }

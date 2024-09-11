@@ -311,7 +311,7 @@
                             </div>
                         </div>
                     </div><br>
-                    <center><button type="button" class="btn btn-success btn-lg" onclick="gestionar_cliente();">Guardar Cliente</button></center><br><br><br>
+                    <center><button type="button" class="btn btn-success btn-lg" onclick="gestionar_cliente('clientes.php;');">Guardar Cliente</button></center><br><br><br>
                     <!-- INICIA MODAL MODAL PARA EDITAR CLIENTE -->
                     <div class="modal fade" id="modal_clientes" role="dialog" style="overflow: scroll;">
                         <div class="modal-dialog modal-xl">
