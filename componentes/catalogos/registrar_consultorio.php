@@ -16,19 +16,18 @@
     {
         $caracteres = array("&", '"', "'");
         $reemplazo = array("&amp;", "&quot;", "&apos;");
-        $nuevo_social = str_replace($caracteres, $reemplazo, strtoupper($_POST['nombre_social']));
 
-        if($_POST['id_cliente'] == 0)
+        if($_POST['id_consultorio'] == 0)
         {
             $fecha_alta = date("Y-m-d");
 
-            $selectMAX = "SELECT COALESCE(MAX(id_cliente),0) AS no_registro FROM emisores_clientes WHERE id_emisor=".$_SESSION['id_emisor'];
+            $selectMAX = "SELECT COALESCE(MAX(id_consultorio),0) AS no_registro FROM emisores_consultorios WHERE id_emisores=".$_SESSION['id_emisor'];
             $resMAX = mysqli_query($conexion, $selectMAX);
             $max = mysqli_fetch_array($resMAX);
             $ultimo = $max['no_registro'] + 1;
 
-            $insertCliente = "INSERT INTO emisores_clientes VALUES(".$ultimo.", ".$_SESSION['id_emisor'].", '".strtoupper(trim($_POST['rfc']))."','".trim($nuevo_social)."','".strtoupper(trim($_POST['calle']))."','".strtoupper(trim($_POST['no_exterior']))."','".strtoupper(trim($_POST['no_interior']))."','".$_POST['codigo_postal']."','".strtoupper(trim($_POST['colonia']))."','".strtoupper($_POST['estado'])."','".strtoupper($_POST['municipio'])."','".strtoupper($_POST['pais'])."','".$_POST['regimen']."','".$_POST['metodo_pago']."','".$_POST['forma_pago']."', '".$_POST['uso_cfdi']."','".strtolower($_POST['correo'])."','".$_POST['telefono']."',".$_POST['tipo_cliente'].", '".$fecha_alta."', 1)";
-            $resultado=mysqli_query($conexion, $insertCliente);
+            $insertConsultorios = "INSERT INTO emisores_consultorios VALUES(".$_SESSION['id_emisor'].", ".$ultimo.", '".strtoupper($_POST['nombre'])."','".$fecha_alta."')";
+            $resultado=mysqli_query($conexion, $insertConsultorios);
             if($resultado)
             {
                 echo "ok";
@@ -40,7 +39,7 @@
         }
         else
         {
-            $updateCliente = "UPDATE emisores_clientes SET rfc='".strtoupper(trim($_POST['rfc']))."', nombre_social='".trim($nuevo_social)."', calle='".strtoupper(trim($_POST['calle']))."', no_exterior='".strtoupper(trim($_POST['no_exterior']))."', no_interior='".strtoupper(trim($_POST['no_interior']))."', codigo_postal='".strtoupper($_POST['codigo_postal'])."', colonia='".strtoupper(trim($_POST['colonia']))."', municipio='".strtoupper($_POST['municipio'])."', estado='".strtoupper($_POST['estado'])."', pais='".strtoupper($_POST['pais'])."', regimen_fiscal='".strtoupper($_POST['regimen'])."', metodo_pago='".strtoupper($_POST['metodo_pago'])."', forma_pago='".strtoupper($_POST['forma_pago'])."', uso_cfdi='".strtoupper($_POST['uso_cfdi'])."', correo='".strtolower($_POST['correo'])."', telefono='".$_POST['telefono']."', tipo_cliente=".$_POST['tipo_cliente']." WHERE id_cliente=".$_POST['id_cliente']." AND id_emisor=".$_SESSION['id_emisor'];
+            $updateCliente = "UPDATE emisores_clientes SET id_emisor=".$_SESSION['id_emisor'];
             $resultado=mysqli_query($conexion, $updateCliente);
             if($resultado)
             {

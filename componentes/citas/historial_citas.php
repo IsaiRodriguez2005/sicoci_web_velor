@@ -87,7 +87,7 @@
                 $consulta .= ' fecha_agenda >= '; 
                 
 
-                $consulta .= "'".$_POST['fecha_inicial']. "' AND fecha_agenda <= '". $_POST['fecha_final']."'";
+                $consulta .= "'".$_POST['fecha_inicial']." 08:00:00 ' AND fecha_agenda <= '". $_POST['fecha_final']." 16:00:00 '";
             }
 
 
@@ -180,7 +180,7 @@
                                 <i class='fas fa-code'></i>
                             </button>
                             &nbsp;
-                            <button type='button' id='btn_can_".$citas['id_folio']."' class='btn btn-danger btn-sm' ".$boton_cancelar." title='Cancelar cita' onclick='cancelar_factura(".",".$citas['id_folio'].")'>
+                            <button type='button' id='btn_can_".$citas['id_folio']."' class='btn btn-danger btn-sm' ".$boton_cancelar." title='Cancelar cita' onclick='cancelar_cita(".$citas['id_folio'].", &quot;".$citas['fecha_agenda']."&quot;)'>
                                 <i class='fas fa-ban'></i>
                             </button>
                         </div>

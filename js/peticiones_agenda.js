@@ -227,10 +227,9 @@ function tipo_servicio() {
         $("#consultorio_form").prop('disabled', false);
     }
 
-}                                      
+}
 
-function actualizar_lista_clientes() 
-{
+function actualizar_lista_clientes() {
 
     $.ajax({
         cache: false,
@@ -281,6 +280,8 @@ function mostrar_historial_citas() {
         Swal.close();
     });
 }
+
+
 function editar_cita(folio_cita, nombre_cliente, id_consultorio, id_terapeuta, tipo_servicio, tipo_cita, fecha_agenda, observaciones) {
 
     $("#tipo_gestion").val(folio_cita);
@@ -295,24 +296,70 @@ function editar_cita(folio_cita, nombre_cliente, id_consultorio, id_terapeuta, t
     $("#modal_nueva_cita").modal("show");
 }
 
+function cancelar_cita(id_folio, fecha_agenda) {
+    
 
+    $('#modal_cancelacion').modal('show');
 
+    $('#cancelar_cita').on('click', function () {
+        console.log(id_folio)
 
-// Peticiones 
+        motivo = $("#motivo_cancelacion").val();
+        if (!motivo) {
 
-function abrir_modal(modal1, modal2) {
-    //ocultamos el modal de agendar cita
-    $('#' + modal1).modal('hide');
+            $("#motivo_cancelacion").addClass('is-invalid');
 
-    // abrimos el modal del cliente
-    $("#" + modal2).modal("show");
+            return;
+        }
+
+        Swal.fire({
+            title: 'Registrando cancelación...',
+            allowEscapeKey: false,
+            allowOutsideClick: false,
+            didOpen: () => {
+                Swal.showLoading()
+            }
+        });
+    
+        $.ajax({
+            cache: false,
+            url: 'componentes/citas/registrar_cancelacion.php',
+            type: 'POST',
+            dataType: 'html',
+            data: { 'id_folio': id_folio, 'fecha_agenda': fecha_agenda, 'motivo': motivo },
+        }).done(function (resultado) {
+            $("#historial_citas").html(resultado);
+            Swal.close();
+        });
+    });
+
 }
 
-function cerrar_modal(modal1, modal2)
-{
-    //ocultamos el modal
-    $('#' + modal1).modal('hide');
 
-    // abrimos el modal
-    $("#" + modal2).modal("show");
+
+// Peticiones Modales
+function abrir_modal(modal1, modal2) {
+
+    if (modal1.length != 0) {
+        //ocultamos el modal de agendar cita
+        $('#' + modal1).modal('hide');
+    }
+
+    if (modal2.length != 0) {
+        // abrimos el modal del cliente
+        $("#" + modal2).modal("show");
+    }
+
+}
+
+function cerrar_modal(modal1, modal2) {
+    if (modal1.length != 0) {
+        //ocultamos el modal de agendar cita
+        $('#' + modal1).modal('hide');
+    }
+
+    if (modal2.length != 0) {
+        // abrimos el modal del cliente
+        $("#" + modal2).modal("show");
+    }
 }

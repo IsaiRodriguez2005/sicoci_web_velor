@@ -78,8 +78,8 @@ if (!isset($_SESSION['nombre_usuario'])) {
                                 </div>
                                 <div class="card-body">
                                     <?php
-                                    $hoy = date("Y-m-d H:i:s");
-                                    $pasado = date("Y-m-d H:i:s", strtotime($hoy . " - 30 days"));
+                                    $hoy = date("Y-m-d");
+                                    $pasado = date("Y-m-d", strtotime($hoy . " - 30 days"));
                                     ?>
                                     <div class="row">
                                         <!-- Cliente -->
@@ -161,7 +161,7 @@ if (!isset($_SESSION['nombre_usuario'])) {
                                                 <div class="input-group-prepend">
                                                     <span class="input-group-text"><i class="fas fa-calendar"></i></span>
                                                 </div>
-                                                <input type="datetime" class="form-control" title="Ingresa fecha inicial de la búsqueda" id="fecha_inicial" value="<?php echo $pasado; ?>" onfocus="resetear('fecha_inicial')">
+                                                <input type="date" class="form-control" title="Ingresa fecha inicial de la búsqueda" id="fecha_inicial" value="<?php echo $pasado; ?>" onfocus="resetear('fecha_inicial')">
                                             </div>
                                         </div>
                                         <!-- Fecha Final -->
@@ -170,7 +170,7 @@ if (!isset($_SESSION['nombre_usuario'])) {
                                                 <div class="input-group-prepend">
                                                     <span class="input-group-text"><i class="fas fa-calendar"></i></span>
                                                 </div>
-                                                <input type="datetime" class="form-control" title="Ingresa fecha final de la búsqueda" id="fecha_final" value="<?php echo $hoy; ?>" onfocus="resetear('fecha_final')">
+                                                <input type="date" class="form-control" title="Ingresa fecha final de la búsqueda" id="fecha_final" value="<?php echo $hoy; ?>" onfocus="resetear('fecha_final')">
                                             </div>
                                         </div>
 
