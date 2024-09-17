@@ -296,43 +296,72 @@ function editar_cita(folio_cita, nombre_cliente, id_consultorio, id_terapeuta, t
     $("#modal_nueva_cita").modal("show");
 }
 
-function cancelar_cita(id_folio, fecha_agenda) {
+function cancelar_cita(id_folio, nombre_cliente, nombre_terapeuta, nombre_consultorio) {
     
-
+    $("#folio_cancelar").html(id_folio);
+    $("#cliente_cancelar").html("Cliente: " + nombre_cliente);
+    $("#terapeuta_cancelar").html("Terapeuta: " + nombre_terapeuta);
+    $("#consultorio_cancelar").html("Consultorio: " + nombre_consultorio);
     $('#modal_cancelacion').modal('show');
+}
 
-    $('#cancelar_cita').on('click', function () {
-        console.log(id_folio)
+function enviar_cancelacion() {
+    motivo = $("#motivo_cancelacion").val();
+    id_folio = $("#folio_cancelar").html();
+    if (!motivo) {
+        $("#motivo_cancelacion").addClass('is-invalid');
+        return;
+    }
 
-        motivo = $("#motivo_cancelacion").val();
-        if (!motivo) {
-
-            $("#motivo_cancelacion").addClass('is-invalid');
-
-            return;
+    Swal.fire({
+        title: 'Procesando cancelación...',
+        allowEscapeKey: false,
+        allowOutsideClick: false,
+        didOpen: () => {
+            Swal.showLoading()
         }
-
-        Swal.fire({
-            title: 'Registrando cancelación...',
-            allowEscapeKey: false,
-            allowOutsideClick: false,
-            didOpen: () => {
-                Swal.showLoading()
-            }
-        });
-    
-        $.ajax({
-            cache: false,
-            url: 'componentes/citas/registrar_cancelacion.php',
-            type: 'POST',
-            dataType: 'html',
-            data: { 'id_folio': id_folio, 'fecha_agenda': fecha_agenda, 'motivo': motivo },
-        }).done(function (resultado) {
-            $("#historial_citas").html(resultado);
-            Swal.close();
-        });
     });
 
+    $.ajax({
+        cache: false,
+        url: 'componentes/citas/registrar_cancelacion.php',
+        type: 'POST',
+        dataType: 'html',
+        data: { 'id_folio': id_folio, 'motivo': motivo },
+    }).done(function (resultado) {
+        Swal.close();
+        if(resultado == "ok")
+        {
+            Swal.fire({
+                icon: "success",
+                title: "Cancelaci&oacute;n exitosa",
+                showConfirmButton: false,
+                timer: 2000
+            });
+            $("#btn_edit_"+id_folio).prop("disabled", "disabled");
+            $("#btn_can_"+id_folio).prop("disabled", "disabled");
+            $("#td_ef_"+id_folio).html('<span class="badge badge-secondary" style="width: 100%; color:white;">CANCELADO</span>');
+            $("#modal_cancelacion").modal("hide");
+        }
+        if(resultado == "error")
+        {
+            Swal.fire({
+                icon: "error",
+                title: "No se logro realizar la cancelaci&oacute;n",
+                showConfirmButton: false,
+                timer: 2000
+            });
+        }
+        if(resultado == "error2")
+            {
+                Swal.fire({
+                    icon: "error",
+                    title: "No se logro actualizar el estatus de la cita",
+                    showConfirmButton: false,
+                    timer: 2000
+                });
+            }
+    });
 }
 
 

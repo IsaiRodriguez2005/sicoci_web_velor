@@ -14,14 +14,8 @@
     }
     else
     {
-        $sql = "SELECT d.id_documento, d.nombre_documento FROM emisores_modulos em INNER JOIN _cat_erp_modulos m ON m.id_modulo = em.id_modulo AND em.estatus = 1 INNER JOIN _cat_erp_documentos d ON d.id_modulo = m.id_modulo WHERE em.id_emisor = ".$_SESSION['id_emisor'];
-        $reslSQL = mysqli_query($conexion, $sql);
-        $options = "<option value='0'>Selecciona tipo de documento</option>";
-        while($documento = mysqli_fetch_array($reslSQL))
-        {
-            $options .= "<option value='".$documento['id_documento']."'>".$documento['nombre_documento']."</option>";
-        }
-
+        $html = "";
+        $tabla = "";
         $consultaCatalogo = "SELECT s.id_partida, s.id_documento, s.serie, s.folio, s.codigo_postal, s.leyenda, s.estatus, d.nombre_documento FROM emisores_series s INNER JOIN _cat_erp_documentos d ON d.id_documento = s.id_documento WHERE s.id_emisor = ".$_SESSION['id_emisor']." ORDER BY id_partida ASC";
         $resCatalogo = mysqli_query($conexion, $consultaCatalogo);
         while($catalogo = mysqli_fetch_array($resCatalogo))
@@ -78,7 +72,10 @@
                                     <span class="input-group-text"><i class="fas fa-file"></i></span>
                                 </div>
                                 <select class="form-control" id="documento" onfocus="resetear(&quot;documento&quot;)">
-                                    '.$options.'
+                                    <option value="0">Selecciona el tipo de documento</option>
+                                    <option value="1">Ticket</option>
+                                    <option value="2">Factura</option>
+                                    <option value="3">Pago a proveedores</option>
                                 </select>
                             </div>
                         </div>

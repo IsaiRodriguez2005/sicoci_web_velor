@@ -352,6 +352,7 @@
         </div>
     </div>
 </div>
+
 <!-- Funciones JS Personalizadas -->
 <script src="js/peticiones_clientes.js"></script>
 <!-- Modal Nuevo cliente -->
@@ -572,17 +573,34 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title text-success">Cancelar Cita</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <h4 class="modal-title text-danger">Cancelar Cita</h4>
             </div>
             <div class="card-body">
-                <h6><i class="fas fa-id-card"></i> Datos de cancelaci&oacute;n</h6>
-                <hr>
-
-                <div class="row justify-content-center">
-                    <div class="col-8">
+                <div class="card card-info">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-12 text-danger">
+                                Folio:
+                                <span id="folio_cancelar"> </span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <h7 id="cliente_cancelar"> </h6>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-7">
+                                <h7 id="terapeuta_cancelar"> </h6>
+                            </div>
+                            <div class="col-5">
+                                <h7 id="consultorio_cancelar"> </h6>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
                         <div class="input-group mb-3">
                             <div class="input-group-prepend">
                                 <span class="input-group-text">
@@ -591,14 +609,12 @@
                             </div>
                             <textarea id="motivo_cancelacion" class="form-control" placeholder="Escriba el motivo de la cancelación" onfocus="resetear('motivo_cancelacion')" rows="4" required></textarea>
                         </div>
-                        <small class="form-text text-muted text-center">Por favor, indique el motivo de la cancelación.</small>
                     </div>
                 </div>
-
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="cerrar_modal('modal_nuevo_consultorio', '')">Cerrar</button>
-                <center><button type="button" class="btn btn-success" id="cancelar_cita">Confirmar Cancelaci&oacute;n</button></center><br><br><br>
+                <button type="button" class="btn btn-danger" onclick="cerrar_modal('modal_cancelacion', '')">Cerrar</button>
+                <button type="button" class="btn btn-success" onclick="enviar_cancelacion();">Confirmar Cancelaci&oacute;n</button><br><br><br>
             </div>
         </div>
     </div>

@@ -16,7 +16,7 @@
     {
         $html = ''; 
         $html .= '
-            <table class="table table-striped table-responsive" id="tabla_facturas">
+            <table class="table table-striped" id="tabla_facturas" width="100%">
                 <thead>
                     <tr>
                         <th class="sticky text-center text-sm">Acciones</th>
@@ -34,28 +34,48 @@
         ';
         
         // cosultas de busqueda
-        $consulta = "SELECT * FROM emisores_agenda ";
+        $consulta = "SELECT 
+            a.id_folio, 
+            a.id_cliente, 
+            a.id_consultorio, 
+            a.id_terapeuta, 
+            a.tipo_servicio, 
+            a.tipo_cita, 
+            a.fecha_emision, 
+            a.fecha_agenda, 
+            a.estatus, 
+            a.observaciones,
+            p.nombre_personal,
+            c.nombre as nombre_consultorio,
+            cli.nombre_cliente as nombre_cliente
+            FROM emisores_agenda a 
+            LEFT JOIN emisores_personal p ON a.id_terapeuta = p.id_personal AND a.id_emisor = p.id_emisor AND p.tipo = 2
+            LEFT JOIN emisores_consultorios c ON a.id_consultorio = c.id_consultorio AND a.id_emisor = c.id_emisor
+            LEFT JOIN emisores_clientes cli ON a.id_cliente = cli.id_cliente AND a.id_emisor = cli.id_emisor
+        ";
         
 
         if(!empty($_POST)) // si {$_POST} contiene algo, ejecutara las validaciones
         {
             // agregamos el {WHERE} a la consulta
-            $consulta .= "WHERE id_emisor = ". $_SESSION['id_emisor']." AND ";
+            $consulta .= " WHERE a.id_emisor = ". $_SESSION['id_emisor']." AND ";
             
             // primera validacion, si hay {cliente}
             if(!empty($_POST['id_cliente'])){
 
-                $consulta .= " id_cliente = ".$_POST['id_cliente'];
+                $consulta .= " a.id_cliente = ".$_POST['id_cliente'];
             }
 
             // segunda validacin, si es que hay {estatus}
+            /*
             if(!empty($_POST['estatus'])){
 
                 // si el cliente existio antes, pondremos el {AND} 
                 if(!empty($_POST['id_cliente'])) $consulta .= " AND"; 
                 
-                $consulta .= " estatus = ".$_POST['estatus'];
+                $consulta .= " a.estatus = ".$_POST['estatus'];
             }
+            
 
             // tercera validacion, si hay {terapeuta}
             if(!empty($_POST['id_terapeuta'])){
@@ -63,7 +83,7 @@
                 // si el cliente o estatus existio antes, pondremos el {AND} 
                 if(!empty($_POST['estatus']) || !empty($_POST['id_cliente'])) $consulta .= " AND ";
 
-                $consulta .= " id_terapeuta = ".$_POST['id_terapeuta'];
+                $consulta .= " a.id_terapeuta = ".$_POST['id_terapeuta'];
             }
 
             // cuarta validacion, si hay {consultorio}
@@ -72,8 +92,9 @@
                 // si el cliente o estatus o terapeuta existio antes, pondremos el {AND} 
                 if(!empty($_POST['id_terapeuta']) || !empty($_POST['estatus']) || !empty($_POST['id_cliente'])) $consulta .= " AND ";
 
-                $consulta .= " id_consultorio = ".$_POST['id_consultorio'];
+                $consulta .= " a.id_consultorio = ".$_POST['id_consultorio'];
             }
+            */
 
             // RANGO DE FECHAS -------------------------------------BETWEEN---------------------------------
 
@@ -84,15 +105,15 @@
                 if(!empty($_POST['id_terapeuta']) || !empty($_POST['estatus']) || !empty($_POST['id_cliente']) || !empty($_POST['id_consultorio'])) $consulta .= " AND ";
 
                 // agregamos el {BETWEEN}
-                $consulta .= ' fecha_agenda >= '; 
+                $consulta .= ' a.fecha_agenda >= '; 
                 
 
-                $consulta .= "'".$_POST['fecha_inicial']." 08:00:00 ' AND fecha_agenda <= '". $_POST['fecha_final']." 16:00:00 '";
+                $consulta .= "'".$_POST['fecha_inicial']." 08:00:00 ' AND a.fecha_agenda <= '". $_POST['fecha_final']." 16:00:00 '";
             }
 
 
             // cerramos la consulta
-            $consulta .= " ORDER BY fecha_agenda ASC;";
+            $consulta .= " ORDER BY a.fecha_agenda DESC;";
         }
         
         $resCitas = mysqli_query($conexion, $consulta);
@@ -102,34 +123,25 @@
             {
                 case 1:
                     $estatus = '<span class="badge badge-danger" style="width: 100%; color:white;">APERTURADO</span>';
-                    $boton_xml = 'disabled';
-                    $boton_pdf = 'disabled';
                     $boton_editar = '';
                     $boton_cancelar = '';
                     break;
                 case 2:
                     $estatus = '<span class="badge badge-warning" style="width: 100%; color:white;">AGENDADO</span>';
-                    $boton_xml = 'disabled';
                     $boton_editar = '';
                     $boton_cancelar = '';
                     break;
                 case 3:
                     $estatus = '<span class="badge badge-success" style="width: 100%; color:white;">REALIZADO</span>';
-                    $boton_xml = '';
                     $boton_editar = 'disabled';
                     $boton_cancelar = '';
+                    $boton_cobrar = '';
                     break;
                 case 4:
-                    $estatus = '<span class="badge badge-light" style="width: 100%; color:white;">REPROGRAMADO</span>';
-                    $boton_xml = '';
-                    $boton_editar = 'disabled';
-                    $boton_cancelar = '';
-                    break;
-                case 5:
                     $estatus = '<span class="badge badge-secondary" style="width: 100%; color:white;">CANCELADO</span>';
-                    $boton_xml = '';
                     $boton_editar = 'disabled';
                     $boton_cancelar = 'disabled';
+                    $boton_cobrar = 'disabled';
                     break;
             }
 
@@ -153,6 +165,7 @@
                     $tipo_servicio = 'DOMICILIO';
             }
 
+            /*
             // Consulta de cliente
             $consulta_cliente = "SELECT nombre_social FROM emisores_clientes WHERE id_cliente = ".$citas['id_cliente'].";";
             $res_cliente = mysqli_query($conexion, $consulta_cliente);
@@ -167,20 +180,17 @@
             $consulta_consultorio = "SELECT nombre FROM emisores_consultorios WHERE id_consultorio = ".$citas['id_consultorio'].";";
             $res_consultorio = mysqli_query($conexion, $consulta_consultorio);
             $res_consultorio = mysqli_fetch_array($res_consultorio);
+            */
 
             $html .="
                 <tr id='tr_".$citas['id_folio']."'>
                     <td class='text-center'>
                         <div class='btn-group'>
-                            <button type='button' id='btn_edit_".$citas['id_folio']."' class='btn btn-warning btn-sm' ".$boton_editar." title='Editar cita' onclick='editar_cita(".$citas['id_folio'].", &quot;".$res_cliente['nombre_social']."&quot;, ".$citas['id_consultorio'].", ".$citas['id_terapeuta'].", ".$citas['tipo_servicio'].", ".$citas['tipo_cita'].", &quot;".$citas['fecha_agenda']."&quot;, &quot;".$citas['observaciones']."&quot;);')'>
+                            <button type='button' id='btn_edit_".$citas['id_folio']."' class='btn btn-warning btn-sm' ".$boton_editar." title='Editar cita' onclick='editar_cita(".$citas['id_folio'].", &quot;".$citas['nombre_cliente']."&quot;, ".$citas['id_consultorio'].", ".$citas['id_terapeuta'].", ".$citas['tipo_servicio'].", ".$citas['tipo_cita'].", &quot;".$citas['fecha_agenda']."&quot;, &quot;".$citas['observaciones']."&quot;);')'>
                                 <i class='fas fa-pencil-alt'></i>
                             </button>
                             &nbsp;
-                            <button type='button' id='btn_xml_".$citas['id_folio']."' class='btn btn-secondary btn-sm' ".$boton_xml." title='Reagendar cita' onclick='descargar_xml(".",".$citas['id_folio'].")'>
-                                <i class='fas fa-code'></i>
-                            </button>
-                            &nbsp;
-                            <button type='button' id='btn_can_".$citas['id_folio']."' class='btn btn-danger btn-sm' ".$boton_cancelar." title='Cancelar cita' onclick='cancelar_cita(".$citas['id_folio'].", &quot;".$citas['fecha_agenda']."&quot;)'>
+                            <button type='button' id='btn_can_".$citas['id_folio']."' class='btn btn-danger btn-sm' ".$boton_cancelar." title='Cancelar cita' onclick='cancelar_cita(".$citas['id_folio'].", &quot;".$citas['nombre_cliente']."&quot;, &quot;".$citas['nombre_personal']."&quot;, &quot;".$citas['nombre_consultorio']."&quot;)'>
                                 <i class='fas fa-ban'></i>
                             </button>
                         </div>
@@ -188,9 +198,9 @@
                     <td class='text-center text-sm' style='white-space: nowrap; overflow-x: auto;'>".$citas['id_folio']."</td>
                     <td class='text-center text-sm' style='white-space: nowrap; overflow-x: auto;'>".date("d/m/Y", strtotime($citas['fecha_agenda']))."</td>
                     <td class='text-center text-sm' id='td_ef_".$citas['id_folio']."' style='white-space: nowrap; overflow-x: auto;'>".$estatus."</td>
-                    <td class='text-center text-sm' style='white-space: nowrap; overflow-x: auto;'>".$res_cliente['nombre_social']."</td>
-                    <td class='text-center text-sm' style='white-space: nowrap; overflow-x: auto;'>".$res_terapeuta['nombre_personal']."</td>
-                    <td class='text-center text-sm' style='white-space: nowrap; overflow-x: auto;'>".$res_consultorio['nombre']."</td>
+                    <td class='text-center text-sm' style='white-space: nowrap; overflow-x: auto;'>".$citas['nombre_cliente']."</td>
+                    <td class='text-center text-sm' style='white-space: nowrap; overflow-x: auto;'>".$citas['nombre_personal']."</td>
+                    <td class='text-center text-sm' style='white-space: nowrap; overflow-x: auto;'>".$citas['nombre_consultorio']."</td>
                     <td class='text-center text-sm' style='white-space: nowrap; overflow-x: auto;'>".$tipo_cita."</td>
                     <td class='text-center text-sm' style='white-space: nowrap; overflow-x: auto;'>".$tipo_servicio."</td>
                 </tr>

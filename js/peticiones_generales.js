@@ -25,3 +25,4 @@ function resetear(elemento)
 {
     $("#"+elemento).removeClass('is-invalid');
 }
+

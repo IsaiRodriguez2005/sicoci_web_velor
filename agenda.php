@@ -13,7 +13,7 @@ if (!isset($_SESSION['nombre_usuario'])) {
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Intranet Velor Innovation</title>
+        <title><?php include("componentes/estructura/title.php"); ?></title>
 
         <!-- Google Font: Source Sans Pro -->
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -73,7 +73,7 @@ if (!isset($_SESSION['nombre_usuario'])) {
                         <div id="div_factura">
                             <div class="card card-info">
                                 <div class="card-header">
-                                    <h3 class="card-title text-sm">Búsqueda de facturas</h3>
+                                    <h3 class="card-title text-sm">Búsqueda de citas</h3>
                                     <input type="hidden" id="tipo_gestion" value="0">
                                 </div>
                                 <div class="card-body">
@@ -83,7 +83,7 @@ if (!isset($_SESSION['nombre_usuario'])) {
                                     ?>
                                     <div class="row">
                                         <!-- Cliente -->
-                                        <div class="col-md-8 mb-3">
+                                        <div class="col-md-9 mb-3">
                                             <div class="input-group">
                                                 <div class="input-group-prepend">
                                                     <span class="input-group-text"><i class="fas fa-user"></i></span>
@@ -96,7 +96,7 @@ if (!isset($_SESSION['nombre_usuario'])) {
                                             </div>
                                         </div>
 
-                                        <!-- Estatus -->
+                                        <!-- Estatus
                                         <div class="col-md-4 mb-3">
                                             <div class="input-group">
                                                 <div class="input-group-prepend">
@@ -107,16 +107,16 @@ if (!isset($_SESSION['nombre_usuario'])) {
                                                     <option value="1">Aperturado</option>
                                                     <option value="2">Agendado</option>
                                                     <option value="3">Realizado</option>
-                                                    <option value="4">Reprogramado</option>
-                                                    <option value="5">Cancelado</option>
+                                                    <option value="4">Cancelado</option>
                                                 </select>
                                             </div>
                                         </div>
+                                        -->
                                     </div>
 
                                     <div class="row">
-                                        <!-- Terapeuta -->
-                                        <div class="col-md-6 mb-3">
+                                        <!-- Terapeuta 
+                                        <div class="col-md-4 mb-3">
                                             <div class="input-group">
                                                 <div class="input-group-prepend">
                                                     <span class="input-group-text"><i class="fas fa-user"></i></span>
@@ -133,9 +133,9 @@ if (!isset($_SESSION['nombre_usuario'])) {
                                                 </select>
                                             </div>
                                         </div>
-
-                                        <!-- Consultorio -->
-                                        <div class="col-md-6 mb-3">
+                                        -->
+                                        <!-- Consultorio
+                                        <div class="col-md-4 mb-3">
                                             <div class="input-group">
                                                 <div class="input-group-prepend">
                                                     <span class="input-group-text"><i class="fas fa-building"></i></span>
@@ -152,11 +152,12 @@ if (!isset($_SESSION['nombre_usuario'])) {
                                                 </select>   
                                             </div>
                                         </div>
+                                        -->
                                     </div>
                                     
                                     <div class="row">
                                         <!-- Fecha Inicial -->
-                                        <div class="col-md-4 mb-3">
+                                        <div class="col-md-3 mb-3">
                                             <div class="input-group">
                                                 <div class="input-group-prepend">
                                                     <span class="input-group-text"><i class="fas fa-calendar"></i></span>
@@ -165,7 +166,7 @@ if (!isset($_SESSION['nombre_usuario'])) {
                                             </div>
                                         </div>
                                         <!-- Fecha Final -->
-                                        <div class="col-md-4 mb-3">
+                                        <div class="col-md-3 mb-3">
                                             <div class="input-group">
                                                 <div class="input-group-prepend">
                                                     <span class="input-group-text"><i class="fas fa-calendar"></i></span>
@@ -173,16 +174,15 @@ if (!isset($_SESSION['nombre_usuario'])) {
                                                 <input type="date" class="form-control" title="Ingresa fecha final de la búsqueda" id="fecha_final" value="<?php echo $hoy; ?>" onfocus="resetear('fecha_final')">
                                             </div>
                                         </div>
-
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col d-flex justify-content-between">
+                                        <div class="col-md-2 mb-3">
                                             <!-- Botón Buscar -->
                                             <button type="button" class="btn btn-info" onclick="mostrar_historial_citas();">Buscar</button>
-                                            <!-- Botón Nueva Factura -->
-                                            <button type="button" class="btn btn-danger" onclick="form_nueva_cita();"><i class="fas fa-plus"></i> Nueva cita</button>
                                         </div>
+                                    </div>
+
+                                    <div class="row float-right">
+                                        <!-- Botón Nueva Factura -->
+                                        <button type="button" class="btn btn-danger" onclick="form_nueva_cita();"><i class="fas fa-plus"></i> Nueva cita</button>
                                     </div>
                                 </div>
                             </div>

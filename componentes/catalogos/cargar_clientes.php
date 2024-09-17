@@ -20,19 +20,18 @@
                         <th class="sticky text-center">Acciones</th>
                         <th class="sticky text-center">ID</th>
                         <th class="text-center">Nombre del Cliente/Paciente</th>
-                        <th class="text-center">Tipo</th>
-                        <th class="text-center">Estado</th>
+                        <th class="text-center">Estatus</th>
                     </tr>
                 </thead>
                 <tbody id="mostrar_clientes">
         ';
-                $consultaClientes = "SELECT * FROM emisores_clientes WHERE id_emisor = ".$_SESSION['id_emisor']." ORDER BY nombre_social ASC";
+                $consultaClientes = "SELECT * FROM emisores_clientes WHERE id_emisor = ".$_SESSION['id_emisor']." ORDER BY nombre_cliente ASC";
                 $resClientes = mysqli_query($conexion, $consultaClientes);
                 while($clientes = mysqli_fetch_array($resClientes))
                 {
                     $reemplazo = array("&", '"', "'");
                     $caracteres = array("&amp;", "&quot;", "&apos;");
-                    $nuevo_social = str_replace($caracteres, $reemplazo, $clientes['nombre_social']);
+                    $nuevo_social = str_replace($caracteres, $reemplazo, $clientes['nombre_cliente']);
 
                     if($clientes['estatus'] == 1)
                     {
@@ -50,19 +49,15 @@
                         $codigo_estatus = 1;
                         $disabled_edicion = "disabled";
                     }
-                    if($clientes['tipo_cliente'] == 1)
-                    {
-                        $tipo = "NO FISCAL";
-                    }
-                    else
-                    {
-                        $tipo = "FISCAL";
-                    }
                     $html .= "
                         <tr>
                             <td class='text-center'>
                                 <div class='btn-group' id='div-check".$clientes['id_cliente']."'>
-                                    <button type='button' class='btn btn-warning btn-sm' ".$disabled_edicion." title='Editar registro' onclick='editar_cliente(".$clientes['id_cliente'].", &quot;".$clientes['rfc']."&quot;, &quot;".$clientes['nombre_social']."&quot;, &quot;".$clientes['calle']."&quot;, &quot;".$clientes['no_exterior']."&quot;, &quot;".$clientes['no_interior']."&quot;, &quot;".$clientes['codigo_postal']."&quot;, &quot;".$clientes['colonia']."&quot;, &quot;".$clientes['municipio']."&quot;, &quot;".$clientes['estado']."&quot;, &quot;".$clientes['pais']."&quot;, &quot;".$clientes['regimen_fiscal']."&quot;, &quot;".$clientes['metodo_pago']."&quot;, &quot;".$clientes['forma_pago']."&quot;, &quot;".$clientes['uso_cfdi']."&quot;, &quot;".$clientes['correo']."&quot;, &quot;".$clientes['telefono']."&quot;, ".$clientes['tipo_cliente'].")'>
+                                    <button type='button' class='btn btn-primary btn-sm' ".$disabled_edicion." title='Perfiles de facturaci&oacute;n' onclick='cargar_perfil(".$clientes['id_cliente'].", &quot;".$clientes['nombre_cliente']."&quot;)'>
+                                        <i class='fas fa-dollar-sign'></i>
+                                    </button>
+                                    &nbsp;
+                                    <button type='button' class='btn btn-warning btn-sm' ".$disabled_edicion." title='Editar registro' onclick='editar_cliente(".$clientes['id_cliente'].", &quot;".$clientes['nombre_cliente']."&quot;, &quot;".$clientes['correo']."&quot;, &quot;".$clientes['telefono']."&quot;)'>
                                         <i class='fas fa-edit'></i>
                                     </button>
                                     &nbsp;
@@ -72,8 +67,7 @@
                                 </div>
                             </td>
                             <td class='text-center'>".$clientes['id_cliente']."</td>
-                            <td class='text-center'>".$clientes['nombre_social']."</td>
-                            <td class='text-center'>".$tipo."</td>
+                            <td class='text-center'>".$clientes['nombre_cliente']."</td>
                             <td class='text-center'>".$estado."</td>
                         </tr>
                     ";
