@@ -1,48 +1,44 @@
-function buscar_cp()
-{
-    console.log('hola');
+function buscar_cp() {
     var codigo = $("#codigo_postal").val();
     var rfc = $("#rfc").val();
-    if(codigo.length == 5 && rfc != "XEXX010101000")
-    {
+    if (codigo.length == 5 && rfc != "XEXX010101000") {
         $.ajax({
             cache: false,
-            url : 'componentes/catalogos/buscar_colonia.php',
-            type : 'POST',
-            dataType : 'html',
-            data : { 'codigo': codigo},
-        }).done(function(resultado){
+            url: 'componentes/catalogos/buscar_colonia.php',
+            type: 'POST',
+            dataType: 'html',
+            data: { 'codigo': codigo },
+        }).done(function (resultado) {
             $("#colonia").html(resultado);
             $("#colonia").prop('disabled', false);
 
             $.ajax({
                 cache: false,
-                url : 'componentes/catalogos/buscar_estado.php',
-                type : 'POST',
-                dataType : 'html',
-                data : { 'codigo': codigo},
-            }).done(function(resultado){
+                url: 'componentes/catalogos/buscar_estado.php',
+                type: 'POST',
+                dataType: 'html',
+                data: { 'codigo': codigo },
+            }).done(function (resultado) {
                 $("#estado").html(resultado);
                 $("#estado").prop('disabled', false);
 
                 $.ajax({
                     cache: false,
-                    url : 'componentes/catalogos/buscar_municipio.php',
-                    type : 'POST',
-                    dataType : 'html',
-                    data : { 'codigo': codigo},
-                }).done(function(resultado){
+                    url: 'componentes/catalogos/buscar_municipio.php',
+                    type: 'POST',
+                    dataType: 'html',
+                    data: { 'codigo': codigo },
+                }).done(function (resultado) {
                     $("#municipio").html(resultado);
                     $("#municipio").prop('disabled', false);
 
                     $("#pais").html("<option value='MEX'>MEXICO</option>");
                     $("#pais").prop('disabled', false);
-                }); 
-            }); 
+                });
+            });
         });
     }
-    else
-    {
+    else {
         $("#colonia").html("<option value='0'>Colonia</option>");
         $("#colonia").prop('disabled', 'disabled');
         $("#estado").html("<option value='0'>Estado</option>");
@@ -54,8 +50,7 @@ function buscar_cp()
     }
 }
 
-function colonia_text()
-{
+function colonia_text() {
     var cadena = "";
     cadena = '<div class="input-group-prepend"> <span class="input-group-text"><i class="fas fa-city"></i></span> </div>';
     cadena += '<input type="text" class="form-control" placeholder="Escribe colonia" id="colonia_text" maxlength="100" onfocus="resetear(&quot;colonia_text&quot;)">';
@@ -64,8 +59,7 @@ function colonia_text()
     $("#colonia_oculta").val("2");
 }
 
-function colonia_select()
-{
+function colonia_select() {
     var cadena = "";
     cadena = '<div class="input-group-prepend"> <span class="input-group-text"><i class="fas fa-city"></i></span> </div>';
     cadena += '<select class="form-control" id="colonia" onfocus="resetear(&quot;colonia&quot;)" disabled> <option value="0">Colonia</option> </select>';
@@ -74,38 +68,33 @@ function colonia_select()
     $("#colonia_oculta").val("1");
 }
 
-function activar_forma()
-{
+function activar_forma() {
     var metodo = $("#metodo_pago").val();
 
-    if(metodo == "PPD")
-    {
+    if (metodo == "PPD") {
         cadena = '<option value="99">[99] POR DEFINIR </option>';
         $("#forma_pago").html(cadena);
     }
-    else
-    {
+    else {
         $.ajax({
             cache: false,
-            url : 'componentes/catalogos/cargar_forma_pago.php',
-            type : 'POST',
-            dataType : 'html',
-        }).done(function(resultado){
+            url: 'componentes/catalogos/cargar_forma_pago.php',
+            type: 'POST',
+            dataType: 'html',
+        }).done(function (resultado) {
             $("#forma_pago").html(resultado);
-        }); 
+        });
     }
 }
 
-function gestionar_cliente( )
-{
+function gestionar_cliente() {
 
     var tipo_gestion = $('#tipo_gestion').val();
-    var nombre_social = $('#nombre_social').val();
+    var nombre_social = $('#nombre').val();
     var correo = $('#correo').val();
     var telefono = $('#telefono').val();
 
-    if(nombre_social.length == 0)
-    {
+    if (nombre_social.length == 0) {
         $("#nombre_social").addClass('is-invalid');
         Swal.fire({
             icon: "error",
@@ -116,179 +105,6 @@ function gestionar_cliente( )
 
         return false;
     }
-
-    /*
-    if(fiscal == 1)
-    {
-        if(nombre_social.length == 0)
-        {
-            $("#nombre_social").addClass('is-invalid');
-            Swal.fire({
-                icon: "error",
-                title: "Debes especificar el nombre del cliente/paciente",
-                showConfirmButton: false,
-                timer: 1500
-            });
-
-            return false;
-        }
-    }
-    else
-    {
-        if(rfc.length != 13)
-        {
-            $("#rfc").addClass('is-invalid');
-            Swal.fire({
-                icon: "error",
-                title: "Debes especificar un RFC valido",
-                showConfirmButton: false,
-                timer: 1500
-            });
-
-            return false;
-        }
-        if(nombre_social.length == 0)
-        {
-            $("#nombre_social").addClass('is-invalid');
-            Swal.fire({
-                icon: "error",
-                title: "Debes especificar el nombre del cliente/paciente",
-                showConfirmButton: false,
-                timer: 1500
-            });
-
-            return false;
-        }
-        if(calle.length == 0)
-        {
-            $("#calle").addClass('is-invalid');
-            Swal.fire({
-                icon: "error",
-                title: "Debes especificar el nombre de la calle",
-                showConfirmButton: false,
-                timer: 1500
-            });
-
-            return false;
-        }
-        if(no_exterior.length == 0)
-        {
-            $("#no_exterior").addClass('is-invalid');
-            Swal.fire({
-                icon: "error",
-                title: "Debes especificar el n&uacute;mero exterior del domicilio",
-                showConfirmButton: false,
-                timer: 1500
-            });
-
-            return false;
-        }
-        if(codigo_postal.length == 0)
-        {
-            $("#codigo_postal").addClass('is-invalid');
-            Swal.fire({
-                icon: "error",
-                title: "Debes especificar el c&oacute;digo postal del domicilio",
-                showConfirmButton: false,
-                timer: 1500
-            });
-
-            return false;
-        }
-        if(colonia.length == 0 || colonia == 0)
-        {
-            if(tipo_colonia == 2 || extranjero == 2)
-            {
-                $("#colonia_text").addClass('is-invalid');
-            }
-            else
-            {
-                $("#colonia").addClass('is-invalid');
-            }
-            
-            Swal.fire({
-                icon: "error",
-                title: "Debes especificar la colonia del domicilio",
-                showConfirmButton: false,
-                timer: 1500
-            });
-
-            return false;
-        }
-        if(estado == 0 || estado.length == 0)
-        {
-            $("#estado").addClass('is-invalid');
-            Swal.fire({
-                icon: "error",
-                title: "Debes especificar el estado",
-                showConfirmButton: false,
-                timer: 1500
-            });
-
-            return false;
-        }
-        if(municipio == 0 || municipio.length == 0)
-        {
-            $("#municipio").addClass('is-invalid');
-            Swal.fire({
-                icon: "error",
-                title: "Debes especificar el municipio",
-                showConfirmButton: false,
-                timer: 1500
-            });
-
-            return false;
-        }
-        if(regimen == 0)
-        {
-            $("#regimen").addClass('is-invalid');
-            Swal.fire({
-                icon: "error",
-                title: "Debes especificar el regimen fiscal",
-                showConfirmButton: false,
-                timer: 1500
-            });
-
-            return false;
-        }
-        if(uso_cfdi == 0)
-        {
-            $("#uso_cfdi").addClass('is-invalid');
-            Swal.fire({
-                icon: "error",
-                title: "Debes especificar el uso cfdi",
-                showConfirmButton: false,
-                timer: 1500
-            });
-
-            return false;
-        }
-        if(metodo_pago == 0)
-        {
-            $("#metodo_pago").addClass('is-invalid');
-            Swal.fire({
-                icon: "error",
-                title: "Debes especificar el metodo de pago",
-                showConfirmButton: false,
-                timer: 1500
-            });
-
-            return false;
-        }
-        if(forma_pago == 0)
-        {
-            $("#forma_pago").addClass('is-invalid');
-            Swal.fire({
-                icon: "error",
-                title: "Debes especificar la forma de pago",
-                showConfirmButton: false,
-                timer: 1500
-            });
-
-            return false;
-        }
-    }
-        */
 
     Swal.fire({
         title: 'Registrando cliente/paciente...',
@@ -301,21 +117,20 @@ function gestionar_cliente( )
 
     $.ajax({
         cache: false,
-        url : "componentes/catalogos/registrar_cliente.php",
-        type : 'POST',
-        dataType : 'html',
-        data : { 'nombre_social': nombre_social, 'correo': correo, 'telefono': telefono, 'id_cliente': tipo_gestion},
-    }).done(function(resultado){
-        if(resultado == "ok")
-        {
+        url: "componentes/catalogos/registrar_cliente.php",
+        type: 'POST',
+        dataType: 'html',
+        data: { 'nombre_social': nombre_social, 'correo': correo, 'telefono': telefono, 'id_cliente': tipo_gestion },
+    }).done(function (resultado) {
+        if (resultado == "ok") {
             Swal.fire({
                 icon: "success",
                 title: "Cliente/Paciente Registrado",
                 html: "La informaci&oacute;n se registro exitosamente",
                 showConfirmButton: false,
                 timer: 2000
-            }).then(function() {
-                window.location = "clientes.php" ;
+            }).then(function () {
+                window.location = "clientes.php";
             });
             /*
             Swal.fire({
@@ -335,8 +150,7 @@ function gestionar_cliente( )
             });
             */
         }
-        else
-        {
+        else {
             Swal.fire({
                 icon: "warning",
                 title: "Cliente/Paciente No Registrado",
@@ -348,40 +162,40 @@ function gestionar_cliente( )
     });
 }
 
-function ver_catalogo()
-{
+function ver_catalogo() {
     $.ajax({
         cache: false,
-        url : 'componentes/catalogos/cargar_clientes.php',
-        type : 'POST',
-        dataType : 'html',
-    }).done(function(resultado){
+        url: 'componentes/catalogos/cargar_clientes.php',
+        type: 'POST',
+        dataType: 'html',
+    }).done(function (resultado) {
         $("#vista_clientes").html(resultado);
         $("#modal_clientes").modal("show");
-    }); 
+    });
 }
-function actualizar_estatus_cliente(id_cliente, estatus)
-{
+
+
+
+function actualizar_estatus_cliente(id_cliente, estatus) {
     $.ajax({
         cache: false,
-        url : 'componentes/catalogos/actualizar_estatus_cliente.php',
-        type : 'POST',
-        dataType : 'html',
-        data : { 'id_cliente': id_cliente, 'estatus': estatus},
-    }).done(function(resultado){
+        url: 'componentes/catalogos/actualizar_estatus_cliente.php',
+        type: 'POST',
+        dataType: 'html',
+        data: { 'id_cliente': id_cliente, 'estatus': estatus },
+    }).done(function (resultado) {
         Swal.fire({
             icon: 'success',
             title: 'Estatus actualizado!',
             showConfirmButton: false,
             timer: 2000
-        }).then(function() {
+        }).then(function () {
             window.location = 'clientes.php';
         });
-    }); 
+    });
 }
 
-function editar_cliente(id_cliente, nombre_social, correo, telefono)
-{
+function editar_cliente(id_cliente, nombre_social, correo, telefono) {
     $("#leyenda").html("Modificar datos del cliente");
     $("#tipo_gestion").val(id_cliente);
     $("#nombre_social").val(nombre_social);
@@ -518,9 +332,257 @@ function editar_cliente(id_cliente, nombre_social, correo, telefono)
     $("#modal_clientes").modal("hide");
 }
 
-function cargar_perfil(id_cliente, nombre_cliente)
-{
-    $("#perfil_id_cliente").val(id_cliente);
-    $("#perfil_nombre_cliente").val(nombre_cliente);
-    $("#modal_perfiles").modal("show");
+function cargar_perfil(id_cliente, nombre_cliente) {
+
+    $.ajax({
+        cache: false,
+        url: 'componentes/catalogos/cargar_perfil_facturacion.php',
+        type: 'POST',
+        dataType: 'html',
+        data: {'id_cliente': id_cliente}
+    }).done(function (resultado) {
+        $("#vista_perfil_facturacion").html(resultado);
+        $("#perfil_id_cliente").val(id_cliente);
+        $("#perfil_nombre_cliente").val(nombre_cliente);
+        $("#modal_perfiles").modal("show");
+    });
+
+}
+
+function agregar_perfil() {
+
+    // recompilacion de informacion------------------------------------------
+    var id_perfil = $("#tipo_gestion").val();
+    var id_cliente = $("#perfil_id_cliente").val();
+    var nombre = $("#perfil_nombre_cliente").val();
+    var rfc = $("#rfc").val();
+    var nombre_social = $("#nombre_social").val();
+    var calle = $("#calle").val();
+    var no_interior = $("#no_interior").val();
+    var no_exterior = $("#no_exterior").val();
+    var codigo_postal = $("#codigo_postal").val();
+    var colonia = $("#colonia").val();
+    var estado = $("#estado").val();
+    var municipio = $("#municipio").val();
+    var pais = $("#pais").val();
+    var regimen = $("#regimen").val();
+    var uso_cfdi = $("#uso_cfdi").val();
+    var metodo_pago = $("#metodo_pago").val();
+    var forma_pago = $("#forma_pago").val();
+
+
+    // validaciones------------------------------------------------
+
+
+    if (rfc.length != 13) {
+        $("#rfc").addClass('is-invalid');
+        Swal.fire({
+            icon: "error",
+            title: "Debes especificar un RFC valido",
+            showConfirmButton: false,
+            timer: 1500
+        });
+
+        return false;
+    }
+
+    if (nombre_social.length == 0) {
+        $("#nombre_social").addClass('is-invalid');
+        Swal.fire({
+            icon: "error",
+            title: "Debes especificar el nombre del cliente/paciente",
+            showConfirmButton: false,
+            timer: 1500
+        });
+
+        return false;
+    }
+
+
+    if (calle.length == 0) {
+        $("#calle").addClass('is-invalid');
+        Swal.fire({
+            icon: "error",
+            title: "Debes especificar el nombre de la calle",
+            showConfirmButton: false,
+            timer: 1500
+        });
+
+        return false;
+    }
+    if (no_exterior.length == 0) {
+        $("#no_exterior").addClass('is-invalid');
+        Swal.fire({
+            icon: "error",
+            title: "Debes especificar el n&uacute;mero exterior del domicilio",
+            showConfirmButton: false,
+            timer: 1500
+        });
+
+        return false;
+    }
+    if (codigo_postal.length == 0) {
+        $("#codigo_postal").addClass('is-invalid');
+        Swal.fire({
+            icon: "error",
+            title: "Debes especificar el c&oacute;digo postal del domicilio",
+            showConfirmButton: false,
+            timer: 1500
+        });
+
+        return false;
+    }
+    if (colonia.length == 0 || colonia == 0) {
+        if (tipo_colonia == 2 || extranjero == 2) {
+            $("#colonia_text").addClass('is-invalid');
+        }
+        else {
+            $("#colonia").addClass('is-invalid');
+        }
+
+        Swal.fire({
+            icon: "error",
+            title: "Debes especificar la colonia del domicilio",
+            showConfirmButton: false,
+            timer: 1500
+        });
+
+        return false;
+    }
+    if (estado == 0 || estado.length == 0) {
+        $("#estado").addClass('is-invalid');
+        Swal.fire({
+            icon: "error",
+            title: "Debes especificar el estado",
+            showConfirmButton: false,
+            timer: 1500
+        });
+
+        return false;
+    }
+    if (municipio == 0 || municipio.length == 0) {
+        $("#municipio").addClass('is-invalid');
+        Swal.fire({
+            icon: "error",
+            title: "Debes especificar el municipio",
+            showConfirmButton: false,
+            timer: 1500
+        });
+
+        return false;
+    }
+    if (pais == 0 || pais.length == 0) {
+        $("#pais").addClass('is-invalid');
+        Swal.fire({
+            icon: "error",
+            title: "Debes especificar el pais",
+            showConfirmButton: false,
+            timer: 1500
+        });
+
+        return false;
+    }
+    if (regimen == 0) {
+        $("#regimen").addClass('is-invalid');
+        Swal.fire({
+            icon: "error",
+            title: "Debes especificar el regimen fiscal",
+            showConfirmButton: false,
+            timer: 1500
+        });
+
+        return false;
+    }
+    if (uso_cfdi == 0) {
+        $("#uso_cfdi").addClass('is-invalid');
+        Swal.fire({
+            icon: "error",
+            title: "Debes especificar el uso cfdi",
+            showConfirmButton: false,
+            timer: 1500
+        });
+
+        return false;
+    }
+    if (metodo_pago == 0) {
+        $("#metodo_pago").addClass('is-invalid');
+        Swal.fire({
+            icon: "error",
+            title: "Debes especificar el metodo de pago",
+            showConfirmButton: false,
+            timer: 1500
+        });
+
+        return false;
+    }
+    if (forma_pago == 0) {
+        $("#forma_pago").addClass('is-invalid');
+        Swal.fire({
+            icon: "error",
+            title: "Debes especificar la forma de pago",
+            showConfirmButton: false,
+            timer: 1500
+        });
+
+        return false;
+    }
+
+
+    // peticin ajax-------------------------------------------
+    Swal.fire({
+        title: 'Registrando Perfil de Facuración...',
+        allowEscapeKey: false,
+        allowOutsideClick: false,
+        didOpen: () => {
+            Swal.showLoading()
+        }
+    });
+
+    $.ajax({
+        cache: false,
+        url: "componentes/catalogos/registrar_perfil_facturacion.php",
+        type: 'POST',
+        dataType: 'html',
+        data: {
+            'id_perfil': id_perfil,
+            'id_cliente': id_cliente,
+            'rfc': rfc,
+            'nombre_social': nombre_social,
+            'calle': calle,
+            'no_exterior': no_exterior,
+            'no_interior': no_interior,
+            'codigo_postal': codigo_postal,
+            'colonia': colonia,
+            'municipio': municipio,
+            'estado': estado,
+            'pais': pais,
+            'regimen_fiscal': regimen,
+            'metodo_pago': metodo_pago,
+            'forma_pago': forma_pago,
+            'uso_cfdi': uso_cfdi,
+        },
+    }).done(function (resultado) {
+        if (resultado == "ok") {
+            Swal.fire({
+                icon: "success",
+                title: "Perfil de Facuración Registrado",
+                html: "La informaci&oacute;n se registro exitosamente",
+                showConfirmButton: false,
+                timer: 2000
+            }).then(function () {
+                //window.location = "clientes.php";
+            });
+        } else if (resultado == "error") {
+            Swal.fire({
+                icon: "error",
+                title: "Error Perfil de Facuración Registrado",
+                html: "La informaci&oacute;n no se registro exitosamente",
+                showConfirmButton: false,
+                timer: 2000
+            }).then(function () {
+                //window.location = "clientes.php";
+            });
+        }
+    });
+
 }
