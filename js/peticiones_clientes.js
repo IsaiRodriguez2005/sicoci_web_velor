@@ -90,7 +90,7 @@ function activar_forma() {
 function gestionar_cliente() {
 
     var tipo_gestion = $('#tipo_gestion').val();
-    var nombre_social = $('#nombre').val();
+    var nombre_social = $('#nombre_social').val();
     var correo = $('#correo').val();
     var telefono = $('#telefono').val();
 
@@ -202,137 +202,11 @@ function editar_cliente(id_cliente, nombre_social, correo, telefono) {
     $("#correo").val(correo);
     $("#telefono").val(telefono);
 
-    /*
-    if(tipo_cliente == 1)
-    {
-        $("#no_fisico").prop("checked","checked");
-        $("#fisico").prop("checked",false);
-        
-        $("#rfc").prop("disabled","disabled");
-        $("#nombre_social").prop("disabled",false);
-        $("#correo").prop("disabled",false);
-        $("#telefono").prop("disabled",false);
-        $("#calle").prop("disabled","disabled");
-        $("#no_exterior").prop("disabled","disabled");
-        $("#no_interior").prop("disabled","disabled");
-        $("#codigo_postal").prop("disabled","disabled");
-        $("#colonia").prop("disabled","disabled");
-        $("#municipio").prop("disabled","disabled");
-        $("#estado").prop("disabled","disabled");
-        $("#pais").prop("disabled","disabled");
-        $("#regimen").prop("disabled","disabled");
-        $("#metodo_pago").prop("disabled","disabled");
-        $("#forma_pago").prop("disabled","disabled");
-        $("#uso_cfdi").prop("disabled","disabled");
-    }
-    else
-    {
-        $("#no_fisico").prop("checked", false);
-        $("#fisico").prop("checked", "checked");
-        
-        $("#rfc").prop("disabled",false);
-        $("#nombre_social").prop("disabled",false);
-        $("#correo").prop("disabled",false);
-        $("#telefono").prop("disabled",false);
-        $("#calle").prop("disabled",false);
-        $("#no_exterior").prop("disabled",false);
-        $("#no_interior").prop("disabled",false);
-        $("#codigo_postal").prop("disabled",false);
-        $("#municipio").prop("disabled",false);
-        $("#estado").prop("disabled",false);
-        $("#pais").prop("disabled",false);
-        $("#regimen").prop("disabled",false);
-        $("#metodo_pago").prop("disabled",false);
-        $("#forma_pago").prop("disabled",false);
-        $("#uso_cfdi").prop("disabled",false);
-
-        if(colonia.length > 4)
-        {
-            var cadena = "";
-            cadena = '<div class="input-group-prepend"> <span class="input-group-text"><i class="fas fa-city"></i></span> </div>';
-            cadena += '<input type="text" class="form-control" placeholder="Escribe colonia" id="colonia_text" maxlength="100" onfocus="resetear(&quot;colonia_text&quot;)">';
-            cadena += '&nbsp; <button type="button" class="btn btn-info" onclick="colonia_select();" title="Capturar colonia"><i class="fas fa-edit"></i></button>';
-            $("#dato_colonia").html(cadena);
-            $("#colonia_text").val(colonia);
-            $("#colonia_oculta").val("2");
-        }
-        else
-        {
-            var cadena = "";
-            cadena = '<div class="input-group-prepend"> <span class="input-group-text"><i class="fas fa-city"></i></span> </div>';
-            cadena += '<select class="form-control" id="colonia" onfocus="resetear(&quot;colonia&quot;)" disabled> <option value="0">Colonia</option> </select>';
-            cadena += '&nbsp; <button type="button" class="btn btn-info" onclick="colonia_text();" title="Capturar colonia"><i class="fas fa-edit"></i></button>';
-            $("#dato_colonia").html(cadena);
-            $("#colonia_oculta").val("1");
-
-            $.ajax({
-                cache: false,
-                url : 'componentes/catalogos/buscar_colonia.php',
-                type : 'POST',
-                dataType : 'html',
-                data : { 'codigo': codigo_postal},
-            }).done(function(resultado){
-                $("#colonia").html(resultado);
-                $("#colonia").prop('disabled', false);
-            });
-            $("#colonia > option[value='"+colonia+"']").prop("selected","selected");
-        }
-
-        var cadena_pais = "";
-        cadena_pais = '<div class="input-group-prepend"> <span class="input-group-text"><i class="fas fa-city"></i></span> </div>';
-        cadena_pais += '<select class="form-control" id="pais" onfocus="resetear(&quot;pais&quot;)" disabled><option value="0">Pais</option></select>';
-        $("#dato_pais").html(cadena_pais);
-
-
-        $.ajax({
-            cache: false,
-            url : 'componentes/catalogos/buscar_estado.php',
-            type : 'POST',
-            dataType : 'html',
-            data : { 'codigo': codigo_postal},
-        }).done(function(resultado){
-            $("#estado").html(resultado);
-            $("#estado").prop('disabled', false);
-
-            $.ajax({
-                cache: false,
-                url : 'componentes/catalogos/buscar_municipio.php',
-                type : 'POST',
-                dataType : 'html',
-                data : { 'codigo': codigo_postal},
-            }).done(function(resultado){
-                $("#municipio").html(resultado);
-                $("#municipio").prop('disabled', false);
-
-                $("#pais").html("<option value='MEX'>MEXICO</option>");
-                $("#pais").prop('disabled', false);
-            }); 
-        }); 
-
-        if(metodo_pago == "PPD")
-            {
-                cadena = '<option value="99">[99] POR DEFINIR </option>';
-                $("#forma_pago").html(cadena);
-            }
-            else
-            {
-                $.ajax({
-                    cache: false,
-                    url : 'componentes/catalogos/cargar_forma_pago.php',
-                    type : 'POST',
-                    dataType : 'html',
-                }).done(function(resultado){
-                    $("#forma_pago").html(resultado);
-                    $("#forma_pago > option[value='"+forma_pago+"']").prop("selected","selected");
-                }); 
-            }
-    }
-    */
 
     $("#modal_clientes").modal("hide");
 }
 
-function cargar_perfil(id_cliente, nombre_cliente) {
+function cargar_perfil(id_cliente, nombre_cliente = "") {
 
     $.ajax({
         cache: false,
@@ -343,7 +217,20 @@ function cargar_perfil(id_cliente, nombre_cliente) {
     }).done(function (resultado) {
         $("#vista_perfil_facturacion").html(resultado);
         $("#perfil_id_cliente").val(id_cliente);
-        $("#perfil_nombre_cliente").val(nombre_cliente);
+        if(nombre_cliente){
+            $("#perfil_nombre_cliente").val(nombre_cliente);
+        } else {
+            $.ajax({
+                cache: false,
+                url: 'componentes/catalogos/buscar_perfil_facturacion.php',
+                type: 'POST',
+                dataType: 'html',
+                data: { 'id_cliente': id_cliente }
+            }).done(function (resultado) {
+                    $("#perfil_id_cliente").val(id_cliente);
+                    $("#perfil_nombre_cliente").val(resultado);
+            });
+        }
 
         // si no esya activo el modal, hay qe activarlo, si ya esta activo, no hara anda
         if ($("#modal_perfiles").is(':hidden')) {
@@ -577,35 +464,17 @@ function agregar_perfil() {
                     showConfirmButton: false,
                     timer: 2000
                 }).then(function () {
-
-                    //cargar_perfil(id_cliente, nombre_cliente)
                     //window.location = "clientes.php";
-                    cargar_perfil(id_cliente, nombre);
-                    /*
-                    $("#tipo_gestion").val('');
-                    $("#rfc").val('');
-                    $("#nombre_perfil").val('');
-                    $("#calle").val('');
-                    $("#no_interior").val('');
-                    $("#no_exterior").val('');
-                    $("#codigo_postal").val('');
-                    $("#colonia").val(0);
-                    $("#estado").val(0);
-                    $("#municipio").val(0);
-                    $("#pais").val(0);
-                    $("#regimen").val(0);
-                    $("#uso_cfdi").val(0);
-                    $("#metodo_pago").val(0);
-                    $("#forma_pago").val(0);
-                    */
+                    cargar_perfil(id_cliente);
                 });
             } else {
                 Swal.fire({
                     icon: "error",
                     title: "Error Perfil de Facuración Registrado",
-                    html: "La informaci&oacute;n no se registro exitosamente",
-                    showConfirmButton: false,
-                    timer: 2000
+                    //html: "La informaci&oacute;n no se registro exitosamente",
+                    html: resultado,
+                    showConfirmButton: true,
+                    //timer: 2000
                 }).then(function () {
                     //window.location = "clientes.php";
                 });
@@ -616,8 +485,11 @@ function agregar_perfil() {
 }
 
 
-function editar_perfil(id_perfil, rfc, nombre_perfil, calle, no_exterior, no_interior, codigo_postal, colonia, regimen, uso_cfdi, metodo_pago, forma_pago) {
+function editar_perfil(id_cliente, id_perfil, rfc, nombre_perfil, calle, no_exterior, no_interior, codigo_postal, colonia, regimen, uso_cfdi, metodo_pago, forma_pago) {
 
+    $(".modal-content").animate({ scrollTop: 0 }, "slow");
+
+    $("#perfil_id_cliente").val(id_cliente);
     $("#tipo_gestion").val(id_perfil);
     $("#rfc").val(rfc);
     $("#nombre_perfil").val(nombre_perfil);
@@ -626,11 +498,60 @@ function editar_perfil(id_perfil, rfc, nombre_perfil, calle, no_exterior, no_int
     $("#no_exterior").val(no_exterior);
     $("#codigo_postal").val(codigo_postal);
     $("#colonia").val(colonia);
-    $("#estado").val(estado);
-    $("#municipio").val(municipio);
-    $("#pais").val(pais);
     $("#regimen").val(regimen);
     $("#uso_cfdi").val(uso_cfdi);
     $("#metodo_pago").val(metodo_pago);
     $("#forma_pago").val(forma_pago);
+}
+
+function actualizar_estatus_perfil(id_cliente, id_perfil, estatus)
+{
+    $.ajax({
+        cache: false,
+        url: 'componentes/catalogos/actualizar_estatus_perfil_fact.php',
+        type: 'POST',
+        dataType: 'html',
+        data: { 'id_perfil': id_perfil, 'estatus': estatus },
+    }).done(function (resultado) {
+        Swal.fire({
+            icon: 'success',
+            title: 'Estatus actualizado!',
+            showConfirmButton: false,
+            timer: 2000
+        }).then(function () {
+            //window.location = 'clientes.php';
+            cargar_perfil(id_cliente);
+        });
+    });
+}
+
+
+function eliminar_perfil(id_perfil, id_cliente)
+{
+    $.ajax({
+        cache: false,
+        url: 'componentes/catalogos/eliminar_perfil_facturacion.php',
+        type: 'POST',
+        dataType: 'html',
+        data: { 'id_perfil': id_perfil },
+    }).done(function (resultado) {
+        if(resultado == 'ok'){
+            Swal.fire({
+                icon: 'success',
+                title: 'Perfil Eliminado',
+                showConfirmButton: false,
+                timer: 2000
+            }).then(function () {
+                cargar_perfil(id_cliente);
+            });
+        }else{
+            Swal.fire({
+                icon: 'error',
+                title: 'Ocurrio un Error',
+                showConfirmButton: false,
+                timer: 2000
+            })
+        }
+        
+    });
 }

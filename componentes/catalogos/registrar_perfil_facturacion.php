@@ -61,27 +61,32 @@
         }
         else
         {
-            
             $updateCliente = "UPDATE emisores_clientes_facturacion SET 
                                                                         rfc='".trim($_POST['rfc'])."',  
                                                                         nombre_social='".strtolower($_POST['nombre_social'])."', 
                                                                         calle='".strtolower($_POST['calle'])."', 
-                                                                        correo='".strtolower($_POST['correo'])."', 
-                                                                        correo='".strtolower($_POST['correo'])."', 
-                                                                        correo='".strtolower($_POST['correo'])."', 
-                                                                        correo='".strtolower($_POST['correo'])."', 
-                                                                        telefono='".$_POST['telefono']."' 
+                                                                        no_exterior='".strtolower($_POST['no_exterior'])."', 
+                                                                        no_interior='".strtolower($_POST['no_interior'])."', 
+                                                                        codigo_postal='".strtolower($_POST['codigo_postal'])."', 
+                                                                        colonia='".strtolower($_POST['colonia'])."', 
+                                                                        municipio='".strtolower($_POST['municipio'])."', 
+                                                                        estado='".strtolower($_POST['estado'])."', 
+                                                                        pais='".strtolower($_POST['pais'])."', 
+                                                                        regimen_fiscal='".strtolower($_POST['regimen_fiscal'])."', 
+                                                                        metodo_pago='".strtolower($_POST['metodo_pago'])."', 
+                                                                        forma_pago='".strtolower($_POST['forma_pago'])."', 
+                                                                        uso_cfdi='".strtolower($_POST['uso_cfdi'])."' 
                                                                     WHERE 
-                                                                        id_cliente=".$_POST['id_cliente']." AND 
+                                                                        id_cliente=".$_POST['id_perfil']." AND 
                                                                         id_emisor=".$_SESSION['id_emisor'];
             $resultado=mysqli_query($conexion, $updateCliente);
             if($resultado)
             {
-                echo "ok";
+                echo '1';
             }
             else
             {
-                echo "error";
+                echo "2";
             }
             
         }
