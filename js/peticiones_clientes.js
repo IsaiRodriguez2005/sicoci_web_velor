@@ -339,12 +339,17 @@ function cargar_perfil(id_cliente, nombre_cliente) {
         url: 'componentes/catalogos/cargar_perfil_facturacion.php',
         type: 'POST',
         dataType: 'html',
-        data: {'id_cliente': id_cliente}
+        data: { 'id_cliente': id_cliente }
     }).done(function (resultado) {
         $("#vista_perfil_facturacion").html(resultado);
         $("#perfil_id_cliente").val(id_cliente);
         $("#perfil_nombre_cliente").val(nombre_cliente);
-        $("#modal_perfiles").modal("show");
+
+        // si no esya activo el modal, hay qe activarlo, si ya esta activo, no hara anda
+        if ($("#modal_perfiles").is(':hidden')) {
+
+            $("#modal_perfiles").modal("show");
+        }
     });
 
 }
@@ -356,7 +361,7 @@ function agregar_perfil() {
     var id_cliente = $("#perfil_id_cliente").val();
     var nombre = $("#perfil_nombre_cliente").val();
     var rfc = $("#rfc").val();
-    var nombre_social = $("#nombre_social").val();
+    var nombre_social = $("#nombre_perfil").val();
     var calle = $("#calle").val();
     var no_interior = $("#no_interior").val();
     var no_exterior = $("#no_exterior").val();
@@ -370,6 +375,7 @@ function agregar_perfil() {
     var metodo_pago = $("#metodo_pago").val();
     var forma_pago = $("#forma_pago").val();
 
+    var bandera = 0;
 
     // validaciones------------------------------------------------
 
@@ -383,11 +389,11 @@ function agregar_perfil() {
             timer: 1500
         });
 
-        return false;
+        bandera = 1;
     }
 
     if (nombre_social.length == 0) {
-        $("#nombre_social").addClass('is-invalid');
+        $("#nombre_perfil").addClass('is-invalid');
         Swal.fire({
             icon: "error",
             title: "Debes especificar el nombre del cliente/paciente",
@@ -395,7 +401,7 @@ function agregar_perfil() {
             timer: 1500
         });
 
-        return false;
+        bandera = 1;
     }
 
 
@@ -408,7 +414,7 @@ function agregar_perfil() {
             timer: 1500
         });
 
-        return false;
+        bandera = 1;
     }
     if (no_exterior.length == 0) {
         $("#no_exterior").addClass('is-invalid');
@@ -419,7 +425,7 @@ function agregar_perfil() {
             timer: 1500
         });
 
-        return false;
+        bandera = 1;
     }
     if (codigo_postal.length == 0) {
         $("#codigo_postal").addClass('is-invalid');
@@ -430,7 +436,7 @@ function agregar_perfil() {
             timer: 1500
         });
 
-        return false;
+        bandera = 1;
     }
     if (colonia.length == 0 || colonia == 0) {
         if (tipo_colonia == 2 || extranjero == 2) {
@@ -447,7 +453,7 @@ function agregar_perfil() {
             timer: 1500
         });
 
-        return false;
+        bandera = 1;
     }
     if (estado == 0 || estado.length == 0) {
         $("#estado").addClass('is-invalid');
@@ -458,7 +464,7 @@ function agregar_perfil() {
             timer: 1500
         });
 
-        return false;
+        bandera = 1;
     }
     if (municipio == 0 || municipio.length == 0) {
         $("#municipio").addClass('is-invalid');
@@ -469,7 +475,7 @@ function agregar_perfil() {
             timer: 1500
         });
 
-        return false;
+        bandera = 1;
     }
     if (pais == 0 || pais.length == 0) {
         $("#pais").addClass('is-invalid');
@@ -480,7 +486,7 @@ function agregar_perfil() {
             timer: 1500
         });
 
-        return false;
+        bandera = 1;
     }
     if (regimen == 0) {
         $("#regimen").addClass('is-invalid');
@@ -491,7 +497,7 @@ function agregar_perfil() {
             timer: 1500
         });
 
-        return false;
+        bandera = 1;
     }
     if (uso_cfdi == 0) {
         $("#uso_cfdi").addClass('is-invalid');
@@ -502,7 +508,7 @@ function agregar_perfil() {
             timer: 1500
         });
 
-        return false;
+        bandera = 1;
     }
     if (metodo_pago == 0) {
         $("#metodo_pago").addClass('is-invalid');
@@ -513,7 +519,7 @@ function agregar_perfil() {
             timer: 1500
         });
 
-        return false;
+        bandera = 1;
     }
     if (forma_pago == 0) {
         $("#forma_pago").addClass('is-invalid');
@@ -524,65 +530,107 @@ function agregar_perfil() {
             timer: 1500
         });
 
-        return false;
+        bandera = 1;
     }
 
-
     // peticin ajax-------------------------------------------
-    Swal.fire({
-        title: 'Registrando Perfil de Facuración...',
-        allowEscapeKey: false,
-        allowOutsideClick: false,
-        didOpen: () => {
-            Swal.showLoading()
-        }
-    });
+    if (bandera == 0) {
+        Swal.fire({
+            title: 'Registrando Perfil de Facuración...',
+            allowEscapeKey: false,
+            allowOutsideClick: false,
+            didOpen: () => {
+                Swal.showLoading()
+            }
+        });
 
-    $.ajax({
-        cache: false,
-        url: "componentes/catalogos/registrar_perfil_facturacion.php",
-        type: 'POST',
-        dataType: 'html',
-        data: {
-            'id_perfil': id_perfil,
-            'id_cliente': id_cliente,
-            'rfc': rfc,
-            'nombre_social': nombre_social,
-            'calle': calle,
-            'no_exterior': no_exterior,
-            'no_interior': no_interior,
-            'codigo_postal': codigo_postal,
-            'colonia': colonia,
-            'municipio': municipio,
-            'estado': estado,
-            'pais': pais,
-            'regimen_fiscal': regimen,
-            'metodo_pago': metodo_pago,
-            'forma_pago': forma_pago,
-            'uso_cfdi': uso_cfdi,
-        },
-    }).done(function (resultado) {
-        if (resultado == "ok") {
-            Swal.fire({
-                icon: "success",
-                title: "Perfil de Facuración Registrado",
-                html: "La informaci&oacute;n se registro exitosamente",
-                showConfirmButton: false,
-                timer: 2000
-            }).then(function () {
-                //window.location = "clientes.php";
-            });
-        } else if (resultado == "error") {
-            Swal.fire({
-                icon: "error",
-                title: "Error Perfil de Facuración Registrado",
-                html: "La informaci&oacute;n no se registro exitosamente",
-                showConfirmButton: false,
-                timer: 2000
-            }).then(function () {
-                //window.location = "clientes.php";
-            });
-        }
-    });
+        $.ajax({
+            cache: false,
+            url: "componentes/catalogos/registrar_perfil_facturacion.php",
+            type: 'POST',
+            dataType: 'html',
+            data: {
+                'id_perfil': id_perfil,
+                'id_cliente': id_cliente,
+                'rfc': rfc,
+                'nombre_social': nombre_social,
+                'calle': calle,
+                'no_exterior': no_exterior,
+                'no_interior': no_interior,
+                'codigo_postal': codigo_postal,
+                'colonia': colonia,
+                'municipio': municipio,
+                'estado': estado,
+                'pais': pais,
+                'regimen_fiscal': regimen,
+                'metodo_pago': metodo_pago,
+                'forma_pago': forma_pago,
+                'uso_cfdi': uso_cfdi,
+            },
+        }).done(function (resultado) {
+            Swal.close();
+            if (resultado == 1) {
+                Swal.fire({
+                    icon: "success",
+                    title: "Perfil de Facuración Registrado",
+                    html: "La informaci&oacute;n se registro exitosamente",
+                    showConfirmButton: false,
+                    timer: 2000
+                }).then(function () {
 
+                    //cargar_perfil(id_cliente, nombre_cliente)
+                    //window.location = "clientes.php";
+                    cargar_perfil(id_cliente, nombre);
+                    /*
+                    $("#tipo_gestion").val('');
+                    $("#rfc").val('');
+                    $("#nombre_perfil").val('');
+                    $("#calle").val('');
+                    $("#no_interior").val('');
+                    $("#no_exterior").val('');
+                    $("#codigo_postal").val('');
+                    $("#colonia").val(0);
+                    $("#estado").val(0);
+                    $("#municipio").val(0);
+                    $("#pais").val(0);
+                    $("#regimen").val(0);
+                    $("#uso_cfdi").val(0);
+                    $("#metodo_pago").val(0);
+                    $("#forma_pago").val(0);
+                    */
+                });
+            } else {
+                Swal.fire({
+                    icon: "error",
+                    title: "Error Perfil de Facuración Registrado",
+                    html: "La informaci&oacute;n no se registro exitosamente",
+                    showConfirmButton: false,
+                    timer: 2000
+                }).then(function () {
+                    //window.location = "clientes.php";
+                });
+            }
+        });
+    }
+
+}
+
+
+function editar_perfil(id_perfil, rfc, nombre_perfil, calle, no_exterior, no_interior, codigo_postal, colonia, regimen, uso_cfdi, metodo_pago, forma_pago) {
+
+    $("#tipo_gestion").val(id_perfil);
+    $("#rfc").val(rfc);
+    $("#nombre_perfil").val(nombre_perfil);
+    $("#calle").val(calle);
+    $("#no_interior").val(no_interior);
+    $("#no_exterior").val(no_exterior);
+    $("#codigo_postal").val(codigo_postal);
+    $("#colonia").val(colonia);
+    $("#estado").val(estado);
+    $("#municipio").val(municipio);
+    $("#pais").val(pais);
+    $("#regimen").val(regimen);
+    $("#uso_cfdi").val(uso_cfdi);
+    $("#metodo_pago").val(metodo_pago);
+    $("#forma_pago").val(forma_pago);
 }

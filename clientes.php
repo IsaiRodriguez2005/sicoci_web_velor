@@ -85,7 +85,7 @@ if (!isset($_SESSION['nombre_usuario'])) {
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text"><i class="fas fa-file-signature"></i></span>
                                             </div>
-                                            <input type="text" class="form-control" placeholder="Nombre de la persona" id="nombre" onfocus="resetear('nombre_social')" maxlength="150">
+                                            <input type="text" class="form-control" placeholder="Nombre de la persona" id="nombre_social" onfocus="resetear('nombre_social')" maxlength="150">
                                         </div>
                                     </div>
                                 </div>
@@ -176,7 +176,7 @@ if (!isset($_SESSION['nombre_usuario'])) {
                                                             <div class="input-group-prepend">
                                                                 <span class="input-group-text"><i class="fas fa-file-signature"></i></span>
                                                             </div>
-                                                            <input type="text" class="form-control" placeholder="Nombre de la persona" id="nombre_social" onfocus="resetear('nombre_social')" maxlength="150">
+                                                            <input type="text" class="form-control" placeholder="Nombre de la persona" id="nombre_perfil" onfocus="resetear('nombre_social')" maxlength="150">
                                                         </div>
                                                     </div>
                                                 </div>

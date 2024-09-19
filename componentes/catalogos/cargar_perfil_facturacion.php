@@ -57,10 +57,19 @@
                                         <i class='fas fa-dollar-sign'></i>
                                     </button>
                                     &nbsp;
-                                    <button type='button' class='btn btn-warning btn-sm' ".$disabled_edicion." title='Editar registro' onclick='editar_cliente(".$clientes['id_perfil'].", 
+                                    <button type='button' class='btn btn-warning btn-sm' ".$disabled_edicion." title='Editar registro' onclick='editar_perfil(".$clientes['id_perfil'].",
+                                                                                                                                                                &quot;".$clientes['rfc']."&quot;,
                                                                                                                                                                 &quot;".$clientes['nombre_social']."&quot;,
-                                                                                                                                                                
-                                                                                                                                                                '>
+                                                                                                                                                                &quot;".$clientes['calle']."&quot;,
+                                                                                                                                                                &quot;".$clientes['no_exterior']."&quot;,
+                                                                                                                                                                &quot;".$clientes['no_interior']."&quot;,
+                                                                                                                                                                &quot;".$clientes['codigo_postal']."&quot;,
+                                                                                                                                                                &quot;".$clientes['colonia']."&quot;,
+                                                                                                                                                                &quot;".$clientes['regimen_fiscal']."&quot;,
+                                                                                                                                                                &quot;".$clientes['uso_cfdi']."&quot;,
+                                                                                                                                                                &quot;".$clientes['metodo_pago']."&quot;,
+                                                                                                                                                                &quot;".$clientes['forma_pago']."&quot;
+                                                                                                                                                                )'>
                                         <i class='fas fa-edit'></i>
                                     </button>
                                     &nbsp;

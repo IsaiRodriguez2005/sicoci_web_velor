@@ -2,6 +2,7 @@
     session_start();
     require("../conexion.php");
     date_default_timezone_set('America/Mexico_City');
+    error_reporting(0);
 
     if(empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario']))
     {
@@ -51,17 +52,28 @@
             $resultado=mysqli_query($conexion, $insertCliente);
             if($resultado)
             {
-                echo "ok";
+                echo "1";
             }
             else
             {
-                echo "error";
+                echo "2";
             }
         }
         else
         {
-            /*
-            $updateCliente = "UPDATE emisores_clientes SET nombre_cliente='".trim($nuevo_social)."', correo='".strtolower($_POST['correo'])."', telefono='".$_POST['telefono']."' WHERE id_cliente=".$_POST['id_cliente']." AND id_emisor=".$_SESSION['id_emisor'];
+            
+            $updateCliente = "UPDATE emisores_clientes_facturacion SET 
+                                                                        rfc='".trim($_POST['rfc'])."',  
+                                                                        nombre_social='".strtolower($_POST['nombre_social'])."', 
+                                                                        calle='".strtolower($_POST['calle'])."', 
+                                                                        correo='".strtolower($_POST['correo'])."', 
+                                                                        correo='".strtolower($_POST['correo'])."', 
+                                                                        correo='".strtolower($_POST['correo'])."', 
+                                                                        correo='".strtolower($_POST['correo'])."', 
+                                                                        telefono='".$_POST['telefono']."' 
+                                                                    WHERE 
+                                                                        id_cliente=".$_POST['id_cliente']." AND 
+                                                                        id_emisor=".$_SESSION['id_emisor'];
             $resultado=mysqli_query($conexion, $updateCliente);
             if($resultado)
             {
@@ -71,24 +83,8 @@
             {
                 echo "error";
             }
-                */
+            
         }
     }
 ?>
 
-<script>
-  $(function () {
-    $('#tabla_cliente').DataTable({
-      "paging": true,
-      "lengthChange": false,
-      "searching": true,
-      "ordering": true,
-      "info": true,
-      "autoWidth": true,
-      "responsive": true,
-      "language": {
-        "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
-        }
-    });
-  });
-</script>
