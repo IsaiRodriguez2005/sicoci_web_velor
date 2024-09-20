@@ -89,7 +89,7 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"><i class="fas fa-user"></i></span>
                                 </div>
-                                <input type="text" class="form-control" placeholder="Nombre del usuario" id="nombre" onfocus="resetear('rfc')" maxlength="100">
+                                <input type="text" class="form-control" placeholder="Nombre del usuario" id="nombre" onfocus="resetear('nombre')" maxlength="100">
                             </div>
                         </div>
                         <div class="col-4">

@@ -94,7 +94,7 @@ if (!isset($_SESSION['nombre_usuario'])) {
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text"><i class="fas fa-file-signature"></i></span>
                                             </div>
-                                            <select class="form-control" id="tipo_personal" name="tipo_personal" required>
+                                            <select class="form-control" id="tipo_personal" name="tipo_personal" onfocus="resetear('tipo_personal')" required>
                                                 <option value="" selected disabled>--Tipo de personal--</option>
                                                 <option value="1">Recepción</option>
                                                 <option value="2">Terapeuta</option>
@@ -113,6 +113,11 @@ if (!isset($_SESSION['nombre_usuario'])) {
                                                 </li>
                                                 <li class="nav-item">
                                                     <a class="nav-link" id="custom-tabs-one-profile-tab" data-toggle="pill" href="#custom-tabs-one-profile" role="tab" aria-controls="custom-tabs-one-profile" aria-selected="false"><i class="fas fa-map-marked"></i> &nbsp;Domicilio</a>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <a class="nav-link" id="custom-tabs-two-profile-tab" data-toggle="pill" href="#custom-tabs-two-profile" role="tab" aria-controls="custom-tabs-two-profile" aria-selected="false">
+                                                        <i class="far fa-id-badge"></i> &nbsp;Permisos
+                                                    </a>
                                                 </li>
                                             </ul>
                                         </div>
@@ -221,6 +226,53 @@ if (!isset($_SESSION['nombre_usuario'])) {
                                                         </div>
                                                     </div>
                                                 </div>
+                                                <div class="tab-pane fade" id="custom-tabs-two-profile" role="tabpanel" aria-labelledby="custom-tabs-two-profile-tab">
+                                                    <div class="row">
+                                                        <div class="card-body">
+                                                            <div class="card card-info shadow-sm" style="max-width: 600px; margin: 20px auto;">
+                                                                <div class="card-body">
+                                                                    <div class="d-flex align-items-center justify-content-between">
+                                                                        <div class="form-group w-50 mr-2">
+                                                                            <label for="id_personal" class="form-label">Selecciona un Terapeuta</label>
+                                                                            <select class="form-control" id="id_personal">
+                                                                                <option value="0" selected disabled>Selecciona un Terapeuta</option>
+                                                                                <?php
+                                                                                $consulta = "SELECT id_personal, nombre_personal FROM emisores_personal WHERE tipo = 2;";
+                                                                                $res_exis_pers = mysqli_query($conexion, $consulta);
+                                                                                while ($terapeutas = mysqli_fetch_array($res_exis_pers)) {
+                                                                                    echo "<option value='" . $terapeutas['id_personal'] . "'>" . $terapeutas['nombre_personal'] . "</option>";
+                                                                                }
+                                                                                ?>
+                                                                            </select>
+                                                                        </div>
+                                                                        <div class="form-group w-50 ml-2">
+                                                                            <label for="fecha_permiso" class="form-label">Fecha</label>
+                                                                            <input type="date" class="form-control" id="fecha_permiso" required onfocus="resetear('fecha_permiso')">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+
+                                                            <div class="row">
+                                                                <div class="col-12">
+                                                                    <div class="input-group mb-3">
+                                                                        <div class="input-group-prepend">
+                                                                            <span class="input-group-text">
+                                                                                <i class="fas fa-file-signature"></i>
+                                                                            </span>
+                                                                        </div>
+                                                                        <textarea id="motivo_permiso" class="form-control" placeholder="Escriba el motivo de la cancelación" onfocus="resetear('motivo_permiso')" rows="4" required></textarea>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row d-flex justify-content-center">
+                                                                <button class="btn btn-danger" type="submit" onclick="guardar_permiso();">Aplicar Permiso</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
                                             </div>
                                         </div>
                                     </div>

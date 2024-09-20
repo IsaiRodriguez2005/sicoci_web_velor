@@ -93,7 +93,7 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"><i class="fas fa-tags"></i></span>
                                 </div>
-                                <select class="form-control" id="tipo" name="tipo" required onchange="deshabilitar()">
+                                <select class="form-control" id="tipo" name="tipo" required onchange="deshabilitar()" onfocus="resetear('tipo')">
                                     <option value="" selected disabled>Selecciona Producto/Servicio</option>
                                     <option value="1">Servicio</option>
                                     <option value="2">Producto</option>

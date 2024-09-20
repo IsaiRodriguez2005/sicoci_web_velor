@@ -333,3 +333,74 @@ function editar_personal(id_personal, nombre_personal, tipo_personal, calle, ext
 
     $("#modal_personal").modal("hide");
 }
+
+
+
+// PERMISOS------------------------------------------
+
+function guardar_permiso() {
+
+    var fecha_permiso = $("#fecha_permiso").val();
+    var motivo_permiso = $("#motivo_permiso").val();
+    var id_personal = $("#id_personal").val();
+
+    if (id_personal == '0') {
+        $("#id_personal").addClass('is-invalid');
+        Swal.fire({
+            icon: "error",
+            title: "Debes seleccionar un terapeuta",
+            showConfirmButton: false,
+            timer: 1500
+        });
+
+        return false;
+    }
+    if (fecha_permiso.length == 0) {
+        $("#fecha_permiso").addClass('is-invalid');
+        Swal.fire({
+            icon: "error",
+            title: "Debes especificar la fecha del permiso",
+            showConfirmButton: false,
+            timer: 1500
+        });
+
+        return false;
+    }
+
+    if (motivo_permiso.length == 0) {
+        $("#motivo_permiso").addClass('is-invalid');
+        Swal.fire({
+            icon: "error",
+            title: "Debes especificar el motivo del perimiso",
+            showConfirmButton: false,
+            timer: 1500
+        });
+
+        return false;
+    }
+
+    $.ajax({
+        cache: false,
+        url: 'componentes/catalogos/registrar_permiso_personal.php',
+        type: 'POST',
+        dataType: 'html',
+        data: { 'id_personal': id_personal, 'fecha_permiso': fecha_permiso, 'motivo_permiso': motivo_permiso},
+    }).done(function (resultado) {
+        if (resultado == "ok") {
+            Swal.fire({
+                icon: "success",
+                title: "Permiso Registrado",
+                html: "La informaci&oacute;n se registro exitosamente",
+                showConfirmButton: false,
+                timer: 2000
+            })
+        } else {
+            Swal.fire({
+                icon: "error",
+                title: "Permiso No Registrado",
+                showConfirmButton: false,
+                timer: 2000
+            })
+        }
+    });
+}
