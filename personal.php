@@ -114,10 +114,8 @@ if (!isset($_SESSION['nombre_usuario'])) {
                                                 <li class="nav-item">
                                                     <a class="nav-link" id="custom-tabs-one-profile-tab" data-toggle="pill" href="#custom-tabs-one-profile" role="tab" aria-controls="custom-tabs-one-profile" aria-selected="false"><i class="fas fa-map-marked"></i> &nbsp;Domicilio</a>
                                                 </li>
-                                                <li class="nav-item">
-                                                    <a class="nav-link" id="custom-tabs-two-profile-tab" data-toggle="pill" href="#custom-tabs-two-profile" role="tab" aria-controls="custom-tabs-two-profile" aria-selected="false">
-                                                        <i class="far fa-id-badge"></i> &nbsp;Permisos
-                                                    </a>
+                                                <li class="nav-item" id="permisos_view">
+
                                                 </li>
                                             </ul>
                                         </div>
@@ -226,25 +224,19 @@ if (!isset($_SESSION['nombre_usuario'])) {
                                                         </div>
                                                     </div>
                                                 </div>
+
                                                 <div class="tab-pane fade" id="custom-tabs-two-profile" role="tabpanel" aria-labelledby="custom-tabs-two-profile-tab">
                                                     <div class="row">
                                                         <div class="card-body">
                                                             <div class="card card-info shadow-sm" style="max-width: 600px; margin: 20px auto;">
                                                                 <div class="card-body">
                                                                     <div class="d-flex align-items-center justify-content-between">
-                                                                        <div class="form-group w-50 mr-2">
-                                                                            <label for="id_personal" class="form-label">Selecciona un Terapeuta</label>
-                                                                            <select class="form-control" id="id_personal">
-                                                                                <option value="0" selected disabled>Selecciona un Terapeuta</option>
-                                                                                <?php
-                                                                                $consulta = "SELECT id_personal, nombre_personal FROM emisores_personal WHERE tipo = 2;";
-                                                                                $res_exis_pers = mysqli_query($conexion, $consulta);
-                                                                                while ($terapeutas = mysqli_fetch_array($res_exis_pers)) {
-                                                                                    echo "<option value='" . $terapeutas['id_personal'] . "'>" . $terapeutas['nombre_personal'] . "</option>";
-                                                                                }
-                                                                                ?>
-                                                                            </select>
+                                                                        <div class="form-group w-50">
+                                                                            <label for="id_personal_input" class="form-label">ID Personal:</label>
+                                                                            <!-- Deshabilitar el campo de entrada -->
+                                                                            <input type="text" class="form-control" id="id_personal_input" value="12345" disabled>
                                                                         </div>
+
                                                                         <div class="form-group w-50 ml-2">
                                                                             <label for="fecha_permiso" class="form-label">Fecha</label>
                                                                             <input type="date" class="form-control" id="fecha_permiso" required onfocus="resetear('fecha_permiso')">
@@ -252,8 +244,6 @@ if (!isset($_SESSION['nombre_usuario'])) {
                                                                     </div>
                                                                 </div>
                                                             </div>
-
-
                                                             <div class="row">
                                                                 <div class="col-12">
                                                                     <div class="input-group mb-3">
@@ -268,6 +258,20 @@ if (!isset($_SESSION['nombre_usuario'])) {
                                                             </div>
                                                             <div class="row d-flex justify-content-center">
                                                                 <button class="btn btn-danger" type="submit" onclick="guardar_permiso();">Aplicar Permiso</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+
+                                                    <div class="card card-info">
+                                                        <div class="card-header">
+                                                            <h3 class="card-title text-sm">Historial de Permisos</h3>
+                                                        </div>
+                                                        <div class="card-body">
+                                                            <div class="row">
+                                                                <div class="col-12">
+                                                                    <div id="historial_permisos"></div>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>

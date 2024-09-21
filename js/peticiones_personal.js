@@ -250,6 +250,8 @@ function editar_personal(id_personal, nombre_personal, tipo_personal, calle, ext
 
     $("#leyenda").html("Modificar datos del personal");
     $("#tipo_gestion").val(id_personal);
+    $("#id_personal_input").val(id_personal);
+
     $("#nombre_personal").val(nombre_personal);
     $("#tipo_personal").val(tipo_personal);
     $("#calle").val(calle);
@@ -330,7 +332,7 @@ function editar_personal(id_personal, nombre_personal, tipo_personal, calle, ext
             $("#pais").prop('disabled', false);
         });
     });
-
+    habilitar_view_permisos()
     $("#modal_personal").modal("hide");
 }
 
@@ -342,7 +344,7 @@ function guardar_permiso() {
 
     var fecha_permiso = $("#fecha_permiso").val();
     var motivo_permiso = $("#motivo_permiso").val();
-    var id_personal = $("#id_personal").val();
+    var id_personal = $("#tipo_gestion").val();
 
     if (id_personal == '0') {
         $("#id_personal").addClass('is-invalid');
@@ -384,7 +386,7 @@ function guardar_permiso() {
         url: 'componentes/catalogos/registrar_permiso_personal.php',
         type: 'POST',
         dataType: 'html',
-        data: { 'id_personal': id_personal, 'fecha_permiso': fecha_permiso, 'motivo_permiso': motivo_permiso},
+        data: { 'id_personal': id_personal, 'fecha_permiso': fecha_permiso, 'motivo_permiso': motivo_permiso },
     }).done(function (resultado) {
         if (resultado == "ok") {
             Swal.fire({
@@ -402,5 +404,43 @@ function guardar_permiso() {
                 timer: 2000
             })
         }
+        mostrar_historial_permisos()
+    });
+}
+
+
+function habilitar_view_permisos() {
+    html = ' <a class="nav-link" id="custom-tabs-two-profile-tab" data-toggle="pill" href="#custom-tabs-two-profile" role="tab" aria-controls="custom-tabs-two-profile" aria-selected="false"><i class="far fa-id-badge"></i> &nbsp;Permisos</a> ';
+
+    mostrar_historial_permisos()
+    $("#permisos_view").html(html);
+
+}
+
+function mostrar_historial_permisos() {
+
+    var fecha_permiso = $("#fecha_permiso").val();
+    var motivo_permiso = $("#motivo_permiso").val();
+    var id_personal = $("#tipo_gestion").val();
+
+    Swal.fire({
+        title: 'Cargando permisos...',
+        allowEscapeKey: false,
+        allowOutsideClick: false,
+        didOpen: () => {
+            Swal.showLoading()
+        }
+    });
+
+    $.ajax({
+        cache: false,
+        url: 'componentes/catalogos/cargar_permisos.php',
+        type: 'POST',
+        dataType: 'html',
+        data: { 'id_personal': id_personal, 'motivo_permiso': motivo_permiso, 'fecha_permiso': fecha_permiso },
+    }).done(function (resultado) {
+        console.log(resultado)
+        $("#historial_permisos").html(resultado);
+        Swal.close();
     });
 }

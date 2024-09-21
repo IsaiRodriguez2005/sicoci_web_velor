@@ -23,7 +23,7 @@
                 $max = mysqli_fetch_array($resMAX);
                 $ultimo = $max['no_registro'] + 1;
     
-                $insertPermiso = "INSERT INTO emisores_personal_permisos VALUES(".$ultimo.", ".$_SESSION['id_emisor'].",'".intval($_POST['id_personal'])."',".strtoupper($_POST['fecha_permiso']).",'".strtoupper($_POST['motivo_permiso'])."','".$fecha_alta."', 1)";
+                $insertPermiso = "INSERT INTO emisores_personal_permisos VALUES(".$ultimo.", ".$_SESSION['id_emisor'].",'".intval($_POST['id_personal'])."','".$_POST['fecha_permiso']."','".strtoupper($_POST['motivo_permiso'])."','".$fecha_alta."', 1)";
                 $resultado = mysqli_query($conexion, $insertPermiso);
                 if($resultado)
                 {

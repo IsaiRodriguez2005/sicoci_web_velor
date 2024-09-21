@@ -12,13 +12,13 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
 } else {
     $html = "";
 
-    $sql = "SELECT id_cliente, nombre_social FROM emisores_clientes;";
+    $sql = "SELECT id_cliente, nombre_cliente FROM emisores_clientes;";
     $res = mysqli_query($conexion, $sql);
     if (mysqli_num_rows($res) == 0) {
         $html.= "<option value='No existen clientes'></option>";
     } else {
         while ($cliente = mysqli_fetch_array($res)) {
-            $html.= "<option value='" . $cliente['nombre_social'] . "'></option>";
+            $html.= "<option value='" . $cliente['nombre_cliente'] . "'></option>";
         }
     }
 

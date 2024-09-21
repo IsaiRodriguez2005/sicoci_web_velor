@@ -185,11 +185,16 @@ function gestionar_cita() {
 }
 
 
-function cargar_datos() {
+function cargar_datos(movimiento) {
 
     id_cliente = $("#id_cliente2").val();
     fecha_hora_cita = $("#fecha_hora_cita_form").val();
 
+    // movimiento 1 :  cargar datos para nueva cita
+    // movimiento 2 : cargar datos para ver disponivilidad de terapeutas [proximos 7 dias]
+    // por defecto simpre sera el 1
+
+    //console.log(movimiento)
 
     $.ajax({
         cache: false,
@@ -197,9 +202,14 @@ function cargar_datos() {
         url: "componentes/catalogos/cargar_terapeutas.php",
         type: 'POST',
         dataType: 'html',
-        data: { 'id_cliente': id_cliente, 'fecha_hora': fecha_hora_cita, },
+        data: { 'movimiento': movimiento, 'id_cliente': id_cliente, 'fecha_hora': fecha_hora_cita, },
     }).done(function (resultado) {
-        $("#terapeuta_form").html(resultado);
+        console.log(resultado)
+        if (movimiento == 1) {
+            $("#terapeuta_form").html(resultado);
+        } else {
+
+        }
     })
 
 
@@ -297,7 +307,7 @@ function editar_cita(folio_cita, nombre_cliente, id_consultorio, id_terapeuta, t
 }
 
 function cancelar_cita(id_folio, nombre_cliente, nombre_terapeuta, nombre_consultorio) {
-    
+
     $("#folio_cancelar").html(id_folio);
     $("#cliente_cancelar").html("Cliente: " + nombre_cliente);
     $("#terapeuta_cancelar").html("Terapeuta: " + nombre_terapeuta);
@@ -330,21 +340,19 @@ function enviar_cancelacion() {
         data: { 'id_folio': id_folio, 'motivo': motivo },
     }).done(function (resultado) {
         Swal.close();
-        if(resultado == "ok")
-        {
+        if (resultado == "ok") {
             Swal.fire({
                 icon: "success",
                 title: "Cancelaci&oacute;n exitosa",
                 showConfirmButton: false,
                 timer: 2000
             });
-            $("#btn_edit_"+id_folio).prop("disabled", "disabled");
-            $("#btn_can_"+id_folio).prop("disabled", "disabled");
-            $("#td_ef_"+id_folio).html('<span class="badge badge-secondary" style="width: 100%; color:white;">CANCELADO</span>');
+            $("#btn_edit_" + id_folio).prop("disabled", "disabled");
+            $("#btn_can_" + id_folio).prop("disabled", "disabled");
+            $("#td_ef_" + id_folio).html('<span class="badge badge-secondary" style="width: 100%; color:white;">CANCELADO</span>');
             $("#modal_cancelacion").modal("hide");
         }
-        if(resultado == "error")
-        {
+        if (resultado == "error") {
             Swal.fire({
                 icon: "error",
                 title: "No se logro realizar la cancelaci&oacute;n",
@@ -352,15 +360,14 @@ function enviar_cancelacion() {
                 timer: 2000
             });
         }
-        if(resultado == "error2")
-            {
-                Swal.fire({
-                    icon: "error",
-                    title: "No se logro actualizar el estatus de la cita",
-                    showConfirmButton: false,
-                    timer: 2000
-                });
-            }
+        if (resultado == "error2") {
+            Swal.fire({
+                icon: "error",
+                title: "No se logro actualizar el estatus de la cita",
+                showConfirmButton: false,
+                timer: 2000
+            });
+        }
     });
 }
 

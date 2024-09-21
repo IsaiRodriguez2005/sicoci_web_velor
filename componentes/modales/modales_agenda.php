@@ -28,7 +28,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="fecha_hora_cita">Fecha y Hora de Cita</label>
-                                <input type="datetime-local" class="form-control" id="fecha_hora_cita_form" required onchange="cargar_datos();">
+                                <input type="datetime-local" class="form-control" id="fecha_hora_cita_form" required onchange="cargar_datos(1);">
                             </div>
                         </div>
                     </div>
@@ -530,7 +530,7 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title text-success">Ver Nuevo Terapeuta</h4>
+                <h4 class="modal-title text-success">Ver Disponibilidad Terapeuta</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
