@@ -28,7 +28,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="fecha_hora_cita">Fecha y Hora de Cita</label>
-                                <input type="datetime-local" class="form-control" id="fecha_hora_cita_form" required onchange="cargar_datos(1);">
+                                <input type="datetime-local" class="form-control" id="fecha_hora_cita_form" required onchange="cargar_datos();">
                             </div>
                         </div>
                     </div>
@@ -45,7 +45,7 @@
                                         ?>
                                     </select>
                                     <button type="button" class="btn btn-info ml-2" onclick="abrir_modal('modal_nueva_cita', 'modal_nuevo_terapeuta')">+</button>
-                                    <button type="button" class="btn btn-info ml-2" onclick="abrir_modal('modal_nueva_cita', 'modal_ver_terapeuta')"><i class="far fa-eye"></i></button>
+                                    <button type="button" class="btn btn-info ml-2" onclick="disponibilidad_terapeutas()"><i class="far fa-eye"></i></button>
                                 </div>
                             </div>
                         </div>
@@ -526,174 +526,51 @@
         </div>
     </div>
 </div>
+<!-- Modal nuevo terapeuta -->
+
+<!-- Modal disponibilidad terapeuta -->
 <div class="modal fade" id="modal_ver_terapeuta" role="dialog" style="overflow: scroll;">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title text-success">Ver Disponibilidad Terapeuta</h4>
+                <h4 class="modal-title text-success">Disponibilidad de Terapeuta</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="card-body">
-                <h6><i class="fas fa-id-card"></i> Datos de identificaci&oacute;n</h6>
-                <hr>
-
-                <div class="row">
-                    <div class="col-8">
-                        <div class="input-group mb-3">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text"><i class="fas fa-file-signature"></i></span>
-                            </div>
-                            <input type="text" class="form-control" placeholder="Nombre del personal" id="nombre_personal" onfocus="resetear('nombre_personal')" maxlength="150" require>
-                        </div>
-                    </div>
-                    <div class="col-4">
-                        <div class="input-group mb-3">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text"><i class="fas fa-file-signature"></i></span>
-                            </div>
-                            <select class="form-control" id="tipo_personal" name="tipo_personal" required>
-                                <option value="2" selected>Terapeuta</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
                 <div class="row">
                     <div class="col-12">
-                        <div class="card card-dark card-tabs">
-                            <div class="card-header p-0 pt-1">
-                                <ul class="nav nav-tabs" id="custom-tabs-one-tab" role="tablist">
-                                    <li class="nav-item">
-                                        <a class="nav-link active" id="custom-tabs-one-home-tab_ter" data-toggle="pill" href="#custom-tabs-one-home_ter" role="tab" aria-controls="custom-tabs-one-home_ter" aria-selected="true"><i class="fas fa-info"></i> &nbsp;Datos de contacto</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" id="custom-tabs-one-profile-tab_ter" data-toggle="pill" href="#custom-tabs-one-profile_ter" role="tab" aria-controls="custom-tabs-one-profile_ter" aria-selected="false"><i class="fas fa-map-marked"></i> &nbsp;Domicilio</a>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="card-body">
-                                <div class="tab-content" id="custom-tabs-one-tabContent">
-                                    <div class="tab-pane fade show active" id="custom-tabs-one-home_ter" role="tabpanel" aria-labelledby="custom-tabs-one-home-tab_ter">
-                                        <div class="row">
-                                            <div class="col-4">
-                                                <div class="input-group mb-3">
-                                                    <div class="input-group-prepend">
-                                                        <span class="input-group-text"><i class="fas fa-envelope"></i></span>
-                                                    </div>
-                                                    <input type="text" class="form-control" placeholder="Correo electr&oacute;nico" id="correo" onfocus="resetear('correo')" maxlength="150">
-                                                </div>
-                                            </div>
-                                            <div class="col-4">
-                                                <div class="input-group mb-3">
-                                                    <div class="input-group-prepend">
-                                                        <span class="input-group-text"><i class="fas fa-mobile-alt"></i></span>
-                                                    </div>
-                                                    <input type="text" class="form-control" placeholder="N&uacute;mero telef&oacute;nico" id="telefono" onfocus="resetear('telefono')" maxlength="10" onKeypress="if (event.keyCode < 45 || event.keyCode > 57) event.returnValue = false;">
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="tab-pane fade" id="custom-tabs-one-profile_ter" role="tabpanel" aria-labelledby="custom-tabs-one-profile-tab_ter">
-                                        <div class="row">
-                                            <div class="col-4">
-                                                <div class="input-group mb-3">
-                                                    <div class="input-group-prepend">
-                                                        <span class="input-group-text"><i class="fas fa-road"></i></span>
-                                                    </div>
-                                                    <input type="text" class="form-control" placeholder="Calle" id="calle" onfocus="resetear('calle')" maxlength="50">
-                                                </div>
-                                            </div>
-                                            <div class="col-4">
-                                                <div class="input-group mb-3">
-                                                    <div class="input-group-prepend">
-                                                        <span class="input-group-text"><i class="fas fa-hashtag"></i></span>
-                                                    </div>
-                                                    <input type="text" class="form-control" placeholder="N&uacute;mero exterior" id="no_exterior" onfocus="resetear('no_exterior')" maxlength="50">
-                                                </div>
-                                            </div>
-                                            <div class="col-4">
-                                                <div class="input-group mb-3">
-                                                    <div class="input-group-prepend">
-                                                        <span class="input-group-text"><i class="fas fa-hashtag"></i></span>
-                                                    </div>
-                                                    <input type="text" class="form-control" placeholder="N&uacute;mero interior" id="no_interior" onfocus="resetear('no_interior')" maxlength="50">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-4">
-                                                <div class="input-group mb-3">
-                                                    <div class="input-group-prepend">
-                                                        <span class="input-group-text"><i class="fas fa-street-view"></i></span>
-                                                    </div>
-                                                    <input type="text" class="form-control" placeholder="C&oacute;digo postal" id="codigo_postal" onfocus="resetear('codigo_postal')" onKeyup="buscar_cp()" onKeypress="if (event.keyCode < 45 || event.keyCode > 57) event.returnValue = false;" min="0">
-                                                </div>
-                                            </div>
-                                            <div class="col-4">
-                                                <input type="hidden" id="colonia_oculta" value="1">
-                                                <div class="input-group mb-3" id="dato_colonia">
-                                                    <div class="input-group-prepend">
-                                                        <span class="input-group-text"><i class="fas fa-city"></i></span>
-                                                    </div>
-                                                    <select class="form-control" id="colonia" onfocus="resetear('colonia')" disabled>
-                                                        <option value="0">Colonia</option>
-                                                    </select>
-                                                    &nbsp;
-                                                    <button type="button" class="btn btn-info" id="colonia_texto" onclick="colonia_text();" title="Capturar colonia" disabled><i class="fas fa-edit"></i></button>
-                                                </div>
-                                            </div>
-                                            <div class="col-4">
-                                                <div class="input-group mb-3" id="dato_estado">
-                                                    <div class="input-group-prepend">
-                                                        <span class="input-group-text"><i class="fas fa-city"></i></span>
-                                                    </div>
-                                                    <select class="form-control" id="estado" onfocus="resetear('estado')" disabled>
-                                                        <option value="0">Estado</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-4">
-                                                <div class="input-group mb-3" id="dato_municipio">
-                                                    <div class="input-group-prepend">
-                                                        <span class="input-group-text"><i class="fas fa-city"></i></span>
-                                                    </div>
-                                                    <select class="form-control" id="municipio" onfocus="resetear('municipio')" disabled>
-                                                        <option value="0">Municipio</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="col-4">
-                                                <div class="input-group mb-3" id="dato_pais">
-                                                    <div class="input-group-prepend">
-                                                        <span class="input-group-text"><i class="fas fa-city"></i></span>
-                                                    </div>
-                                                    <select class="form-control" id="pais" onfocus="resetear('pais')" disabled>
-                                                        <option value="0">Pais</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <div id="disponibilidad_terapeutas" class="table-responsive"></div>
                     </div>
-                </div><br>
+                </div>
             </div>
             <div class="modal-footer">
-
-                <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="cerrar_modal('modal_nuevo_cliene', 'modal_nueva_cita')">Cerrar</button>
-                <center><button type="button" class="btn btn-success" onclick="gestionar_personal('', 'modal_nueva_cita', 'modal_ver_terapeuta');">Guardar Terapeuta</button></center><br><br><br>
+                <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="cerrar_modal('modal_nuevo_cliene', 'modal_nueva_cita')">Regresar</button>
             </div>
         </div>
     </div>
 </div>
+<style>
+    .badge-custom {
+        background-color: #fff;
+        border: 1px solid #ddd;
+        padding: 5px;
+        text-align: center;
+    }
+
+    .calendar-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
+        grid-gap: 10px;
+        background-color: #f0f0f0;
+        padding: 10px;
+    }
+</style>
+<!-- Modal disponibilidad terapeuta -->
+
 <!-- Funciones JS Personalizadas -->
 <script src="js/peticiones_personal.js"></script>
-<!-- Modal nuevo terapeuta -->
 
 
 <!-- Modal nuevo Consultorio -->
@@ -751,15 +628,18 @@
                         </div>
                         <div class="row">
                             <div class="col-12">
-                                <h7 id="cliente_cancelar"> </h6>
+                                <h7 id="cliente_cancelar">
+                                    </h6>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-7">
-                                <h7 id="terapeuta_cancelar"> </h6>
+                                <h7 id="terapeuta_cancelar">
+                                    </h6>
                             </div>
                             <div class="col-5">
-                                <h7 id="consultorio_cancelar"> </h6>
+                                <h7 id="consultorio_cancelar">
+                                    </h6>
                             </div>
                         </div>
                     </div>

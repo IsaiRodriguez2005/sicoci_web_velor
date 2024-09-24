@@ -17,7 +17,7 @@
         $html = '';
         if(true)
         {
-            $sql = "SELECT id_cliente, nombre_social FROM emisores_clientes WHERE nombre_social = '".$_POST['nombre_social']."';";
+            $sql = "SELECT id_cliente, nombre_cliente FROM emisores_clientes WHERE nombre_cliente = '".$_POST['nombre_social']."';";
         }
         $res = mysqli_query($conexion, $sql);
         $cliente = mysqli_fetch_array($res);

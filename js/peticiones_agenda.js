@@ -34,6 +34,7 @@ function buscar_cliente(nombre_social) {
         type: 'POST',
         data: { 'nombre_social': nombre_social.value }
     }).done(function (data) {
+        console.log(data)
         $("#id_cliente2").val(data);
     })
 }
@@ -119,7 +120,7 @@ function gestionar_cita() {
                 showConfirmButton: false,
                 timer: 2000
             }).then(function () {
-                window.location = 'facturas.php';
+                window.location = 'agenda.php';
             });
         }
         else if (resultado == "actualizado") {
@@ -130,7 +131,7 @@ function gestionar_cita() {
                 showConfirmButton: false,
                 timer: 2000
             }).then(function () {
-                window.location = 'facturas.php';
+                window.location = 'agenda.php';
             });
         }
         else if (resultado == "error") {
@@ -185,17 +186,11 @@ function gestionar_cita() {
 }
 
 
-function cargar_datos(movimiento) {
+function cargar_datos() {
 
     id_cliente = $("#id_cliente2").val();
     fecha_hora_cita = $("#fecha_hora_cita_form").val();
-
-    // movimiento 1 :  cargar datos para nueva cita
-    // movimiento 2 : cargar datos para ver disponivilidad de terapeutas [proximos 7 dias]
-    // por defecto simpre sera el 1
-
-    //console.log(movimiento)
-
+    movimiento = 1
     $.ajax({
         cache: false,
 
@@ -204,11 +199,8 @@ function cargar_datos(movimiento) {
         dataType: 'html',
         data: { 'movimiento': movimiento, 'id_cliente': id_cliente, 'fecha_hora': fecha_hora_cita, },
     }).done(function (resultado) {
-        console.log(resultado)
         if (movimiento == 1) {
             $("#terapeuta_form").html(resultado);
-        } else {
-
         }
     })
 
@@ -398,4 +390,23 @@ function cerrar_modal(modal1, modal2) {
         // abrimos el modal del cliente
         $("#" + modal2).modal("show");
     }
+}
+
+function disponibilidad_terapeutas() {
+
+    abrir_modal('modal_nueva_cita', 'modal_ver_terapeuta')
+
+    var fecha_hora = $("#fecha_hora_cita_form").val();
+    console.log(fecha_hora)
+    var movimiento = '2';
+    $.ajax({
+        cache: false,
+        url: 'componentes/catalogos/cargar_terapeutas.php',
+        type: 'POST',
+        dataType: 'html',
+        data: {'fecha_hora': fecha_hora, 'movimiento': movimiento},
+    }).done(function(resultado){
+        $("#disponibilidad_terapeutas").html(resultado)
+    });
+
 }

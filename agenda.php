@@ -154,7 +154,7 @@ if (!isset($_SESSION['nombre_usuario'])) {
                                         </div>
                                         -->
                                     </div>
-                                    
+
                                     <div class="row">
                                         <!-- Fecha Inicial -->
                                         <div class="col-md-3 mb-3">
@@ -218,119 +218,119 @@ if (!isset($_SESSION['nombre_usuario'])) {
             <!-- /.control-sidebar -->
 
             <!--MODAL EDITAR-->
-                    <div class="modal fade" id="editar_factura" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" style="overflow-y: scroll;">
-                            <div class="modal-dialog modal-xl">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h4 class="modal-title">Factura # <span class="text-danger" id="e_ffactura"></span></h4>
-                                    </div>
-                                    <div class="modal-body">
-                                        <div id="ver_factura"></div>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-primary" onclick="validar_factura(1)">Guardar Proforma</button>
-                                        <button type="button" class="btn btn-success" onclick="validar_factura(2)">Timbrar Factura</button>
-                                    </div>
-                                </div>
-                            </div>
+            <div class="modal fade" id="editar_factura" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" style="overflow-y: scroll;">
+                <div class="modal-dialog modal-xl">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Factura # <span class="text-danger" id="e_ffactura"></span></h4>
                         </div>
-                        <div class="modal fade" id="ver_pdf_factura" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" style="overflow-y: scroll;">
-                            <div class="modal-dialog modal-xl">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h4 class="modal-title">Factura # <span class="text-danger" id="pdf_ffactura"></span></h4>
-                                    </div>
-                                    <div class="modal-body">
-                                        <embed id="ruta_pdf" frameborder="0" width="100%" height="600px"></embed>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="modal-body">
+                            <div id="ver_factura"></div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" onclick="validar_factura(1)">Guardar Proforma</button>
+                            <button type="button" class="btn btn-success" onclick="validar_factura(2)">Timbrar Factura</button>
                         </div>
                     </div>
+                </div>
+            </div>
+            <div class="modal fade" id="ver_pdf_factura" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" style="overflow-y: scroll;">
+                <div class="modal-dialog modal-xl">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Factura # <span class="text-danger" id="pdf_ffactura"></span></h4>
+                        </div>
+                        <div class="modal-body">
+                            <embed id="ruta_pdf" frameborder="0" width="100%" height="600px"></embed>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
 
 
 
 
-            <!--Modales-->
-            <?php 
-            require("componentes/modales/modales_agenda.php");
-            ?>
-            <!-- ./wrapper -->
+        <!--Modales-->
+        <?php
+        require("componentes/modales/modales_agenda.php");
+        ?>
+        <!-- ./wrapper -->
 
-            <!-- jQuery -->
-            <script src="plugins/jquery/jquery.min.js"></script>
-            <!-- jQuery UI 1.11.4 -->
-            <script src="plugins/jquery-ui/jquery-ui.min.js"></script>
-            <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
-            <script>
-                $.widget.bridge('uibutton', $.ui.button)
-            </script>
-            <!-- Bootstrap 4 -->
-            <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-            <!-- ChartJS -->
-            <script src="plugins/chart.js/Chart.min.js"></script>
-            <!-- Sparkline -->
-            <script src="plugins/sparklines/sparkline.js"></script>
-            <!-- JQVMap -->
-            <script src="plugins/jqvmap/jquery.vmap.min.js"></script>
-            <script src="plugins/jqvmap/maps/jquery.vmap.usa.js"></script>
-            <!-- jQuery Knob Chart -->
-            <script src="plugins/jquery-knob/jquery.knob.min.js"></script>
-            <!-- daterangepicker -->
-            <script src="plugins/moment/moment.min.js"></script>
-            <script src="plugins/daterangepicker/daterangepicker.js"></script>
-            <!-- Tempusdominus Bootstrap 4 -->
-            <script src="plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
-            <!-- Summernote -->
-            <script src="plugins/summernote/summernote-bs4.min.js"></script>
-            <!-- overlayScrollbars -->
-            <script src="plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
-            <!-- AdminLTE App -->
-            <script src="dist/js/adminlte.js"></script>
-            <!-- Funciones JS Personalizadas -->
-            <script src="js/peticiones_agenda.js"></script>
-            <script src="js/peticiones_generales.js"></script>
-            <!-- bs-custom-file-input -->
-            <script src="plugins/bs-custom-file-input/bs-custom-file-input.min.js"></script>
-            <!-- DataTables  & Plugins -->
-            <script src="plugins/datatables/jquery.dataTables.min.js"></script>
-            <script src="plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
-            <script src="plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
-            <script src="plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
-            <script src="plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
-            <script src="plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
-            <script src="plugins/jszip/jszip.min.js"></script>
-            <script src="plugins/pdfmake/pdfmake.min.js"></script>
-            <script src="plugins/pdfmake/vfs_fonts.js"></script>
-            <script src="plugins/datatables-buttons/js/buttons.html5.min.js"></script>
-            <script src="plugins/datatables-buttons/js/buttons.print.min.js"></script>
-            <script src="plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
-            <!-- Page specific script -->
-            <script>
-                $(function() {
-                    $('#tabla_cliente').DataTable({
-                        "paging": true,
-                        "lengthChange": false,
-                        "searching": true,
-                        "ordering": true,
-                        "info": true,
-                        "autoWidth": true,
-                        "responsive": true,
-                        "language": {
-                            "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
-                        }
-                    });
+        <!-- jQuery -->
+        <script src="plugins/jquery/jquery.min.js"></script>
+        <!-- jQuery UI 1.11.4 -->
+        <script src="plugins/jquery-ui/jquery-ui.min.js"></script>
+        <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+        <script>
+            $.widget.bridge('uibutton', $.ui.button)
+        </script>
+        <!-- Bootstrap 4 -->
+        <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+        <!-- ChartJS -->
+        <script src="plugins/chart.js/Chart.min.js"></script>
+        <!-- Sparkline -->
+        <script src="plugins/sparklines/sparkline.js"></script>
+        <!-- JQVMap -->
+        <script src="plugins/jqvmap/jquery.vmap.min.js"></script>
+        <script src="plugins/jqvmap/maps/jquery.vmap.usa.js"></script>
+        <!-- jQuery Knob Chart -->
+        <script src="plugins/jquery-knob/jquery.knob.min.js"></script>
+        <!-- daterangepicker -->
+        <script src="plugins/moment/moment.min.js"></script>
+        <script src="plugins/daterangepicker/daterangepicker.js"></script>
+        <!-- Tempusdominus Bootstrap 4 -->
+        <script src="plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
+        <!-- Summernote -->
+        <script src="plugins/summernote/summernote-bs4.min.js"></script>
+        <!-- overlayScrollbars -->
+        <script src="plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
+        <!-- AdminLTE App -->
+        <script src="dist/js/adminlte.js"></script>
+        <!-- Funciones JS Personalizadas -->
+        <script src="js/peticiones_agenda.js"></script>
+        <script src="js/peticiones_generales.js"></script>
+        <!-- bs-custom-file-input -->
+        <script src="plugins/bs-custom-file-input/bs-custom-file-input.min.js"></script>
+        <!-- DataTables  & Plugins -->
+        <script src="plugins/datatables/jquery.dataTables.min.js"></script>
+        <script src="plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+        <script src="plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+        <script src="plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+        <script src="plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+        <script src="plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+        <script src="plugins/jszip/jszip.min.js"></script>
+        <script src="plugins/pdfmake/pdfmake.min.js"></script>
+        <script src="plugins/pdfmake/vfs_fonts.js"></script>
+        <script src="plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+        <script src="plugins/datatables-buttons/js/buttons.print.min.js"></script>
+        <script src="plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+        <!-- Page specific script -->
+        <script>
+            $(function() {
+                $('#tabla_cliente').DataTable({
+                    "paging": true,
+                    "lengthChange": false,
+                    "searching": true,
+                    "ordering": true,
+                    "info": true,
+                    "autoWidth": true,
+                    "responsive": true,
+                    "language": {
+                        "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
+                    }
                 });
-            </script>
-            <script>
-                document.addEventListener("DOMContentLoaded", function(event) {
-                    mostrar_historial_citas();
-                });
-            </script>
+            });
+        </script>
+        <script>
+            document.addEventListener("DOMContentLoaded", function(event) {
+                mostrar_historial_citas();
+            });
+        </script>
     </body>
 
     </html>

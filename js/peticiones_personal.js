@@ -444,3 +444,4 @@ function mostrar_historial_permisos() {
         Swal.close();
     });
 }
+
