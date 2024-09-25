@@ -59,116 +59,120 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
     } else {
 
         //$nombreDia = date('l', strtotime($_POST['fecha_hora']));
-        if (!$_POST['fecha_hora']) {
-            echo '<h2>Debes de ingresar una fecha para ver dsiponibilidad</h2>';
-        } else {
 
-
-
-
-            $html = '';
-            $html .= '
+        $html = '';
+        $html .= '
             <table class="table table-striped table-hover" id="tabla_disponibilidad_terapeutas" width="100%">
                 <thead>
                     <tr>
                         <th class="sticky text-center text-sm">Terapeuta</th>
                         ';
 
+        if (!$_POST['fecha_hora']) {
+            $_fecha = date('Y-m-d');
+        } else {
             $_fecha = date('Y-m-d', strtotime($_POST['fecha_hora']));
-
-            // convertir la fecha inicial a un objeto DateTime para realizar operaciones
-            $fecha_tabla = new DateTime($_fecha);
-
-            // array para almacenar los nombres de los dias en español
-            $dias_semana = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
-
-            // Recorrer los próximos 7 dias
-            for ($i = 0; $i < 7; $i++) {
-
-                // Obtener el numero del día de la semana (0 = domingo, 6 = sabado)
-                $dia_semana = $fecha_tabla->format('w');
-
-                // Obtener la fecha formateada y el nombre del dia
-                $fecha_formateada = $fecha_tabla->format('Y-m-d');
-                $nombre_dia = $dias_semana[$dia_semana];
-
-                // Imprimir o utilizar la fecha y el nombre del día formateados
-                $html .= '<th class="text-center text-sm">'.$nombre_dia.'<br>'.$fecha_tabla->format('d-m-Y').'</th>';
-
-                // Incrementar la fecha en un día
-                $fecha_tabla->modify('+1 day');
-            }
+        }
 
 
-            $html .= '
+        // convertir la fecha inicial a un objeto DateTime para realizar operaciones
+        $fecha_tabla = new DateTime($_fecha);
+
+        // array para almacenar los nombres de los dias en español
+        $dias_semana = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+
+        // Recorrer los próximos 7 dias
+        for ($i = 0; $i < 7; $i++) {
+
+            // Obtener el numero del día de la semana (0 = domingo, 6 = sabado)
+            $dia_semana = $fecha_tabla->format('w');
+
+            // Obtener la fecha formateada y el nombre del dia
+            $fecha_formateada = $fecha_tabla->format('Y-m-d');
+            $nombre_dia = $dias_semana[$dia_semana];
+
+            // Imprimir o utilizar la fecha y el nombre del día formateados
+            $html .= '<th class="text-center text-sm">' . $nombre_dia . '<br>' . $fecha_tabla->format('d-m-Y') . '</th>';
+
+            // Incrementar la fecha en un día
+            $fecha_tabla->modify('+1 day');
+        }
+
+
+        $html .= '
                     </tr>
                 </thead>
                 <tbody id="mostrar_clientes">
             ';
 
-            $queryTerapeutas = "SELECT id_personal, nombre_personal FROM emisores_personal WHERE tipo = 2 AND id_emisor = " . $_SESSION['id_usuario'] . "";
-            $resultadotTerapeutas = mysqli_query($conexion, $queryTerapeutas);
-            while ($terapeuta = mysqli_fetch_assoc($resultadotTerapeutas)) {
+        $queryTerapeutas = "SELECT id_personal, nombre_personal FROM emisores_personal WHERE tipo = 2 AND id_emisor = " . $_SESSION['id_usuario'] . "";
+        $resultadotTerapeutas = mysqli_query($conexion, $queryTerapeutas);
+        while ($terapeuta = mysqli_fetch_assoc($resultadotTerapeutas)) {
 
-                $nombre_terapeuta = $terapeuta['nombre_personal'];
-
+            $nombre_terapeuta = $terapeuta['nombre_personal'];
+            if (!$_POST['fecha_hora']) {
+                $fecha = date('Y-m-d');
+            } else {
                 $fecha = date('Y-m-d', strtotime($_POST['fecha_hora']));
-                // array para almacenar horarios en formato de 30min
-                $horarios = [];
+            }
 
-                /* HORARIOS (Margen) */
-                $horaInicio = new DateTime('08:00');
-                $horaFin = new DateTime('18:00');
+            
+            // array para almacenar horarios en formato de 30min
+            $horarios = [];
 
-                // iteramos para giardar la lista de los horarios
-                while ($horaInicio <= $horaFin) {
-                    $horarios[] = $horaInicio->format('H:i');
-                    $horaInicio->modify('+30 minutes');
-                }
+            /* HORARIOS (Margen) */
+            $horaInicio = new DateTime('08:00');
+            $horaFin = new DateTime('18:00');
 
-                $html .= "
+            // iteramos para giardar la lista de los horarios
+            while ($horaInicio <= $horaFin) {
+                $horarios[] = $horaInicio->format('H:i');
+                $horaInicio->modify('+30 minutes');
+            }
+
+            $html .= "
                             <tr>
                                 <td class='text-center'> " . $nombre_terapeuta . "</td>
                                 
                         ";
 
-                // Convertir la fecha inicial a un objeto DateTime para realizar operaciones
-                $fecha_objeto = new DateTime($fecha);
+            // Convertir la fecha inicial a un objeto DateTime para realizar operaciones
+            $fecha_objeto = new DateTime($fecha);
 
-                // Recorrer los próximos 7 días
-                for ($i = 0; $i < 7; $i++) {
+            // Recorrer los próximos 7 días
+            for ($i = 0; $i < 7; $i++) {
 
-                    // Obtener la fecha formateada
-                    $fecha = $fecha_objeto->format('Y-m-d');
+                // Obtener la fecha formateada
+                $fecha = $fecha_objeto->format('Y-m-d');
 
-                    // buscamos los horarios que esten ocudos en el dia establecido por el usuario
-                    $query = "SELECT id_terapeuta, fecha_agenda FROM emisores_agenda WHERE fecha_agenda >= '" . $fecha . "T08:00' AND fecha_agenda <= '" . $fecha . "T21:00' AND id_terapeuta = " . $terapeuta['id_personal'] . "";
-                    $resultado = mysqli_query($conexion, $query);
-                    //echo $query;
+                // buscamos los horarios que esten ocudos en el dia establecido por el usuario
+                $query = "SELECT id_terapeuta, fecha_agenda FROM emisores_agenda WHERE fecha_agenda >= '" . $fecha . "T08:00' AND fecha_agenda <= '" . $fecha . "T21:00' AND id_terapeuta = " . $terapeuta['id_personal'] . "";
+                $resultado = mysqli_query($conexion, $query);
+                //echo $query;
 
-                    $horariosOcupados = [];
+                $horariosOcupados = [];
 
-                    // guardamos los horarios redondeados en el formato de 30min
-                    while ($fila = mysqli_fetch_assoc($resultado)) {
+                // guardamos los horarios redondeados en el formato de 30min
+                while ($fila = mysqli_fetch_assoc($resultado)) {
 
-                        $horario = date('H:i:s', strtotime($fila['fecha_agenda']));
-                        $horario = redondearHora($horario);
-                        $horariosOcupados[] = $horario;
-                    }
+                    $horario = date('H:i:s', strtotime($fila['fecha_agenda']));
+                    $horario = redondearHora($horario);
+                    $horariosOcupados[] = $horario;
+                }
 
-                    //print_r($horariosOcupados);
+                //print_r($horariosOcupados);
 
-                    // quitaos los horarios ocupados de los hoarios disponibles
-                    $horariosDisponibles = array_diff($horarios, $horariosOcupados);
+                // quitaos los horarios ocupados de los hoarios disponibles
+                $horariosDisponibles = array_diff($horarios, $horariosOcupados);
 
-                    $html_horarios_disponbles = '';
+                $html_horarios_disponbles = '';
 
-                    foreach ($horariosDisponibles as $h) {
-                        $html_horarios_disponbles .= '';
-                        $html_horarios_disponbles .= '<span class="badge badge-custom">' . $h . '</span>';
-                    }
+                foreach ($horariosDisponibles as $h) {
+                    $html_horarios_disponbles .= '';
+                    $html_horarios_disponbles .= '<span class="badge badge-custom">' . $h . '</span>';
+                }
 
-                    $html .= "
+                $html .= "
                             
                             <td class='text-center''> 
                                 <div class='calendar-container'> 
@@ -178,22 +182,21 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
 
                     ";
 
-                    // Incrementar la fecha en un día
-                    $fecha_objeto->modify('+1 day');
-                }
-                $html .= "</tr>";
+                // Incrementar la fecha en un día
+                $fecha_objeto->modify('+1 day');
             }
+            $html .= "</tr>";
+        }
 
 
 
 
-            $html .= "
+        $html .= "
                 </tbody>
             </table>
             ";
 
-            echo $html;
-        }
+        echo $html;
     }
 }
 
