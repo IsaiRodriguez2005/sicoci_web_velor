@@ -397,7 +397,6 @@ function disponibilidad_terapeutas() {
     abrir_modal('modal_nueva_cita', 'modal_ver_terapeuta')
 
     var fecha_hora = $("#fecha_hora_cita_form").val();
-    console.log(fecha_hora)
     var movimiento = '2';
     $.ajax({
         cache: false,

@@ -28,7 +28,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="fecha_hora_cita">Fecha y Hora de Cita</label>
-                                <input type="datetime-local" class="form-control" id="fecha_hora_cita_form" required onchange="cargar_datos();">
+                                <input type="datetime-local" step="3600" class="form-control" id="fecha_hora_cita_form" required onchange="cargar_datos();">
                             </div>
                         </div>
                     </div>
