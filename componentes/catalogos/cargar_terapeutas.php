@@ -113,36 +113,11 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
         while ($terapeuta = mysqli_fetch_assoc($resultadotTerapeutas)) {
 
             $nombre_terapeuta = $terapeuta['nombre_personal'];
+
             if (!$_POST['fecha_hora']) {
                 $fecha = date('Y-m-d');
             } else {
                 $fecha = date('Y-m-d', strtotime($_POST['fecha_hora']));
-            }
-
-
-            // array para almacenar horarios en formato de 1hora
-            $horarios = [];
-
-            //! HORARIOS (Margen)
-            $horaInicio = new DateTime('08:00');
-
-            $fecha_objeto = new DateTime($fecha);
-            $dia_semana = $fecha_objeto->format('w');
-            
-            echo $dia_semana;
-            // Si es sábado, ajustamos la hora de fin
-            if (intval($dia_semana) == 6) {
-                $horaFin = new DateTime('14:00');
-            }else{
-                $horaFin = new DateTime('18:00');
-            }
-
-            
-
-            // iteramos para giardar la lista de los horarios
-            while ($horaInicio <= $horaFin) {
-                $horarios[] = $horaInicio->format('H:i');
-                $horaInicio->modify('+1 hour'); //! 1 hora
             }
 
             $html .= "
@@ -166,7 +141,25 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
                     // buscamos los horarios que esten ocudos en el dia establecido por el usuario
                     $query = "SELECT id_terapeuta, fecha_agenda FROM emisores_agenda WHERE fecha_agenda >= '" . $fecha . "T08:00' AND fecha_agenda <= '" . $fecha . "T21:00' AND id_terapeuta = " . $terapeuta['id_personal'] . "";
                     $resultado = mysqli_query($conexion, $query);
-                    //echo $query;
+
+                    // array para almacenar horarios en formato de 1hora
+                    $horarios = [];
+
+                    //! HORARIOS (Margen)--------------------
+                    $horaInicio = new DateTime('08:00');
+                    
+                    if (intval($dia_semana) == 6) {
+                        $horaFin = new DateTime('14:00');
+                    } else {
+                        $horaFin = new DateTime('18:00');
+                    }
+                    //! FIN HORARIOS (Margen)--------------------
+
+                    // iteramos para giardar la lista de los horarios
+                    while ($horaInicio <= $horaFin) {
+                        $horarios[] = $horaInicio->format('H:i');
+                        $horaInicio->modify('+1 hour'); //! 1 hora
+                    }
 
                     $horariosOcupados = [];
 
