@@ -75,6 +75,7 @@ if (!isset($_SESSION['nombre_usuario'])) {
                             <div class="card-header">
                                 <h3 class="card-title" id="leyenda">Registro de nuevo personal</h3>
                                 <input type="hidden" id="tipo_gestion" value="0">
+                                <input type="hidden" id="tipo_gestion_permiso" value="0">
                             </div>
                             <div class="card-body">
                                 <h6><i class="fas fa-id-card"></i> Datos de identificaci&oacute;n</h6>
@@ -253,7 +254,7 @@ if (!isset($_SESSION['nombre_usuario'])) {
                                                         </div>
                                                     </div>
                                                     <div class="row d-flex justify-content-center">
-                                                        <button class="btn btn-danger" type="submit" onclick="guardar_permiso();">Aplicar Permiso</button>
+                                                        <button class="btn btn-danger" id="btn-permiso" type="submit" onclick="guardar_permiso();">Aplicar Permiso</button>
                                                     </div><br>
                                                     <div class="card card-info">
                                                         <div class="card-header">
