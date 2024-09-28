@@ -33,10 +33,8 @@
   <link rel="stylesheet" href="dist/css/adminlte.min.css">
   <!-- overlayScrollbars -->
   <link rel="stylesheet" href="plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
-  <!-- Daterange picker -->
-  <link rel="stylesheet" href="plugins/daterangepicker/daterangepicker.css">
-  <!-- summernote -->
-  <link rel="stylesheet" href="plugins/summernote/summernote-bs4.min.css">
+  <!-- fullCalendar -->
+  <link rel="stylesheet" href="plugins/fullcalendar/main.css">
   <!-- Favicon -->
   <link rel="icon" type="image/icon" href="favicon.ico"/>
   <!-- Sweet Alerts-->
@@ -45,10 +43,14 @@
   <link rel="stylesheet" href="plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
   <link rel="stylesheet" href="plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
   <link rel="stylesheet" href="plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+  <!-- Full Calendar -->
+  <link rel='stylesheet' type='text/css' href='css/calendar/fullcalendar.css' />
+  <script type='text/javascript' src='js/calendar/moment.min.js'></script>
+  <script type='text/javascript' src='js/calendar/fullcalendar.min.js'></script>
+  <script type='text/javascript' src='js/calendar/locale/es.js'></script>
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
-  
   <?php
     include("componentes/estructura/preloader.php");
     include("componentes/estructura/encabezado.php");
@@ -76,14 +78,60 @@
       <div class="container-fluid">
         <!-- Small boxes (Stat box) -->
         <div class="row">
-            <?php
-              if($_SESSION['id_emisor'] == 0)
-              {
-                include("componentes/administrador/dashboard.php");
-              }
-            ?>
+            <div class="col-lg-3 col-6">
+                <div class="small-box bg-info">
+                    <div class="inner">
+                        <?php
+                            $sql_citas = "SELECT COUNT(*) as citas_hoy FROM emisores_agenda WHERE id_emisor = ".$_SESSION['id_emisor']." AND DATE(fecha_agenda) = '".date('Y-m-d')."' AND estatus = 2";
+                            $res_citas = mysqli_query($conexion, $sql_citas);
+                            $citas = mysqli_fetch_array($res_citas);
+                            echo "<h3>".$citas['citas_hoy']."</h3>";
+                        ?>
+                        <p>Citas para hoy</p>
+                    </div>
+                    <div class="icon">
+                        <i class="ion ion-calendar"></i>
+                    </div>
+                    <a href="#" class="small-box-footer">M&aacute;s info <i class="fas fa-arrow-circle-right"></i></a>
+                </div>
+            </div>
+            <div class="col-lg-3 col-6">
+                <div class="small-box bg-danger">
+                    <div class="inner">
+                        <?php
+                            $sql_citas2 = "SELECT COUNT(*) as citas_sin_cobrar FROM emisores_agenda WHERE id_emisor = ".$_SESSION['id_emisor']." AND DATE(fecha_agenda) < '".date('Y-m-d')."' AND estatus = 2";
+                            $res_citas2 = mysqli_query($conexion, $sql_citas2);
+                            $citas2 = mysqli_fetch_array($res_citas2);
+                            echo "<h3>".$citas2['citas_sin_cobrar']."</h3>";
+                        ?>
+                        <p>Citas sin cobrar</p>
+                    </div>
+                    <div class="icon">
+                        <i class="ion ion-cash"></i>
+                    </div>
+                    <a href="#" class="small-box-footer">M&aacute;s info <i class="fas fa-arrow-circle-right"></i></a>
+                </div>
+            </div>
         </div>
-        <!-- Small boxes (Stat box) -->
+      </div><!-- /.container-fluid -->
+    </section>
+    <section class="content">
+      <div class="container-fluid">
+        <div class="row">
+          <!-- /.col -->
+          <div class="col-md-9">
+            <div class="card card-primary">
+              <div class="card-body p-0">
+                <!-- THE CALENDAR -->
+                <div id="calendar"></div>
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+          </div>
+          <!-- /.col -->
+        </div>
+        <!-- /.row -->
       </div><!-- /.container-fluid -->
     </section>
     <!-- /.content -->
@@ -113,6 +161,7 @@
 <!-- AdminLTE App -->
 <script src="dist/js/adminlte.js"></script>
 <script src="js/peticiones_generales.js"></script>
+<script src="js/peticiones_calendario.js"></script>
 <!-- DataTables  & Plugins -->
 <script src="plugins/datatables/jquery.dataTables.min.js"></script>
 <script src="plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
@@ -126,7 +175,10 @@
 <script src="plugins/datatables-buttons/js/buttons.html5.min.js"></script>
 <script src="plugins/datatables-buttons/js/buttons.print.min.js"></script>
 <script src="plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
-
+<!-- fullCalendar 2.2.5 -->
+<script src="plugins/moment/moment.min.js"></script>
+<script src="plugins/fullcalendar/main.min.js"></script>
+<script src="plugins/fullcalendar/locales-all.min.js"></script>
 </body>
 </html>
 <?php

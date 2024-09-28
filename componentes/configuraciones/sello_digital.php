@@ -14,6 +14,8 @@
     }
     else
     {
+        $pass = "";
+        $html = "";
         $sql = "SELECT sello_cer, sello_key, password, sello_vigencia FROM emisores_configuraciones WHERE id_emisor = ".$_SESSION['id_emisor'];
         $reslSQL = mysqli_query($conexion, $sql);
         $emisor = mysqli_fetch_array($reslSQL);

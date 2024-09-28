@@ -17,7 +17,7 @@
                                 <label for="cliente">Cliente</label>
                                 <div class="d-flex">
                                     <input type="text" class="form-control" id="cliente_form" list="clientes" placeholder="Nombre del Cliente" autocomplete="off" onchange="buscar_cliente(this)" onfocus="actualizar_lista_clientes()" required>
-                                    <button type="button" class="btn btn-info ml-2" onclick="abrir_modal('modal_nueva_cita', 'modal_nuevo_cliente')">+</button>
+                                    <!-- <button type="button" class="btn btn-info ml-2" onclick="abrir_modal('modal_nueva_cita', 'modal_nuevo_cliente')"><i class="fas fa-user-plus"></i></button>-->
                                 </div>
                                 <datalist id="clientes">
 
@@ -40,11 +40,8 @@
                                 <div class="d-flex">
                                     <select class="form-control" id="terapeuta_form" required>
                                         <option value="" disabled selected>Selecciona Terapeuta</option>
-                                        <?php
-
-                                        ?>
                                     </select>
-                                    <button type="button" class="btn btn-info ml-2" onclick="abrir_modal('modal_nueva_cita', 'modal_nuevo_terapeuta')">+</button>
+                                    <!--<button type="button" class="btn btn-info ml-2" onclick="abrir_modal('modal_nueva_cita', 'modal_nuevo_terapeuta')"><i class="fas fa-user-plus"></i></button>-->
                                     <button type="button" class="btn btn-info ml-2" onclick="disponibilidad_terapeutas()"><i class="far fa-eye"></i></button>
                                 </div>
                             </div>
@@ -68,7 +65,7 @@
                                 <label for="tipo_cita">Tipo de Cita</label>
                                 <select class="form-control" id="tipo_cita_form" required>
                                     <option value="" disabled selected>Selecciona Tipo de Cita</option>
-                                    <option value="1">Seguimiento</option>
+                                    <option value="1">Subsecuente</option>
                                     <option value="2">Primera vez</option>
                                 </select>
                             </div>
@@ -81,7 +78,7 @@
                                     <select class="form-control" id="consultorio_form" required>
 
                                     </select>
-                                    <button type="button" class="btn btn-info ml-2" onclick="abrir_modal('modal_nueva_cita', 'modal_nuevo_consultorio')">+</button>
+                                    <button type="button" class="btn btn-info ml-2" onclick="abrir_modal('modal_nueva_cita', 'modal_nuevo_consultorio')"><i class="fas fa-plus-circle"></i></button>
                                 </div>
                             </div>
                         </div>
@@ -89,7 +86,7 @@
                     <!-- Observaciones -->
                     <div class="form-group">
                         <label for="observaciones">Observaciones</label>
-                        <textarea class="form-control" id="observaciones_form" rows="4" placeholder="Escribe aquí tus observaciones" required></textarea>
+                        <textarea class="form-control" id="observaciones_form" rows="4" placeholder="Escribe aqu&iacute; tus observaciones" required></textarea>
                     </div>
                 </form>
             </div>
@@ -593,7 +590,7 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fas fa-file-signature"></i></span>
                             </div>
-                            <input type="text" class="form-control" placeholder="Nombre del consultorio" id="nombre_consultorio" onfocus="resetear('nombre_consultorio')" maxlength="150" require>
+                            <input type="text" class="form-control" placeholder="Nombre del consultorio" id="nombre_consultorio" onfocus="resetear('nombre_consultorio')" maxlength="150" required>
                         </div>
                     </div>
                 </div>
@@ -652,7 +649,7 @@
                                     <i class="fas fa-file-signature"></i>
                                 </span>
                             </div>
-                            <textarea id="motivo_cancelacion" class="form-control" placeholder="Escriba el motivo de la cancelación" onfocus="resetear('motivo_cancelacion')" rows="4" required></textarea>
+                            <textarea id="motivo_cancelacion" class="form-control" placeholder="Escriba el motivo de la cancelaci&oacute;n" onfocus="resetear('motivo_cancelacion')" rows="4" required></textarea>
                         </div>
                     </div>
                 </div>

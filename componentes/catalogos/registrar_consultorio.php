@@ -21,7 +21,7 @@
         {
             $fecha_alta = date("Y-m-d");
 
-            $selectMAX = "SELECT COALESCE(MAX(id_consultorio),0) AS no_registro FROM emisores_consultorios WHERE id_emisores=".$_SESSION['id_emisor'];
+            $selectMAX = "SELECT COALESCE(MAX(id_consultorio),0) AS no_registro FROM emisores_consultorios WHERE id_emisor = ".$_SESSION['id_emisor'];
             $resMAX = mysqli_query($conexion, $selectMAX);
             $max = mysqli_fetch_array($resMAX);
             $ultimo = $max['no_registro'] + 1;

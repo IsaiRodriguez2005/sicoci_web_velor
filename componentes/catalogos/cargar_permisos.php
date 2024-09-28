@@ -19,10 +19,11 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
                     <!--
                         <th class="sticky text-center text-sm">Acciones</th>
                         -->
-                        <th class="sticky text-center text-sm">Folio</th>
-                        <th class="text-center text-sm">Fecha de Permiso</th>
+                        <th class="sticky text-center text-sm"># Permiso</th>
+                        <th class="text-center text-sm">Fecha Inicio</th>
+                        <th class="text-center text-sm">Fecha Fin</th>
                         <th class="sticky text-center text-sm">Motivo</th>
-                        <!-- <th class="sticky text-center text-sm">Estado</th> -->
+                        <th class="sticky text-center text-sm">Estatus</th>
                     </tr>
                 </thead>
                 <tbody id="mostrar_permisos">
@@ -35,22 +36,11 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
 
         switch (intval($permiso['estatus'])) {
             case 1:
-                $estatus = '<span class="badge badge-danger" style="width: 100%; color:white;">APERTURADO</span>';
+                $estatus = '<span class="badge badge-success" style="width: 100%; color:white;">AUTORIZADO</span>';
                 $boton_editar = '';
                 $boton_cancelar = '';
                 break;
             case 2:
-                $estatus = '<span class="badge badge-warning" style="width: 100%; color:white;">AGENDADO</span>';
-                $boton_editar = '';
-                $boton_cancelar = '';
-                break;
-            case 3:
-                $estatus = '<span class="badge badge-success" style="width: 100%; color:white;">REALIZADO</span>';
-                $boton_editar = 'disabled';
-                $boton_cancelar = '';
-                $boton_cobrar = '';
-                break;
-            case 4:
                 $estatus = '<span class="badge badge-secondary" style="width: 100%; color:white;">CANCELADO</span>';
                 $boton_editar = 'disabled';
                 $boton_cancelar = 'disabled';
@@ -75,9 +65,10 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
                     </td>
                     -->
                     <td class='text-center text-sm' style='white-space: nowrap; overflow-x: auto;'>" . $permiso['id_permiso'] . "</td>
-                    <td class='text-center text-sm' style='white-space: nowrap; overflow-x: auto;'>" . date("d/m/Y", strtotime($permiso['fecha_permiso'])) . "</td>
+                    <td class='text-center text-sm' style='white-space: nowrap; overflow-x: auto;'>" . $permiso['fecha_inicial'] . "</td>
+                    <td class='text-center text-sm' style='white-space: nowrap; overflow-x: auto;'>" . $permiso['fecha_final'] . "</td>
                     <td class='text-center text-sm' style='white-space: nowrap; overflow-x: auto;'>" . $permiso['motivo'] . "</td>
-                    <!-- <td class='text-center text-sm' id='td_ef_" . $permiso['id_permiso'] . "' style='white-space: nowrap; overflow-x: auto;'>" . $estatus . "</td> -->
+                    <td class='text-center text-sm' id='td_ef_" . $permiso['id_permiso'] . "' style='white-space: nowrap; overflow-x: auto;'>" . $estatus . "</td>
                 </tr>
             ";
     }

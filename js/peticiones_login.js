@@ -29,6 +29,7 @@ function validar_login()
             dataType : 'html',
             data : { 'correo': correo, 'password': pass, 'pin': pin},
         }).done(function(resultado){
+            console.log(resultado);
             if(resultado == "correcto")
             {
                 Swal.fire({

@@ -227,42 +227,34 @@ if (!isset($_SESSION['nombre_usuario'])) {
 
                                                 <div class="tab-pane fade" id="custom-tabs-two-profile" role="tabpanel" aria-labelledby="custom-tabs-two-profile-tab">
                                                     <div class="row">
-                                                        <div class="card-body">
-                                                            <div class="card card-info shadow-sm" style="max-width: 600px; margin: 20px auto;">
-                                                                <div class="card-body">
-                                                                    <div class="d-flex align-items-center justify-content-between">
-                                                                        <div class="form-group w-50">
-                                                                            <label for="id_personal_input" class="form-label">ID Personal:</label>
-                                                                            <!-- Deshabilitar el campo de entrada -->
-                                                                            <input type="text" class="form-control" id="id_personal_input" value="12345" disabled>
-                                                                        </div>
-
-                                                                        <div class="form-group w-50 ml-2">
-                                                                            <label for="fecha_permiso" class="form-label">Fecha</label>
-                                                                            <input type="date" class="form-control" id="fecha_permiso" required onfocus="resetear('fecha_permiso')">
-                                                                        </div>
-                                                                    </div>
+                                                        <div class="col-4">
+                                                            <label for="id_personal_input" class="form-label">ID Personal:</label>
+                                                            <input type="text" class="form-control" id="id_personal_input" value="12345" disabled>
+                                                        </div>
+                                                        <div class="col-4">
+                                                            <label for="fecha_inicial" class="form-label">Fecha Inicial:</label>
+                                                            <input type="datetime-local" class="form-control" id="fecha_inicial" required onfocus="resetear('fecha_inicial')">
+                                                        </div>
+                                                        <div class="col-4">
+                                                            <label for="fecha_final" class="form-label">Fecha Final:</label>
+                                                            <input type="datetime-local" class="form-control" id="fecha_final" required onfocus="resetear('fecha_final')">
+                                                        </div>
+                                                    </div><br>
+                                                    <div class="row">
+                                                        <div class="col-12">
+                                                            <div class="input-group mb-3">
+                                                                <div class="input-group-prepend">
+                                                                    <span class="input-group-text">
+                                                                        <i class="fas fa-file-signature"></i>
+                                                                    </span>
                                                                 </div>
-                                                            </div>
-                                                            <div class="row">
-                                                                <div class="col-12">
-                                                                    <div class="input-group mb-3">
-                                                                        <div class="input-group-prepend">
-                                                                            <span class="input-group-text">
-                                                                                <i class="fas fa-file-signature"></i>
-                                                                            </span>
-                                                                        </div>
-                                                                        <textarea id="motivo_permiso" class="form-control" placeholder="Escriba el motivo de la cancelación" onfocus="resetear('motivo_permiso')" rows="4" required></textarea>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="row d-flex justify-content-center">
-                                                                <button class="btn btn-danger" type="submit" onclick="guardar_permiso();">Aplicar Permiso</button>
+                                                                <textarea id="motivo_permiso" class="form-control" placeholder="Escriba el motivo de la cancelaci&oacute;n" onfocus="resetear('motivo_permiso')" rows="4" required></textarea>
                                                             </div>
                                                         </div>
                                                     </div>
-
-
+                                                    <div class="row d-flex justify-content-center">
+                                                        <button class="btn btn-danger" type="submit" onclick="guardar_permiso();">Aplicar Permiso</button>
+                                                    </div><br>
                                                     <div class="card card-info">
                                                         <div class="card-header">
                                                             <h3 class="card-title text-sm">Historial de Permisos</h3>

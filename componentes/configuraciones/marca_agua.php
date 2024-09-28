@@ -14,6 +14,8 @@
     }
     else
     {
+        $boton_eliminar = "";
+        $html = "";
         $sql = "SELECT marca, tipo_marca FROM emisores_configuraciones WHERE id_emisor = ".$_SESSION['id_emisor'];
         $reslSQL = mysqli_query($conexion, $sql);
         $emisor = mysqli_fetch_array($reslSQL);

@@ -1,0 +1,31 @@
+[26-Sep-2024 22:15:14 UTC] PHP Warning:  Undefined variable $options in /home/velormx/public_html/sicoci/componentes/administrador/buscar_colonia.php on line 26
+[26-Sep-2024 22:15:14 UTC] PHP Warning:  Undefined variable $options in /home/velormx/public_html/sicoci/componentes/administrador/buscar_colonia.php on line 26
+[26-Sep-2024 16:16:07 America/Mexico_City] PHP Fatal error:  Uncaught mysqli_sql_exception: Column count doesn't match value count at row 1 in /home/velormx/public_html/sicoci/componentes/administrador/registrar_emisor.php:27
+Stack trace:
+#0 /home/velormx/public_html/sicoci/componentes/administrador/registrar_emisor.php(27): mysqli_query(Object(mysqli), 'INSERT INTO emi...')
+#1 {main}
+  thrown in /home/velormx/public_html/sicoci/componentes/administrador/registrar_emisor.php on line 27
+[26-Sep-2024 22:17:12 UTC] PHP Warning:  Undefined variable $options in /home/velormx/public_html/sicoci/componentes/administrador/buscar_colonia.php on line 26
+[26-Sep-2024 22:17:12 UTC] PHP Warning:  Undefined variable $options in /home/velormx/public_html/sicoci/componentes/administrador/buscar_colonia.php on line 26
+[26-Sep-2024 16:17:19 America/Mexico_City] PHP Fatal error:  Uncaught mysqli_sql_exception: Column count doesn't match value count at row 1 in /home/velormx/public_html/sicoci/componentes/administrador/registrar_emisor.php:27
+Stack trace:
+#0 /home/velormx/public_html/sicoci/componentes/administrador/registrar_emisor.php(27): mysqli_query(Object(mysqli), 'INSERT INTO emi...')
+#1 {main}
+  thrown in /home/velormx/public_html/sicoci/componentes/administrador/registrar_emisor.php on line 27
+[26-Sep-2024 22:18:06 UTC] PHP Warning:  Undefined variable $options in /home/velormx/public_html/sicoci/componentes/administrador/buscar_colonia.php on line 26
+[26-Sep-2024 22:18:06 UTC] PHP Warning:  Undefined variable $options in /home/velormx/public_html/sicoci/componentes/administrador/buscar_colonia.php on line 26
+[26-Sep-2024 16:18:36 America/Mexico_City] PHP Fatal error:  Uncaught mysqli_sql_exception: Column count doesn't match value count at row 1 in /home/velormx/public_html/sicoci/componentes/administrador/registrar_emisor.php:27
+Stack trace:
+#0 /home/velormx/public_html/sicoci/componentes/administrador/registrar_emisor.php(27): mysqli_query(Object(mysqli), 'INSERT INTO emi...')
+#1 {main}
+  thrown in /home/velormx/public_html/sicoci/componentes/administrador/registrar_emisor.php on line 27
+[26-Sep-2024 16:19:47 America/Mexico_City] PHP Fatal error:  Uncaught mysqli_sql_exception: Table 'velormx_sicoci.emisores_modulos' doesn't exist in /home/velormx/public_html/sicoci/componentes/administrador/mostrar_modulos.php:37
+Stack trace:
+#0 /home/velormx/public_html/sicoci/componentes/administrador/mostrar_modulos.php(37): mysqli_query(Object(mysqli), 'SELECT m.id_par...')
+#1 {main}
+  thrown in /home/velormx/public_html/sicoci/componentes/administrador/mostrar_modulos.php on line 37
+[26-Sep-2024 16:20:10 America/Mexico_City] PHP Fatal error:  Uncaught mysqli_sql_exception: Table 'velormx_sicoci.timbres' doesn't exist in /home/velormx/public_html/sicoci/componentes/administrador/mostrar_timbres.php:37
+Stack trace:
+#0 /home/velormx/public_html/sicoci/componentes/administrador/mostrar_timbres.php(37): mysqli_query(Object(mysqli), 'SELECT * FROM t...')
+#1 {main}
+  thrown in /home/velormx/public_html/sicoci/componentes/administrador/mostrar_timbres.php on line 37

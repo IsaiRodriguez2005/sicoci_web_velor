@@ -15,7 +15,7 @@
       <!-- Notifications Dropdown Menu -->
       <span class="nav-link text-sm text-right">
         <b>Raz&oacute;n Social:</b><span class="text-danger text-sm"> <?php echo $_SESSION['nombre_comercial']; ?></span> <br>
-        <b>Vigencia del CSD:</b><span class="text-danger text-sm"> <?php echo date("d/m/Y", strtotime($_SESSION['sello'])); ?></span>
+        <b>Vigencia del CSD:</b><span class="text-danger text-sm"> <?php //echo date("d/m/Y", strtotime($_SESSION['sello'])); ?></span>
       </span>
       <li class="nav-item dropdown">
         <a class="nav-link" data-toggle="dropdown" href="#">
