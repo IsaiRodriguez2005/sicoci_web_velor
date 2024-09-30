@@ -43,6 +43,11 @@
   <link rel="stylesheet" href="plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
   <link rel="stylesheet" href="plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
   <link rel="stylesheet" href="plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+  <!-- Full Calendar -->
+  <link rel='stylesheet' type='text/css' href='css/calendar/fullcalendar.css' />
+  <script type='text/javascript' src='js/calendar/moment.min.js'></script>
+  <script type='text/javascript' src='js/calendar/fullcalendar.min.js'></script>
+  <script type='text/javascript' src='js/calendar/locale/es.js'></script>
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
@@ -173,6 +178,10 @@
 <!-- fullCalendar 2.2.5 -->
 <script src="plugins/moment/moment.min.js"></script>
 <script src="plugins/fullcalendar/main.min.js"></script>
+<<<<<<< HEAD
+=======
+<script src="plugins/fullcalendar/locales-all.min.js"></script>
+>>>>>>> d75ff7c8a767d8e82e174b4601590a0de07449ba
 </body>
 </html>
 <?php

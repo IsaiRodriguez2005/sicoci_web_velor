@@ -1,0 +1,284 @@
+[26-Sep-2024 17:35:16 America/Mexico_City] PHP Warning:  Undefined array key "emisor" in /home/velormx/public_html/cosera/componentes/catalogos/registrar_usuario.php on line 34
+[26-Sep-2024 17:35:16 America/Mexico_City] PHP Fatal error:  Uncaught mysqli_sql_exception: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1 in /home/velormx/public_html/cosera/componentes/catalogos/registrar_usuario.php:35
+Stack trace:
+#0 /home/velormx/public_html/cosera/componentes/catalogos/registrar_usuario.php(35): mysqli_query(Object(mysqli), 'SELECT nombre_s...')
+#1 {main}
+  thrown in /home/velormx/public_html/cosera/componentes/catalogos/registrar_usuario.php on line 35
+[26-Sep-2024 23:38:51 UTC] PHP Warning:  Undefined variable $options in /home/velormx/public_html/cosera/componentes/catalogos/cargar_forma_pago.php on line 18
+[26-Sep-2024 23:39:23 UTC] PHP Warning:  Undefined variable $options in /home/velormx/public_html/cosera/componentes/catalogos/cargar_forma_pago.php on line 18
+[26-Sep-2024 23:40:40 UTC] PHP Warning:  Undefined array key "movimiento" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 14
+[26-Sep-2024 23:40:40 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 71
+[26-Sep-2024 23:40:40 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 117
+[26-Sep-2024 23:40:40 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 117
+[26-Sep-2024 23:40:40 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 117
+[26-Sep-2024 23:40:40 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_consultorios.php on line 16
+[26-Sep-2024 17:41:04 America/Mexico_City] PHP Warning:  Trying to access array offset on value of type null in /home/velormx/public_html/cosera/componentes/catalogos/buscar_clientes.php on line 25
+[26-Sep-2024 23:45:00 UTC] PHP Warning:  Undefined array key "movimiento" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 14
+[26-Sep-2024 23:45:00 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 71
+[26-Sep-2024 23:45:00 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 117
+[26-Sep-2024 23:45:00 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 117
+[26-Sep-2024 23:45:00 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 117
+[26-Sep-2024 23:45:00 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_consultorios.php on line 16
+[26-Sep-2024 17:45:23 America/Mexico_City] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'id_emisores' in 'where clause' in /home/velormx/public_html/cosera/componentes/catalogos/registrar_consultorio.php:25
+Stack trace:
+#0 /home/velormx/public_html/cosera/componentes/catalogos/registrar_consultorio.php(25): mysqli_query(Object(mysqli), 'SELECT COALESCE...')
+#1 {main}
+  thrown in /home/velormx/public_html/cosera/componentes/catalogos/registrar_consultorio.php on line 25
+[26-Sep-2024 17:45:41 America/Mexico_City] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'id_emisores' in 'where clause' in /home/velormx/public_html/cosera/componentes/catalogos/registrar_consultorio.php:25
+Stack trace:
+#0 /home/velormx/public_html/cosera/componentes/catalogos/registrar_consultorio.php(25): mysqli_query(Object(mysqli), 'SELECT COALESCE...')
+#1 {main}
+  thrown in /home/velormx/public_html/cosera/componentes/catalogos/registrar_consultorio.php on line 25
+[26-Sep-2024 17:45:44 America/Mexico_City] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'id_emisores' in 'where clause' in /home/velormx/public_html/cosera/componentes/catalogos/registrar_consultorio.php:25
+Stack trace:
+#0 /home/velormx/public_html/cosera/componentes/catalogos/registrar_consultorio.php(25): mysqli_query(Object(mysqli), 'SELECT COALESCE...')
+#1 {main}
+  thrown in /home/velormx/public_html/cosera/componentes/catalogos/registrar_consultorio.php on line 25
+[26-Sep-2024 23:45:49 UTC] PHP Warning:  Undefined array key "movimiento" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 14
+[26-Sep-2024 23:45:49 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 71
+[26-Sep-2024 23:45:49 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 117
+[26-Sep-2024 23:45:49 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 117
+[26-Sep-2024 23:45:49 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 117
+[26-Sep-2024 23:45:49 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_consultorios.php on line 16
+[26-Sep-2024 23:51:58 UTC] PHP Warning:  Undefined array key "movimiento" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 14
+[26-Sep-2024 23:51:58 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 71
+[26-Sep-2024 23:51:58 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 117
+[26-Sep-2024 23:51:58 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 117
+[26-Sep-2024 23:51:58 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 117
+[26-Sep-2024 23:51:58 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_consultorios.php on line 16
+[26-Sep-2024 23:52:15 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_consultorios.php on line 16
+[26-Sep-2024 23:52:15 UTC] PHP Warning:  Undefined array key "movimiento" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 14
+[26-Sep-2024 23:52:15 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 71
+[26-Sep-2024 23:52:15 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 117
+[26-Sep-2024 23:52:15 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 117
+[26-Sep-2024 23:52:15 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 117
+[27-Sep-2024 01:30:11 UTC] PHP Warning:  Undefined array key "movimiento" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 14
+[27-Sep-2024 01:30:11 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 71
+[27-Sep-2024 01:30:11 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 117
+[27-Sep-2024 01:30:11 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 117
+[27-Sep-2024 01:30:11 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 117
+[27-Sep-2024 01:30:12 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_consultorios.php on line 16
+[27-Sep-2024 01:30:19 UTC] PHP Warning:  Undefined array key "movimiento" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 14
+[27-Sep-2024 01:30:19 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 71
+[27-Sep-2024 01:30:19 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 117
+[27-Sep-2024 01:30:19 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 117
+[27-Sep-2024 01:30:19 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 117
+[27-Sep-2024 01:30:19 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_consultorios.php on line 16
+[27-Sep-2024 01:31:25 UTC] PHP Warning:  Undefined array key "movimiento" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 14
+[27-Sep-2024 01:31:25 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 71
+[27-Sep-2024 01:31:25 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 117
+[27-Sep-2024 01:31:25 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 117
+[27-Sep-2024 01:31:25 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 117
+[27-Sep-2024 01:31:25 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_consultorios.php on line 16
+[27-Sep-2024 20:16:18 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_consultorios.php on line 16
+[27-Sep-2024 20:16:18 UTC] PHP Warning:  Undefined array key "movimiento" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 14
+[27-Sep-2024 20:16:18 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 71
+[27-Sep-2024 20:16:18 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 117
+[27-Sep-2024 20:16:18 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 117
+[27-Sep-2024 20:16:18 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 117
+[27-Sep-2024 14:29:15 America/Mexico_City] PHP Warning:  Undefined array key "fecha_fin" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_permisos.php on line 80
+[27-Sep-2024 14:29:15 America/Mexico_City] PHP Deprecated:  strtotime(): Passing null to parameter #1 ($datetime) of type string is deprecated in /home/velormx/public_html/cosera/componentes/catalogos/cargar_permisos.php on line 80
+[27-Sep-2024 21:44:18 UTC] PHP Warning:  Undefined array key "movimiento" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 14
+[27-Sep-2024 21:44:18 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 71
+[27-Sep-2024 21:44:18 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 117
+[27-Sep-2024 21:44:18 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 117
+[27-Sep-2024 21:44:18 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 117
+[27-Sep-2024 21:44:18 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_consultorios.php on line 16
+[27-Sep-2024 21:46:14 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_consultorios.php on line 16
+[27-Sep-2024 21:46:14 UTC] PHP Warning:  Undefined array key "movimiento" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 14
+[27-Sep-2024 21:46:14 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 71
+[27-Sep-2024 21:46:14 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 117
+[27-Sep-2024 21:46:14 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 117
+[27-Sep-2024 21:46:14 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 117
+[27-Sep-2024 21:47:10 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_consultorios.php on line 16
+[27-Sep-2024 21:47:10 UTC] PHP Warning:  Undefined array key "movimiento" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 14
+[27-Sep-2024 21:47:10 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 71
+[27-Sep-2024 21:47:10 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 117
+[27-Sep-2024 21:47:10 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 117
+[27-Sep-2024 21:47:10 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 117
+[27-Sep-2024 21:50:24 UTC] PHP Warning:  Undefined array key "movimiento" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 14
+[27-Sep-2024 21:50:24 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 71
+[27-Sep-2024 21:50:24 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 117
+[27-Sep-2024 21:50:24 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 117
+[27-Sep-2024 21:50:24 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 117
+[27-Sep-2024 21:50:24 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_consultorios.php on line 16
+[27-Sep-2024 15:50:47 America/Mexico_City] PHP Warning:  Trying to access array offset on value of type null in /home/velormx/public_html/cosera/componentes/catalogos/buscar_clientes.php on line 25
+[27-Sep-2024 21:51:07 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_consultorios.php on line 16
+[27-Sep-2024 21:51:07 UTC] PHP Warning:  Undefined array key "movimiento" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 14
+[27-Sep-2024 21:51:07 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 71
+[27-Sep-2024 21:51:07 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 117
+[27-Sep-2024 21:51:07 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 117
+[27-Sep-2024 21:51:07 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 117
+[27-Sep-2024 21:51:24 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_consultorios.php on line 16
+[27-Sep-2024 21:51:24 UTC] PHP Warning:  Undefined array key "movimiento" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 14
+[27-Sep-2024 21:51:24 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 71
+[27-Sep-2024 21:51:24 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 117
+[27-Sep-2024 21:51:24 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 117
+[27-Sep-2024 21:51:24 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 117
+[27-Sep-2024 21:53:09 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_consultorios.php on line 16
+[27-Sep-2024 21:53:09 UTC] PHP Warning:  Undefined array key "movimiento" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 14
+[27-Sep-2024 21:53:09 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 71
+[27-Sep-2024 21:53:09 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 117
+[27-Sep-2024 21:53:09 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 117
+[27-Sep-2024 21:53:09 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 117
+[27-Sep-2024 21:55:11 UTC] PHP Warning:  Undefined array key "movimiento" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 14
+[27-Sep-2024 21:55:11 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 71
+[27-Sep-2024 21:55:11 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 117
+[27-Sep-2024 21:55:11 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 117
+[27-Sep-2024 21:55:11 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 117
+[27-Sep-2024 21:55:11 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_consultorios.php on line 16
+[27-Sep-2024 21:55:26 UTC] PHP Warning:  Undefined array key "movimiento" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 14
+[27-Sep-2024 21:55:26 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 71
+[27-Sep-2024 21:55:26 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 117
+[27-Sep-2024 21:55:26 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 117
+[27-Sep-2024 21:55:26 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 117
+[27-Sep-2024 21:55:26 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_consultorios.php on line 16
+[27-Sep-2024 21:56:16 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_consultorios.php on line 16
+[27-Sep-2024 21:56:16 UTC] PHP Warning:  Undefined array key "movimiento" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 14
+[27-Sep-2024 21:56:16 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 71
+[27-Sep-2024 21:56:16 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 117
+[27-Sep-2024 21:56:16 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 117
+[27-Sep-2024 21:56:16 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 117
+[27-Sep-2024 21:56:36 UTC] PHP Warning:  Undefined array key "movimiento" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 14
+[27-Sep-2024 21:56:36 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 71
+[27-Sep-2024 21:56:36 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 117
+[27-Sep-2024 21:56:36 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 117
+[27-Sep-2024 21:56:36 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 117
+[27-Sep-2024 21:56:36 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_consultorios.php on line 16
+[27-Sep-2024 21:59:18 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_consultorios.php on line 16
+[27-Sep-2024 21:59:18 UTC] PHP Warning:  Undefined array key "movimiento" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 14
+[27-Sep-2024 21:59:18 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 71
+[27-Sep-2024 21:59:18 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 117
+[27-Sep-2024 21:59:18 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 117
+[27-Sep-2024 21:59:18 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 117
+[27-Sep-2024 21:59:45 UTC] PHP Warning:  Undefined array key "movimiento" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 14
+[27-Sep-2024 21:59:45 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 71
+[27-Sep-2024 21:59:45 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 117
+[27-Sep-2024 21:59:45 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 117
+[27-Sep-2024 21:59:45 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 117
+[27-Sep-2024 21:59:45 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_consultorios.php on line 16
+[27-Sep-2024 22:00:25 UTC] PHP Warning:  Undefined array key "movimiento" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 14
+[27-Sep-2024 22:00:25 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 71
+[27-Sep-2024 22:00:25 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 117
+[27-Sep-2024 22:00:25 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 117
+[27-Sep-2024 22:00:25 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 117
+[27-Sep-2024 22:00:25 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_consultorios.php on line 16
+[27-Sep-2024 22:03:12 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'fecha_permiso' in 'where clause' in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php:20
+Stack trace:
+#0 /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php(20): mysqli_query(Object(mysqli), 'SELECT id_terap...')
+#1 {main}
+  thrown in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 20
+[27-Sep-2024 22:03:17 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'fecha_permiso' in 'where clause' in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php:20
+Stack trace:
+#0 /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php(20): mysqli_query(Object(mysqli), 'SELECT id_terap...')
+#1 {main}
+  thrown in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 20
+[27-Sep-2024 22:03:28 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'fecha_permiso' in 'where clause' in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php:20
+Stack trace:
+#0 /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php(20): mysqli_query(Object(mysqli), 'SELECT id_terap...')
+#1 {main}
+  thrown in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 20
+[27-Sep-2024 22:03:37 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'fecha_permiso' in 'where clause' in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php:20
+Stack trace:
+#0 /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php(20): mysqli_query(Object(mysqli), 'SELECT id_terap...')
+#1 {main}
+  thrown in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 20
+[27-Sep-2024 22:08:31 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_consultorios.php on line 16
+[27-Sep-2024 22:08:31 UTC] PHP Warning:  Undefined array key "movimiento" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 14
+[27-Sep-2024 22:08:31 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 71
+[27-Sep-2024 22:08:31 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 117
+[27-Sep-2024 22:08:31 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 117
+[27-Sep-2024 22:08:31 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 117
+[27-Sep-2024 22:08:34 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'fecha_permiso' in 'where clause' in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php:20
+Stack trace:
+#0 /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php(20): mysqli_query(Object(mysqli), 'SELECT id_terap...')
+#1 {main}
+  thrown in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 20
+[27-Sep-2024 22:08:47 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'fecha_permiso' in 'where clause' in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php:20
+Stack trace:
+#0 /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php(20): mysqli_query(Object(mysqli), 'SELECT id_terap...')
+#1 {main}
+  thrown in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 20
+[27-Sep-2024 22:10:52 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'fecha_permiso' in 'where clause' in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php:20
+Stack trace:
+#0 /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php(20): mysqli_query(Object(mysqli), 'SELECT id_terap...')
+#1 {main}
+  thrown in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 20
+[27-Sep-2024 22:13:33 UTC] PHP Warning:  Undefined array key "movimiento" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 14
+[27-Sep-2024 22:13:33 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 71
+[27-Sep-2024 22:13:33 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 117
+[27-Sep-2024 22:13:33 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 117
+[27-Sep-2024 22:13:33 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 117
+[27-Sep-2024 22:13:33 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_consultorios.php on line 16
+[27-Sep-2024 22:13:49 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'fecha_permiso' in 'where clause' in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php:20
+Stack trace:
+#0 /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php(20): mysqli_query(Object(mysqli), 'SELECT id_terap...')
+#1 {main}
+  thrown in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 20
+[27-Sep-2024 22:17:25 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_consultorios.php on line 16
+[27-Sep-2024 22:17:25 UTC] PHP Warning:  Undefined array key "movimiento" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 14
+[27-Sep-2024 22:17:25 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 71
+[27-Sep-2024 22:17:25 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 117
+[27-Sep-2024 22:17:25 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 117
+[27-Sep-2024 22:17:25 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 117
+[27-Sep-2024 22:17:43 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'fecha_permiso' in 'where clause' in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php:20
+Stack trace:
+#0 /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php(20): mysqli_query(Object(mysqli), 'SELECT id_terap...')
+#1 {main}
+  thrown in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 20
+[27-Sep-2024 22:19:57 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_consultorios.php on line 16
+[27-Sep-2024 22:19:57 UTC] PHP Warning:  Undefined array key "movimiento" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 14
+[27-Sep-2024 22:19:57 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 71
+[27-Sep-2024 22:19:57 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 117
+[27-Sep-2024 22:19:57 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 117
+[27-Sep-2024 22:19:57 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 117
+[27-Sep-2024 16:23:55 America/Mexico_City] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'id_emisores' in 'where clause' in /home/velormx/public_html/cosera/componentes/catalogos/registrar_consultorio.php:25
+Stack trace:
+#0 /home/velormx/public_html/cosera/componentes/catalogos/registrar_consultorio.php(25): mysqli_query(Object(mysqli), 'SELECT COALESCE...')
+#1 {main}
+  thrown in /home/velormx/public_html/cosera/componentes/catalogos/registrar_consultorio.php on line 25
+[27-Sep-2024 22:33:25 UTC] PHP Warning:  Undefined array key "movimiento" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 14
+[27-Sep-2024 22:33:25 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 71
+[27-Sep-2024 22:33:25 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 117
+[27-Sep-2024 22:33:25 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 117
+[27-Sep-2024 22:33:25 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 117
+[27-Sep-2024 22:33:25 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_consultorios.php on line 16
+[27-Sep-2024 16:33:38 America/Mexico_City] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'id_emisores' in 'where clause' in /home/velormx/public_html/cosera/componentes/catalogos/registrar_consultorio.php:25
+Stack trace:
+#0 /home/velormx/public_html/cosera/componentes/catalogos/registrar_consultorio.php(25): mysqli_query(Object(mysqli), 'SELECT COALESCE...')
+#1 {main}
+  thrown in /home/velormx/public_html/cosera/componentes/catalogos/registrar_consultorio.php on line 25
+[27-Sep-2024 16:35:15 America/Mexico_City] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'id_emisores' in 'where clause' in /home/velormx/public_html/cosera/componentes/catalogos/registrar_consultorio.php:25
+Stack trace:
+#0 /home/velormx/public_html/cosera/componentes/catalogos/registrar_consultorio.php(25): mysqli_query(Object(mysqli), 'SELECT COALESCE...')
+#1 {main}
+  thrown in /home/velormx/public_html/cosera/componentes/catalogos/registrar_consultorio.php on line 25
+[27-Sep-2024 22:35:48 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_consultorios.php on line 16
+[27-Sep-2024 22:35:48 UTC] PHP Warning:  Undefined array key "movimiento" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 14
+[27-Sep-2024 22:35:48 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 71
+[27-Sep-2024 22:35:48 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 117
+[27-Sep-2024 22:35:48 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 117
+[27-Sep-2024 22:35:48 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 117
+[27-Sep-2024 16:36:24 America/Mexico_City] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'id_emisores' in 'where clause' in /home/velormx/public_html/cosera/componentes/catalogos/registrar_consultorio.php:25
+Stack trace:
+#0 /home/velormx/public_html/cosera/componentes/catalogos/registrar_consultorio.php(25): mysqli_query(Object(mysqli), 'SELECT COALESCE...')
+#1 {main}
+  thrown in /home/velormx/public_html/cosera/componentes/catalogos/registrar_consultorio.php on line 25
+[27-Sep-2024 22:37:33 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_consultorios.php on line 16
+[27-Sep-2024 22:37:33 UTC] PHP Warning:  Undefined array key "movimiento" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 14
+[27-Sep-2024 22:37:33 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 71
+[27-Sep-2024 22:37:33 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 117
+[27-Sep-2024 22:37:33 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 117
+[27-Sep-2024 22:37:33 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 117
+[27-Sep-2024 22:40:55 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_consultorios.php on line 16
+[27-Sep-2024 22:40:55 UTC] PHP Warning:  Undefined array key "movimiento" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 14
+[27-Sep-2024 22:40:55 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 71
+[27-Sep-2024 22:40:55 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 117
+[27-Sep-2024 22:40:55 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 117
+[27-Sep-2024 22:40:55 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 117
+[27-Sep-2024 22:48:37 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_consultorios.php on line 16
+[27-Sep-2024 22:48:37 UTC] PHP Warning:  Undefined array key "movimiento" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 14
+[27-Sep-2024 22:48:37 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 71
+[27-Sep-2024 22:48:37 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 117
+[27-Sep-2024 22:48:37 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 117
+[27-Sep-2024 22:48:37 UTC] PHP Warning:  Undefined array key "fecha_hora" in /home/velormx/public_html/cosera/componentes/catalogos/cargar_terapeutas.php on line 117

@@ -190,10 +190,10 @@ function cargar_datos() {
 
     id_cliente = $("#id_cliente2").val();
     fecha_hora_cita = $("#fecha_hora_cita_form").val();
-    movimiento = 1
+    movimiento = 1;
+    
     $.ajax({
         cache: false,
-
         url: "componentes/catalogos/cargar_terapeutas.php",
         type: 'POST',
         dataType: 'html',
@@ -232,15 +232,15 @@ function tipo_servicio() {
 }
 
 function actualizar_lista_clientes() {
-
+    
     $.ajax({
         cache: false,
-
         url: "componentes/catalogos/cargar_list_clientes.php",
         type: 'POST',
         dataType: 'html',
     }).done(function (resultado) {
         $("#clientes").html(resultado);
+        $("#cliente_form").removeClass('is-invalid');
     })
 
 }

@@ -1,0 +1,49 @@
+[26-Sep-2024 21:52:45 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Access denied for user 'root'@'localhost' (using password: NO) in /home/velormx/public_html/sicoci/componentes/conexion.php:2
+Stack trace:
+#0 /home/velormx/public_html/sicoci/componentes/conexion.php(2): mysqli_connect('localhost', 'root', '', 'sicoci_web')
+#1 /home/velormx/public_html/sicoci/componentes/login/validar_usuario.php(3): require('/home/velormx/p...')
+#2 {main}
+  thrown in /home/velormx/public_html/sicoci/componentes/conexion.php on line 2
+[26-Sep-2024 21:52:58 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Access denied for user 'root'@'localhost' (using password: NO) in /home/velormx/public_html/sicoci/componentes/conexion.php:2
+Stack trace:
+#0 /home/velormx/public_html/sicoci/componentes/conexion.php(2): mysqli_connect('localhost', 'root', '', 'sicoci_web')
+#1 /home/velormx/public_html/sicoci/componentes/login/validar_usuario.php(3): require('/home/velormx/p...')
+#2 {main}
+  thrown in /home/velormx/public_html/sicoci/componentes/conexion.php on line 2
+[26-Sep-2024 21:56:34 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Access denied for user 'root'@'localhost' (using password: NO) in /home/velormx/public_html/sicoci/componentes/conexion.php:2
+Stack trace:
+#0 /home/velormx/public_html/sicoci/componentes/conexion.php(2): mysqli_connect('localhost', 'root', '', 'sicoci_web')
+#1 /home/velormx/public_html/sicoci/componentes/login/validar_usuario.php(3): require('/home/velormx/p...')
+#2 {main}
+  thrown in /home/velormx/public_html/sicoci/componentes/conexion.php on line 2
+[26-Sep-2024 21:57:03 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Access denied for user 'root'@'localhost' (using password: NO) in /home/velormx/public_html/sicoci/componentes/conexion.php:2
+Stack trace:
+#0 /home/velormx/public_html/sicoci/componentes/conexion.php(2): mysqli_connect('localhost', 'root', '', 'sicoci_web')
+#1 /home/velormx/public_html/sicoci/componentes/login/validar_usuario.php(3): require('/home/velormx/p...')
+#2 {main}
+  thrown in /home/velormx/public_html/sicoci/componentes/conexion.php on line 2
+[26-Sep-2024 21:57:13 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Access denied for user 'root'@'localhost' (using password: NO) in /home/velormx/public_html/sicoci/componentes/conexion.php:2
+Stack trace:
+#0 /home/velormx/public_html/sicoci/componentes/conexion.php(2): mysqli_connect('localhost', 'root', '', 'sicoci_web')
+#1 /home/velormx/public_html/sicoci/componentes/login/validar_usuario.php(3): require('/home/velormx/p...')
+#2 {main}
+  thrown in /home/velormx/public_html/sicoci/componentes/conexion.php on line 2
+[26-Sep-2024 21:58:27 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Access denied for user 'root'@'localhost' (using password: NO) in /home/velormx/public_html/sicoci/componentes/conexion.php:2
+Stack trace:
+#0 /home/velormx/public_html/sicoci/componentes/conexion.php(2): mysqli_connect('localhost', 'root', '', 'sicoci_web')
+#1 /home/velormx/public_html/sicoci/componentes/login/validar_usuario.php(3): require('/home/velormx/p...')
+#2 {main}
+  thrown in /home/velormx/public_html/sicoci/componentes/conexion.php on line 2
+[26-Sep-2024 21:58:31 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Access denied for user 'root'@'localhost' (using password: NO) in /home/velormx/public_html/sicoci/componentes/conexion.php:2
+Stack trace:
+#0 /home/velormx/public_html/sicoci/componentes/conexion.php(2): mysqli_connect('localhost', 'root', '', 'sicoci_web')
+#1 /home/velormx/public_html/sicoci/componentes/login/validar_usuario.php(3): require('/home/velormx/p...')
+#2 {main}
+  thrown in /home/velormx/public_html/sicoci/componentes/conexion.php on line 2
+[26-Sep-2024 22:00:11 UTC] PHP Warning:  Undefined array key "nombre_comercial" in /home/velormx/public_html/sicoci/componentes/login/validar_usuario.php on line 43
+[26-Sep-2024 22:02:16 UTC] PHP Warning:  Undefined array key "nombre_comercial" in /home/velormx/public_html/sicoci/componentes/login/validar_usuario.php on line 43
+[26-Sep-2024 22:07:47 UTC] PHP Warning:  Undefined array key "nombre_comercial" in /home/velormx/public_html/sicoci/componentes/login/validar_usuario.php on line 43
+[26-Sep-2024 22:08:17 UTC] PHP Warning:  Undefined array key "nombre_comercial" in /home/velormx/public_html/sicoci/componentes/login/validar_usuario.php on line 43
+[26-Sep-2024 22:08:45 UTC] PHP Warning:  Undefined array key "nombre_comercial" in /home/velormx/public_html/sicoci/componentes/login/validar_usuario.php on line 43
+[26-Sep-2024 22:10:28 UTC] PHP Warning:  Undefined array key "nombre_comercial" in /home/velormx/public_html/sicoci/componentes/login/validar_usuario.php on line 43
+[26-Sep-2024 22:10:49 UTC] PHP Warning:  Undefined array key "nombre_comercial" in /home/velormx/public_html/sicoci/componentes/login/validar_usuario.php on line 43

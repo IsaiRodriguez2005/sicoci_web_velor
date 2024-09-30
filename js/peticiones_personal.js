@@ -342,7 +342,9 @@ function editar_personal(id_personal, nombre_personal, tipo_personal, calle, ext
 
 function guardar_permiso() {
 
-    var fecha_permiso = $("#fecha_permiso").val();
+    var tipo_gestion = $("#tipo_gestion_permiso").val();
+    var fecha_inicial = $("#fecha_inicial").val();
+    var fecha_final = $("#fecha_final").val();
     var motivo_permiso = $("#motivo_permiso").val();
     var id_personal = $("#tipo_gestion").val();
 
@@ -357,18 +359,28 @@ function guardar_permiso() {
 
         return false;
     }
-    if (fecha_permiso.length == 0) {
-        $("#fecha_permiso").addClass('is-invalid');
+    if (fecha_inicial.length == 0) {
+        $("#fecha_inicio").addClass('is-invalid');
         Swal.fire({
             icon: "error",
-            title: "Debes especificar la fecha del permiso",
+            title: "Debes especificar la fecha inicial del permiso",
             showConfirmButton: false,
             timer: 1500
         });
 
         return false;
     }
+    if (fecha_final.length == 0) {
+        $("#fecha_final").addClass('is-invalid');
+        Swal.fire({
+            icon: "error",
+            title: "Debes especificar la fecha final del permiso",
+            showConfirmButton: false,
+            timer: 1500
+        });
 
+        return false;
+    }
     if (motivo_permiso.length == 0) {
         $("#motivo_permiso").addClass('is-invalid');
         Swal.fire({
@@ -381,31 +393,68 @@ function guardar_permiso() {
         return false;
     }
 
-    $.ajax({
-        cache: false,
-        url: 'componentes/catalogos/registrar_permiso_personal.php',
-        type: 'POST',
-        dataType: 'html',
-        data: { 'id_personal': id_personal, 'fecha_permiso': fecha_permiso, 'motivo_permiso': motivo_permiso },
-    }).done(function (resultado) {
-        if (resultado == "ok") {
-            Swal.fire({
-                icon: "success",
-                title: "Permiso Registrado",
-                html: "La informaci&oacute;n se registro exitosamente",
-                showConfirmButton: false,
-                timer: 2000
-            })
-        } else {
-            Swal.fire({
-                icon: "error",
-                title: "Permiso No Registrado",
-                showConfirmButton: false,
-                timer: 2000
-            })
-        }
-        mostrar_historial_permisos()
-    });
+    if (tipo_gestion == '0') {
+
+        $.ajax({
+            cache: false,
+            url: 'componentes/catalogos/registrar_permiso_personal.php',
+            type: 'POST',
+            dataType: 'html',
+            data: { 'id_personal': id_personal, 'fecha_inicial': fecha_inicial, 'fecha_final': fecha_final, 'motivo_permiso': motivo_permiso },
+        }).done(function (resultado) {
+            if (resultado == "ok") {
+                Swal.fire({
+                    icon: "success",
+                    title: "Permiso Registrado",
+                    html: "La informaci&oacute;n se registro exitosamente",
+                    showConfirmButton: false,
+                    timer: 2000
+                })
+            } else {
+                Swal.fire({
+                    icon: "error",
+                    title: "Permiso No Registrado",
+                    showConfirmButton: false,
+                    timer: 2000
+                })
+            }
+            mostrar_historial_permisos()
+        });
+
+    } else {
+        $.ajax({
+            cache: false,
+            url: 'componentes/catalogos/registrar_permiso_personal.php',
+            type: 'POST',
+            dataType: 'html',
+            data: { 'id_permiso': tipo_gestion, 'id_personal': id_personal, 'fecha_inicial': fecha_inicial, 'fecha_final': fecha_final, 'motivo_permiso': motivo_permiso },
+        }).done(function (resultado) {
+            if (resultado == "ok") {
+                Swal.fire({
+                    icon: "success",
+                    title: "Permiso Actualizado",
+                    html: "La informaci&oacute;n se actializo exitosamente",
+                    showConfirmButton: false,
+                    timer: 2000
+                })
+            } else {
+                Swal.fire({
+                    icon: "error",
+                    title: "Permiso No Registrado",
+                    showConfirmButton: false,
+                    timer: 2000
+                })
+            }
+            $("#tipo_gestion_permiso").val('0');
+            $("#id_personal_input").val(id_personal);
+            $("#fecha_inicial").val('');
+            $("#fecha_final").val('');
+            $("#motivo_permiso").val('');
+
+            $("#btn-permiso").html('Guardar Permiso');
+            mostrar_historial_permisos()
+        });
+    }
 }
 
 
@@ -418,9 +467,6 @@ function habilitar_view_permisos() {
 }
 
 function mostrar_historial_permisos() {
-
-    var fecha_permiso = $("#fecha_permiso").val();
-    var motivo_permiso = $("#motivo_permiso").val();
     var id_personal = $("#tipo_gestion").val();
 
     Swal.fire({
@@ -437,11 +483,35 @@ function mostrar_historial_permisos() {
         url: 'componentes/catalogos/cargar_permisos.php',
         type: 'POST',
         dataType: 'html',
-        data: { 'id_personal': id_personal, 'motivo_permiso': motivo_permiso, 'fecha_permiso': fecha_permiso },
+        data: { 'id_personal': id_personal },
     }).done(function (resultado) {
-        console.log(resultado)
         $("#historial_permisos").html(resultado);
         Swal.close();
     });
 }
 
+function editar_permiso(id_permiso, id_personal, fecha_inicial, fecha_final, motivo) {
+    $("#tipo_gestion_permiso").val(id_permiso);
+    $("#id_personal_input").val(id_personal);
+    $("#fecha_inicial").val(fecha_inicial);
+    $("#fecha_final").val(fecha_final);
+    $("#motivo_permiso").val(motivo);
+
+    $("#btn-permiso").html('Editar Permiso');
+
+}
+
+
+function cancelar_permiso(id_permiso, estatus){
+    $.ajax({
+        cache: false,
+        url: 'componentes/catalogos/actualizar_estatus_permiso.php',
+        type: 'POST',
+        dataType: 'html',
+        data: { 'id_permiso': id_permiso, 'estatus' : estatus },
+    }).done(function (resultado) {
+        console.log(resultado)
+        mostrar_historial_permisos()
+        Swal.close();
+    });
+}

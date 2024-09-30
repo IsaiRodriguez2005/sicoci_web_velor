@@ -1,8 +1,14 @@
-function gestionar_consultorio( redireccion, modal_agenda = '', modal_cliente = '' )
+function gestionar_consultorio(redireccion, modal_agenda = '', modal_cliente = '' )
 {
 
     var nombre_consultorio = $('#nombre_consultorio').val();
     var tipo_gestion = $('#tipo_gestion').val();
+    
+    if(nombre_consultorio.length == 0)
+    {
+        $("#nombre_consultorio").addClass("is-invalid");
+        return false;
+    }
 
 
     Swal.fire({

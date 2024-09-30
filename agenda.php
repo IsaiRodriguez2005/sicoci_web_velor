@@ -80,6 +80,7 @@ if (!isset($_SESSION['nombre_usuario'])) {
                                     <?php
                                     $hoy = date("Y-m-d");
                                     $pasado = date("Y-m-d", strtotime($hoy . " - 30 days"));
+                                    $futuro = date("Y-m-d", strtotime($hoy . " + 30 days"));
                                     ?>
                                     <div class="row">
                                         <!-- Cliente -->
@@ -171,7 +172,7 @@ if (!isset($_SESSION['nombre_usuario'])) {
                                                 <div class="input-group-prepend">
                                                     <span class="input-group-text"><i class="fas fa-calendar"></i></span>
                                                 </div>
-                                                <input type="date" class="form-control" title="Ingresa fecha final de la búsqueda" id="fecha_final" value="<?php echo $hoy; ?>" onfocus="resetear('fecha_final')">
+                                                <input type="date" class="form-control" title="Ingresa fecha final de la búsqueda" id="fecha_final" value="<?php echo $futuro; ?>" onfocus="resetear('fecha_final')">
                                             </div>
                                         </div>
                                         <div class="col-md-2 mb-3">

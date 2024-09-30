@@ -14,6 +14,7 @@
     }
     else
     {
+<<<<<<< HEAD
         $html = ''; 
         $html .= '
             <table class="table table-striped" id="tabla_facturas" width="100%">
@@ -55,6 +56,8 @@
             LEFT JOIN emisores_clientes cli ON a.id_cliente = cli.id_cliente AND a.id_emisor = cli.id_emisor
         ";
         */
+=======
+>>>>>>> d75ff7c8a767d8e82e174b4601590a0de07449ba
         $consulta = " SELECT a.id_folio, 
                             a.id_cliente,
                             a.estatus,
