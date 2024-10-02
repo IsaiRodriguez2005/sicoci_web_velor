@@ -41,11 +41,14 @@ if (!isset($_SESSION['nombre_usuario'])) {
     <link rel="stylesheet" href="plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
     <link rel="stylesheet" href="plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
-    <!-- Full Calendar -->
+    <!-- Full Calendar 
     <link rel='stylesheet' type='text/css' href='css/calendar/fullcalendar.css' />
     <script type='text/javascript' src='js/calendar/moment.min.js'></script>
     <script type='text/javascript' src='js/calendar/fullcalendar.min.js'></script>
     <script type='text/javascript' src='js/calendar/locale/es.js'></script>
+    -->
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js'></script>
+    <script src='fullcalendar/core/locales/es.global.js'></script>
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/5.10.1/main.min.css" rel="stylesheet" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/5.10.1/main.min.js"></script>
@@ -122,10 +125,11 @@ if (!isset($_SESSION['nombre_usuario'])) {
           <div class="container-fluid">
             <div class="row">
               <!-- /.col -->
-              <div class="col-md-9">
+              <div class="col-md-9 ">
                 <div class="card card-primary">
-                  <div class="card-body p-0">
+                  <div class="card-body p-0"> <!--  mx-auto d-flex justify-content-center align-items-center Asegúrate de que haya suficiente altura -->
                     <!-- THE CALENDAR -->
+
                     <div id="calendar"></div>
                   </div>
                   <!-- /.card-body -->

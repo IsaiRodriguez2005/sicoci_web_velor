@@ -1,3 +1,5 @@
+
+
 $(function () {
   /* initialize the external events
     -----------------------------------------------------------------*/
@@ -43,38 +45,48 @@ $(function () {
   get_citas_agenda().then(function (resultado) {
     // Convierte el resultado a un objeto JavaScript (array de objetos)
     let citas = JSON.parse(resultado);
-  
-    
+
+
     let eventos = citas.map(cita => {
       return {
-        title: cita.nombre_personal, 
-        start: cita.fecha_agenda,    
-        backgroundColor: '#00a65a',  
-        borderColor: '#00a65a',      
-        allDay: false                
+        title: cita.nombre_personal,
+        start: cita.fecha_agenda,
+        backgroundColor: '#00a65a',
+        borderColor: '#00a65a',
+        allDay: false
       };
     });
-  
-    
-    var calendarEl = document.getElementById("calendar"); 
-  
+
+
+    var calendarEl = document.getElementById("calendar");
+
     var calendar = new FullCalendar.Calendar(calendarEl, {
       headerToolbar: {
         left: "prev,next today",
         center: "title",
         right: "dayGridMonth,timeGridWeek,timeGridDay",
       },
+      locale: 'es', // idioma español
       themeSystem: "bootstrap",
-      events: eventos, 
+      initialView: 'timeGridDay',
+      //defaulView:'day',
+      buttonText: { // Textos de botones
+        today: 'Hoy',
+        month: 'Mes',
+        week: 'Semana',
+        day: 'Día',
+        list: 'list'
+      },
+      events: eventos, // eventos de promesa
       editable: false,
-      droppable: true, 
+      droppable: true,
       drop: function (info) {
         if (checkbox.checked) {
           info.draggedEl.parentNode.removeChild(info.draggedEl);
         }
       }
     });
-  
+
     // renderizar el calendario
     calendar.render();
   }).catch(function (error) {
