@@ -199,6 +199,7 @@ function cargar_datos() {
         dataType: 'html',
         data: { 'movimiento': movimiento, 'id_cliente': id_cliente, 'fecha_hora': fecha_hora_cita, },
     }).done(function (resultado) {
+        //console.log(resultado)
         if (movimiento == 1) {
             $("#terapeuta_form").html(resultado);
         }
@@ -213,6 +214,7 @@ function cargar_datos() {
         dataType: 'html',
         data: { 'fecha_hora': fecha_hora_cita, },
     }).done(function (resultado) {
+        //console.log(resultado)
         $("#consultorio_form").html(resultado);
     })
 }

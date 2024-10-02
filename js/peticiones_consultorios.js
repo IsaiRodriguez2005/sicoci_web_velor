@@ -40,9 +40,21 @@ function gestionar_consultorio(redireccion, modal_agenda = '', modal_cliente = '
                     window.location = redireccion ;
                 }
                 if(modal_agenda && modal_cliente){
+                    $.ajax({
+                        cache: false,
+                
+                        url: "componentes/catalogos/cargar_consultorios.php",
+                        type: 'POST',
+                        dataType: 'html',
+                        data: { 'fecha_hora': fecha_hora_cita, },
+                    }).done(function (resultado) {
+                        //console.log(resultado)
+                        $("#consultorio_form").html(resultado);
+                    })
                     $('#' + modal_cliente).modal('hide');
                     $("#" + modal_agenda).modal("show");
                     $("#tipo_gestion").val(0);
+
                 }
             });
         }

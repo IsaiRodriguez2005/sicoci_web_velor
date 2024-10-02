@@ -1,3 +1,3 @@
 <?php
-    $conexion = mysqli_connect("localhost","root","","velormx_sicoci_pruebas");
+    $conexion = mysqli_connect("localhost","root","","sicoci_web");
 ?>

@@ -29,10 +29,16 @@
             clave_regimen='".strtoupper($_POST['regimen'])."',
             sitio_web='".$_POST['sitio_web']."',
             correo='".$_POST['correo']."',
-            telefono='".$_POST['telefono']."'
+            telefono='".$_POST['telefono']."',
+            hora_entrada = '".$_POST['hora_entrada']."',
+            hora_salida = '".$_POST['hora_salida']."',
+            rango_citas = '".$_POST['rango_citas']."'
             WHERE
             id_emisor=".$_SESSION['id_emisor'];
-        mysqli_query($conexion, $sqlEmisor);
-        echo $sqlEmisor;
+        $resultado = mysqli_query($conexion, $sqlEmisor);
+
+        if($resulado){
+            echo 'ok';
+        }
     }
 ?>

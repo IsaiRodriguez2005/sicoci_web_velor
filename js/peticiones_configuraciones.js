@@ -31,6 +31,11 @@ function gestionar_emisor()
     var no_exterior = $('#no_exterior').val();
     var no_interior = $('#no_interior').val();
     var codigo_postal = $('#codigo_postal').val();
+    
+    var hora_entrada = $('#hora_entrada').val();
+    var hora_salida = $('#hora_salida').val();
+    var rango_citas = $('#rango_citas').val();
+
     if(tipo_colonia == 1)
     {
         var colonia = $('#colonia').val();
@@ -126,7 +131,25 @@ function gestionar_emisor()
             url : "componentes/configuraciones/actualizar_emisor.php",
             type : 'POST',
             dataType : 'html',
-            data : { 'rfc': rfc, 'nombre_social': nombre_social, 'nombre_comercial': nombre_comercial, 'calle': calle, 'no_exterior': no_exterior, 'no_interior': no_interior, 'codigo_postal': codigo_postal, 'colonia': colonia, 'estado': estado, 'municipio': municipio, 'pais': pais, 'regimen': regimen, 'correo': correo, 'telefono': telefono, 'sitio_web': sitio_web},
+            data : { 'rfc': rfc, 
+                    'nombre_social': nombre_social, 
+                    'nombre_comercial': nombre_comercial, 
+                    'calle': calle, 
+                    'no_exterior': no_exterior, 
+                    'no_interior': no_interior, 
+                    'codigo_postal': codigo_postal, 
+                    'colonia': colonia, 
+                    'estado': estado, 
+                    'municipio': municipio, 
+                    'pais': pais, 
+                    'regimen': regimen, 
+                    'correo': correo, 
+                    'telefono': telefono, 
+                    'sitio_web': sitio_web,
+                    'hora_entrada': hora_entrada,
+                    'hora_salida': hora_salida,
+                    'rango_citas': rango_citas,
+                },
         }).done(function(resultado){
             Swal.fire({
                 icon: "success",
