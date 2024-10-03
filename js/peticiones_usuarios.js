@@ -154,9 +154,19 @@ function gestionar_usuario()
     {
         dash_directivo = 2;
     }
+    Swal.fire({
+        title: 'Registrando Usuario...',
+        allowEscapeKey: false,
+        allowOutsideClick: false,
+        didOpen: () => {
+            Swal.showLoading()
+        }
+    });
 
     if(bandera == 1)
     {
+        
+
         if(tipo_gestion == 0)
         {
             var url_destino = "componentes/catalogos/registrar_usuario.php";
