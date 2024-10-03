@@ -188,7 +188,7 @@ function estuturaCorreoHTML($mensaje)
                                                                         style="line-height:10px">
                                                                         <div style="max-width: 149px;"><img
                                                                                 alt="I&apos;m an image" height="auto"
-                                                                                src="images/Companify-Logo.png"
+                                                                                src="https://velor.mx/cosera/componentes/correos/images/Companify-Logo.png"
                                                                                 style="display: block; height: auto; border: 0; width: 100%;"
                                                                                 title="I&apos;m an image" width="149" /></div>
                                                                     </div>
@@ -570,7 +570,7 @@ function estuturaCorreoHTML($mensaje)
                                                                                     target="_blank"><img align="center"
                                                                                         alt="Beefree Logo" class="icon"
                                                                                         height="auto"
-                                                                                        src="images/Beefree-logo.png"
+                                                                                        src="https://velor.mx/cosera/componentes/correos/images/Beefree-logo.png"
                                                                                         style="display: block; height: auto; margin: 0 auto; border: 0;"
                                                                                         width="34" /></a>
                                                                             </td>

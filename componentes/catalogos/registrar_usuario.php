@@ -3,6 +3,7 @@ session_start();
 require("../conexion.php");
 
 include '../correos/enviar_correo.php';
+include '../correos/funciones.php';
 
 date_default_timezone_set('America/Mexico_City');
 
@@ -31,9 +32,9 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
     $razon_social = $razon['nombre_social'];
 
     if ($_POST['correo']) {
-        $asunto = 'BIENVENIDO A VELOR ERP';
+        $asunto = 'BIENVENIDO A COSERA';
         $mensaje = '
-            Que tal ' . strtoupper($_POST['nombre']) . ',.<br><br>
+            Que tal ' . strtoupper($_POST['nombre']) . '<br><br>
             Cosera te da la bienvenida y hacemos de tu conocimiento que el administrador de la empresa ' . strtoupper($_SESSION['nombre_comercial']) . ' te ha registrado como un nuevo usuario del sistema por lo que te compartimos tus datos de acceso:<br>
             <b>Nombre de usuario:</b> ' . $razon_social . '<br>
             <b>Enlace:</b> https://www.velor.mx/cosera/<br>
@@ -46,7 +47,3 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
         enviarCorreo($_POST['correo'], $asunto, $mensaje);
     }
 }
-
-
-
-C:\xampp\htdocs\sicoci_web\componentes\correos\images\Img1_2x.jpg

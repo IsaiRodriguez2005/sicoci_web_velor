@@ -5,6 +5,7 @@ use PHPMailer\PHPMailer\Exception;
 
 require '../../vendor/autoload.php';
 require '../correos/estructura_mensaje.php';
+include '../correos/funciones.php';
 
 function enviarCorreo($correoDestinatario, $a, $c)
 {
@@ -23,18 +24,19 @@ function enviarCorreo($correoDestinatario, $a, $c)
 
         // Configuración del correo
         $mail->setFrom('notificaciones@velor.mx', 'COSERA NOTIFICADOR');          // Dirección del remitente
-        $mail->addAddress('desarrollo.aux02@velor.mx');   // Dirección del destinatario $correoDestinatario
+        $mail->addAddress($correoDestinatario);   // Dirección del destinatario 
         $mail->isHTML(true);           
         $mail->Subject = $a;
         $mail->Body    = $body;
 
         // Enviar correo
         if($mail->send()){
-            echo 'Correo enviado exitosamente.';
+            return 1;
         } else {
-            echo "El correo no pudo enviarse. Error: {$mail->ErrorInfo}";
+            return 0;
         }
     } catch (Exception $e) {
-        echo "Excepción al intentar enviar el correo. Error: {$mail->ErrorInfo}";
+        return 2;
     }
 }
+

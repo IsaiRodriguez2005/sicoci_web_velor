@@ -183,7 +183,7 @@ function gestionar_usuario()
             dataType : 'html',
             data : { 'nombre': nombre, 'correo': correo, 'password': password, 'id_usuario': id_usuario, 'configuraciones': configuraciones, 'agenda': agenda, 'clientes': clientes, 'usuarios': usuarios, 'productos': productos, 'proveedores': proveedores, 'personal': personal, 'tickets': tickets, 'facturacion': facturacion, 'pago_proveedores': pago_proveedores, 'reportes': reportes, 'dash_directivo': dash_directivo},
         }).done(function(resultado){
-            console.log(resultado);
+            // console.log(resultado);
             Swal.fire({
                 icon: "success",
                 title: "Usuario Registrado",

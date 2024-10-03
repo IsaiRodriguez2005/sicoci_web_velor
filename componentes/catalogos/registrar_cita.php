@@ -1,6 +1,8 @@
 <?php
 session_start();
 require("../conexion.php");
+include '../correos/enviar_correo.php';
+
 date_default_timezone_set('America/Mexico_City');
 
 if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
@@ -48,6 +50,41 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
                     $insertCliente = "INSERT INTO emisores_agenda VALUES( " . $_SESSION['id_emisor'] . "," . $ultimo . "," . intval($_POST['id_cliente']) . "," . intval($_POST['id_consultorio']) . "," . intval($_POST['id_terapeuta']) . "," . intval($_POST['tipo_servicio']) . "," . intval($_POST['tipo_cita']) . ",'" . $fecha_alta . "','" . strtoupper(trim($_POST['fecha_hora'])) . "','" . strtoupper($_POST['observaciones']) . "', 2)";
                     $resultado = mysqli_query($conexion, $insertCliente);
                     if ($resultado) {
+
+
+                        $datosCliente = getDatosClientes(intval($_POST['id_cliente']), $conexion);
+
+                        $datosTerap = getDatosTerapeuta(intval($_POST['id_terapeuta']), $conexion);
+
+                        $datosConsultorio =  getDatosConsultorio(intval($_POST['id_consultorio']), $conexion);
+
+
+                        if ($datosCliente['correo']) {
+                            $fecha = obtenerFechaEspaniol($_POST['fecha_hora']);
+                            $asunto = 'CITA AGENDADA!';
+                            $mensaje = '
+                                Que tal <b>' . strtoupper($datosCliente['nombre_cliente']) . '</b>.<br><br>
+                                Para confirmar el registro de la cita con el fisioterapeuta <b>' . $datosTerap['nombre_personal'] . '</b> para el día <b>' . $fecha['dia'] . ' '.$fecha['num_dia'].' de ' . $fecha['mes'] . '</b> del <b>' . $fecha['anio'] . '</b> 
+                                a las <b>' . $fecha['hora'] . '</b> en el <b>' . $datosConsultorio['nombre'] . '</b> <br><br>
+                                PD. Este correo es informativo por lo que no es necesario responder dicho correo.
+                                ';
+                            $correo = enviarCorreo($datosCliente['correo'], $asunto, $mensaje);
+                        }
+
+                        if ($datosTerap['correo']) {
+
+                            $fecha = obtenerFechaEspaniol($_POST['fecha_hora']);
+                            $asunto = 'CITA AGENDADA!';
+                            $mensaje = '
+                                Que tal <b>' . strtoupper($datosTerap['nombre_personal']) . '</b>,.<br><br>
+                                El cliente/paciente <b>' . $datosCliente['nombre_cliente'] . '</b> agendó una cita contigo para el día <b>' . $fecha['dia'] . ' '.$fecha['num_dia'].' de ' . $fecha['mes'] . '</b> del <b>' . $fecha['anio'] . '</b> 
+                                a las <b>' . $fecha['hora'] . '</b> en el <b>' . $datosConsultorio['nombre'] . '</b> <br><br>
+                                <b>Observaciones:</b> '.strtoupper($_POST['observaciones']).'
+                                PD. Este correo es informativo por lo que no es necesario responder dicho correo.
+                                ';
+                            $correo = enviarCorreo($datosCliente['correo'], $asunto, $mensaje);
+                        }
+
                         echo "ok";
                     } else {
                         echo "error";
@@ -61,16 +98,5 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
         } else {
             echo 1; // validacion de cliente y hora 
         }
-    } else {
-            $updateCliente = "UPDATE emisores_clientes SET rfc='".strtoupper(trim($_POST['rfc']))."', nombre_social='".trim($nuevo_social)."', calle='".strtoupper(trim($_POST['calle']))."', no_exterior='".strtoupper(trim($_POST['no_exterior']))."', no_interior='".strtoupper(trim($_POST['no_interior']))."', codigo_postal='".strtoupper($_POST['codigo_postal'])."', colonia='".strtoupper(trim($_POST['colonia']))."', municipio='".strtoupper($_POST['municipio'])."', estado='".strtoupper($_POST['estado'])."', pais='".strtoupper($_POST['pais'])."', regimen_fiscal='".strtoupper($_POST['regimen'])."', metodo_pago='".strtoupper($_POST['metodo_pago'])."', forma_pago='".strtoupper($_POST['forma_pago'])."', uso_cfdi='".strtoupper($_POST['uso_cfdi'])."', correo='".strtolower($_POST['correo'])."', telefono='".$_POST['telefono']."', tipo_cliente=".$_POST['tipo_cliente']." WHERE id_cliente=".$_POST['id_cliente']." AND id_emisor=".$_SESSION['id_emisor'];
-            $resultado=mysqli_query($conexion, $updateCliente);
-            if($resultado)
-            {
-                echo "ok";
-            }
-            else
-            {
-                echo "error";
-            }
     }
 }
