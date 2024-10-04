@@ -36,6 +36,12 @@ function gestionar_emisor()
     var hora_salida = $('#hora_salida').val();
     var rango_citas = $('#rango_citas').val();
 
+    var hora_entrada_sabado = $('#hora_entrada_sabado').val();
+    var hora_salida_sabado = $('#hora_salida_sabado').val();
+
+    var hora_comida_inicio = $('#hora_comida_inicio').val();
+    var hora_comida_fin = $('#hora_comida_fin').val();
+
     if(tipo_colonia == 1)
     {
         var colonia = $('#colonia').val();
@@ -115,6 +121,11 @@ function gestionar_emisor()
         bandera = 2;
     }
 
+    if(Number(rango_citas) < 0){
+        $("#rango_citas").addClass('is-invalid');
+        bandera = 2;
+    }
+
     if(bandera == 1)
     {
         Swal.fire({
@@ -149,6 +160,10 @@ function gestionar_emisor()
                     'hora_entrada': hora_entrada,
                     'hora_salida': hora_salida,
                     'rango_citas': rango_citas,
+                    'hora_entrada_sabado': hora_entrada_sabado,
+                    'hora_salida_sabado': hora_salida_sabado,
+                    'hora_comida_inicio': hora_comida_inicio,
+                    'hora_comida_fin': hora_comida_fin,
                 },
         }).done(function(resultado){
             Swal.fire({

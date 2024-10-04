@@ -15,7 +15,31 @@
     else
     {
         $html = "";
-        $sql = "SELECT e.rfc, e.nombre_social, e.nombre_comercial, e.calle, e.exterior, e.interior, e.codigo_postal, e.clave_colonia, e.clave_estado, e.clave_municipio, e.clave_pais, e.clave_regimen, e.sitio_web, e.correo, e.telefono, e.hora_entrada, e.hora_salida, e.rango_citas, c.nombre_colonia, es.nombre_estado, m.nombre_municipio, p.descripcion FROM emisores e LEFT JOIN _cat_sat_colonias c ON c.clave_colonia = e.clave_colonia AND c.codigo_postal = e.codigo_postal LEFT JOIN _cat_sat_estados es ON es.clave_estado = e.clave_estado AND es.clave_pais = e.clave_pais LEFT JOIN _cat_sat_municipios m ON m.clave_municipio = e.clave_municipio AND m.clave_estado = e.clave_estado LEFT JOIN _cat_sat_pais p ON p.clave_pais = e.clave_pais  WHERE id_emisor = ".$_SESSION['id_emisor'];
+        $sql = "SELECT e.rfc, 
+                        e.nombre_social, 
+                        e.nombre_comercial, 
+                        e.calle, e.exterior, 
+                        e.interior, 
+                        e.codigo_postal, 
+                        e.clave_colonia, 
+                        e.clave_estado, 
+                        e.clave_municipio, 
+                        e.clave_pais, 
+                        e.clave_regimen, 
+                        e.sitio_web, 
+                        e.correo, 
+                        e.telefono, 
+                        e.hora_entrada, 
+                        e.hora_salida, 
+                        e.rango_citas, 
+                        e.hora_entrada_sabado, 
+                        e.hora_salida_sabado,
+                        e.hora_comida_inicio, 
+                        e.hora_comida_fin,
+                        c.nombre_colonia, 
+                        es.nombre_estado, 
+                        m.nombre_municipio, 
+                        p.descripcion FROM emisores e LEFT JOIN _cat_sat_colonias c ON c.clave_colonia = e.clave_colonia AND c.codigo_postal = e.codigo_postal LEFT JOIN _cat_sat_estados es ON es.clave_estado = e.clave_estado AND es.clave_pais = e.clave_pais LEFT JOIN _cat_sat_municipios m ON m.clave_municipio = e.clave_municipio AND m.clave_estado = e.clave_estado LEFT JOIN _cat_sat_pais p ON p.clave_pais = e.clave_pais  WHERE id_emisor = ".$_SESSION['id_emisor'];
         $reslSQL = mysqli_query($conexion, $sql);
         $emisor = mysqli_fetch_array($reslSQL);
 
@@ -205,29 +229,70 @@
                             </div>
                         </div>
                     </div>
+                    <br><h6><i class="fas fa-clock"></i></i> Horarios lunes a viernes</h6><hr>
                     <div class="row">
-                        <div class="col-3">
+                        <div class="col-6">
                             <div class="input-group mb-3">
                                 <div class="input-group-prepend">
-                                    <span class="input-group-text">Hora Entrada</i></span>
+                                    <span class="input-group-text">Entrada</i></span>
                                 </div>
                                 <input type="time" class="form-control" id="hora_entrada" onfocus="resetear(&quot;hora_entrada&quot;)" maxlength="50" value="'.$emisor['hora_entrada'].'">
                             </div>
                         </div>
-                        <div class="col-4">
+                        <div class="col-6">
                             <div class="input-group mb-3">
                                 <div class="input-group-prepend">
-                                    <span class="input-group-text">Hora Salida</i></span>
+                                    <span class="input-group-text">Salida</i></span>
                                 </div>
                                 <input type="time" class="form-control" id="hora_salida" onfocus="resetear(&quot;hora_salida&quot;)" maxlength="50" value="'.$emisor['hora_salida'].'">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-5">
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">Rangos</span>
+                                </div>
+                                <input type="number" class="form-control" placeholder="Tiempo en minutos" id="rango_citas" onfocus="resetear(&quot;rango_citas&quot;)" min="1" max="250" value="'.$emisor['rango_citas'].'">
+                            </div>
+                        </div>
+                    </div>
+                    <br><h6><i class="fas fa-clock"></i></i> Horarios sabados</h6><hr>
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">Entrada</i></span>
+                                </div>
+                                <input type="time" class="form-control" id="hora_entrada_sabado" onfocus="resetear(&quot;hora_entrada_sabado&quot;)" maxlength="50" value="'.$emisor['hora_entrada_sabado'].'">
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">Salida</i></span>
+                                </div>
+                                <input type="time" class="form-control" id="hora_salida_sabado" onfocus="resetear(&quot;hora_salida_sabado&quot;)" maxlength="50" value="'.$emisor['hora_salida_sabado'].'">
+                            </div>
+                        </div>
+                    </div><br>
+                    <br><h6><i class="fas fa-clock"></i></i> Horarios de comida</h6><hr>
+                    <div class="row">
+                        <div class="col-5">
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">Inicio</i></span>
+                                </div>
+                                <input type="time" class="form-control" id="hora_comida_inicio" onfocus="resetear(&quot;hora_entrada&quot;)" maxlength="50" value="'.$emisor['hora_comida_inicio'].'">
                             </div>
                         </div>
                         <div class="col-5">
                             <div class="input-group mb-3">
                                 <div class="input-group-prepend">
-                                    <span class="input-group-text">Rangos de cita</span>
+                                    <span class="input-group-text">Fin</i></span>
                                 </div>
-                                <input type="time" class="form-control" id="rango_citas" onfocus="resetear(&quot;rango_citas&quot;)" maxlength="100" value="'.$emisor['rango_citas'].'">
+                                <input type="time" class="form-control" id="hora_comida_fin" onfocus="resetear(&quot;hora_salida&quot;)" maxlength="50" value="'.$emisor['hora_comida_fin'].'">
                             </div>
                         </div>
                     </div><br>
