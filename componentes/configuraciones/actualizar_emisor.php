@@ -32,13 +32,14 @@
             telefono='".$_POST['telefono']."',
             hora_entrada = '".$_POST['hora_entrada']."',
             hora_salida = '".$_POST['hora_salida']."',
-            rango_citas = '".intval($_POST['rango_citas'])."'
+            rango_citas = ".intval($_POST['rango_citas']).",
             hora_entrada_sabado = '".$_POST['hora_entrada_sabado']."',
             hora_salida_sabado = '".$_POST['hora_salida_sabado']."',
             hora_comida_inicio = '".$_POST['hora_comida_inicio']."',
-            hora_comida_fin = '".$_POST['hora_comida_fin']."',
+            hora_comida_fin = '".$_POST['hora_comida_fin']."'
             WHERE
             id_emisor=".$_SESSION['id_emisor'];
+        //echo $sqlEmisor;
         $resultado = mysqli_query($conexion, $sqlEmisor);
 
         if($resulado){

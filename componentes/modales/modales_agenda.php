@@ -24,11 +24,11 @@
                                 </datalist>
                             </div>
                         </div>
-                        <!-- Fecha y Hora de Cita -->
+                        <!-- Fecha de Cita -->
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="fecha_hora_cita">Fecha y Hora de Cita</label>
-                                <input type="datetime-local" step="3600" class="form-control" id="fecha_hora_cita_form" required onchange="cargar_datos();">
+                                <label for="fecha_hora_cita">Fecha de Cita</label>
+                                <input type="date" class="form-control" id="fecha_cita_form" required onchange="cargar_datos();">
                             </div>
                         </div>
                     </div>
@@ -38,7 +38,7 @@
                             <div class="form-group">
                                 <label for="terapeuta">Terapeuta</label>
                                 <div class="d-flex">
-                                    <select class="form-control" id="terapeuta_form" required>
+                                    <select class="form-control" id="terapeuta_form" required onchange="cargar_horarios_disponibles();">
                                         <option value="" disabled selected>Selecciona Terapeuta</option>
                                     </select>
                                     <!--<button type="button" class="btn btn-info ml-2" onclick="abrir_modal('modal_nueva_cita', 'modal_nuevo_terapeuta')"><i class="fas fa-user-plus"></i></button>-->
@@ -46,6 +46,17 @@
                                 </div>
                             </div>
                         </div>
+                        <!-- Hora de Cita -->
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="fecha_hora_cita">Hora de Cita</label>
+                                <select class="form-control" id="hora_cita_form" required onchange="cargar_consultorios_disponibles();">
+                                    <option value="" disabled selected>Selecciona Hora de Cita</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
                         <!-- Tipo de Servicio -->
                         <div class="col-md-6">
                             <div class="form-group">
@@ -57,8 +68,6 @@
                                 </select>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
                         <!-- Tipo de Cita -->
                         <div class="col-md-6">
                             <div class="form-group">
@@ -70,6 +79,8 @@
                                 </select>
                             </div>
                         </div>
+                    </div>
+                    <div class="row">
                         <!-- Consultorio -->
                         <div class="col-md-6">
                             <div class="form-group">

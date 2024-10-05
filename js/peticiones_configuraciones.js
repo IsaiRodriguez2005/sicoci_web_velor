@@ -166,6 +166,7 @@ function gestionar_emisor()
                     'hora_comida_fin': hora_comida_fin,
                 },
         }).done(function(resultado){
+            //console.log(resultado)
             Swal.fire({
                 icon: "success",
                 title: "Emisor Actualizado",

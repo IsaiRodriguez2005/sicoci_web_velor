@@ -16,7 +16,10 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
 
         $fecha = date('Y-m-d', strtotime($_POST['fecha_hora']));
         // revisamos la fecha de la agenda, para sacar los terapeutas que estan en ese dia y hora ocupados
-        $terapeutas_Activos = "SELECT id_terapeuta FROM emisores_agenda WHERE fecha_agenda = '" . $_POST['fecha_hora'] . "' UNION SELECT id_personal FROM emisores_personal_permisos WHERE fecha_inicial >= '" . $fecha . "' OR fecha_final <= '" . $fecha . "'";
+        $terapeutas_Activos = "SELECT id_terapeuta FROM emisores_agenda WHERE fecha_agenda = '" . $_POST['fecha_hora'] . "' 
+                                                                                UNION 
+                                SELECT id_personal FROM emisores_personal_permisos WHERE fecha_inicial >= '" . $fecha . "' OR fecha_final <= '" . $fecha . "'";
+        echo $terapeutas_Activos;
         $resultado = mysqli_query($conexion, $terapeutas_Activos);
 
         // si contiene alguna respuesa
@@ -36,7 +39,7 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
             $consultaTerapeuta = "SELECT * FROM emisores_personal WHERE tipo = 2 AND id_personal NOT IN (" . $ids . ") ORDER BY nombre_personal ASC";
             $resTerapeutas = mysqli_query($conexion, $consultaTerapeuta);
 
-            echo $consultaTerapeuta;
+            // echo $consultaTerapeuta;
 
             while ($terapeuta = mysqli_fetch_array($resTerapeutas)) {
                 // cargamos los terapeutas que estan disponibles
@@ -68,6 +71,7 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
                         <th class="sticky text-center text-sm">Terapeuta</th>
                         ';
 
+        //var_dump($_POST['fecha_hora']);
         if (!$_POST['fecha_hora']) {
             $_fecha = date('Y-m-d');
         } else {
@@ -139,29 +143,43 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
 
                 if (intval($dia_semana) != 0) {
                     // buscamos los horarios que esten ocudos en el dia establecido por el usuario
-                    $query = "SELECT id_terapeuta, fecha_agenda FROM emisores_agenda WHERE fecha_agenda >= '" . $fecha . "T".$_SESSION['hora_entrada']."' AND fecha_agenda <= '" . $fecha . "T".$_SESSION['hora_salida']."' AND id_terapeuta = " . $terapeuta['id_personal'] . "";
+                    $query = "SELECT id_terapeuta, fecha_agenda FROM emisores_agenda WHERE fecha_agenda >= '" . $fecha . "T" . $_SESSION['hora_entrada'] . "' AND fecha_agenda <= '" . $fecha . "T" . $_SESSION['hora_salida'] . "' AND id_terapeuta = " . $terapeuta['id_personal'] . "";
                     $resultado = mysqli_query($conexion, $query);
 
                     // array para almacenar horarios en formato de 1hora
                     $horarios = [];
 
                     //! HORARIOS (Margen)--------------------
-                    $horaInicio = new DateTime($_SESSION['hora_entrada']);
 
                     if (intval($dia_semana) == 6) {
-                        $horaFin = new DateTime('14:00');
+                        $horaInicio = new DateTime($_SESSION['hora_entrada_sabado']);
+                        $horaSalida = new DateTime($_SESSION['hora_salida_sabado']);
                     } else {
-                        $horaFin = new DateTime($_SESSION['hora_salida']);
+                        $horaInicio = new DateTime($_SESSION['hora_entrada']);
+                        $horaSalida = new DateTime($_SESSION['hora_salida']);
+                        $horaInicioComida = new DateTime($_SESSION['hora_comida_inicio']);
+                        $horaFinComida = new DateTime($_SESSION['hora_comida_fin']);
                     }
                     //! FIN HORARIOS (Margen)--------------------
-                    
+
                     $rango_citas = $_SESSION['rango_citas'];
-                    list($hora, $minutos) = explode(':', $rango_citas);
-                    
-                    // iteramos para giardar la lista de los horarios
-                    while ($horaInicio <= $horaFin) {
-                        $horarios[] = $horaInicio->format('H:i');
-                        $horaInicio->modify('+'.$hora.' hour '.$minutos.' minutes'); //! 1 hora
+
+                    if (intval($dia_semana) == 6) {
+                        while ($horaInicio <= $horaSalida) {
+                            $horarios[] = $horaInicio->format('H:i');
+                            $horaInicio->modify('+' . $rango_citas . ' minutes'); //! 1 hora
+                        }
+                    } else {
+                        // iteramos para giardar la lista de los horarios
+                        while ($horaInicio <= $horaInicioComida) {
+                            $horarios[] = $horaInicio->format('H:i');
+                            $horaInicio->modify('+' . $rango_citas . ' minutes'); //! 1 hora
+                        }
+
+                        while ($horaFinComida <= $horaSalida) {
+                            $horarios[] = $horaFinComida->format('H:i');
+                            $horaFinComida->modify('+' . $rango_citas . ' minutes'); //! 1 hora
+                        }
                     }
 
                     $horariosOcupados = [];
@@ -169,8 +187,8 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
                     // guardamos los horarios redondeados en el formato de 30min
                     while ($fila = mysqli_fetch_assoc($resultado)) {
 
-                        $horario = date('H:i:s', strtotime($fila['fecha_agenda']));
-                        $horario = redondearHora($horario);
+                        $horario = date('H:i', strtotime($fila['fecha_agenda']));
+                        //$horario = redondearHora($horario);
                         $horariosOcupados[] = $horario;
                     }
 
@@ -249,6 +267,9 @@ function redondearHora($hora)
         return date('H:00', strtotime('+1 hour', $timestamp));
     }
 }
+
+
+function rangoHorarios() {}
 
 ?>
 

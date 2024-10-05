@@ -17,24 +17,26 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
     $reemplazo = array("&amp;", "&quot;", "&apos;");
     $nuevo_social = str_replace($caracteres, $reemplazo, strtoupper($_POST['id_cliente']));
 
+    $fecha_hora = $_POST['fecha_cita'] . 'T' . $_POST['hora_cita'];
     if ($_POST['tipo_gestion'] == 0) {
 
         // primera validacion, ¿hay alguna cita para el cliente mismo dia y misma hora?
-        $hay_cita = "SELECT * FROM emisores_agenda WHERE id_cliente = " . intval($_POST['id_cliente']) . " AND fecha_agenda = '" . $_POST['fecha_hora'] . "'";
+        $hay_cita = "SELECT * FROM emisores_agenda WHERE id_cliente = " . intval($_POST['id_cliente']) . " AND fecha_agenda = '" . $fecha_hora . "'";
         $resultado = mysqli_query($conexion, $hay_cita);
         $filas = mysqli_fetch_assoc($resultado);
 
         if (!$filas) { // validacion de cliente y hora
 
             // segunda validacion, ¿esta ocuado el conultorio el dia y misma hora?
-            $consultorio_ocupado = "SELECT * FROM emisores_agenda WHERE id_consultorio = " . intval($_POST['id_consultorio']) . " AND fecha_agenda = '" . $_POST['fecha_hora'] . "'";
+            $consultorio_ocupado = "SELECT * FROM emisores_agenda WHERE id_consultorio = " . intval($_POST['id_consultorio']) . " AND fecha_agenda = '" . $fecha_hora . "'";
             $resultado = mysqli_query($conexion, $consultorio_ocupado);
             $filas = mysqli_fetch_assoc($resultado);
 
             if (!$filas) { // validacion de consultorio ocupado
 
                 // tercera validacion, ¿esta ocupado el terapeuta el dia y misma hora?
-                $terapeuta_ocupado = "SELECT * FROM emisores_agenda WHERE id_terapeuta = " . intval($_POST['id_terapeuta']) . " AND fecha_agenda = '" . $_POST['fecha_hora'] . "'";
+                $terapeuta_ocupado = "SELECT * FROM emisores_agenda WHERE id_terapeuta = " . intval($_POST['id_terapeuta']) . " AND 
+                                                                            fecha_agenda = '" . $fecha_hora . "'";
                 $resultado = mysqli_query($conexion, $terapeuta_ocupado);
                 $filas = mysqli_fetch_assoc($resultado);
 
@@ -47,7 +49,7 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
                     $max = mysqli_fetch_array($resMAX);
                     $ultimo = $max['no_registro'] + 1;
 
-                    $insertCliente = "INSERT INTO emisores_agenda VALUES( " . $_SESSION['id_emisor'] . "," . $ultimo . "," . intval($_POST['id_cliente']) . "," . intval($_POST['id_consultorio']) . "," . intval($_POST['id_terapeuta']) . "," . intval($_POST['tipo_servicio']) . "," . intval($_POST['tipo_cita']) . ",'" . $fecha_alta . "','" . strtoupper(trim($_POST['fecha_hora'])) . "','" . strtoupper($_POST['observaciones']) . "', 2)";
+                    $insertCliente = "INSERT INTO emisores_agenda VALUES( " . $_SESSION['id_emisor'] . "," . $ultimo . "," . intval($_POST['id_cliente']) . "," . intval($_POST['id_consultorio']) . "," . intval($_POST['id_terapeuta']) . "," . intval($_POST['tipo_servicio']) . "," . intval($_POST['tipo_cita']) . ",'" . $fecha_alta . "','" . strtoupper(trim($fecha_hora)) . "','" . strtoupper($_POST['observaciones']) . "', 2)";
                     $resultado = mysqli_query($conexion, $insertCliente);
                     if ($resultado) {
 
@@ -60,7 +62,7 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
 
 
                         if ($datosCliente['correo']) {
-                            $fecha = obtenerFechaEspaniol($_POST['fecha_hora']);
+                            $fecha = obtenerFechaEspaniol($fecha_hora);
                             $asunto = 'CITA AGENDADA!';
                             $mensaje = '
                                 Que tal <b>' . strtoupper($datosCliente['nombre_cliente']) . '</b>.<br><br>
@@ -73,7 +75,7 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
 
                         if ($datosTerap['correo']) {
 
-                            $fecha = obtenerFechaEspaniol($_POST['fecha_hora']);
+                            $fecha = obtenerFechaEspaniol($fecha_hora);
                             $asunto = 'CITA AGENDADA!';
                             $mensaje = '
                                 Que tal <b>' . strtoupper($datosTerap['nombre_personal']) . '</b>,.<br><br>

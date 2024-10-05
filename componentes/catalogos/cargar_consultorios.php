@@ -11,9 +11,11 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
         ";
 } else {
 
+    $fecha_hora = $_POST['fecha_cita'] . 'T' . $_POST['hora_cita'];
+
     $html = '<option value="" selected disabled>Selecciona Consultorio</option>';
     // revisamos la fecha de la agenda, para sacar los cosltorios que estan en ese dia y hora ocupados
-    $consultorios_Activos = "SELECT id_consultorio FROM emisores_agenda WHERE fecha_agenda = '" . $_POST['fecha_hora'] . "'";
+    $consultorios_Activos = "SELECT id_consultorio FROM emisores_agenda WHERE fecha_agenda = '" . $fecha_hora . "'";
     $resultado = mysqli_query($conexion, $consultorios_Activos);
     $filas = mysqli_fetch_assoc($resultado);
     // validamos si hay alguno
