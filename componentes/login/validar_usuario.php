@@ -18,7 +18,8 @@
         {
             $sqlUsuario = "SELECT u.id_usuario, 
                                     u.id_emisor, 
-                                    u.nombre, 
+                                    u.nombre,
+                                    u.id_personal, 
                                     e.nombre_comercial, 
                                     e.hora_entrada, 
                                     e.hora_salida,
@@ -53,6 +54,7 @@
             if($_POST['pin'] != 0)
             {
                 $_SESSION['nombre_comercial'] = $usuario["nombre_comercial"];
+                $_SESSION['id_personal'] = $usuario["id_personal"];
             }
             else
             {

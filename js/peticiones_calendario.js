@@ -47,45 +47,85 @@ $(function () {
     let citas = JSON.parse(resultado);
 
 
+    
     let eventos = citas.map(cita => {
-      return {
-        title: cita.nombre_personal,
-        start: cita.fecha_agenda,
-        backgroundColor: '#00a65a',
-        borderColor: '#00a65a',
-        allDay: false
-      };
+      if(Number( $("#id_terapeuta").val() ) == 0){
+        return {
+          title: cita.nombre_personal,
+          start: cita.fecha_agenda,
+          backgroundColor: '#00a65a',
+          borderColor: '#00a65a',
+          allDay: false
+        };
+      } else{
+        return {
+          title: cita.nombre_cliente,
+          start: cita.fecha_agenda,
+          backgroundColor: '#00a65a',
+          borderColor: '#00a65a',
+          allDay: false
+        };
+      }
     });
 
 
     var calendarEl = document.getElementById("calendar");
 
-    var calendar = new FullCalendar.Calendar(calendarEl, {
-      headerToolbar: {
-        left: "prev,next today",
-        center: "title",
-        right: "dayGridMonth,timeGridWeek,timeGridDay",
-      },
-      locale: 'es', // idioma español
-      themeSystem: "bootstrap",
-      initialView: 'timeGridDay',
-      //defaulView:'day',
-      buttonText: { // Textos de botones
-        today: 'Hoy',
-        month: 'Mes',
-        week: 'Semana',
-        day: 'Día',
-        list: 'list'
-      },
-      events: eventos, // eventos de promesa
-      editable: false,
-      droppable: true,
-      drop: function (info) {
-        if (checkbox.checked) {
-          info.draggedEl.parentNode.removeChild(info.draggedEl);
+    if(Number( $("#id_terapeuta").val() ) == 0){
+      var calendar = new FullCalendar.Calendar(calendarEl, {
+        headerToolbar: {
+          left: "prev,next today",
+          center: "title",
+          right: "dayGridMonth,timeGridWeek,timeGridDay",
+        },
+        locale: 'es', // idioma español
+        themeSystem: "bootstrap",
+        initialView: 'timeGridDay',
+        //defaulView:'day',
+        buttonText: { // Textos de botones
+          today: 'Hoy',
+          month: 'Mes',
+          week: 'Semana',
+          day: 'Día',
+          list: 'list'
+        },
+        events: eventos, // eventos de promesa
+        editable: false,
+        droppable: true,
+        drop: function (info) {
+          if (checkbox.checked) {
+            info.draggedEl.parentNode.removeChild(info.draggedEl);
+          }
         }
-      }
-    });
+      });
+    } else {
+      var calendar = new FullCalendar.Calendar(calendarEl, {
+        headerToolbar: {
+          left: "prev,next today",
+          center: "title",
+          right: "dayGridMonth,timeGridWeek,timeGridDay",
+        },
+        locale: 'es', // idioma español
+        themeSystem: "bootstrap",
+        initialView: 'timeGridWeek',
+        //defaulView:'day',
+        buttonText: { // Textos de botones
+          today: 'Hoy',
+          month: 'Mes',
+          week: 'Semana',
+          day: 'Día',
+          list: 'list'
+        },
+        events: eventos, // eventos de promesa
+        editable: false,
+        droppable: true,
+        drop: function (info) {
+          if (checkbox.checked) {
+            info.draggedEl.parentNode.removeChild(info.draggedEl);
+          }
+        }
+      });
+    }
 
     // renderizar el calendario
     calendar.render();
@@ -138,30 +178,39 @@ $(function () {
 
 
 function get_citas_agenda() {
+  id_terapeuta = $("#id_terapeuta").val()
 
-  return new Promise(function (resolve, reject) {
-    $.ajax({
-      cache: false,
-      url: 'componentes/citas/cargar_historial_calendario.php',
-      type: 'POST',
-      dataType: 'html',
-      data: {},
-    }).done(function (resultado) {
-      resolve(resultado);
-    }).fail(function (jqXHR, textStatus, errorThrown) {
-      reject(errorThrown);
+  //console.log(id_terapeuta)
+  if(Number(id_terapeuta) == 0){
+    return new Promise(function (resolve, reject) {
+      $.ajax({
+        cache: false,
+        url: 'componentes/citas/cargar_historial_calendario.php',
+        type: 'POST',
+        dataType: 'html',
+        data: {},
+      }).done(function (resultado) {
+        //console.log('hola')
+        resolve(resultado);
+      }).fail(function (jqXHR, textStatus, errorThrown) {
+        reject(errorThrown);
+      });
     });
-  });
-  /*
-  $.ajax({
-    cache: false,
-    url: 'componentes/citas/cargar_historial_calendario.php',
-    type: 'POST',
-    dataType: 'html',
-    data: {},
-  }).done(function (resultado) {
-      resolve(resultado);
-  });
-  */
+  } else {
+    return new Promise(function (resolve, reject) {
+      $.ajax({
+        cache: false,
+        url: 'componentes/citas/cargar_historial_calendario.php',
+        type: 'POST',
+        dataType: 'html',
+        data: {'id_terapeuta' : id_terapeuta},
+      }).done(function (resultado) {
+        
+        resolve(resultado);
+      }).fail(function (jqXHR, textStatus, errorThrown) {
+        reject(errorThrown);
+      });
+    });
+  }
 
 }

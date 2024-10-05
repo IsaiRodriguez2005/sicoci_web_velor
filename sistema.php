@@ -127,6 +127,7 @@ if (!isset($_SESSION['nombre_usuario'])) {
               <!-- /.col -->
               <div class="col-md-9 ">
                 <div class="card card-primary">
+                  <input type="hidden" id="id_terapeuta" value="<?php if(empty($_SESSION['id_personal' ])){ echo 0; } else echo $_SESSION['id_personal' ];?>">
                   <div class="card-body p-0"> <!--  mx-auto d-flex justify-content-center align-items-center Asegúrate de que haya suficiente altura -->
                     <!-- THE CALENDAR -->
 
