@@ -85,3 +85,12 @@ function getDatosAgenda($id, $conex)
 
     return $datosAgenda;
 }
+
+function getDatosPermisos($id, $conex){
+
+    $consultaPermiso = "SELECT * FROM emisores_personal_permisos WHERE id_permiso = $id";
+    $resPermiso = mysqli_query($conex, $consultaPermiso);
+    $datosAgenda = mysqli_fetch_array($resPermiso);
+
+    return $datosAgenda;
+}

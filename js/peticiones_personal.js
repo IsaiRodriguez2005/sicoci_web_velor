@@ -393,6 +393,14 @@ function guardar_permiso() {
         return false;
     }
 
+    Swal.fire({
+        title: 'Registrando Usuario...',
+        allowEscapeKey: false,
+        allowOutsideClick: false,
+        didOpen: () => {
+            Swal.showLoading()
+        }
+    });
     if (tipo_gestion == '0') {
 
         $.ajax({
@@ -402,6 +410,7 @@ function guardar_permiso() {
             dataType: 'html',
             data: { 'id_personal': id_personal, 'fecha_inicial': fecha_inicial, 'fecha_final': fecha_final, 'motivo_permiso': motivo_permiso },
         }).done(function (resultado) {
+            console.log(resultado)
             if (resultado == "ok") {
                 Swal.fire({
                     icon: "success",
@@ -491,6 +500,7 @@ function mostrar_historial_permisos() {
 }
 
 function editar_permiso(id_permiso, id_personal, fecha_inicial, fecha_final, motivo) {
+    //)
     $("#tipo_gestion_permiso").val(id_permiso);
     $("#id_personal_input").val(id_personal);
     $("#fecha_inicial").val(fecha_inicial);

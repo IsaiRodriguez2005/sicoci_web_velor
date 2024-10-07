@@ -66,7 +66,7 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
                             $asunto = 'CITA AGENDADA!';
                             $mensaje = '
                                 Que tal <b>' . strtoupper($datosCliente['nombre_cliente']) . '</b>.<br><br>
-                                Para confirmar el registro de la cita con el fisioterapeuta <b>' . $datosTerap['nombre_personal'] . '</b> para el día <b>' . $fecha['dia'] . ' '.$fecha['num_dia'].' de ' . $fecha['mes'] . '</b> del <b>' . $fecha['anio'] . '</b> 
+                                Para confirmar el registro de la cita con el fisioterapeuta <b>' . $datosTerap['nombre_personal'] . '</b> para el día <b>' . $fecha['dia'] . ' ' . $fecha['num_dia'] . ' de ' . $fecha['mes'] . '</b> del <b>' . $fecha['anio'] . '</b> 
                                 a las <b>' . $fecha['hora'] . '</b> en el <b>' . $datosConsultorio['nombre'] . '</b> <br><br>
                                 PD. Este correo es informativo por lo que no es necesario responder dicho correo.
                                 ';
@@ -79,12 +79,12 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
                             $asunto = 'CITA AGENDADA!';
                             $mensaje = '
                                 Que tal <b>' . strtoupper($datosTerap['nombre_personal']) . '</b>,.<br><br>
-                                El cliente/paciente <b>' . $datosCliente['nombre_cliente'] . '</b> agendó una cita contigo para el día <b>' . $fecha['dia'] . ' '.$fecha['num_dia'].' de ' . $fecha['mes'] . '</b> del <b>' . $fecha['anio'] . '</b> 
+                                El cliente/paciente <b>' . $datosCliente['nombre_cliente'] . '</b> agendó una cita contigo para el día <b>' . $fecha['dia'] . ' ' . $fecha['num_dia'] . ' de ' . $fecha['mes'] . '</b> del <b>' . $fecha['anio'] . '</b> 
                                 a las <b>' . $fecha['hora'] . '</b> en el <b>' . $datosConsultorio['nombre'] . '</b> <br><br>
-                                <b>Observaciones:</b> '.strtoupper($_POST['observaciones']).'
+                                <b>Observaciones:</b> ' . strtoupper($_POST['observaciones']) . '
                                 PD. Este correo es informativo por lo que no es necesario responder dicho correo.
                                 ';
-                            $correo = enviarCorreo($datosCliente['correo'], $asunto, $mensaje);
+                            $correo = enviarCorreo($datosTerap['correo'], $asunto, $mensaje);
                         }
 
                         echo "ok";
@@ -99,6 +99,65 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
             }
         } else {
             echo 1; // validacion de cliente y hora 
+        }
+    } else {
+
+
+        $sqlUpdate = "UPDATE emisores_agenda SET 
+                                    id_cliente=" . $_POST['id_cliente'] . ", 
+                                    id_consultorio=" . $_POST['id_consultorio'] . ", 
+                                    id_terapeuta=" . $_POST['id_terapeuta'] . ", 
+                                    tipo_servicio=" . $_POST['tipo_servicio'] . ", 
+                                    tipo_cita=" . $_POST['tipo_cita'] . ", 
+                                    fecha_agenda=" . $fecha_hora . ", 
+                                    observaciones=" . $_POST['observaciones'] . "
+                                        WHERE 
+                                    id_emisor = " . $_SESSION['id_emisor'] . " 
+                                        AND 
+                                    id_folio=" . $_POST['id_folio'];
+        mysqli_query($conexion, $sqlPermisos);
+
+        if (mysqli_affected_rows($conexion) > 0) {
+
+            $datosCliente = getDatosClientes(intval($_POST['id_cliente']), $conexion);
+
+            $datosTerap = getDatosTerapeuta(intval($_POST['id_terapeuta']), $conexion);
+
+            $datosConsultorio =  getDatosConsultorio(intval($_POST['id_consultorio']), $conexion);
+
+
+            if ($datosCliente['correo']) {
+                $fecha = obtenerFechaEspaniol($fecha_hora);
+                $asunto = 'CITA ACTUALIZADA!';
+                $mensaje = '
+                                Que tal <b>' . strtoupper($datosCliente['nombre_cliente']) . '</b>,.<br><br>
+                                Se ha registrado un cambio en tu cita previamente programada:<br>
+                                Fisioterapeuta: <b>' . $datosCliente['nombre_cliente'] . '</b><br>
+                                Fecha: <b>' . $fecha['dia'] . ' ' . $fecha['num_dia'] . ' de ' . $fecha['mes'] . '</b> del <b>' . $fecha['anio'] . '</b> 
+                                a las <b>' . $fecha['hora'] . '</b><br>
+                                Consultorio: <b>' . $datosConsultorio['nombre'] . '</b> <br><br>
+                                
+                                PD. Este correo es informativo por lo que no es necesario responder dicho correo.
+                                ';
+                $correo = enviarCorreo($datosCliente['correo'], $asunto, $mensaje);
+            }
+
+            if ($datosTerap['correo']) {
+
+                $fecha = obtenerFechaEspaniol($fecha_hora);
+                $asunto = 'CITA ACTUALIZADA!';
+                $mensaje = '
+                                Que tal <b>' . strtoupper($datosTerap['nombre_personal']) . '</b>,.<br><br>
+                                Se ha registrado un cambio en una consulta programada contigo quedando de la siguiente manera:<br>
+                                El cliente/paciente:<b>' . $datosCliente['nombre_cliente'] . '</b><br>
+                                Fecha: <b>' . $fecha['dia'] . ' ' . $fecha['num_dia'] . ' de ' . $fecha['mes'] . '</b> del <b>' . $fecha['anio'] . '</b> 
+                                a las <b>' . $fecha['hora'] . '</b><br>
+                                Consultorio: <b>' . $datosConsultorio['nombre'] . '</b> <br><br>
+                                <b>Observaciones:</b> ' . strtoupper($_POST['observaciones']) . '
+                                PD. Este correo es informativo por lo que no es necesario responder dicho correo.
+                                ';
+                $correo = enviarCorreo($datosTerap['correo'], $asunto, $mensaje);
+            }
         }
     }
 }

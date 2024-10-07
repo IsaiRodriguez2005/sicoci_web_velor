@@ -167,7 +167,7 @@ function gestionar_usuario() {
                     'reportes': reportes, 
                     'dash_directivo': dash_directivo },
         }).done(function (resultado) {
-            //console.log(typeof resultado)
+            //console.log(resultado)
             if(Number(resultado) == 1)
             {
                 Swal.fire({
@@ -202,11 +202,12 @@ function actualizar_estatus_usuario(id_usuario, estatus) {
         dataType: 'html',
         data: { 'id_usuario': id_usuario, 'estatus': estatus },
     }).done(function (resultado) {
+        //console.log(resultado)
         Swal.fire({
             icon: 'success',
             title: 'Estatus actualizado!',
-            showConfirmButton: false,
-            timer: 2000
+            showConfirmButton: true,
+            //timer: 2000
         }).then(function () {
             window.location = 'usuarios.php';
         });
