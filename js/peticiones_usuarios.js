@@ -195,6 +195,14 @@ function gestionar_usuario() {
 }
 
 function actualizar_estatus_usuario(id_usuario, estatus) {
+    Swal.fire({
+        title: 'Actualizando Estatus Usuario...',
+        allowEscapeKey: false,
+        allowOutsideClick: false,
+        didOpen: () => {
+            Swal.showLoading()
+        }
+    });
     $.ajax({
         cache: false,
         url: 'componentes/catalogos/actualizar_estatus_usuario.php',

@@ -35,13 +35,22 @@
             while ($res = mysqli_fetch_array($resultado)) {
                 if ($res['correo']) {
                     $asunto = 'Que tal ' . strtoupper($res['nombre']) . '.';
-                    $mensaje = '
+
+                    if(intval($_POST['estatus']) == 1){
+                        $mensaje = '
                             Cosera notificador: <br><br>
-                            <b>El administrador de la empresa '.$res['nombre_comercial'].' ha suspendido tu perfil.</b> <br>
+                            <b>El administrador de la empresa '.$res['nombre_comercial'].' ha activado tu perfil.</b> <br>
                             <br>
                             PD. Este correo es informativo por lo que no es necesario responder dicho correo.
                             ';
-            
+                    } else {
+                        $mensaje = '
+                                Cosera notificador: <br><br>
+                                <b>El administrador de la empresa '.$res['nombre_comercial'].' ha suspendido tu perfil.</b> <br>
+                                <br>
+                                PD. Este correo es informativo por lo que no es necesario responder dicho correo.
+                                ';
+                    }
                     enviarCorreo($res['correo'], $asunto, $mensaje);
                 }
             }
