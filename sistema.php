@@ -83,16 +83,12 @@ if (!isset($_SESSION['nombre_usuario'])) {
         <section class="content">
           <div class="container-fluid">
             <!-- Small boxes (Stat box) -->
+            <input type="hidden" id="id_personal" value="<?php if(empty($_SESSION['id_personal'])){ echo 0; }else{ echo $_SESSION['id_personal']; }  ?>">
             <div class="row">
               <div class="col-lg-3 col-6">
                 <div class="small-box bg-info">
                   <div class="inner">
-                    <?php
-                    $sql_citas = "SELECT COUNT(*) as citas_hoy FROM emisores_agenda WHERE id_emisor = " . $_SESSION['id_emisor'] . " AND DATE(fecha_agenda) = '" . date('Y-m-d') . "' AND estatus = 2";
-                    $res_citas = mysqli_query($conexion, $sql_citas);
-                    $citas = mysqli_fetch_array($res_citas);
-                    echo "<h3>" . $citas['citas_hoy'] . "</h3>";
-                    ?>
+                    <h3 id="citas_hoy"></h3>
                     <p>Citas para hoy</p>
                   </div>
                   <div class="icon">
@@ -104,12 +100,7 @@ if (!isset($_SESSION['nombre_usuario'])) {
               <div class="col-lg-3 col-6">
                 <div class="small-box bg-danger">
                   <div class="inner">
-                    <?php
-                    $sql_citas2 = "SELECT COUNT(*) as citas_sin_cobrar FROM emisores_agenda WHERE id_emisor = " . $_SESSION['id_emisor'] . " AND DATE(fecha_agenda) < '" . date('Y-m-d') . "' AND estatus = 2";
-                    $res_citas2 = mysqli_query($conexion, $sql_citas2);
-                    $citas2 = mysqli_fetch_array($res_citas2);
-                    echo "<h3>" . $citas2['citas_sin_cobrar'] . "</h3>";
-                    ?>
+                    <h3 id="citas_sin_cobrar"></h3>
                     <p>Citas sin cobrar</p>
                   </div>
                   <div class="icon">
@@ -170,6 +161,7 @@ if (!isset($_SESSION['nombre_usuario'])) {
     <script src="dist/js/adminlte.js"></script>
     <script src="js/peticiones_generales.js"></script>
     <script src="js/peticiones_calendario.js"></script>
+    <script src="js/peticiones_sistema.js"></script>
     <!-- DataTables  & Plugins -->
     <script src="plugins/datatables/jquery.dataTables.min.js"></script>
     <script src="plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>

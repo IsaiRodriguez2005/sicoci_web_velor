@@ -50,8 +50,10 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
                     LEFT JOIN emisores_clientes c ON a.id_cliente = c.id_cliente 
                                                 AND a.id_emisor = c.id_emisor 
             WHERE 
-                    a.id_terapeuta = " . $id_terapeuta;;
+                    a.estatus != 4 AND
+                    a.id_terapeuta = " . $id_terapeuta;
 
+        //print_r($consulta);
         $resCitas = mysqli_query($conexion, $consulta);
 
         $citas = array();

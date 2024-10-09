@@ -75,6 +75,7 @@ if (!isset($_SESSION['nombre_usuario'])) {
                                 <div class="card-header">
                                     <h3 class="card-title text-sm">Búsqueda de citas</h3>
                                     <input type="hidden" id="tipo_gestion" value="0">
+                                    <input type="hidden" id="id_personal" value="<?php if(empty($_SESSION['id_personal'])){ echo 0; }else{ echo $_SESSION['id_personal']; }  ?>">
                                 </div>
                                 <div class="card-body">
                                     <?php
@@ -181,9 +182,9 @@ if (!isset($_SESSION['nombre_usuario'])) {
                                         </div>
                                     </div>
 
-                                    <div class="row float-right">
+                                    <div class="row float-right" id="btn-nueva-cita">
                                         <!-- Botón Nueva Factura -->
-                                        <button type="button" class="btn btn-danger" onclick="form_nueva_cita();"><i class="fas fa-plus"></i> Nueva cita</button>
+                                        
                                     </div>
                                 </div>
                             </div>

@@ -1,3 +1,13 @@
+$(document).ready(function () {
+    
+    id_terapeuta = $("#id_personal").val();
+
+    if(Number(id_terapeuta) == 0){
+        $("#btn-nueva-cita").html('<button type="button" class="btn btn-danger" onclick="form_nueva_cita();"><i class="fas fa-plus"></i> Nueva cita</button>');
+    }
+});
+
+
 function form_nueva_cita() {
     $("#modal_nueva_cita").modal("show");
 }
@@ -328,6 +338,14 @@ function cancelar_cita(id_folio, nombre_cliente, nombre_terapeuta, nombre_consul
     $("#terapeuta_cancelar").html("Terapeuta: " + nombre_terapeuta);
     $("#consultorio_cancelar").html("Consultorio: " + nombre_consultorio);
     $('#modal_cancelacion').modal('show');
+}
+
+function realizar_cita(id_folio, nombre_cliente, nombre_terapeuta, nombre_consultorio){
+    
+    $('#modal_valoracion').modal('show');
+}
+function enviar_valoracion(){
+
 }
 
 function enviar_cancelacion() {

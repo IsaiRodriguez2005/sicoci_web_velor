@@ -160,8 +160,18 @@
                     } else {
 
                     ?>
-                        
-
+                        <li class="nav-item">
+                            <a href="agenda.php" class="nav-link">
+                                <i class="nav-icon fas fa-calendar-day"></i>
+                                <p>Agenda</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="fas fa-folder-open"></i>
+                                <p>Expedienes</p>
+                            </a>
+                        </li>
 
                 <?php
                     }

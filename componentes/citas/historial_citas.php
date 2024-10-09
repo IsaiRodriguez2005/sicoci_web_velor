@@ -63,36 +63,6 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
             $consulta .= " a.id_cliente = " . $_POST['id_cliente'];
         }
 
-        // segunda validacin, si es que hay {estatus}
-        /*
-            if(!empty($_POST['estatus'])){
-
-                // si el cliente existio antes, pondremos el {AND} 
-                if(!empty($_POST['id_cliente'])) $consulta .= " AND"; 
-                
-                $consulta .= " a.estatus = ".$_POST['estatus'];
-            }
-            
-
-            // tercera validacion, si hay {terapeuta}
-            if(!empty($_POST['id_terapeuta'])){
-
-                // si el cliente o estatus existio antes, pondremos el {AND} 
-                if(!empty($_POST['estatus']) || !empty($_POST['id_cliente'])) $consulta .= " AND ";
-
-                $consulta .= " a.id_terapeuta = ".$_POST['id_terapeuta'];
-            }
-
-            // cuarta validacion, si hay {consultorio}
-            if(!empty($_POST['id_consultorio'])){
-
-                // si el cliente o estatus o terapeuta existio antes, pondremos el {AND} 
-                if(!empty($_POST['id_terapeuta']) || !empty($_POST['estatus']) || !empty($_POST['id_cliente'])) $consulta .= " AND ";
-
-                $consulta .= " a.id_consultorio = ".$_POST['id_consultorio'];
-            }
-            */
-
         // RANGO DE FECHAS -------------------------------------BETWEEN---------------------------------
 
         // sexta validacion, si hay {fecha de agenda}
@@ -106,6 +76,10 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
 
 
             $consulta .= "'" . $_POST['fecha_inicial'] . " 08:00:00 ' AND a.fecha_agenda <= '" . $_POST['fecha_final'] . " 16:00:00 '";
+        }
+
+        if(!empty($_SESSION['id_personal'])){
+            $consulta .= 'AND a.id_terapeuta = '.$_SESSION['id_personal'].'';
         }
 
 
@@ -169,27 +143,8 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
                 $tipo_servicio = 'DOMICILIO';
         }
 
-        /*
-            // Consulta de cliente
-            $consulta_cliente = "SELECT nombre_social FROM emisores_clientes WHERE id_cliente = ".$citas['id_cliente'].";";
-            $res_cliente = mysqli_query($conexion, $consulta_cliente);
-            $res_cliente = mysqli_fetch_array($res_cliente);
-
-            // Consulta de terapeuta
-            $consulta_terapeuta = "SELECT nombre_personal FROM emisores_personal WHERE id_personal = ".$citas['id_terapeuta']." AND tipo = 2;";
-            $res_terapeuta = mysqli_query($conexion, $consulta_terapeuta);
-            $res_terapeuta = mysqli_fetch_array($res_terapeuta);
-
-            // Consulta de onsultorio
-            $consulta_consultorio = "SELECT nombre FROM emisores_consultorios WHERE id_consultorio = ".$citas['id_consultorio'].";";
-            $res_consultorio = mysqli_query($conexion, $consulta_consultorio);
-            $res_consultorio = mysqli_fetch_array($res_consultorio);
-            */
-
-        $html .= "
-                <tr id='tr_" . $citas['id_folio'] . "'>
-                    <td class='text-center'>
-                        <div class='btn-group'>
+        if (empty($_SESSION['id_personal'])) {
+            $acciones = "
                             <button type='button' id='btn_edit_" . $citas['id_folio'] . "' class='btn btn-warning btn-sm' " . $boton_editar . " title='Editar cita' onclick='editar_cita(" . $citas['id_folio'] . ", &quot;" . $citas['nombre_cliente'] . "&quot;, " . $citas['id_consultorio'] . ", " . $citas['id_terapeuta'] . ", " . $citas['tipo_servicio'] . ", " . $citas['tipo_cita'] . ", &quot;" . $fecha . "&quot;, &quot;" . $hora . "&quot;, &quot;" . $citas['observaciones'] . "&quot;);')'>
                                 <i class='fas fa-pencil-alt'></i>
                             </button>
@@ -197,6 +152,21 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
                             <button type='button' id='btn_can_" . $citas['id_folio'] . "' class='btn btn-danger btn-sm' " . $boton_cancelar . " title='Cancelar cita' onclick='cancelar_cita(" . $citas['id_folio'] . ", &quot;" . $citas['nombre_cliente'] . "&quot;, &quot;" . $citas['nombre_personal'] . "&quot;, &quot;" . $citas['nombre_consultorio'] . "&quot;)'>
                                 <i class='fas fa-ban'></i>
                             </button>
+                            ";
+        } else {
+            $acciones = "
+                            <button type='button' id='btn_rea_" . $citas['id_folio'] . "' class='btn btn-success btn-sm' " . $boton_cancelar . " title='Cita Realizada' onclick='realizar_cita(" . $citas['id_folio'] . ", &quot;" . $citas['nombre_cliente'] . "&quot;, &quot;" . $citas['nombre_personal'] . "&quot;, &quot;" . $citas['nombre_consultorio'] . "&quot;)'>
+                                <i class='fas fa-check'></i>
+                            </button>
+            ";
+        }
+
+
+        $html .= "
+                <tr id='tr_" . $citas['id_folio'] . "'>
+                    <td class='text-center'>
+                        <div class='btn-group'>
+                            $acciones
                         </div>
                     </td>
                     <td class='text-center text-sm' style='white-space: nowrap; overflow-x: auto;'>" . $citas['id_folio'] . "</td>

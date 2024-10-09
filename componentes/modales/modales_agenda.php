@@ -613,7 +613,6 @@
         </div>
     </div>
 </div>
-</div>
 <!-- Funciones JS Personalizadas -->
 <script src="js/peticiones_consultorios.js"></script>
 <!-- Modal nuevo Consultorio -->
@@ -672,5 +671,60 @@
         </div>
     </div>
 </div>
-</div>
 <!-- Modal Cancelacion -->
+
+<!-- Modal Valoracion Cita -->
+<div class="modal fade" id="modal_valoracion" role="dialog" style="overflow: scroll;">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title text-danger">Cancelar Cita</h4>
+            </div>
+            <div class="card-body">
+                <div class="card card-info">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-12 text-danger">
+                                Folio:
+                                <span id="folio_cancelar"> </span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <h7 id="cliente_cancelar">
+                                    </h6>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-7">
+                                <h7 id="terapeuta_cancelar">
+                                    </h6>
+                            </div>
+                            <div class="col-5">
+                                <h7 id="consultorio_cancelar">
+                                    </h6>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                    <i class="fas fa-file-signature"></i>
+                                </span>
+                            </div>
+                            <textarea id="motivo_cancelacion" class="form-control" placeholder="Escriba el motivo de la cancelaci&oacute;n" onfocus="resetear('motivo_cancelacion')" rows="4" required></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" onclick="cerrar_modal('modal_valoracion', '')">Cerrar</button>
+                <button type="button" class="btn btn-success" onclick="enviar_valoracion();">Confirmar Cancelaci&oacute;n</button><br><br><br>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal Valoracion Cita -->

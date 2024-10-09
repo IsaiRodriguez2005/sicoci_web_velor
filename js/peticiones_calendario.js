@@ -205,7 +205,7 @@ function get_citas_agenda() {
         dataType: 'html',
         data: {'id_terapeuta' : id_terapeuta},
       }).done(function (resultado) {
-        
+        //console.log(resultado)
         resolve(resultado);
       }).fail(function (jqXHR, textStatus, errorThrown) {
         reject(errorThrown);
