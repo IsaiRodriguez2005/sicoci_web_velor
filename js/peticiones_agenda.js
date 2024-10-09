@@ -12,21 +12,6 @@ function form_nueva_cita() {
     $("#modal_nueva_cita").modal("show");
 }
 
-
-function buscar_cliente(nombre_social) {
-
-    $.ajax({
-        cache: false,
-        url: 'componentes/catalogos/buscar_clientes.php',
-        type: 'POST',
-        data: { 'nombre_social': nombre_social.value }
-    }).done(function (data) {
-        //console.log(data)
-        $("#id_cliente2").val(data);
-    })
-}
-
-
 function gestionar_cita() {
 
     var id_folio = $("#tipo_gestion").val();
@@ -275,6 +260,19 @@ function actualizar_lista_clientes() {
         $("#cliente_form").removeClass('is-invalid');
     })
 
+}
+
+function buscar_cliente(nombre_social) {
+
+    $.ajax({
+        cache: false,
+        url: 'componentes/catalogos/buscar_clientes.php',
+        type: 'POST',
+        data: { 'nombre_social': nombre_social.value }
+    }).done(function (data) {
+        //console.log(data)
+        $("#id_cliente2").val(data);
+    })
 }
 
 function mostrar_historial_citas() {

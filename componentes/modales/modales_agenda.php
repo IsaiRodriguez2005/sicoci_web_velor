@@ -678,51 +678,227 @@
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title text-danger">Cancelar Cita</h4>
+                <h4 class="modal-title text-danger">Valoracion de Cita</h4>
             </div>
             <div class="card-body">
                 <div class="card card-info">
                     <div class="card-body">
-                        <div class="row">
-                            <div class="col-12 text-danger">
-                                Folio:
-                                <span id="folio_cancelar"> </span>
+                        <div class="form-row">
+                            <div class="col-md-6">
+                                <label for="apellidos">Apellidos:</label>
+                                <input type="text" class="form-control" id="apellidos_valoracion" placeholder="Ingrese sus apellidos">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="nombre">Nombre:</label>
+                                <input type="text" class="form-control" id="nombre_valoracion" placeholder="Ingrese su nombre">
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-12">
-                                <h7 id="cliente_cancelar">
-                                    </h6>
+                        <div class="form-row pt-4">
+                            <div class="col-md-3">
+                                <label>Sexo:</label>
+                                <div class="row d-flex justify-content-between">
+                                    <div class="col">
+                                        <div class="form-check mt-2">
+                                            <input class="form-check-input" type="radio" name="sexo" id="masculino_valoracion" value="masculino">
+                                            <label class="form-check-label" for="masculino">Masculino</label>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="form-check mt-2">
+                                            <input class="form-check-input" type="radio" name="sexo" id="femenino_valoracion" value="femenino">
+                                            <label class="form-check-label" for="femenino">Femenino</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="col-md-4">
+                                <label for="edad">Edad:</label>
+                                <input type="number" class="form-control" id="edad_valoracion" placeholder="Ingrese su edad">
+                            </div>
+                            <div class="col-md-5">
+                                <label for="ocupacion">Ocupación:</label>
+                                <input type="text" class="form-control" id="ocupacion_valoracion" placeholder="Ingrese su ocupación">
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-7">
-                                <h7 id="terapeuta_cancelar">
-                                    </h6>
+
+                        <div class="form-row pt-4">
+                            <div class="col-md-6">
+                                <label for="apellidos">Domicilio:</label>
+                                <input type="text" class="form-control" id="domicilio_valoracion" placeholder="Ingrese sus apellidos">
                             </div>
-                            <div class="col-5">
-                                <h7 id="consultorio_cancelar">
-                                    </h6>
+                            <div class="col-md-6">
+                                <label for="nombre">Telefono:</label>
+                                <input type="text" class="form-control" id="telefono_valoracion" placeholder="Ingrese su nombre">
                             </div>
                         </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-12">
-                        <div class="input-group mb-3">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text">
-                                    <i class="fas fa-file-signature"></i>
-                                </span>
+
+                        <div class="form-row pt-4">
+                            <div class="col-md-6">
+                                <label for="apellidos">Estado Civil:</label>
+                                <input type="text" class="form-control" id="estado_civil_valoracion" placeholder="Ingrese sus apellidos">
                             </div>
-                            <textarea id="motivo_cancelacion" class="form-control" placeholder="Escriba el motivo de la cancelaci&oacute;n" onfocus="resetear('motivo_cancelacion')" rows="4" required></textarea>
+                            <div class="col-md-6">
+                                <label for="nombre">Toximanias:</label>
+                                <input type="text" class="form-control" id="toximanias_valoracion" placeholder="Ingrese su nombre">
+                            </div>
                         </div>
+
+                        <div class="form-group pt-4">
+                            <label for="motivoConsulta">Motivo de Consulta:</label>
+                            <textarea class="form-control" id="motivo_consulta_valoracion" rows="3"></textarea>
+                        </div>
+                        <div class="form-grop pt-3">
+                            <label for="nombre">Actividad Fisica:</label>
+                            <input type="text" class="form-control" id="act_fisica_valoracion" placeholder="Ingrese su nombre">
+                        </div>
+                        <div class="form-row pt-4">
+                            <div class="col-md-2">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="diabetes">
+                                    <label class="form-check-label" for="diabetes">Diabetes</label>
+                                </div>
+                            </div>
+
+                            <div class="col-md-2">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="hta">
+                                    <label class="form-check-label" for="hta">HTA</label>
+                                </div>
+                            </div>
+
+                            <!-- Checkbox para Cáncer -->
+                            <div class="col-md-2">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="cancer">
+                                    <label class="form-check-label" for="cancer">Cáncer</label>
+                                </div>
+                            </div>
+
+                            <!-- Checkbox para Enfermedades Reumáticas -->
+                            <div class="col-md-2">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="enfermedades_reumaticas">
+                                    <label class="form-check-label" for="enfermedades_reumaticas">Enf. Reumáticas</label>
+                                </div>
+                            </div>
+
+                            <!-- Checkbox para Cardiopatías -->
+                            <div class="col-md-2">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="cardiopatias">
+                                    <label class="form-check-label" for="cardiopatias">Cardiopatías</label>
+                                </div>
+                            </div>
+
+                            <!-- Checkbox para Cirugías -->
+                            <div class="col-md-2">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="cirugias">
+                                    <label class="form-check-label" for="cirugias">Cirugías</label>
+                                </div>
+                            </div>
+
+                            <!-- Checkbox para Alergias -->
+                            <div class="col-md-2 pt-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="alergias">
+                                    <label class="form-check-label" for="alergias">Alergias</label>
+                                </div>
+                            </div>
+
+                            <!-- Checkbox para Transfusiones -->
+                            <div class="col-md-2 pt-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="transfusiones">
+                                    <label class="form-check-label" for="transfusiones">Transfusiones</label>
+                                </div>
+                            </div>
+
+                            <!-- Checkbox para Fracturas -->
+                            <div class="col-md-2 pt-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="fracturas">
+                                    <label class="form-check-label" for="fracturas">Fracturas</label>
+                                </div>
+                            </div>
+
+                            <!-- Checkbox para Otros -->
+                            <div class="col-md-2 pt-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="otros">
+                                    <label class="form-check-label" for="otros">Otros</label>
+                                </div>
+                            </div>
+                        </div>
+                        <style>
+                            .form-check-input {
+                                width: 15px;
+                                height: 15px;
+                            }
+                        </style>
+
+
+                        <div class="form-group pt-4">
+                            <label for="ta">Signos Vitales:</label>
+                            <div class="form-row">
+                                <div class="col-md-4 d-flex align-items-center">
+                                    <label for="ta" class="mr-2">TA:</label>
+                                    <input type="text" class="form-control" id="ta" placeholder="Ingrese la tensión arterial">
+                                </div>
+                                <div class="col-md-4 d-flex align-items-center">
+                                    <label for="fc" class="mr-2">FC:</label>
+                                    <input type="number" class="form-control" id="fc" placeholder="Ingrese la frecuencia cardíaca">
+                                </div>
+                                <div class="col-md-4 d-flex align-items-center">
+                                    <label for="fr" class="mr-2">FR:</label>
+                                    <input type="number" class="form-control" id="fr" placeholder="Ingrese la frecuencia respiratoria">
+                                </div>
+                            </div>
+                            <div class="form-row pt-2">
+                                <div class="col-md-4 d-flex align-items-center">
+                                    <label for="satO2" class="mr-2">Sat. de O2:</label>
+                                    <input type="number" class="form-control" id="satO2" placeholder="Ingrese la saturación de oxígeno">
+                                </div>
+                                <div class="col-md-4 d-flex align-items-center">
+                                    <label for="temp" class="mr-2">Temp:</label>
+                                    <input type="number" class="form-control" id="temp" placeholder="Ingrese la temperatura">
+                                </div>
+                                <div class="col-md-4 d-flex align-items-center">
+                                    <label for="glucosa" class="mr-2">Glucosa:</label>
+                                    <input type="number" class="form-control" id="glucosa" placeholder="Ingrese el nivel de glucosa">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="farmacos">Fármacos:</label>
+                            <textarea class="form-control" id="farmacos" rows="2">Diclofenaco inyectado</textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="diagnosticoMedico">Diagnóstico Médico:</label>
+                            <textarea class="form-control" id="diagnosticoMedico" rows="3"></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="escalaDolor">Escala de Dolor EVA:</label>
+                            <div class="d-flex align-items-center">
+                                <input type="range" class="custom-range ml-2" min="0" max="10" id="escalaDolor" value="5" oninput="updateValue(this.value)">
+                                <span id="escalaValor" class="ml-2">5</span> <!-- Elemento para mostrar el valor -->
+                            </div>
+                        </div>
+                        <script>
+                            function updateValue(val) {
+                                document.getElementById('escalaValor').innerText = val; // Actualiza el texto con el valor actual
+                            }
+                        </script>
+
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger" onclick="cerrar_modal('modal_valoracion', '')">Cerrar</button>
-                <button type="button" class="btn btn-success" onclick="enviar_valoracion();">Confirmar Cancelaci&oacute;n</button><br><br><br>
+                <button type="button" class="btn btn-success" onclick="enviar_valoracion();">Emviar Valoraci&oacute;n</button><br><br><br>
             </div>
         </div>
     </div>

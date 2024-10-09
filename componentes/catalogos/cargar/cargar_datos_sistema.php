@@ -46,21 +46,3 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
         echo json_encode($citas);
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-?>
-
-<?php
-
-?>

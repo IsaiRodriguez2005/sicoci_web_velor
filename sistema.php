@@ -80,10 +80,14 @@ if (!isset($_SESSION['nombre_usuario'])) {
         <!-- /.content-header -->
 
         <!-- Main content -->
+        <?php 
+          if(empty($_SESSION['id_personal'])){
+        ?>
         <section class="content">
           <div class="container-fluid">
             <!-- Small boxes (Stat box) -->
             <input type="hidden" id="id_personal" value="<?php if(empty($_SESSION['id_personal'])){ echo 0; }else{ echo $_SESSION['id_personal']; }  ?>">
+            
             <div class="row">
               <div class="col-lg-3 col-6">
                 <div class="small-box bg-info">
@@ -109,9 +113,13 @@ if (!isset($_SESSION['nombre_usuario'])) {
                   <a href="#" class="small-box-footer">M&aacute;s info <i class="fas fa-arrow-circle-right"></i></a>
                 </div>
               </div>
+
             </div>
           </div><!-- /.container-fluid -->
         </section>
+        <?php 
+          }
+        ?>
         <section class="content">
           <div class="container-fluid">
             <div class="row">

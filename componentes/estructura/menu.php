@@ -167,7 +167,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <a href="expedientes.php" class="nav-link">
                                 <i class="fas fa-folder-open"></i>
                                 <p>Expedienes</p>
                             </a>
