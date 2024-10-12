@@ -175,3 +175,6 @@ function gestionar_ocupacion( modal_show = '', modal_hide = '' )
         }
     });
 }
+
+
+

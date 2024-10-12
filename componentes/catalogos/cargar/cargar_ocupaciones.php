@@ -11,7 +11,7 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
         ";
 } else {
 
-    $html = '<option value="" selected disabled>Seleccione la ocupacion</option>';
+    $html = '<option value="0" selected disabled>Seleccione la ocupacion</option>';
     $consOcupaciones = "SELECT nombre_ocupacion, id_ocupacion FROM emisores_ocupaciones WHERE id_emisor = " . $_SESSION['id_emisor'] . "";
     $resultado = mysqli_query($conexion, $consOcupaciones);
 

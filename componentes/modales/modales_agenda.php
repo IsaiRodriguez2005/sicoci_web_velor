@@ -699,6 +699,7 @@
                                 </div>
                         </div>
                         <div class="form-row pt-4">
+                            <!--
                             <div class="col-md-3">
                                 <label>Sexo:</label>
                                 <div class="row d-flex justify-content-between">
@@ -717,7 +718,8 @@
                                 </div>
 
                             </div>
-                            <div class="col-md-3">
+                            -->
+                            <div class="col-md-4">
                                 <label for="edad">Edad:</label>
                                 <input type="number" class="form-control" id="edad_valoracion" placeholder="Ingrese su edad" onfocus="resetear('edad_valoracion')">
                             </div>
@@ -922,7 +924,7 @@
 </div>
 <!-- Modal Valoracion Cita -->
 
-<!-- Modal nuevo Consultorio -->
+<!-- Modal nueva ocupacion -->
 <div class="modal fade" id="modal_nueva_ocupacion" role="dialog" style="overflow: scroll;">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">

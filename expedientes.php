@@ -226,121 +226,302 @@ if (!isset($_SESSION['nombre_usuario'])) {
                 <!-- Control sidebar content goes here -->
             </aside>
             <!-- /.control-sidebar -->
-
-            <!--MODAL EDITAR-->
-            <div class="modal fade" id="editar_factura" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" style="overflow-y: scroll;">
+            <!--Modales-->
+            <!-- Modal Valoracion Cita -->
+            <div class="modal fade" id="modal_valoracion" role="dialog" style="overflow: scroll;">
                 <div class="modal-dialog modal-xl">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h4 class="modal-title">Factura # <span class="text-danger" id="e_ffactura"></span></h4>
+                            <h4 class="modal-title text-danger">Valoracion de Cita</h4>
+                            <input type="hidden" id="id_cliente_valoracion">
+                            <input type="hidden" id="folio">
                         </div>
-                        <div class="modal-body">
-                            <div id="ver_factura"></div>
+                        <div class="card-body">
+                            <div class="card card-info">
+                                <div class="card-body">
+                                    <div class="form-row">
+                                        <!--
+                                
+                        -->
+                                        <div class="col-md-8">
+                                            <label for="nombre">Nombre:</label>
+                                            <input type="text" class="form-control" id="nombre_valoracion" placeholder="Ingrese su nombre" disabled>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="apellidos">Fecha:</label>
+                                            <input type="date" class="form-control" id="fecha" value="<?php echo $hoy ?>" disabled>
+                                        </div>
+                                    </div>
+                                    <div class="form-row pt-4">
+                                        <!--
+                                        <div class="col-md-3">
+                                            <label>Sexo:</label>
+                                            <div class="row d-flex justify-content-between">
+                                                <div class="col">
+                                                    <div class="form-check mt-2">
+                                                        <input class="form-check-input" type="radio" name="sexo" id="masculino_valoracion" value="masculino">
+                                                        <label class="form-check-label" for="masculino">Masculino</label>
+                                                    </div>
+                                                </div>
+                                                <div class="col">
+                                                    <div class="form-check mt-2">
+                                                        <input class="form-check-input" type="radio" name="sexo" id="femenino_valoracion" value="femenino">
+                                                        <label class="form-check-label" for="femenino">Femenino</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                                -->
+                                        <div class="col-md-4">
+                                            <label for="edad">Edad:</label>
+                                            <input type="number" class="form-control" id="edad_valoracion" placeholder="Ingrese su edad" onfocus="resetear('edad_valoracion')">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="ocupacion">Ocupación:</label>
+                                            <div class="d-flex">
+                                                <select class="form-control" id="ocupacion_valoracion" onfocus="resetear('ocupacion_valoracion')">
+
+
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-row pt-4">
+                                        <div class="col-md-6">
+                                            <label for="apellidos">Domicilio:</label>
+                                            <input type="text" class="form-control" id="domicilio_valoracion" placeholder="Domicilio">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="nombre">Telefono:</label>
+                                            <input type="text" class="form-control" id="telefono_valoracion" placeholder="Telefono" maxlength="10" onfocus="resetear('telefono_valoracion')">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-row pt-4">
+                                        <div class="col-md-6">
+                                            <label for="apellidos">Estado Civil:</label>
+                                            <select class="form-control" id="estado_civil_valoracion">
+                                                <option value="" selected disabled>Estado Civil</option>
+                                                <option value="1">Soltero/a</option>
+                                                <option value="2">Casado/a</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="nombre">Toximanias:</label>
+                                            <input type="text" class="form-control" id="toximanias_valoracion" placeholder="Toximanias" onfocus="resetear('toximanias_valoracion')">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group pt-4">
+                                        <label for="motivoConsulta">Motivo de Consulta:</label>
+                                        <textarea class="form-control" id="motivo_consulta_valoracion" rows="3" placeholder="¿Cúal es el motivo?" onfocus="resetear('motivo_consulta_valoracion')"></textarea>
+                                    </div>
+                                    <div class="form-grop pt-3">
+                                        <label for="nombre">Actividad Fisica:</label>
+                                        <input type="text" class="form-control" id="act_fisica_valoracion" placeholder="Actividad fisica" onfocus="resetear('act_fisica_valoracion')">
+                                    </div>
+                                    <!--
+                        <div class="form-row pt-4">
+                            <div class="col-md-2">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="diabetes">
+                                    <label class="form-check-label" for="diabetes">Diabetes</label>
+                                </div>
+                            </div>
+
+                            <div class="col-md-2">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="hta">
+                                    <label class="form-check-label" for="hta">HTA</label>
+                                </div>
+                            </div>
+
+                            
+                            <div class="col-md-2">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="cancer">
+                                    <label class="form-check-label" for="cancer">Cáncer</label>
+                                </div>
+                            </div>
+
+                            
+                            <div class="col-md-2">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="enfermedades_reumaticas">
+                                    <label class="form-check-label" for="enfermedades_reumaticas">Enf. Reumáticas</label>
+                                </div>
+                            </div>
+
+                         
+                            <div class="col-md-2">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="cardiopatias">
+                                    <label class="form-check-label" for="cardiopatias">Cardiopatías</label>
+                                </div>
+                            </div>
+
+                            <
+                            <div class="col-md-2">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="cirugias">
+                                    <label class="form-check-label" for="cirugias">Cirugías</label>
+                                </div>
+                            </div>
+
+                           
+                            <div class="col-md-2 pt-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="alergias">
+                                    <label class="form-check-label" for="alergias">Alergias</label>
+                                </div>
+                            </div>
+
+                            
+                            <div class="col-md-2 pt-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="transfusiones">
+                                    <label class="form-check-label" for="transfusiones">Transfusiones</label>
+                                </div>
+                            </div>
+
+                            
+                            <div class="col-md-2 pt-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="fracturas">
+                                    <label class="form-check-label" for="fracturas">Fracturas</label>
+                                </div>
+                            </div>
+
+                            
+                            <div class="col-md-2 pt-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="otros">
+                                    <label class="form-check-label" for="otros">Otros</label>
+                                </div>
+                            </div>
+                        </div>
+-->
+                                    <style>
+                                        .form-check-input {
+                                            width: 15px;
+                                            height: 15px;
+                                        }
+                                    </style>
+
+
+                                    <div class="form-group pt-4">
+                                        <label for="ta">Signos Vitales:</label>
+                                        <div class="form-row">
+                                            <div class="col-md-4 d-flex align-items-center">
+                                                <label for="ta" class="mr-2">TA:</label>
+                                                <input type="text" class="form-control" id="tension_art" placeholder="Ingrese la tensión arterial">
+                                            </div>
+                                            <div class="col-md-4 d-flex align-items-center">
+                                                <label for="fc" class="mr-2">FC:</label>
+                                                <input type="number" class="form-control" id="fc" placeholder="Ingrese la frecuencia cardíaca">
+                                            </div>
+                                            <div class="col-md-4 d-flex align-items-center">
+                                                <label for="fr" class="mr-2">FR:</label>
+                                                <input type="number" class="form-control" id="fr" placeholder="Ingrese la frecuencia respiratoria">
+                                            </div>
+                                        </div>
+                                        <div class="form-row pt-2">
+                                            <div class="col-md-4 d-flex align-items-center">
+                                                <label for="satO2" class="mr-2">Sat. de O2:</label>
+                                                <input type="number" class="form-control" id="satO2" placeholder="Ingrese la saturación de oxígeno">
+                                            </div>
+                                            <div class="col-md-4 d-flex align-items-center">
+                                                <label for="temp" class="mr-2">Temp:</label>
+                                                <input type="number" class="form-control" id="temp" placeholder="Ingrese la temperatura">
+                                            </div>
+                                            <div class="col-md-4 d-flex align-items-center">
+                                                <label for="glucosa" class="mr-2">Glucosa:</label>
+                                                <input type="number" class="form-control" id="glucosa" placeholder="Ingrese el nivel de glucosa">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="farmacos">Fármacos:</label>
+                                        <textarea class="form-control" id="farmacos" rows="2" placeholder="Ejemplo: Diclofenaco inyectado" onfocus="resetear('farmacos')"></textarea>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="diagnosticoMedico">Diagnóstico Médico:</label>
+                                        <textarea class="form-control" id="diagnosticoMedico" rows="3" placeholder="Diagnostico"></textarea>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="escalaDolor">Escala de Dolor EVA:</label>
+                                        <div class="d-flex align-items-center">
+                                            <input type="range" class="custom-range ml-2" min="0" max="10" id="escalaDolor" value="0" >
+                                            <span id="escalaValor" class="ml-2">0</span> <!-- Elemento para mostrar el valor -->
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-primary" onclick="validar_factura(1)">Guardar Proforma</button>
-                            <button type="button" class="btn btn-success" onclick="validar_factura(2)">Timbrar Factura</button>
+                            <button type="button" class="btn btn-danger" onclick="cerrar_modal('modal_valoracion', '')">Cerrar</button><br><br>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="modal fade" id="ver_pdf_factura" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" style="overflow-y: scroll;">
-                <div class="modal-dialog modal-xl">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h4 class="modal-title">Factura # <span class="text-danger" id="pdf_ffactura"></span></h4>
-                        </div>
-                        <div class="modal-body">
-                            <embed id="ruta_pdf" frameborder="0" width="100%" height="600px"></embed>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+            <!-- Modal Valoracion Cita -->
+            <!-- ./wrapper -->
 
+            <!-- jQuery -->
+            <script src="plugins/jquery/jquery.min.js"></script>
+            <!-- jQuery UI 1.11.4 -->
+            <script src="plugins/jquery-ui/jquery-ui.min.js"></script>
+            <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+            <script>
+                $.widget.bridge('uibutton', $.ui.button)
+            </script>
+            <!-- Bootstrap 4 -->
+            <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+            <!-- ChartJS -->
+            <script src="plugins/chart.js/Chart.min.js"></script>
+            <!-- Sparkline -->
+            <script src="plugins/sparklines/sparkline.js"></script>
+            <!-- JQVMap -->
+            <script src="plugins/jqvmap/jquery.vmap.min.js"></script>
+            <script src="plugins/jqvmap/maps/jquery.vmap.usa.js"></script>
+            <!-- jQuery Knob Chart -->
+            <script src="plugins/jquery-knob/jquery.knob.min.js"></script>
+            <!-- daterangepicker -->
+            <script src="plugins/moment/moment.min.js"></script>
+            <script src="plugins/daterangepicker/daterangepicker.js"></script>
+            <!-- Tempusdominus Bootstrap 4 -->
+            <script src="plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
+            <!-- Summernote -->
+            <script src="plugins/summernote/summernote-bs4.min.js"></script>
+            <!-- overlayScrollbars -->
+            <script src="plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
+            <!-- AdminLTE App -->
+            <script src="dist/js/adminlte.js"></script>
+            <!-- Funciones JS Personalizadas -->
+            <script src="js/peticiones_expedientes.js"></script>
+            <script src="js/peticiones_generales.js"></script>
+            <!-- bs-custom-file-input -->
+            <script src="plugins/bs-custom-file-input/bs-custom-file-input.min.js"></script>
+            <!-- DataTables  & Plugins -->
+            <script src="plugins/datatables/jquery.dataTables.min.js"></script>
+            <script src="plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+            <script src="plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+            <script src="plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+            <script src="plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+            <script src="plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+            <script src="plugins/jszip/jszip.min.js"></script>
+            <script src="plugins/pdfmake/pdfmake.min.js"></script>
+            <script src="plugins/pdfmake/vfs_fonts.js"></script>
+            <script src="plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+            <script src="plugins/datatables-buttons/js/buttons.print.min.js"></script>
+            <script src="plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+            <!-- Page specific script -->
 
-
-
-
-        <!--Modales-->
-        <?php
-        require("componentes/modales/modales_agenda.php");
-        ?>
-        <!-- ./wrapper -->
-
-        <!-- jQuery -->
-        <script src="plugins/jquery/jquery.min.js"></script>
-        <!-- jQuery UI 1.11.4 -->
-        <script src="plugins/jquery-ui/jquery-ui.min.js"></script>
-        <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
-        <script>
-            $.widget.bridge('uibutton', $.ui.button)
-        </script>
-        <!-- Bootstrap 4 -->
-        <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-        <!-- ChartJS -->
-        <script src="plugins/chart.js/Chart.min.js"></script>
-        <!-- Sparkline -->
-        <script src="plugins/sparklines/sparkline.js"></script>
-        <!-- JQVMap -->
-        <script src="plugins/jqvmap/jquery.vmap.min.js"></script>
-        <script src="plugins/jqvmap/maps/jquery.vmap.usa.js"></script>
-        <!-- jQuery Knob Chart -->
-        <script src="plugins/jquery-knob/jquery.knob.min.js"></script>
-        <!-- daterangepicker -->
-        <script src="plugins/moment/moment.min.js"></script>
-        <script src="plugins/daterangepicker/daterangepicker.js"></script>
-        <!-- Tempusdominus Bootstrap 4 -->
-        <script src="plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
-        <!-- Summernote -->
-        <script src="plugins/summernote/summernote-bs4.min.js"></script>
-        <!-- overlayScrollbars -->
-        <script src="plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
-        <!-- AdminLTE App -->
-        <script src="dist/js/adminlte.js"></script>
-        <!-- Funciones JS Personalizadas -->
-        <script src="js/peticiones_expedientes.js"></script>
-        <script src="js/peticiones_generales.js"></script>
-        <!-- bs-custom-file-input -->
-        <script src="plugins/bs-custom-file-input/bs-custom-file-input.min.js"></script>
-        <!-- DataTables  & Plugins -->
-        <script src="plugins/datatables/jquery.dataTables.min.js"></script>
-        <script src="plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
-        <script src="plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
-        <script src="plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
-        <script src="plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
-        <script src="plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
-        <script src="plugins/jszip/jszip.min.js"></script>
-        <script src="plugins/pdfmake/pdfmake.min.js"></script>
-        <script src="plugins/pdfmake/vfs_fonts.js"></script>
-        <script src="plugins/datatables-buttons/js/buttons.html5.min.js"></script>
-        <script src="plugins/datatables-buttons/js/buttons.print.min.js"></script>
-        <script src="plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
-        <!-- Page specific script -->
-        <script>
-            $(function() {
-                $('#tabla_cliente').DataTable({
-                    "paging": true,
-                    "lengthChange": false,
-                    "searching": true,
-                    "ordering": true,
-                    "info": true,
-                    "autoWidth": true,
-                    "responsive": true,
-                    "language": {
-                        "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
-                    }
-                });
-            });
-        </script>
-        <script>
-            document.addEventListener("DOMContentLoaded", function(event) {
-                mostrar_historial_citas();
-            });
-        </script>
     </body>
 
     </html>

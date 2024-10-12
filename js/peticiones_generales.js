@@ -26,3 +26,15 @@ function resetear(elemento)
     $("#"+elemento).removeClass('is-invalid');
 }
 
+function cerrar_modal(modal1, modal2) {
+    if (modal1.length != 0) {
+        //ocultamos el modal de agendar cita
+        $('#' + modal1).modal('hide');
+    }
+
+    if (modal2.length != 0) {
+        // abrimos el modal del cliente
+        $("#" + modal2).modal("show");
+    }
+}
+

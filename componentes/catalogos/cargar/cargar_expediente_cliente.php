@@ -13,39 +13,35 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
 
     $html = '';
     $html .= '
-            <table class="table table-striped" id="tabla_facturas" width="100%">
+            <table class="table table-striped" id="expedientes_citas_table" width="100%">
                 <thead>
                     <tr>
                         <th class="sticky text-center text-sm">Acciones</th>
                         <th class="sticky text-center text-sm">Folio</th>
-                        <th class="text-center text-sm">Fecha de Agenda</th>
-                        <th class="text-center text-sm">Estatus</th>
+                        <th class="text-center text-sm">Fecha de Realización</th>
                         <th class="sticky text-center text-sm">Cliente</th>
-                        <th class="text-center text-sm">Terapeuta</th>
-                        <th class="text-center text-sm">Consultorio</th>
-                        <th class="text-center text-sm">Tipo de Cita</th>
-                        <th class="text-center text-sm">Tipo de Servicio</th>
                     </tr>
                 </thead>
                 <tbody id="mostrar_expediente">
         ';
 
-    $consTerapeutas = "SELECT nombre_personal, correo FROM emisores_personal WHERE tipo = 2 AND id_personal = " . $_POST['id_terapeuta'] . "";
-    $resultado = mysqli_query($conexion, $consTerapeutas);
+    $consExpedientes = "SELECT e.fecha_emision, e.folio, e.id_cliente, c.nombre_cliente 
+                                    FROM emisores_historial_expediente AS e INNER JOIN emisores_clientes AS c ON e.id_cliente = c.id_cliente 
+                                    WHERE e.id_cliente = " . $_POST['id_cliente'] . " AND e.id_emisor = " . $_SESSION['id_emisor'] . "";
+    $resultado = mysqli_query($conexion, $consExpedientes);
 
-    while ($citas = mysqli_fetch_array($resCitas)) {
-        $fechaHora = $citas['fecha_agenda'];
+    while ($expediente = mysqli_fetch_array($resultado)) {
+
+        $fecha = $expediente['fecha_emision'];
 
         // Crear un objeto DateTime desde la cadena de fecha y hora
-        $dateTime = new DateTime($fechaHora);
+        $fecha = new DateTime($fecha);
 
         // Obtener la fecha en formato 'YYYY-MM-DD'
-        $fecha = $dateTime->format('Y-m-d');
+        $fecha = $fecha->format('d-m-Y');
 
-        // Obtener la hora en formato 'HH:MM:SS'
-        $hora = $dateTime->format('H:i:s');
-
-        switch ($citas['estatus']) {
+        /*
+        switch ($expediente['estatus']) {
             case 1:
                 $estatus = '<span class="badge badge-danger" style="width: 100%; color:white;">APERTURADO</span>';
                 $boton_editar = '';
@@ -70,7 +66,7 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
                 break;
         }
 
-        switch ($citas['tipo_cita']) {
+        switch ($expediente['tipo_cita']) {
             case 1:
                 $tipo_cita = 'SEGUIMIENTO';
                 break;
@@ -79,7 +75,7 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
                 $tipo_cita = 'PRIMERA VEZ';
         }
 
-        switch ($citas['tipo_servicio']) {
+        switch ($expediente['tipo_servicio']) {
             case 1:
                 $tipo_servicio = 'CONSULTORIO';
                 break;
@@ -87,41 +83,29 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
             case 2:
                 $tipo_servicio = 'DOMICILIO';
         }
+                */
 
-        if (empty($_SESSION['id_personal'])) {
+        if (!empty($_SESSION['id_personal'])) {
+
             $acciones = "
-                            <button type='button' id='btn_edit_" . $citas['id_folio'] . "' class='btn btn-warning btn-sm' " . $boton_editar . " title='Editar cita' onclick='editar_cita(" . $citas['id_folio'] . ", &quot;" . $citas['nombre_cliente'] . "&quot;, " . $citas['id_consultorio'] . ", " . $citas['id_terapeuta'] . ", " . $citas['tipo_servicio'] . ", " . $citas['tipo_cita'] . ", &quot;" . $fecha . "&quot;, &quot;" . $hora . "&quot;, &quot;" . $citas['observaciones'] . "&quot;);')'>
-                                <i class='fas fa-pencil-alt'></i>
-                            </button>
-                            &nbsp;
-                            <button type='button' id='btn_can_" . $citas['id_folio'] . "' class='btn btn-danger btn-sm' " . $boton_cancelar . " title='Cancelar cita' onclick='cancelar_cita(" . $citas['id_folio'] . ", &quot;" . $citas['nombre_cliente'] . "&quot;, &quot;" . $citas['nombre_personal'] . "&quot;, &quot;" . $citas['nombre_consultorio'] . "&quot;)'>
-                                <i class='fas fa-ban'></i>
-                            </button>
-                            ";
-        } else {
-            $acciones = "
-                            <button type='button' id='btn_rea_" . $citas['id_folio'] . "' class='btn btn-success btn-sm' " . $boton_cancelar . " title='Cita Realizada' onclick='realizar_cita(" . $citas['id_folio'] . ", &quot;" . $citas['nombre_cliente'] . "&quot;, &quot;" . $citas['nombre_personal'] . "&quot;, &quot;" . $citas['nombre_consultorio'] . "&quot;)'>
-                                <i class='fas fa-check'></i>
+                            <button type='button' id='btn_rea_" . $expediente['folio'] . "' class='btn btn-warning btn-sm' title='Cita Realizada' onclick='mostrar_valoracion(" . $expediente['folio'] . "," . $expediente['id_cliente'] . ")'>
+                                <!--<i class='fas fa-file'></i>-->
+                                <i class='far fa-file'></i>
                             </button>
             ";
         }
 
 
         $html .= "
-                <tr id='tr_" . $citas['id_folio'] . "'>
+                <tr id='tr_" . $expediente['folio'] . "'>
                     <td class='text-center'>
                         <div class='btn-group'>
                             $acciones
                         </div>
                     </td>
-                    <td class='text-center text-sm' style='white-space: nowrap; overflow-x: auto;'>" . $citas['id_folio'] . "</td>
-                    <td class='text-center text-sm' style='white-space: nowrap; overflow-x: auto;'>" . date("d/m/Y", strtotime($citas['fecha_agenda'])) . "</td>
-                    <td class='text-center text-sm' id='td_ef_" . $citas['id_folio'] . "' style='white-space: nowrap; overflow-x: auto;'>" . $estatus . "</td>
-                    <td class='text-center text-sm' style='white-space: nowrap; overflow-x: auto;'>" . $citas['nombre_cliente'] . "</td>
-                    <td class='text-center text-sm' style='white-space: nowrap; overflow-x: auto;'>" . $citas['nombre_personal'] . "</td>
-                    <td class='text-center text-sm' style='white-space: nowrap; overflow-x: auto;'>" . $citas['nombre_consultorio'] . "</td>
-                    <td class='text-center text-sm' style='white-space: nowrap; overflow-x: auto;'>" . $tipo_cita . "</td>
-                    <td class='text-center text-sm' style='white-space: nowrap; overflow-x: auto;'>" . $tipo_servicio . "</td>
+                    <td class='text-center text-sm' style='white-space: nowrap; overflow-x: auto;'>" . $expediente['folio'] . "</td>
+                    <td class='text-center text-sm' style='white-space: nowrap; overflow-x: auto;'>" . $fecha . "</td>
+                    <td class='text-center text-sm' style='white-space: nowrap; overflow-x: auto;'>" . $expediente['nombre_cliente'] . "</td>
                 </tr>
             ";
     }
@@ -133,3 +117,22 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
     echo $html;
 }
 
+?>
+
+<script>
+    $(function() {
+        $('#expedientes_citas_table').DataTable({
+            "paging": true,
+            "lengthChange": false,
+            "searching": true,
+            "ordering": true,
+            "info": true,
+            "autoWidth": true,
+            "responsive": true,
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
+            }
+
+        });
+    });
+</script>
