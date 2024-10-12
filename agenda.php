@@ -296,6 +296,7 @@ if (!isset($_SESSION['nombre_usuario'])) {
         <!-- Funciones JS Personalizadas -->
         <script src="js/peticiones_agenda.js"></script>
         <script src="js/peticiones_generales.js"></script>
+        <script src="js/peticiones_agenda_terapeuta.js"></script>
         <!-- bs-custom-file-input -->
         <script src="plugins/bs-custom-file-input/bs-custom-file-input.min.js"></script>
         <!-- DataTables  & Plugins -->

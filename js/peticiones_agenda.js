@@ -1,8 +1,8 @@
 $(document).ready(function () {
-    
+
     id_terapeuta = $("#id_personal").val();
 
-    if(Number(id_terapeuta) == 0){
+    if (Number(id_terapeuta) == 0) {
         $("#btn-nueva-cita").html('<button type="button" class="btn btn-danger" onclick="form_nueva_cita();"><i class="fas fa-plus"></i> Nueva cita</button>');
     }
 });
@@ -82,21 +82,24 @@ function gestionar_cita() {
             Swal.showLoading()
         }
 
-    }); $.ajax({
+    });
+    $.ajax({
         cache: false,
 
         url: "componentes/catalogos/registrar_cita.php",
         type: 'POST',
         dataType: 'html',
-        data: { 'tipo_gestion': id_folio, 
-                'id_cliente': id_cliente, 
-                'id_consultorio': id_consultorio, 
-                'id_terapeuta': id_terapeuta, 
-                'tipo_servicio': tipo_servicio, 
-                'tipo_cita': tipo_cita, 
-                'fecha_cita': fecha_cita, 
-                'hora_cita': hora_cita, 
-                'observaciones': observaciones },
+        data: {
+            'tipo_gestion': id_folio,
+            'id_cliente': id_cliente,
+            'id_consultorio': id_consultorio,
+            'id_terapeuta': id_terapeuta,
+            'tipo_servicio': tipo_servicio,
+            'tipo_cita': tipo_cita,
+            'fecha_cita': fecha_cita,
+            'hora_cita': hora_cita,
+            'observaciones': observaciones
+        },
     }).done(function (resultado) {
 
         if (resultado == "ok") {
@@ -178,11 +181,11 @@ function cargar_datos() {
     id_cliente = $("#id_cliente2").val();
     fecha_cita = $("#fecha_cita_form").val();
     //console.log(fecha_cita)
-    if(!fecha_cita){
+    if (!fecha_cita) {
         fecha_cita = new Date();
     }
     movimiento = 1;
-    
+
     $.ajax({
         cache: false,
         url: "componentes/catalogos/cargar_terapeutas.php",
@@ -195,10 +198,10 @@ function cargar_datos() {
             $("#terapeuta_form").html(resultado);
         }
     })
-    
+
 }
 
-function cargar_horarios_disponibles(){
+function cargar_horarios_disponibles() {
 
     //console.log(id_terapeuta)
     id_terapeuta = $("#terapeuta_form").val();
@@ -211,13 +214,13 @@ function cargar_horarios_disponibles(){
         url: "componentes/catalogos/cargar_horarios_disponibles.php",
         type: 'POST',
         dataType: 'html',
-        data: { 'fecha_hora': fecha_cita, 'id_terapeuta': id_terapeuta},
+        data: { 'fecha_hora': fecha_cita, 'id_terapeuta': id_terapeuta },
     }).done(function (resultado) {
         //console.log(resultado)
         $("#hora_cita_form").html(resultado);
     })
 }
-function cargar_consultorios_disponibles(){
+function cargar_consultorios_disponibles() {
     fecha_cita = $("#fecha_cita_form").val();
     hora_cita = $("#hora_cita_form").val();
 
@@ -226,7 +229,7 @@ function cargar_consultorios_disponibles(){
         url: "componentes/catalogos/cargar_consultorios.php",
         type: 'POST',
         dataType: 'html',
-        data: { 'fecha_cita': fecha_cita, 'hora_cita': hora_cita},
+        data: { 'fecha_cita': fecha_cita, 'hora_cita': hora_cita },
     }).done(function (resultado) {
         //console.log(resultado)
         $("#consultorio_form").html(resultado);
@@ -248,7 +251,7 @@ function tipo_servicio() {
 }
 
 function actualizar_lista_clientes() {
-    
+
     $.ajax({
         cache: false,
         url: "componentes/catalogos/cargar_list_clientes.php",
@@ -336,14 +339,6 @@ function cancelar_cita(id_folio, nombre_cliente, nombre_terapeuta, nombre_consul
     $("#terapeuta_cancelar").html("Terapeuta: " + nombre_terapeuta);
     $("#consultorio_cancelar").html("Consultorio: " + nombre_consultorio);
     $('#modal_cancelacion').modal('show');
-}
-
-function realizar_cita(id_folio, nombre_cliente, nombre_terapeuta, nombre_consultorio){
-    
-    $('#modal_valoracion').modal('show');
-}
-function enviar_valoracion(){
-
 }
 
 function enviar_cancelacion() {
@@ -442,8 +437,8 @@ function disponibilidad_terapeutas() {
         url: 'componentes/catalogos/cargar_terapeutas.php',
         type: 'POST',
         dataType: 'html',
-        data: {'fecha_hora': fecha_hora, 'movimiento': movimiento},
-    }).done(function(resultado){
+        data: { 'fecha_hora': fecha_hora, 'movimiento': movimiento },
+    }).done(function (resultado) {
         $("#disponibilidad_terapeutas").html(resultado)
     });
 

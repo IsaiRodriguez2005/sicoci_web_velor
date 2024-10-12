@@ -104,22 +104,26 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
             case 1:
                 $estatus = '<span class="badge badge-danger" style="width: 100%; color:white;">APERTURADO</span>';
                 $boton_editar = '';
+                $valoracion = '';
                 $boton_cancelar = '';
                 break;
             case 2:
                 $estatus = '<span class="badge badge-warning" style="width: 100%; color:white;">AGENDADO</span>';
                 $boton_editar = '';
+                $valoracion = '';
                 $boton_cancelar = '';
                 break;
             case 3:
                 $estatus = '<span class="badge badge-success" style="width: 100%; color:white;">REALIZADO</span>';
                 $boton_editar = 'disabled';
+                $valoracion = 'disabled';
                 $boton_cancelar = '';
                 $boton_cobrar = '';
                 break;
             case 4:
                 $estatus = '<span class="badge badge-secondary" style="width: 100%; color:white;">CANCELADO</span>';
                 $boton_editar = 'disabled';
+                $valoracion = '';
                 $boton_cancelar = 'disabled';
                 $boton_cobrar = 'disabled';
                 break;
@@ -155,7 +159,7 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
                             ";
         } else {
             $acciones = "
-                            <button type='button' id='btn_rea_" . $citas['id_folio'] . "' class='btn btn-success btn-sm' " . $boton_cancelar . " title='Cita Realizada' onclick='realizar_cita(" . $citas['id_folio'] . ", &quot;" . $citas['nombre_cliente'] . "&quot;, &quot;" . $citas['nombre_personal'] . "&quot;, &quot;" . $citas['nombre_consultorio'] . "&quot;)'>
+                            <button type='button' id='btn_rea_" . $citas['id_folio'] . "' class='btn btn-success btn-sm' " . $boton_cancelar . " ".$valoracion." title='Cita Realizada' onclick='realizar_valoracion(" . $citas['id_folio'] . ", " . $citas['id_cliente'] . ", &quot;" . $citas['nombre_cliente'] . "&quot;)'>
                                 <i class='fas fa-check'></i>
                             </button>
             ";

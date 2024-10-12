@@ -679,19 +679,24 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title text-danger">Valoracion de Cita</h4>
+                <input type="hidden" id="id_cliente_valoracion">
+                <input type="hidden" id="id_folio_cita">
             </div>
             <div class="card-body">
                 <div class="card card-info">
                     <div class="card-body">
                         <div class="form-row">
-                            <div class="col-md-6">
-                                <label for="apellidos">Apellidos:</label>
-                                <input type="text" class="form-control" id="apellidos_valoracion" placeholder="Ingrese sus apellidos">
-                            </div>
-                            <div class="col-md-6">
+                            <!--
+                                
+                        -->
+                            <div class="col-md-8">
                                 <label for="nombre">Nombre:</label>
-                                <input type="text" class="form-control" id="nombre_valoracion" placeholder="Ingrese su nombre">
+                                <input type="text" class="form-control" id="nombre_valoracion" placeholder="Ingrese su nombre" disabled>
                             </div>
+                            <div class="col-md-4">
+                                    <label for="apellidos">Fecha:</label>
+                                    <input type="date" class="form-control" id="fecha" value="<?php echo $hoy ?>" disabled>
+                                </div>
                         </div>
                         <div class="form-row pt-4">
                             <div class="col-md-3">
@@ -712,46 +717,57 @@
                                 </div>
 
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <label for="edad">Edad:</label>
-                                <input type="number" class="form-control" id="edad_valoracion" placeholder="Ingrese su edad">
+                                <input type="number" class="form-control" id="edad_valoracion" placeholder="Ingrese su edad" onfocus="resetear('edad_valoracion')">
                             </div>
-                            <div class="col-md-5">
+                            <div class="col-md-6">
                                 <label for="ocupacion">Ocupación:</label>
-                                <input type="text" class="form-control" id="ocupacion_valoracion" placeholder="Ingrese su ocupación">
+                                <div class="d-flex">
+                                    <select class="form-control" id="ocupacion_valoracion" onfocus="resetear('ocupacion_valoracion')">
+                                        
+    
+                                    </select>
+                                    <button type="button" class="btn btn-info ml-2" onclick="abrir_modal('modal_valoracion', 'modal_nueva_ocupacion')"><i class="fas fa-plus-circle"></i></button>
+                                </div>
                             </div>
                         </div>
 
                         <div class="form-row pt-4">
                             <div class="col-md-6">
                                 <label for="apellidos">Domicilio:</label>
-                                <input type="text" class="form-control" id="domicilio_valoracion" placeholder="Ingrese sus apellidos">
+                                <input type="text" class="form-control" id="domicilio_valoracion" placeholder="Domicilio">
                             </div>
                             <div class="col-md-6">
                                 <label for="nombre">Telefono:</label>
-                                <input type="text" class="form-control" id="telefono_valoracion" placeholder="Ingrese su nombre">
+                                <input type="text" class="form-control" id="telefono_valoracion" placeholder="Telefono" maxlength="10" onfocus="resetear('telefono_valoracion')">
                             </div>
                         </div>
 
                         <div class="form-row pt-4">
                             <div class="col-md-6">
                                 <label for="apellidos">Estado Civil:</label>
-                                <input type="text" class="form-control" id="estado_civil_valoracion" placeholder="Ingrese sus apellidos">
+                                <select class="form-control" id="estado_civil_valoracion">
+                                    <option value="" selected disabled>Estado Civil</option>
+                                    <option value="1">Soltero/a</option>
+                                    <option value="2">Casado/a</option>
+                                </select>
                             </div>
                             <div class="col-md-6">
                                 <label for="nombre">Toximanias:</label>
-                                <input type="text" class="form-control" id="toximanias_valoracion" placeholder="Ingrese su nombre">
+                                <input type="text" class="form-control" id="toximanias_valoracion" placeholder="Toximanias" onfocus="resetear('toximanias_valoracion')">
                             </div>
                         </div>
 
                         <div class="form-group pt-4">
                             <label for="motivoConsulta">Motivo de Consulta:</label>
-                            <textarea class="form-control" id="motivo_consulta_valoracion" rows="3"></textarea>
+                            <textarea class="form-control" id="motivo_consulta_valoracion" rows="3" placeholder="¿Cúal es el motivo?" onfocus="resetear('motivo_consulta_valoracion')"></textarea>
                         </div>
                         <div class="form-grop pt-3">
                             <label for="nombre">Actividad Fisica:</label>
-                            <input type="text" class="form-control" id="act_fisica_valoracion" placeholder="Ingrese su nombre">
+                            <input type="text" class="form-control" id="act_fisica_valoracion" placeholder="Actividad fisica" onfocus="resetear('act_fisica_valoracion')">
                         </div>
+                        <!--
                         <div class="form-row pt-4">
                             <div class="col-md-2">
                                 <div class="form-check">
@@ -767,7 +783,7 @@
                                 </div>
                             </div>
 
-                            <!-- Checkbox para Cáncer -->
+                            
                             <div class="col-md-2">
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" value="" id="cancer">
@@ -775,7 +791,7 @@
                                 </div>
                             </div>
 
-                            <!-- Checkbox para Enfermedades Reumáticas -->
+                            
                             <div class="col-md-2">
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" value="" id="enfermedades_reumaticas">
@@ -783,7 +799,7 @@
                                 </div>
                             </div>
 
-                            <!-- Checkbox para Cardiopatías -->
+                         
                             <div class="col-md-2">
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" value="" id="cardiopatias">
@@ -791,7 +807,7 @@
                                 </div>
                             </div>
 
-                            <!-- Checkbox para Cirugías -->
+                            <
                             <div class="col-md-2">
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" value="" id="cirugias">
@@ -799,7 +815,7 @@
                                 </div>
                             </div>
 
-                            <!-- Checkbox para Alergias -->
+                           
                             <div class="col-md-2 pt-3">
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" value="" id="alergias">
@@ -807,7 +823,7 @@
                                 </div>
                             </div>
 
-                            <!-- Checkbox para Transfusiones -->
+                            
                             <div class="col-md-2 pt-3">
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" value="" id="transfusiones">
@@ -815,7 +831,7 @@
                                 </div>
                             </div>
 
-                            <!-- Checkbox para Fracturas -->
+                            
                             <div class="col-md-2 pt-3">
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" value="" id="fracturas">
@@ -823,7 +839,7 @@
                                 </div>
                             </div>
 
-                            <!-- Checkbox para Otros -->
+                            
                             <div class="col-md-2 pt-3">
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" value="" id="otros">
@@ -831,6 +847,7 @@
                                 </div>
                             </div>
                         </div>
+-->
                         <style>
                             .form-check-input {
                                 width: 15px;
@@ -844,7 +861,7 @@
                             <div class="form-row">
                                 <div class="col-md-4 d-flex align-items-center">
                                     <label for="ta" class="mr-2">TA:</label>
-                                    <input type="text" class="form-control" id="ta" placeholder="Ingrese la tensión arterial">
+                                    <input type="text" class="form-control" id="tension_art" placeholder="Ingrese la tensión arterial">
                                 </div>
                                 <div class="col-md-4 d-flex align-items-center">
                                     <label for="fc" class="mr-2">FC:</label>
@@ -872,19 +889,19 @@
                         </div>
                         <div class="form-group">
                             <label for="farmacos">Fármacos:</label>
-                            <textarea class="form-control" id="farmacos" rows="2">Diclofenaco inyectado</textarea>
+                            <textarea class="form-control" id="farmacos" rows="2" placeholder="Ejemplo: Diclofenaco inyectado" onfocus="resetear('farmacos')"></textarea>
                         </div>
 
                         <div class="form-group">
                             <label for="diagnosticoMedico">Diagnóstico Médico:</label>
-                            <textarea class="form-control" id="diagnosticoMedico" rows="3"></textarea>
+                            <textarea class="form-control" id="diagnosticoMedico" rows="3" placeholder="Diagnostico"></textarea>
                         </div>
 
                         <div class="form-group">
                             <label for="escalaDolor">Escala de Dolor EVA:</label>
                             <div class="d-flex align-items-center">
-                                <input type="range" class="custom-range ml-2" min="0" max="10" id="escalaDolor" value="5" oninput="updateValue(this.value)">
-                                <span id="escalaValor" class="ml-2">5</span> <!-- Elemento para mostrar el valor -->
+                                <input type="range" class="custom-range ml-2" min="0" max="10" id="escalaDolor" value="0" oninput="updateValue(this.value)">
+                                <span id="escalaValor" class="ml-2">0</span> <!-- Elemento para mostrar el valor -->
                             </div>
                         </div>
                         <script>
@@ -898,9 +915,42 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger" onclick="cerrar_modal('modal_valoracion', '')">Cerrar</button>
-                <button type="button" class="btn btn-success" onclick="enviar_valoracion();">Emviar Valoraci&oacute;n</button><br><br><br>
+                <button type="button" class="btn btn-success" onclick="enviar_valoracion();">Enviar Valoraci&oacute;n</button><br><br><br>
             </div>
         </div>
     </div>
 </div>
 <!-- Modal Valoracion Cita -->
+
+<!-- Modal nuevo Consultorio -->
+<div class="modal fade" id="modal_nueva_ocupacion" role="dialog" style="overflow: scroll;">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title text-success">Registrar Nueva Ocupacion</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="card-body">
+                <h6><i class="fas fa-id-card"></i> Datos de identificaci&oacute;n</h6>
+                <hr>
+
+                <div class="row">
+                    <div class="col-8">
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-file-signature"></i></span>
+                            </div>
+                            <input type="text" class="form-control" placeholder="Nombre de la Ocupacion" id="nombre_ocupacion" onfocus="resetear('nombre_ocupacion')" maxlength="150" required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="cerrar_modal('modal_nueva_ocupacion', 'modal_valoracion')">Cerrar</button>
+                <center><button type="button" class="btn btn-success" onclick="gestionar_ocupacion('modal_valoracion', 'modal_nueva_ocupacion');">Guardar Consultorio</button></center><br><br><br>
+            </div>
+        </div>
+    </div>
+</div>
