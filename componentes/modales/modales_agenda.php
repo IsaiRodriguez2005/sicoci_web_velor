@@ -719,11 +719,11 @@
 
                             </div>
                             -->
-                            <div class="col-md-4">
+                            <div class="col-md-2">
                                 <label for="edad">Edad:</label>
                                 <input type="number" class="form-control" id="edad_valoracion" placeholder="Ingrese su edad" onfocus="resetear('edad_valoracion')">
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-5">
                                 <label for="ocupacion">Ocupación:</label>
                                 <div class="d-flex">
                                     <select class="form-control" id="ocupacion_valoracion" onfocus="resetear('ocupacion_valoracion')">
@@ -733,14 +733,7 @@
                                     <button type="button" class="btn btn-info ml-2" onclick="abrir_modal('modal_valoracion', 'modal_nueva_ocupacion')"><i class="fas fa-plus-circle"></i></button>
                                 </div>
                             </div>
-                        </div>
-
-                        <div class="form-row pt-4">
-                            <div class="col-md-6">
-                                <label for="apellidos">Domicilio:</label>
-                                <input type="text" class="form-control" id="domicilio_valoracion" placeholder="Domicilio">
-                            </div>
-                            <div class="col-md-6">
+                            <div class="col-md-5">
                                 <label for="nombre">Telefono:</label>
                                 <input type="text" class="form-control" id="telefono_valoracion" placeholder="Telefono" maxlength="10" onfocus="resetear('telefono_valoracion')">
                             </div>

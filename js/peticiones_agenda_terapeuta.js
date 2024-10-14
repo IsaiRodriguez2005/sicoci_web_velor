@@ -119,6 +119,8 @@ function enviar_valoracion() {
                 title: "Valoación Enviada",
                 showConfirmButton: false,
                 timer: 2000
+            }).then(function () {
+                window.location = 'expedientes.php';
             });
         }
         //$("#disponibilidad_terapeutas").html(resultado)

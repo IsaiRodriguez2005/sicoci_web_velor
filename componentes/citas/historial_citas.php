@@ -149,7 +149,7 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
 
         if (empty($_SESSION['id_personal'])) {
             $acciones = "
-                            <button type='button' id='btn_edit_" . $citas['id_folio'] . "' class='btn btn-warning btn-sm' " . $boton_editar . " title='Editar cita' onclick='editar_cita(" . $citas['id_folio'] . ", &quot;" . $citas['nombre_cliente'] . "&quot;, " . $citas['id_consultorio'] . ", " . $citas['id_terapeuta'] . ", " . $citas['tipo_servicio'] . ", " . $citas['tipo_cita'] . ", &quot;" . $fecha . "&quot;, &quot;" . $hora . "&quot;, &quot;" . $citas['observaciones'] . "&quot;);')'>
+                            <button type='button' id='btn_edit_" . $citas['id_folio'] . "' class='btn btn-warning btn-sm' " . $boton_editar . " title='Editar cita' onclick='editar_cita(" . $citas['id_folio'] . ")'>
                                 <i class='fas fa-pencil-alt'></i>
                             </button>
                             &nbsp;

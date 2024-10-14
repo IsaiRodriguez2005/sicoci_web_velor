@@ -19,8 +19,7 @@
         {
 
             isset($_POST['toximanias']);
-            $fecha = new DateTime();
-            $fecha = $fecha->format('Y-m-d');
+            $fecha = date("Y-m-d");
 
             $selectMAX = "SELECT COALESCE(MAX(folio),0) AS no_registro FROM emisores_historial_expediente WHERE id_emisor = ".$_SESSION['id_emisor'];
             $resMAX = mysqli_query($conexion, $selectMAX);
@@ -50,7 +49,7 @@
                                                                             VALUES (
                                                                             $ultimo, 
                                                                             ".intval($_SESSION['id_emisor']).",
-                                                                            ".$fecha.",
+                                                                            '".$fecha."',
                                                                             ".intval($_POST['id_cliente']).",
                                                                             ".intval($_POST['edad']).",
                                                                             ".intval($_POST['id_ocupacion']).",

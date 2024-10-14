@@ -78,7 +78,7 @@ function mostrar_valoracion(folio, id_cliente) {
         data: { 'id_cliente': id_cliente, 'folio': folio }
     }).done(function (dataVal) {
         
-        console.log(dataVal[0].id_ocupacion)
+        console.log(dataVal)
         
         $("#id_cliente_valoracion").val(dataVal[0].id_cliente);
         $("#folio").val(dataVal[0].folio);

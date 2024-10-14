@@ -273,11 +273,11 @@ if (!isset($_SESSION['nombre_usuario'])) {
 
                                         </div>
                                                 -->
-                                        <div class="col-md-4">
+                                        <div class="col-md-2">
                                             <label for="edad">Edad:</label>
                                             <input type="number" class="form-control" id="edad_valoracion" placeholder="Ingrese su edad" onfocus="resetear('edad_valoracion')">
                                         </div>
-                                        <div class="col-md-6">
+                                        <div class="col-md-5">
                                             <label for="ocupacion">Ocupación:</label>
                                             <div class="d-flex">
                                                 <select class="form-control" id="ocupacion_valoracion" onfocus="resetear('ocupacion_valoracion')">
@@ -286,14 +286,7 @@ if (!isset($_SESSION['nombre_usuario'])) {
                                                 </select>
                                             </div>
                                         </div>
-                                    </div>
-
-                                    <div class="form-row pt-4">
-                                        <div class="col-md-6">
-                                            <label for="apellidos">Domicilio:</label>
-                                            <input type="text" class="form-control" id="domicilio_valoracion" placeholder="Domicilio">
-                                        </div>
-                                        <div class="col-md-6">
+                                        <div class="col-md-5">
                                             <label for="nombre">Telefono:</label>
                                             <input type="text" class="form-control" id="telefono_valoracion" placeholder="Telefono" maxlength="10" onfocus="resetear('telefono_valoracion')">
                                         </div>
@@ -420,25 +413,25 @@ if (!isset($_SESSION['nombre_usuario'])) {
                                             </div>
                                             <div class="col-md-4 d-flex align-items-center">
                                                 <label for="fc" class="mr-2">FC:</label>
-                                                <input type="number" class="form-control" id="fc" placeholder="Ingrese la frecuencia cardíaca">
+                                                <input type="text" class="form-control" id="fc" placeholder="Ingrese la frecuencia cardíaca">
                                             </div>
                                             <div class="col-md-4 d-flex align-items-center">
                                                 <label for="fr" class="mr-2">FR:</label>
-                                                <input type="number" class="form-control" id="fr" placeholder="Ingrese la frecuencia respiratoria">
+                                                <input type="text" class="form-control" id="fr" placeholder="Ingrese la frecuencia respiratoria">
                                             </div>
                                         </div>
                                         <div class="form-row pt-2">
                                             <div class="col-md-4 d-flex align-items-center">
                                                 <label for="satO2" class="mr-2">Sat. de O2:</label>
-                                                <input type="number" class="form-control" id="satO2" placeholder="Ingrese la saturación de oxígeno">
+                                                <input type="text" class="form-control" id="satO2" placeholder="Ingrese la saturación de oxígeno">
                                             </div>
                                             <div class="col-md-4 d-flex align-items-center">
                                                 <label for="temp" class="mr-2">Temp:</label>
-                                                <input type="number" class="form-control" id="temp" placeholder="Ingrese la temperatura">
+                                                <input type="text" class="form-control" id="temp" placeholder="Ingrese la temperatura">
                                             </div>
                                             <div class="col-md-4 d-flex align-items-center">
                                                 <label for="glucosa" class="mr-2">Glucosa:</label>
-                                                <input type="number" class="form-control" id="glucosa" placeholder="Ingrese el nivel de glucosa">
+                                                <input type="text" class="form-control" id="glucosa" placeholder="Ingrese el nivel de glucosa">
                                             </div>
                                         </div>
                                     </div>
