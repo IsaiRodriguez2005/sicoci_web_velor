@@ -7,14 +7,13 @@ $(document).ready(function () {
     }
 });
 
-
 function form_nueva_cita() {
     $("#modal_nueva_cita").modal("show");
 }
 
 function gestionar_cita() {
 
-    var id_folio = $("#tipo_gestion").val();
+    var id_folio = $("#folio_gestion").val();
 
     var id_cliente = $("#id_cliente2").val();
     if (id_cliente == '0') {
@@ -177,28 +176,39 @@ function gestionar_cita() {
 
 
 function cargar_datos() {
+    return new Promise((resolve, reject) => {
+        let id_cliente = $("#id_cliente2").val();
+        let fecha_cita = $("#fecha_cita_form").val();
 
-    id_cliente = $("#id_cliente2").val();
-    fecha_cita = $("#fecha_cita_form").val();
-    //console.log(fecha_cita)
-    if (!fecha_cita) {
-        fecha_cita = new Date();
-    }
-    movimiento = 1;
-
-    $.ajax({
-        cache: false,
-        url: "componentes/catalogos/cargar_terapeutas.php",
-        type: 'POST',
-        dataType: 'html',
-        data: { 'movimiento': movimiento, 'id_cliente': id_cliente, 'fecha_hora': fecha_cita, },
-    }).done(function (resultado) {
-        //console.log(resultado)
-        if (movimiento == 1) {
-            $("#terapeuta_form").html(resultado);
+        // Si la fecha no está definida, inicializarla con la fecha actual en formato correcto
+        if (!fecha_cita) {
+            fecha_cita = new Date().toISOString().split('T')[0];  // Formato YYYY-MM-DD
         }
-    })
 
+        let movimiento = 1;
+
+        $.ajax({
+            cache: false,
+            url: "componentes/catalogos/cargar_terapeutas.php",
+            type: 'POST',
+            dataType: 'html',
+            data: {
+                'movimiento': movimiento,
+                'id_cliente': id_cliente,
+                'fecha_hora': fecha_cita,
+            },
+        }).done(function (resultado) {
+            // Si el movimiento es correcto, rellenar el select y resolver la promesa
+            if (movimiento == 1) {
+                $("#terapeuta_form").html(resultado);
+                resolve();  // Promesa resuelta correctamente
+            }
+        }).fail(function (jqXHR, textStatus, errorThrown) {
+            // En caso de error, rechazar la promesa con el error
+            console.error("Error al cargar los terapeutas: ", textStatus, errorThrown);
+            reject(textStatus);  // Rechazar la promesa en caso de error
+        });
+    });
 }
 
 function cargar_horarios_disponibles() {
@@ -208,32 +218,42 @@ function cargar_horarios_disponibles() {
     //console.log(id_terapeuta)
     fecha_cita = $("#fecha_cita_form").val();
 
+    folio_gestion = $("#folio_gestion").val();
+    hora_gestion = $("#hora_gestion").val();
+
     $.ajax({
         cache: false,
 
         url: "componentes/catalogos/cargar_horarios_disponibles.php",
         type: 'POST',
         dataType: 'html',
-        data: { 'fecha_hora': fecha_cita, 'id_terapeuta': id_terapeuta },
+        data: { 'fecha_hora': fecha_cita, 'id_terapeuta': id_terapeuta, 'folio_gestion': folio_gestion, 'hora_gestion': hora_gestion },
     }).done(function (resultado) {
         //console.log(resultado)
         $("#hora_cita_form").html(resultado);
     })
 }
 function cargar_consultorios_disponibles() {
-    fecha_cita = $("#fecha_cita_form").val();
-    hora_cita = $("#hora_cita_form").val();
+    return new Promise(function (resolve, reject) {
+        fecha_cita = $("#fecha_cita_form").val();
+        hora_cita = $("#hora_cita_form").val();
 
-    $.ajax({
-        cache: false,
-        url: "componentes/catalogos/cargar_consultorios.php",
-        type: 'POST',
-        dataType: 'html',
-        data: { 'fecha_cita': fecha_cita, 'hora_cita': hora_cita },
-    }).done(function (resultado) {
-        //console.log(resultado)
-        $("#consultorio_form").html(resultado);
-    })
+        $.ajax({
+            cache: false,
+            url: "componentes/catalogos/cargar_consultorios.php",
+            type: 'POST',
+            dataType: 'html',
+            data: { 'fecha_cita': fecha_cita, 'hora_cita': hora_cita },
+        }).done(function (resultado) {
+            //console.log(resultado)
+            $("#consultorio_form").html(resultado);
+            resolve();
+        }).fail(function (jqXHR, textStatus, errorThrown) {
+            // En caso de error, rechazar la promesa con el error
+            console.error("Error al cargar los terapeutas: ", textStatus, errorThrown);
+            reject(textStatus);  // Rechazar la promesa en caso de error
+        })
+    });
 }
 
 function tipo_servicio() {
@@ -319,7 +339,6 @@ function mostrar_historial_citas() {
 
 function editar_cita(folio_cita) {
 
-    cargar_datos();
     $.ajax({
         cache: false,
         url: 'componentes/catalogos/cargar/cargar_datos_cita.php',
@@ -327,25 +346,42 @@ function editar_cita(folio_cita) {
         dataType: 'json',
         data: { 'id_folio': folio_cita },
     }).done(function (citaData) {
-        console.log(citaData);
-        
+        //console.log(citaData);
         const [fecha, hora] = citaData[0].fecha_agenda.split(' ');
 
-        $("#tipo_gestion").val(citaData[0].id_folio);
-        $("#cliente_form").val(citaData[0].nombre_cliente);
         $("#fecha_cita_form").val(fecha);
-        $("#terapeuta_form").val(citaData[0].id_terapeuta);
+        $("#hora_gestion").val(hora);
+        $("#folio_gestion").val(folio_cita);
+        $("#id_cliente2").val(citaData[0].id_cliente);
+        $("#cliente_form").val(citaData[0].nombre_cliente);
+
+        // Cargar datos del select antes de asignar el terapeuta
+        cargar_datos().then(function () {
+            $("#terapeuta_form").val(citaData[0].id_terapeuta);
+        }).catch(function (error) {
+            console.error("Ocurrió un error al cargar los terapeutas: ", error);
+        });
+        cargar_horarios_disponibles();
+
+        $("#hora_cita").val(hora);
+
+        $("#tipo_gestion").val(citaData[0].id_folio);
         $("#tipo_cita_form").val(citaData[0].tipo_cita);
         $("#tipo_servicio_form").val(citaData[0].tipo_servicio);
-        $("#consultorio_form").val(citaData[0].id_consultorio);
+
+        cargar_consultorios_disponibles().then(function () {
+            $("#consultorio_form").val(citaData[0].id_consultorio);
+        }).catch(function () {
+            console.error("Ocurrió un error al cargar los consultorios: ", error);
+        });
+
         $("#observaciones_form").val(citaData[0].observaciones);
         $("#fecha_hora_form").val(hora);
 
         $("#modal_nueva_cita").modal("show");
     });
-
-
 }
+
 
 function cancelar_cita(id_folio, nombre_cliente, nombre_terapeuta, nombre_consultorio) {
 

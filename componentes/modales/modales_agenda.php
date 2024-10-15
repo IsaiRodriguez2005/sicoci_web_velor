@@ -7,6 +7,8 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
+                <input type="hidden" id="folio_gestion">
+                <input type="hidden" id="hora_gestion">
             </div>
             <div class="modal-body">
                 <form id="form_nueva_cita">

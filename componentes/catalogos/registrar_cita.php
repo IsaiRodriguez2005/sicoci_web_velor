@@ -101,21 +101,23 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
             echo 1; // validacion de cliente y hora 
         }
     } else {
-
-
+        //print_r($_POST);
+        //$fecha = $_POST['fecha_cita'] . 'T' . $_POST['hora_cita'] . ':00' ;
+        //print_r($fecha);
         $sqlUpdate = "UPDATE emisores_agenda SET 
-                                    id_cliente=" . $_POST['id_cliente'] . ", 
-                                    id_consultorio=" . $_POST['id_consultorio'] . ", 
-                                    id_terapeuta=" . $_POST['id_terapeuta'] . ", 
-                                    tipo_servicio=" . $_POST['tipo_servicio'] . ", 
-                                    tipo_cita=" . $_POST['tipo_cita'] . ", 
-                                    fecha_agenda=" . $fecha_hora . ", 
-                                    observaciones=" . $_POST['observaciones'] . "
+                                    id_cliente=" . intval($_POST['id_cliente']) . ", 
+                                    id_consultorio=" . intval($_POST['id_consultorio']) . ", 
+                                    id_terapeuta=" . intval($_POST['id_terapeuta']) . ", 
+                                    tipo_servicio=" . intval($_POST['tipo_servicio']) . ", 
+                                    tipo_cita=" . intval($_POST['tipo_cita']) . ", 
+                                    fecha_agenda='" . $fecha_hora . "', 
+                                    observaciones='" . strtoupper($_POST['observaciones']) . "'
                                         WHERE 
-                                    id_emisor = " . $_SESSION['id_emisor'] . " 
+                                    id_emisor = " . intval($_SESSION['id_emisor']) . " 
                                         AND 
-                                    id_folio=" . $_POST['id_folio'];
-        mysqli_query($conexion, $sqlPermisos);
+                                    id_folio=" . intval($_POST['tipo_gestion']);
+                                    //echo $sqlUpdate;
+        mysqli_query($conexion, $sqlUpdate);
 
         if (mysqli_affected_rows($conexion) > 0) {
 
@@ -159,5 +161,6 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
                 $correo = enviarCorreo($datosTerap['correo'], $asunto, $mensaje);
             }
         }
+        echo 'actualizado';
     }
 }

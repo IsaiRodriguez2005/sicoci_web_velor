@@ -98,7 +98,13 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
         // de los horarios disponibles, vamos a recorrerlos todos y por cada uno , haremos un [spam] para mostrar la hora disponible
         foreach ($horariosDisponibles as $h) {
             $html_horarios_disponbles .= '';
-            $html_horarios_disponbles .= '<option value="' . $h . '" selected>' . $h . '</option>';
+            $html_horarios_disponbles .= '<option value="' . $h . '">' . $h . '</option>';
+        }
+
+        echo $_POST['folio_gestion'];
+        if(intval($_POST['folio_gestion']) != 0){
+            $horario = date('H:i', strtotime($_POST['hora_gestion']));
+            $html_horarios_disponbles .= '<option value="' . $horario . '" selected>' . $horario . '</option>';
         }
 
 
