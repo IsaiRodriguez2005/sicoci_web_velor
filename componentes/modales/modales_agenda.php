@@ -858,29 +858,29 @@
                             <div class="form-row">
                                 <div class="col-md-4 d-flex align-items-center">
                                     <label for="ta" class="mr-2">TA:</label>
-                                    <input type="text" class="form-control" id="tension_art" placeholder="Ingrese la tensión arterial">
+                                    <input type="text" class="form-control" id="tension_art" placeholder="Ingrese la tensión arterial" maxlength="10">
                                 </div>
                                 <div class="col-md-4 d-flex align-items-center">
                                     <label for="fc" class="mr-2">FC:</label>
-                                    <input type="number" class="form-control" id="fc" placeholder="Ingrese la frecuencia cardíaca">
+                                    <input type="text" class="form-control" id="fc" placeholder="Ingrese la frecuencia cardíaca" maxlength="10">
                                 </div>
                                 <div class="col-md-4 d-flex align-items-center">
                                     <label for="fr" class="mr-2">FR:</label>
-                                    <input type="number" class="form-control" id="fr" placeholder="Ingrese la frecuencia respiratoria">
+                                    <input type="text" class="form-control" id="fr" placeholder="Ingrese la frecuencia respiratoria" maxlength="10">
                                 </div>
                             </div>
                             <div class="form-row pt-2">
                                 <div class="col-md-4 d-flex align-items-center">
                                     <label for="satO2" class="mr-2">Sat. de O2:</label>
-                                    <input type="number" class="form-control" id="satO2" placeholder="Ingrese la saturación de oxígeno">
+                                    <input type="text" class="form-control" id="satO2" placeholder="Ingrese la saturación de oxígeno" maxlength="10">
                                 </div>
                                 <div class="col-md-4 d-flex align-items-center">
-                                    <label for="temp" class="mr-2">Temp:</label>
-                                    <input type="number" class="form-control" id="temp" placeholder="Ingrese la temperatura">
+                                    <label for="temp" class="mr-2">Temp:</label> 
+                                    <input type="text" class="form-control" id="temp" placeholder="Ingrese la temperatura" maxlength="10">
                                 </div>
                                 <div class="col-md-4 d-flex align-items-center">
                                     <label for="glucosa" class="mr-2">Glucosa:</label>
-                                    <input type="number" class="form-control" id="glucosa" placeholder="Ingrese el nivel de glucosa">
+                                    <input type="text" class="form-control" id="glucosa" placeholder="Ingrese el nivel de glucosa" maxlength="10">
                                 </div>
                             </div>
                         </div>

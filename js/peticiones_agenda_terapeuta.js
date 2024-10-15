@@ -36,11 +36,12 @@ function cargarOcupaciones() {
     });
 }
 
-function realizar_valoracion(id_folio, id_cliente,  nombre_cliente) {
+function realizar_valoracion(id_folio, id_cliente,  nombre_cliente, telefono) {
 
     $("#id_cliente_valoracion").val(id_cliente);
     $("#id_folio_cita").val(id_folio);
     $("#nombre_valoracion").val(nombre_cliente);
+    $("#telefono_valoracion").val(telefono);
 
     cargarOcupaciones();
 
@@ -120,7 +121,7 @@ function enviar_valoracion() {
                 showConfirmButton: false,
                 timer: 2000
             }).then(function () {
-                window.location = 'expedientes.php';
+                window.location = 'agenda.php';
             });
         }
         //$("#disponibilidad_terapeutas").html(resultado)
