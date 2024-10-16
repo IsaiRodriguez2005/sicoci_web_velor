@@ -18,7 +18,8 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
     $nuevo_social = str_replace($caracteres, $reemplazo, strtoupper($_POST['id_cliente']));
 
     $fecha_hora = $_POST['fecha_cita'] . 'T' . $_POST['hora_cita'];
-    if ($_POST['tipo_gestion'] == 0) {
+    //print_r($_POST);
+    if (!$_POST['tipo_gestion']) {
 
         // primera validacion, ¿hay alguna cita para el cliente mismo dia y misma hora?
         $hay_cita = "SELECT * FROM emisores_agenda WHERE id_cliente = " . intval($_POST['id_cliente']) . " AND fecha_agenda = '" . $fecha_hora . "'";

@@ -20,6 +20,7 @@
         if($_POST['nombre_ocupacion'])
         {
 
+            
             $selectMAX = "SELECT COALESCE(MAX(id_ocupacion),0) AS no_registro FROM emisores_ocupaciones WHERE id_emisor = ".$_SESSION['id_emisor'];
             $resMAX = mysqli_query($conexion, $selectMAX);
             $max = mysqli_fetch_array($resMAX);

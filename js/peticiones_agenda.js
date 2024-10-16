@@ -483,3 +483,22 @@ function disponibilidad_terapeutas() {
     });
 
 }
+
+
+function enfermedades_form(){
+
+    diabetes = $("#diabetes").prop('checked');
+    hta = $("#hta").prop('checked');
+    cancer = $("#cancer").prop('checked');
+    enfermedades_reumaticas = $("#enfermedades_reumaticas").prop('checked');
+    cardiopatias = $("#cardiopatias").prop('checked');
+    cirugias = $("#cirugias").prop('checked');
+    alergias = $("#alergias").prop('checked');
+    transfusiones = $("#transfusiones").prop('checked');
+    otros = $("#otros").prop('checked');
+
+    if(diabetes){
+        
+    }
+
+}

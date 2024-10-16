@@ -2,14 +2,14 @@ function isRequired(idInput) {
     var variable = $("#" + idInput).val();
 
     if (!variable || Number(variable) == 0 || variable.length == 0) {
-
         $("#" + idInput).addClass('is-invalid');
-
+        return false; // Retornar 'false' si falla la validación
     } else {
-
-        return variable;
+        $("#" + idInput).removeClass('is-invalid'); // Remover la clase si es válido
+        return variable; // Retornar el valor válido
     }
 }
+
 
 function pantallaCarga( texto ){
     Swal.fire({
@@ -49,7 +49,6 @@ function realizar_valoracion(id_folio, id_cliente,  nombre_cliente, telefono) {
 }
 
 function enviar_valoracion() {
-
     var id_cliente = $("#id_cliente_valoracion").val();
     var id_folio = $("#id_folio_cita").val();
 
@@ -63,27 +62,34 @@ function enviar_valoracion() {
         genero = 'F';
     }
 
+    // Validaciones de los campos obligatorios
     var edad = isRequired('edad_valoracion');
     var ocupacion = isRequired('ocupacion_valoracion');
-    var domicilio = $("#domicilio_valoracion").val();
     var telefono = isRequired('telefono_valoracion');
-    var estado_civil = $("#estado_civil_valoracion").val();
     var toximanias = isRequired('toximanias_valoracion');
     var motivo_consulta = isRequired('motivo_consulta_valoracion');
     var act_fisica = isRequired('act_fisica_valoracion');
+    var farmacos = isRequired('farmacos');
+    var escalaDolor = isRequired('escalaDolor');
+
+    // Si alguna de las validaciones falla, detener la ejecución
+    if (!edad || !ocupacion || !telefono || !toximanias || !motivo_consulta || !act_fisica || !farmacos || !escalaDolor) {
+        alert("Faltan campos obligatorios.");
+        return; // Detener la función si hay algún campo inválido
+    }
+
+    var domicilio = $("#domicilio_valoracion").val();
+    var estado_civil = $("#estado_civil_valoracion").val();
     var ta = $("#tension_art").val();
     var fc = $("#fc").val();
     var fr = $("#fr").val();
     var satO2 = $("#satO2").val();
     var temp = $("#temp").val();
     var glucosa = $("#glucosa").val();
-    var farmacos = isRequired('farmacos');
     var diagnosticoMedico = $("#diagnosticoMedico").val();
-    var escalaDolor = isRequired('escalaDolor');
 
-    if(edad && ocupacion && telefono && toximanias && motivo_consulta && act_fisica && farmacos && escalaDolor ){
-        pantallaCarga('Registrando cita...');
-    }
+    // Si todas las validaciones son correctas, mostrar pantalla de carga y realizar la petición
+    pantallaCarga('Guardando valoracion...');
 
     $.ajax({
         cache: false,
@@ -113,22 +119,22 @@ function enviar_valoracion() {
             'escalaDolor': escalaDolor,
         },
     }).done(function (resultado) {
-        console.log(resultado)
-        if(resultado == 'ok'){
+        console.log(resultado);
+        if (resultado == 'ok') {
             Swal.fire({
                 icon: "success",
-                title: "Valoación Enviada",
+                title: "Valoración Enviada",
                 showConfirmButton: false,
                 timer: 2000
             }).then(function () {
                 window.location = 'agenda.php';
             });
         }
-        //$("#disponibilidad_terapeutas").html(resultado)
         $("#modal_valoracion").modal("hide");
         Swal.close();
     });
-}   
+}
+
 
 
 function gestionar_ocupacion( modal_show = '', modal_hide = '' )
