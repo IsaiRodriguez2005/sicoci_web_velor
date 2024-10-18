@@ -11,7 +11,7 @@ function isRequired(idInput) {
 }
 
 
-function pantallaCarga( texto ){
+function pantallaCarga(texto) {
     Swal.fire({
         title: texto,
         allowEscapeKey: false,
@@ -25,7 +25,6 @@ function pantallaCarga( texto ){
 function cargarOcupaciones() {
     $.ajax({
         cache: false,
-
         url: "componentes/catalogos/cargar/cargar_ocupaciones.php",
         type: 'POST',
         dataType: 'html',
@@ -36,7 +35,60 @@ function cargarOcupaciones() {
     });
 }
 
-function realizar_valoracion(id_folio, id_cliente,  nombre_cliente, telefono) {
+function cargarEnfermedades() {
+    $.ajax({
+        cache: false,
+        url: "componentes/catalogos/cargar/cargar_enfermedades.php",
+        type: 'POST',
+        dataType: 'html',
+        data: {},
+    }).done(function (resultado) {
+        //console.log(resultado)
+        $("#enfermedades").html(resultado);
+    });
+}
+
+function cargar_datos_tabla_enfermedades() {
+
+    let id_folio = $("#id_folio_cita").val();
+
+    $.ajax({
+        cache: false,
+        url: "componentes/catalogos/cargar/cargar_datos_enfermedades.php",
+        type: 'POST',
+        dataType: 'html',
+        data: { 'id_folio_cita': id_folio },
+    }).done(function (resultado) {
+        //console.log(resultado);
+        $("#form_enfermedad").html(resultado);
+    });
+}
+function eliminar_enfermedad_valoracion(id_folio, id_enfermedad){
+    pantallaCarga('Eliminando Enfermedad');
+    $.ajax({
+        cache: false,
+        url: "componentes/catalogos/eliminar/eliminar_enfermedad_valoracion.php",
+        type: 'POST',
+        dataType: 'html',
+        data: { 'id_folio': id_folio, 'id_enfermedad': id_enfermedad },
+    }).done(function (resultado) {
+        console.log(resultado);
+        if (resultado == 'ok') {
+            Swal.fire({
+                icon: "success",
+                title: "Enfermedad eliminada",
+                showConfirmButton: false,
+                timer: 2000
+            });
+            cargar_datos_tabla_enfermedades();
+            Swal.close();
+        } else {
+            alert('No se pudo borrar la enfermedad');
+        }
+    });
+}
+
+function realizar_valoracion(id_folio, id_cliente, nombre_cliente, telefono) {
 
     $("#id_cliente_valoracion").val(id_cliente);
     $("#id_folio_cita").val(id_folio);
@@ -44,6 +96,8 @@ function realizar_valoracion(id_folio, id_cliente,  nombre_cliente, telefono) {
     $("#telefono_valoracion").val(telefono);
 
     cargarOcupaciones();
+    cargarEnfermedades();
+    cargar_datos_tabla_enfermedades()
 
     $('#modal_valoracion').modal('show');
 }
@@ -137,53 +191,123 @@ function enviar_valoracion() {
 
 
 
-function gestionar_ocupacion( modal_show = '', modal_hide = '' )
-{
-    pantallaCarga('Registrando Ocupación...');
-
-
+function gestionar_ocupacion(modal_show = '', modal_hide = '') {
     var nombre_ocupacion = isRequired('nombre_ocupacion');
+    if (nombre_ocupacion) {
+        pantallaCarga('Registrando Ocupación...');
+        $.ajax({
+            cache: false,
+            url: "componentes/catalogos/registrar/registrar_ocupacion.php",
+            type: 'POST',
+            dataType: 'html',
+            data: { 'nombre_ocupacion': nombre_ocupacion },
+        }).done(function (resultado) {
+            console.log(resultado)
+            if (resultado == "ok") {
+                Swal.fire({
+                    icon: "success",
+                    title: "Ocupación Registrada",
+                    html: "La informaci&oacute;n se registro exitosamente",
+                    showConfirmButton: false,
+                    timer: 2000
+                }).then(function () {
+
+                    if (modal_show && modal_hide) {
+
+                        cargarOcupaciones();
+
+                        $('#' + modal_hide).modal('hide');
+                        $("#" + modal_show).modal("show");
+
+                    }
+                });
+            }
+            else {
+                Swal.fire({
+                    icon: "warning",
+                    title: "Ocupación No Registrado",
+                    html: "La informaci&oacute;n no se logro registrar",
+                    showConfirmButton: false,
+                    timer: 2000
+                });
+            }
+        });
+    }
+}
+function gestionar_enfermedad(modal_show = '', modal_hide = '') {
+    var nombre_enfermedad = isRequired('nombre_enfermedad');
+
+    if (nombre_enfermedad) {
+
+        pantallaCarga('Registrando Enfermedad...');
+
+        $.ajax({
+            cache: false,
+            url: "componentes/catalogos/registrar/registrar_enfermedad.php",
+            type: 'POST',
+            dataType: 'html',
+            data: { 'nombre_enfermedad': nombre_enfermedad },
+        }).done(function (resultado) {
+            console.log(resultado)
+            if (resultado == "ok") {
+                Swal.fire({
+                    icon: "success",
+                    title: "Enfermedad Registrada",
+                    html: "La informaci&oacute;n se registro exitosamente",
+                    showConfirmButton: false,
+                    timer: 2000
+                }).then(function () {
+
+                    if (modal_show && modal_hide) {
+
+                        cargarOcupaciones();
+
+                        $('#' + modal_hide).modal('hide');
+                        $("#" + modal_show).modal("show");
+
+                    }
+                });
+            }
+            else {
+                Swal.fire({
+                    icon: "warning",
+                    title: "Enfermedad No Registrado",
+                    html: "La informaci&oacute;n no se logro registrar",
+                    showConfirmButton: false,
+                    timer: 2000
+                });
+            }
+        });
+    }
+}
+
+function agregarEnfermedadValoracion() {
+
+    let id_folio = $("#id_folio_cita").val();
+    let enfermedad = isRequired('enfermedades');
+    let tiempo = isRequired('tiempo_enfermedad');
+    let toma_medicamento = isRequired('toma_medicamento');
 
     $.ajax({
         cache: false,
-        url : "componentes/catalogos/registrar/registrar_ocupacion.php",
-        type : 'POST',
-        dataType : 'html',
-        data : { 'nombre_ocupacion': nombre_ocupacion},
-    }).done(function(resultado){
-        console.log(resultado)
-        if(resultado == "ok")
-        {
-            Swal.fire({
-                icon: "success",
-                title: "Consultorio Registrado",
-                html: "La informaci&oacute;n se registro exitosamente",
-                showConfirmButton: false,
-                timer: 2000
-            }).then(function() {
-
-                if(modal_show && modal_hide){
-
-                    cargarOcupaciones();
-
-                    $('#' + modal_hide).modal('hide');
-                    $("#" + modal_show).modal("show");
-
-                }
-            });
-        }
-        else
-        {
-            Swal.fire({
-                icon: "warning",
-                title: "Consultorio No Registrado",
-                html: "La informaci&oacute;n no se logro registrar",
-                showConfirmButton: false,
-                timer: 2000
-            });
+        url: "componentes/catalogos/registrar/registrar_datos_enfermedades.php",
+        type: 'POST',
+        dataType: 'html',
+        data: { 'id_folio_cita': id_folio, 'id_enfermedad': enfermedad, 'tiempo': tiempo, 'toma_medicamento': toma_medicamento, },
+    }).done(function (resultado) {
+        console.log(resultado);
+        if (resultado == 'ok') {
+            
+            cargar_datos_tabla_enfermedades();
+        } else {
+            alert('Esta enfermedad ya la has agregado');
         }
     });
+
 }
+
+
+
 
 
 
