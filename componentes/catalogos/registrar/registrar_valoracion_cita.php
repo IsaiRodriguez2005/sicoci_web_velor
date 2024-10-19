@@ -14,7 +14,6 @@
     }
     else
     {
-        
         if($_POST['id_cliente'] != 0)
         {
 
@@ -89,21 +88,6 @@
                 echo "existe";
             }
         }
-        else
-        {
-            $updateCliente = "UPDATE emisores_personal SET nombre_personal='".strtoupper($_POST['nombre_personal'])."', tipo='".$_POST['tipo_personal']."', calle='".strtoupper($_POST['calle'])."', no_exterior='".strtoupper($_POST['no_exterior'])."', no_interior='".strtoupper($_POST['no_interior'])."', codigo_postal='".strtoupper($_POST['codigo_postal'])."', colonia='".strtoupper($_POST['colonia'])."', municipio='".strtoupper($_POST['municipio'])."', estado='".strtoupper($_POST['estado'])."', pais='".strtoupper($_POST['pais'])."', correo='".strtolower($_POST['correo'])."', telefono='".strtolower($_POST['telefono'])."' WHERE id_personal=".$_POST['id_personal']." AND id_emisor=".$_SESSION['id_emisor'];
-            $resultado = mysqli_query($conexion, $updateCliente);
-            if($resultado)
-            {
-                echo "actualizado";
-            }
-            else
-            {
-                echo "error";
-            }
-        }
-
-
     }
 
 ?>

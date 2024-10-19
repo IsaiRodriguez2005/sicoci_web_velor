@@ -756,12 +756,20 @@
                     <div class="card-body">
                         <!-- Aquí va el contenido de las observaciones -->
                         <div class="form-group">
+                            <label for="motivo_consulta_valoracion">Motivo de consulta:</label>
+                            <textarea class="form-control" id="motivo_consulta_valoracion" rows="3" placeholder="Motivo de consulta..." onfocus="resetear('motivo_consulta_valoracion')"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="act_fisica_valoracion">Actividad física:</label>
+                            <input type="text" class="form-control" id="act_fisica_valoracion" placeholder="Toximanias" onfocus="resetear('act_fisica_valoracion')">
+                        </div>
+                        <div class="form-group">
                             <label for="toximanias_valoracion">Toxicomanías:</label>
-                            <input type="text" class="form-control" id="toximanias_valoracion" placeholder="Toximanias">
+                            <input type="text" class="form-control" id="toximanias_valoracion" placeholder="Toximanias" onfocus="resetear('toximanias_valoracion')">
                         </div>
                         <div class="form-group">
                             <label for="farmacos">Fármacos:</label>
-                            <textarea class="form-control" id="farmacos" rows="2" placeholder="Ejemplo: Diclofenaco inyectado"></textarea>
+                            <textarea class="form-control" id="farmacos" rows="2" placeholder="Ejemplo: Diclofenaco inyectado" onfocus="resetear('farmacos')"></textarea>
                         </div>
                         <div class="form-group">
                             <label for="diagnosticoMedico">Diagnóstico Médico:</label>
@@ -769,7 +777,11 @@
                         </div>
                         <div class="form-group">
                             <label for="escalaDolor">Escala de Dolor EVA:</label>
-                            <div class="d-flex align-items-center">
+                            <div class="text-danger d-flex align-items-center" id="escaDolMessage">
+
+                            </div>
+
+                            <div class="d-flex align-items-center ">
                                 <input type="range" class="custom-range ml-2" min="0" max="10" id="escalaDolor" value="0" oninput="updateValue(this.value)">
                                 <span id="escalaValor" class="ml-2">0</span>
                             </div>
@@ -779,60 +791,56 @@
 
                 <!-- Enfermedades Tab -->
                 <div class="tab-pane fade" id="custom-tabs-one-enf" role="tabpanel" aria-labelledby="custom-tabs-one-enf-tab">
-                    <div class="col-md-8 mt-4 mb-4 mx-auto">
+                    <div class="col-md-12 mt-4 mb-4 mx-auto">
                         <div class="card shadow-sm">
-                            <div class="card-body">
-                                <!-- Contenedor centrado sin text-center para alinear correctamente -->
-                                <label for="ocupacion_valoracion" class="font-weight-bold">Enfermedades:</label>
+                            <div class="card-body d-flex align-items-center justify-content-between">
+                                <!-- Contenedor para la etiqueta y el select de enfermedades -->
+                                <div class="d-flex col-md-4">
+                                    <div>
+                                        <label for="enfermedades" class="font-weight-bold mr-2">Enfermedades:</label>
+                                        <select class="form-control mr-2" id="enfermedades" onfocus="resetear('enfermedades')"></select>
+                                    </div>
+                                    <div class="d-flex align-items-end ml-2">
+                                        <button type="button" class="btn btn-info" onclick="abrir_modal('modal_valoracion', 'modal_nueva_enfermedad')">
+                                            <i class="fas fa-plus-circle"></i>
+                                        </button>
+                                    </div>
 
-                                <div class="d-flex justify-content-between mb-3">
-                                    <!-- Centrar el select y botón -->
-                                    <select class="form-control col-md-9" id="enfermedades" onfocus="resetear('enfermedades')">
+                                </div>
 
+                                <!-- Tiempo con la enfermedad -->
+                                <div class="col-md-3">
+                                    <label for="tiempo_enfermedad" class="font-weight-bold">Tiempo con la enfermedad:</label>
+                                    <input type="text" class="form-control" id="tiempo_enfermedad" placeholder="Ingrese el tiempo con la enfermedad" onfocus="resetear('tiempo_enfermedad')">
+                                </div>
+
+                                <!-- Selección de toma de medicamentos -->
+                                <div class="col-md-3">
+                                    <label for="toma_medicamento" class="font-weight-bold">¿Toma algún medicamento?</label>
+                                    <select class="form-control" id="toma_medicamento" onfocus="resetear('toma_medicamento')">
+                                        <option value="" selected disabled>Selecciona una opción</option>
+                                        <option value="NO">No</option>
+                                        <option value="SI">Sí</option>
                                     </select>
-                                    <button type="button" class="btn btn-info ml-3" onclick="abrir_modal('modal_valoracion', 'modal_nueva_enfermedad')">
-                                        <i class="fas fa-plus-circle"></i>
-                                    </button>
                                 </div>
 
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <label for="tiempo_enfermedad" class="font-weight-bold">Tiempo con la enfermedad:</label>
-                                        <input type="text" class="form-control" id="tiempo_enfermedad" placeholder="Ingrese el tiempo con la enfermedad" onfocus="resetear('tiempo_enfermedad')">
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        <label for="toma_medicamento" class="font-weight-bold">¿Toma algún medicamento?</label>
-                                        <select class="form-control" id="toma_medicamento" onfocus="resetear('tiempo_enfermedad')">
-
-                                            <option value="" selected disabled>Selecciona una Opcion</option>
-                                            <option value="NO">No</option>
-                                            <option value="SI">Sí</option>
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <!-- Medicamentos, solo se muestra si selecciona " Sí" -->
-                                    <div id="medicamento_section" style="display: none;" class="mt-4">
-                                        <label for="nombre_medicamento" class="font-weight-bold">Medicamento(s):</label>
-                                        <input type="text" class="form-control" id="nombre_medicamento" placeholder="Ingrese los medicamentos">
-                                    </div>
-
-                                    <!-- Botón Agregar -->
-                                    <div class="text-right mt-4">
+                                <!-- Botón Agregar -->
+                                <div class="d-flex align-items-end">
+                                    <div class="col-md-2 text-right">
                                         <button type="button" class="btn btn-success" onclick="agregarEnfermedadValoracion()">Agregar</button>
                                     </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <!-- Contenedor de los formularios de enfermedades -->
+                        <div class="col-md-12 mx-auto pb-4">
+                            <div id="form_enfermedad" class="col-md-auto mx-auto">
+                                <!-- Aquí se apilarán los formularios dinámicamente -->
                             </div>
                         </div>
                     </div>
-                    <!-- Contenedor de los formularios de enfermedades -->
-                    <div class="col-md-10 mx-auto pb-4">
-                        <div id="form_enfermedad" class="col-md-auto mx-auto">
-                            <!-- Aquí se apilarán los formularios dinámicamente -->
-                        </div>
-                    </div>
                 </div>
-
 
                 <!-- Signos Vitales Tab -->
                 <div class="tab-pane fade" id="custom-tabs-one-sv" role="tabpanel" aria-labelledby="custom-tabs-one-sv-tab">
@@ -842,13 +850,24 @@
                             <label for="ta">Signos Vitales:</label>
                             <div class="form-row">
                                 <div class="col-md-4">
-                                    <input type="text" class="form-control" id="tension_art" placeholder="TA">
+                                    <input type="text" class="form-control" id="tension_art" placeholder="Tención Arterial">
                                 </div>
                                 <div class="col-md-4">
                                     <input type="text" class="form-control" id="fc" placeholder="FC">
                                 </div>
                                 <div class="col-md-4">
                                     <input type="text" class="form-control" id="fr" placeholder="FR">
+                                </div>
+                            </div>
+                            <div class="form-row mt-3">
+                                <div class="col-md-4">
+                                    <input type="text" class="form-control" id="oxigeno" placeholder="Saturación de O2">
+                                </div>
+                                <div class="col-md-4">
+                                    <input type="text" class="form-control" id="temperatura" placeholder="Temperatura">
+                                </div>
+                                <div class="col-md-4">
+                                    <input type="text" class="form-control" id="glucosa" placeholder="Glucosa">
                                 </div>
                             </div>
                             <!-- Agrega más campos aquí -->
@@ -866,6 +885,7 @@
 </div>
 <script>
     function updateValue(val) {
+        $("#escaDolMessage").html('');
         document.getElementById('escalaValor').innerText = val;
     }
 </script>

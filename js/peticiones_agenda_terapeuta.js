@@ -63,7 +63,7 @@ function cargar_datos_tabla_enfermedades() {
         $("#form_enfermedad").html(resultado);
     });
 }
-function eliminar_enfermedad_valoracion(id_folio, id_enfermedad){
+function eliminar_enfermedad_valoracion(id_folio, id_enfermedad) {
     pantallaCarga('Eliminando Enfermedad');
     $.ajax({
         cache: false,
@@ -72,7 +72,7 @@ function eliminar_enfermedad_valoracion(id_folio, id_enfermedad){
         dataType: 'html',
         data: { 'id_folio': id_folio, 'id_enfermedad': id_enfermedad },
     }).done(function (resultado) {
-        console.log(resultado);
+        //console.log(resultado);
         if (resultado == 'ok') {
             Swal.fire({
                 icon: "success",
@@ -105,40 +105,56 @@ function realizar_valoracion(id_folio, id_cliente, nombre_cliente, telefono) {
 function enviar_valoracion() {
     var id_cliente = $("#id_cliente_valoracion").val();
     var id_folio = $("#id_folio_cita").val();
-
-    var masculino = $("#masculino_valoracion").is(':checked');
-    var femenino = $("#femenino_valoracion").is(':checked');
-
-    var genero = '';
-    if (masculino && !femenino) {
-        genero = 'M';
-    } else {
-        genero = 'F';
-    }
-
     // Validaciones de los campos obligatorios
     var edad = isRequired('edad_valoracion');
     var ocupacion = isRequired('ocupacion_valoracion');
     var telefono = isRequired('telefono_valoracion');
-    var toximanias = isRequired('toximanias_valoracion');
+    //var toximanias = isRequired('toximanias_valoracion');
     var motivo_consulta = isRequired('motivo_consulta_valoracion');
     var act_fisica = isRequired('act_fisica_valoracion');
     var farmacos = isRequired('farmacos');
-    var escalaDolor = isRequired('escalaDolor');
+    var escalaDolor = $("#escalaDolor").val();
+    if (!escalaDolor || escalaDolor == '0') {
+        $("#escaDolMessage").html('Campo obligatorio')
+    }
+
 
     // Si alguna de las validaciones falla, detener la ejecución
+    /*
     if (!edad || !ocupacion || !telefono || !toximanias || !motivo_consulta || !act_fisica || !farmacos || !escalaDolor) {
         alert("Faltan campos obligatorios.");
         return; // Detener la función si hay algún campo inválido
     }
+        */
+    // Si alguna de las validaciones falla, detener la ejecución
+    if (!edad || !ocupacion || !telefono || !motivo_consulta || !act_fisica || !farmacos || !escalaDolor) {
+        let camposFaltantes = [];
 
-    var domicilio = $("#domicilio_valoracion").val();
+        if (!edad) camposFaltantes.push("Edad");
+        if (!ocupacion) camposFaltantes.push("Ocupación");
+        if (!telefono) camposFaltantes.push("Teléfono");
+        if (!motivo_consulta) camposFaltantes.push("Motivo de consulta");
+        if (!act_fisica) camposFaltantes.push("Actividad física");
+        if (!farmacos) camposFaltantes.push("Fármacos");
+        if (!escalaDolor) camposFaltantes.push("Escala de dolor");
+
+        Swal.fire({
+            icon: "warning",
+            title: "Por favor, complete los siguientes campos obligatorios:",
+            html: camposFaltantes.join(", "),
+            showConfirmButton: true,
+        });
+        return; // Detener la función si hay algún campo inválido
+    }
+
+
+    var toximanias = $("#toximanias_valoracion").val();
     var estado_civil = $("#estado_civil_valoracion").val();
     var ta = $("#tension_art").val();
     var fc = $("#fc").val();
     var fr = $("#fr").val();
-    var satO2 = $("#satO2").val();
-    var temp = $("#temp").val();
+    var satO2 = $("#oxigeno").val();
+    var temp = $("#temperatura").val();
     var glucosa = $("#glucosa").val();
     var diagnosticoMedico = $("#diagnosticoMedico").val();
 
@@ -153,10 +169,8 @@ function enviar_valoracion() {
         data: {
             'id_cliente': id_cliente,
             'id_folio': id_folio,
-            'genero': genero,
             'edad': edad,
             'id_ocupacion': ocupacion,
-            'domicilio': domicilio,
             'telefono': telefono,
             'estado_civil': estado_civil,
             'toximanias': toximanias,
@@ -189,8 +203,6 @@ function enviar_valoracion() {
     });
 }
 
-
-
 function gestionar_ocupacion(modal_show = '', modal_hide = '') {
     var nombre_ocupacion = isRequired('nombre_ocupacion');
     if (nombre_ocupacion) {
@@ -202,7 +214,7 @@ function gestionar_ocupacion(modal_show = '', modal_hide = '') {
             dataType: 'html',
             data: { 'nombre_ocupacion': nombre_ocupacion },
         }).done(function (resultado) {
-            console.log(resultado)
+            //console.log(resultado)
             if (resultado == "ok") {
                 Swal.fire({
                     icon: "success",
@@ -221,6 +233,13 @@ function gestionar_ocupacion(modal_show = '', modal_hide = '') {
 
                     }
                 });
+            } else if( resultado == 'ex'){
+                Swal.fire({
+                    icon: "warning",
+                    title: "La Ocupación Ya Existe",
+                    showConfirmButton: false,
+                    timer: 2000
+                });
             }
             else {
                 Swal.fire({
@@ -234,13 +253,11 @@ function gestionar_ocupacion(modal_show = '', modal_hide = '') {
         });
     }
 }
+
 function gestionar_enfermedad(modal_show = '', modal_hide = '') {
     var nombre_enfermedad = isRequired('nombre_enfermedad');
-
     if (nombre_enfermedad) {
-
         pantallaCarga('Registrando Enfermedad...');
-
         $.ajax({
             cache: false,
             url: "componentes/catalogos/registrar/registrar_enfermedad.php",
@@ -248,27 +265,29 @@ function gestionar_enfermedad(modal_show = '', modal_hide = '') {
             dataType: 'html',
             data: { 'nombre_enfermedad': nombre_enfermedad },
         }).done(function (resultado) {
-            console.log(resultado)
+            //console.log(resultado)
             if (resultado == "ok") {
                 Swal.fire({
                     icon: "success",
-                    title: "Enfermedad Registrada",
+                    title: "La Enfermedad Registrada",
                     html: "La informaci&oacute;n se registro exitosamente",
                     showConfirmButton: false,
                     timer: 2000
                 }).then(function () {
-
                     if (modal_show && modal_hide) {
-
-                        cargarOcupaciones();
-
+                        cargarEnfermedades();
                         $('#' + modal_hide).modal('hide');
                         $("#" + modal_show).modal("show");
-
                     }
                 });
-            }
-            else {
+            } else if (resultado == 'ex') {
+                Swal.fire({
+                    icon: "warning",
+                    title: "Enfermedad Ya Existe",
+                    showConfirmButton: false,
+                    timer: 2000
+                });
+            } else {
                 Swal.fire({
                     icon: "warning",
                     title: "Enfermedad No Registrado",
@@ -287,6 +306,14 @@ function agregarEnfermedadValoracion() {
     let enfermedad = isRequired('enfermedades');
     let tiempo = isRequired('tiempo_enfermedad');
     let toma_medicamento = isRequired('toma_medicamento');
+    if (!enfermedad|| !tiempo || !toma_medicamento){
+        Swal.fire({
+            icon: "warning",
+            title: "Por favor, complete los campos obligatorios",
+            showConfirmButton: true,
+        });
+        return; 
+    }
 
     $.ajax({
         cache: false,
@@ -295,12 +322,16 @@ function agregarEnfermedadValoracion() {
         dataType: 'html',
         data: { 'id_folio_cita': id_folio, 'id_enfermedad': enfermedad, 'tiempo': tiempo, 'toma_medicamento': toma_medicamento, },
     }).done(function (resultado) {
-        console.log(resultado);
+        //console.log(resultado);
         if (resultado == 'ok') {
-            
             cargar_datos_tabla_enfermedades();
         } else {
-            alert('Esta enfermedad ya la has agregado');
+            Swal.fire({
+                icon: "warning",
+                title: 'Esta enfermedad ya la has agregado',
+                showConfirmButton: false,
+                timer: 2000
+            });
         }
     });
 
