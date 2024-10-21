@@ -41,9 +41,7 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
             $mensaje = '
             Que tal ' . strtoupper($_POST['nombre']) . '<br><br>
             Cosera te da la bienvenida y hacemos de tu conocimiento que el administrador de la empresa ' . strtoupper($_SESSION['nombre_comercial']) . ' te ha registrado como un nuevo usuario del sistema por lo que te compartimos tus datos de acceso:<br>
-            <b>Nombre de usuario:</b> ' . $razon_social . '<br>
-            <b>Enlace:</b> https://www.velor.mx/cosera/<br>
-            <b>Nombre Usuario:</b> ' . strtoupper($_POST['nombre']) . '<br><br>
+            <b>Enlace:</b> https://www.velor.mx/cosera/<br><br>
             <b>Usuario:</b> ' . $_POST['correo'] . '<br>
             <b>Contrase&ntilde;a:</b> ' . $_POST['password'] . '<br>
             <b>Pin:</b> ' . $_SESSION['id_emisor'] . '<br><br>

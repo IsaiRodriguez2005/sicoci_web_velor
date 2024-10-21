@@ -318,12 +318,7 @@ function estuturaCorreoHTML($mensaje)
                                                             <tr>
                                                                 <td class="pad"
                                                                     style="padding-bottom:10px;padding-left:40px;padding-right:40px;padding-top:10px;">
-                                                                    <div
-                                                                        style="color:#555555;font-family:Montserrat, Trebuchet MS, Lucida Grande, Lucida Sans Unicode, Lucida Sans, Tahoma, sans-serif;font-size:30px;line-height:120%;text-align:center;mso-line-height-alt:36px;">
-                                                                        <p style="margin: 0; word-break: break-word;"><span
-                                                                                style="word-break: break-word; color: #2b303a;"><strong>Verify
-                                                                                    Your Email Account</strong></span></p>
-                                                                    </div>
+                                                                    
                                                                 </td>
                                                             </tr>
                                                         </table>
