@@ -160,7 +160,7 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
                             ";
         } else {
             $acciones = "
-                            <button type='button' id='btn_rea_" . $citas['id_folio'] . "' class='btn btn-success btn-sm' " . $boton_cancelar . " ".$valoracion." title='Cita Realizada' onclick='realizar_valoracion(" . $citas['id_folio'] . ", " . $citas['id_cliente'] . ", &quot;" . $citas['nombre_cliente'] . "&quot;, &quot;".$citas['telefono_cliente']." &quot;)'>
+                            <button type='button' id='btn_rea_" . $citas['id_folio'] . "' class='btn btn-success btn-sm' " . $boton_cancelar . " ".$valoracion." title='Realizar Valoracion' onclick='realizar_valoracion(" . $citas['id_folio'] . ", " . $citas['id_cliente'] . ", &quot;" . $citas['nombre_cliente'] . "&quot;, &quot;".$citas['telefono_cliente']." &quot;)'>
                                 <i class='fas fa-check'></i>
                             </button>
             ";

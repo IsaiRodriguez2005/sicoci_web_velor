@@ -25,9 +25,10 @@
             $max = mysqli_fetch_array($resMAX);
             $ultimo = $max['no_registro'] + 1;
 
-            
+            //print_r($_POST);
             $valorcionSQL = "INSERT INTO emisores_historial_expediente (`folio`, 
                                                                             `id_emisor`, 
+                                                                            `id_folio_cita`, 
                                                                             `fecha_emision`, 
                                                                             `id_cliente`, 
                                                                             `edad`, 
@@ -48,6 +49,7 @@
                                                                             VALUES (
                                                                             $ultimo, 
                                                                             ".intval($_SESSION['id_emisor']).",
+                                                                            ".intval($_POST['id_folio']).",
                                                                             '".$fecha."',
                                                                             ".intval($_POST['id_cliente']).",
                                                                             ".intval($_POST['edad']).",
@@ -66,6 +68,7 @@
                                                                             '".strtoupper($_POST['diagnostico_medico'])."',
                                                                             ".intval($_POST['escalaDolor'])."
                                                                                 );";
+            //print_r($valorcionSQL);
             $resValoracion = mysqli_query($conexion, $valorcionSQL);
             
 
