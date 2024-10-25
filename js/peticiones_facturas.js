@@ -699,9 +699,9 @@ function check_caracter(e)
 
 function ver_pdf(id_documento, folio_factura, serie_factura)
 {
-    //var ruta = "componentes/ver_factura.php?id_liquidacion=" + folio + "&id_folios=" + id_folios;
-    //$("#folio_liq").html(serie + " " + folio);
-    //$("#ruta_pdf").prop("src", ruta);
+    //var ruta = "ver_factura.php?id_documento=" + id_documento + "&folio_factura=" + folio_factura + "&serie_factura=" + serie_factura + "";
+    var ruta = "ver_factura.php?id_documento=" + id_documento;
+    $("#ruta_pdf").prop("src", ruta);
     $("#pdf_ffactura").html(serie_factura + " " + folio_factura);
     $("#ver_pdf_factura").modal("show");
 }

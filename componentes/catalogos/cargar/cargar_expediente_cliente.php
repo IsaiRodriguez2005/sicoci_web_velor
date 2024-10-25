@@ -92,6 +92,9 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
                                 <!--<i class='fas fa-file'></i>-->
                                 <i class='far fa-file'></i>
                             </button>
+                            <button type='button' id='btn_pdf_".$expediente['folio']."' class='btn btn-primary btn-sm' title='Ver PDF' onclick='ver_pdf(".$expediente['folio'].")' >
+                                <i class='fas fa-copy'></i>
+                            </button>
             ";
         }
 

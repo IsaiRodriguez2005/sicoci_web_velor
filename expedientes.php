@@ -448,7 +448,7 @@ if (!isset($_SESSION['nombre_usuario'])) {
                                     <div class="form-group">
                                         <label for="escalaDolor">Escala de Dolor EVA:</label>
                                         <div class="d-flex align-items-center">
-                                            <input type="range" class="custom-range ml-2" min="0" max="10" id="escalaDolor" value="0" >
+                                            <input type="range" class="custom-range ml-2" min="0" max="10" id="escalaDolor" value="0">
                                             <span id="escalaValor" class="ml-2">0</span> <!-- Elemento para mostrar el valor -->
                                         </div>
                                     </div>
@@ -462,7 +462,22 @@ if (!isset($_SESSION['nombre_usuario'])) {
                     </div>
                 </div>
             </div>
-            <!-- Modal Valoracion Cita -->
+            <div class="modal fade" id="ver_pdf_factura" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" style="overflow-y: scroll;">
+                <div class="modal-dialog modal-xl">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Valoraci&oacute;n # <span class="text-danger" id="pdf_ffactura"></span></h4>
+                        </div>
+                        <div class="modal-body">
+                            <embed id="ruta_pdf" frameborder="0" width="100%" height="600px"></embed>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- ./wrapper -->
 
             <!-- jQuery -->
