@@ -28,11 +28,44 @@ body{
 }
 
 .encabezado .datos{
-    width: 45%;
+    width: 30%;
     border: 1px solid;
     border-radius: 5px;
     float: right;
 }
+
+.encabezado .datos_receptor{
+    width: 65%;
+    border: 1px solid;
+    border-radius: 5px;
+    float: left;
+}
+.escala-valor-num {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 23px;
+}
+.contenedor {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+.numero {
+    font-size: 2.5em; /* Tamaño grande para el número */
+}
+
+.cuadro_inferior {
+    width: 60px;
+    height: 20px;
+    margin-top: 14px;
+    margin-bottom: 5px;
+    margin-left: 4.8rem;
+    /* background-color: #000000; */
+    border-radius: 4px;
+}
+
 
 .encabezado .datos .datos_titulo{
     font-size: 10px;

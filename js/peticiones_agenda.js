@@ -502,3 +502,12 @@ function enfermedades_form(){
     }
 
 }
+
+function ver_pdf(id_folio)
+{
+    //var ruta = "ver_pdf_valoracion.php?id_folio=" + id_folio + "&folio_factura=" + folio_factura + "&serie_factura=" + serie_factura + "";
+    var ruta = "ver_pdf_valoracion.php?id_folio=" + id_folio;
+    $("#ruta_pdf").prop("src", ruta);
+    $("#pdf_ffactura").html(id_folio);
+    $("#ver_pdf_factura").modal("show");
+}

@@ -78,17 +78,53 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
                     </div>';
 
     //* Esacala de valor
-    $escalaValHTML = '';
+    // $escalaValHTML = '';
 
-    for ($i = 0; $i < $dataVal['escala_eva']; $i++) {
-        $escalaValHTML .= '<td class="filled escala-dolor" align="center"></td>';
+    // for ($i = 0; $i < $dataVal['escala_eva']; $i++) {
+    //     $escalaValHTML .= '<td class="filled escala-dolor" align="center"></td>';
+    // }
+
+    // if ($dataVal['escala_eva'] < 10) {
+    //     for ($dataVal['escala_eva']; $dataVal['escala_eva'] < 10; $dataVal['escala_eva']++) {
+    //         $escalaValHTML .= '<td class="filled" align="center"></td>';
+    //     }
+    // }
+    switch ($dataVal['escala_eva']) {
+        case 1:
+            $color = '#D4EDDA'; // Verde claro
+            break;
+        case 2:
+            $color = '#A9DFBF'; // Verde
+            break;
+        case 3:
+            $color = '#7DCEA0'; // Verde oliva
+            break;
+        case 4:
+            $color = '#F9E79F'; // Amarillo verdoso
+            break;
+        case 5:
+            $color = '#F4D03F'; // Amarillo
+            break;
+        case 6:
+            $color = '#F39C12'; // Naranja claro
+            break;
+        case 7:
+            $color = '#E67E22'; // Naranja oscuro
+            break;
+        case 8:
+            $color = '#E74C3C'; // Rojo claro
+            break;
+        case 9:
+            $color = '#CB4335'; // Rojo intenso
+            break;
+        case 10:
+            $color = '#922B21'; // Rojo oscuro
+            break;
+        default:
+            $color = '#FFFFFF'; // Color por defecto (blanco)
+            break;
     }
 
-    if( $dataVal['escala_eva'] < 10){
-        for ($dataVal['escala_eva'] ; $dataVal['escala_eva'] < 10; $dataVal['escala_eva']++) {
-            $escalaValHTML .= '<td class="filled" align="center"></td>';
-        }
-    }
 
 
     //* estado civil
@@ -176,7 +212,7 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
                             </div>
                             <div class="datos">
                                 <div class="datos_titulo">
-                                    Registro ' . $nombre_comercial . '
+                                    REGISTRO ' . $nombre_comercial . '
                                 </div>
                                 <div>
                                     <table width="100%" class="datos_parrafo">
@@ -201,7 +237,7 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
                         <div class="titulo_receptor">
                             DATOS BASICOS
                         </div>
-                        <div class="datos_receptor datos_signos_viales">
+                        <div class="datos_receptor ">
                             <table class="datos_parrafo" width="100%">
                                 <tr>
                                     <td width="15%" align="left"><b>NOMBRE:</b></td>
@@ -240,30 +276,45 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
                     </div>
                     ' . $antecedentes . '
                     <div class="renglon">
-                        <div class="titulo_receptor">
-                            SIGNOS VITALES
-                        </div>
-                        <div class="datos_receptor">
-                            <table class="datos_parrafo" width="100%">
-                                <tr>
-                                    <td width="15%" align="left"><b>TENCI&Oacute;N ARTERIAL:</b></td>
-                                    <td width="35%" align="left">' . $dataVal['ta'] . '</td>
-                                    <td width="20%" align="left"><b>FC:</b></td>
-                                    <td width="30%" align="left">' . $dataVal['fc'] . '</td>
-                                </tr>
-                                <tr>
-                                    <td align="left"><b>FR:</b></td>
-                                    <td align="left">' . $dataVal['fr'] . '</td>
-                                    <td align="left"><b>SATURACI&oacute;N DE O2:</b></td>
-                                    <td align="left">' . $dataVal['oxigeno'] . '</td>
-                                </tr>
-                                <tr>
-                                    <td align="left"><b>TEMPERATURA:</b></td>
-                                    <td align="left">' . $dataVal['temperatura'] . '</td>
-                                    <td align="left"><b>GLUCOSA:</b></td>
-                                    <td align="left">' . $dataVal['glucosa'] . '</td>
-                                </tr>
-                            </table>
+                        <div class="encabezado">
+                            <div class="datos_receptor">
+                                <div class="titulo_receptor">
+                                    SIGNOS VITALES
+                                </div>
+                                <table class="datos_parrafo" width="100%">
+                                    <tr>
+                                        <td width="15%" align="left"><b>TENCIÓN ARTERIAL:</b></td>
+                                        <td width="35%" align="left">' . $dataVal['ta'] . '</td>
+                                        <td width="20%" align="left"><b>FC:</b></td>
+                                        <td width="30%" align="left">' . $dataVal['fc'] . '</td>
+                                    </tr>
+                                    <tr>
+                                        <td align="left"><b>FR:</b></td>
+                                        <td align="left">' . $dataVal['fr'] . '</td>
+                                        <td align="left"><b>SATURACIÓN DE O2:</b></td>
+                                        <td align="left">' . $dataVal['oxigeno'] . '</td>
+                                    </tr>
+                                    <tr>
+                                        <td align="left"><b>TEMPERATURA:</b></td>
+                                        <td align="left">' . $dataVal['temperatura'] . '</td>
+                                        <td align="left"><b>GLUCOSA:</b></td>
+                                        <td align="left">' . $dataVal['glucosa'] . '</td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="datos">
+                                <div class="escala-valor">
+                                    <div class="titulo_receptor">
+                                        ESCALA DE DOLOR
+                                    </div>
+                                    <div class="escala-valor-num">
+                                        <div class="contenedor">
+                                            <div class="numero">' . $dataVal['escala_eva'] . '</div>
+                                            <div class="cuadro_inferior" style="background-color: '.$color.';"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="renglon">
@@ -290,18 +341,7 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
                             </table>
                         </div>
                     </div>
-                    <div class="renglon">
-                        <div class="titulo_receptor">
-                            ESCALA DE DOLOR
-                        </div>
-                        <div class="datos_receptor">
-                            <table class="datos_parrafo" width="100%">
-                                <tr>
-                                    '.$escalaValHTML.'
-                                </tr>
-                            </table>
-                        </div>
-                    </div>
+                    
             <!--
                     <div class="renglon">
                         <div class="titulo_factura">

@@ -101,6 +101,26 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
         // Obtener la hora en formato 'HH:MM:SS'
         $hora = $dateTime->format('H:i:s');
 
+
+        $query_valoacion = 'SELECT folio FROM emisores_historial_expediente WHERE id_folio_cita = ' . $citas['id_folio']. '';
+        $res_val = mysqli_query($conexion, $query_valoacion);
+        
+        if($res_val){
+
+            $row = mysqli_fetch_array($res_val);
+            if($row && isset($row['folio']) && $row['folio'] > 0){
+                $pdfValoracion = "<button type='button' id='btn_pdf_".$row['folio']."' class='btn btn-primary btn-sm' title='Ver PDF' onclick='ver_pdf(".$row['folio'].")' >
+                                    <i class='fas fa-copy'></i>
+                                </button>"; 
+            } else {
+                $pdfValoracion = '';
+            }
+        } else {
+            $pdfValoracion = '';
+        }
+
+        // print_r($pdfValoracion);
+
         switch ($citas['estatus']) {
             case 1:
                 $estatus = '<span class="badge badge-danger" style="width: 100%; color:white;">APERTURADO</span>';
@@ -157,12 +177,16 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
                             <button type='button' id='btn_can_" . $citas['id_folio'] . "' class='btn btn-danger btn-sm' " . $boton_cancelar . " title='Cancelar cita' onclick='cancelar_cita(" . $citas['id_folio'] . ", &quot;" . $citas['nombre_cliente'] . "&quot;, &quot;" . $citas['nombre_personal'] . "&quot;, &quot;" . $citas['nombre_consultorio'] . "&quot;)'>
                                 <i class='fas fa-ban'></i>
                             </button>
+                            &nbsp;
+                            ".$pdfValoracion."
                             ";
         } else {
             $acciones = "
                             <button type='button' id='btn_rea_" . $citas['id_folio'] . "' class='btn btn-success btn-sm' " . $boton_cancelar . " ".$valoracion." title='Realizar Valoracion' onclick='realizar_valoracion(" . $citas['id_folio'] . ", " . $citas['id_cliente'] . ", &quot;" . $citas['nombre_cliente'] . "&quot;, &quot;".$citas['telefono_cliente']." &quot;)'>
                                 <i class='fas fa-check'></i>
                             </button>
+                            &nbsp;
+                            ".$pdfValoracion."
             ";
         }
 
@@ -172,6 +196,7 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
                     <td class='text-center'>
                         <div class='btn-group'>
                             $acciones
+
                         </div>
                     </td>
                     <td class='text-center text-sm' style='white-space: nowrap; overflow-x: auto;'>" . $citas['id_folio'] . "</td>
