@@ -237,7 +237,7 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
                         <div class="titulo_receptor">
                             DATOS BASICOS
                         </div>
-                        <div class="datos_receptor ">
+                        <div class="datos_receptor">
                             <table class="datos_parrafo" width="100%">
                                 <tr>
                                     <td width="15%" align="left"><b>NOMBRE:</b></td>

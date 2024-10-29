@@ -45,6 +45,9 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
             p.nombre_personal,
             c.nombre as nombre_consultorio,
             cli.nombre_cliente as nombre_cliente,
+            cli.fec_nac as fecha_nacimiento,
+            cli.ocupacion as ocupacion,
+            cli.est_civ as estado_civil,
             cli.telefono as telefono_cliente
             FROM emisores_agenda a 
             LEFT JOIN emisores_personal p ON a.id_terapeuta = p.id_personal AND a.id_emisor = p.id_emisor AND p.tipo = 2
@@ -138,7 +141,7 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
                 $estatus = '<span class="badge badge-success" style="width: 100%; color:white;">REALIZADO</span>';
                 $boton_editar = 'disabled';
                 $valoracion = 'disabled';
-                $boton_cancelar = '';
+                $boton_cancelar = 'disabled';
                 $boton_cobrar = '';
                 break;
             case 4:
@@ -182,7 +185,7 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
                             ";
         } else {
             $acciones = "
-                            <button type='button' id='btn_rea_" . $citas['id_folio'] . "' class='btn btn-success btn-sm' " . $boton_cancelar . " ".$valoracion." title='Realizar Valoracion' onclick='realizar_valoracion(" . $citas['id_folio'] . ", " . $citas['id_cliente'] . ", &quot;" . $citas['nombre_cliente'] . "&quot;, &quot;".$citas['telefono_cliente']." &quot;)'>
+                            <button type='button' id='btn_rea_" . $citas['id_folio'] . "' class='btn btn-success btn-sm' " . $boton_cancelar . " ".$valoracion." title='Realizar Valoracion' onclick='realizar_valoracion(" . $citas['id_folio'] . ", " . $citas['id_cliente'] . ", &quot;" . $citas['nombre_cliente'] . "&quot;, &quot;".$citas['telefono_cliente']." &quot;, &quot;".$citas['fecha_nacimiento']."&quot;, ".$citas['ocupacion'].", ".$citas['estado_civil'].")'>
                                 <i class='fas fa-check'></i>
                             </button>
                             &nbsp;

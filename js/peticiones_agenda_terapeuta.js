@@ -10,7 +10,6 @@ function isRequired(idInput) {
     }
 }
 
-
 function pantallaCarga(texto) {
     Swal.fire({
         title: texto,
@@ -22,8 +21,23 @@ function pantallaCarga(texto) {
     });
 }
 
+function calcularEdad(fechaNacimiento) {
+    const hoy = new Date(); // Fecha actual
+    const fechaNac = new Date(fechaNacimiento); // Fecha de nacimiento convertida a tipo Date
+
+    let edad = hoy.getFullYear() - fechaNac.getFullYear(); // Diferencia de años
+
+    // Ajuste si el cumpleaños de este año aún no ha pasado
+    const mes = hoy.getMonth() - fechaNac.getMonth();
+    if (mes < 0 || (mes === 0 && hoy.getDate() < fechaNac.getDate())) {
+        edad--;
+    }
+
+    return edad;
+}
+
 function cargarOcupaciones() {
-    $.ajax({
+    return $.ajax({
         cache: false,
         url: "componentes/catalogos/cargar/cargar_ocupaciones.php",
         type: 'POST',
@@ -88,14 +102,21 @@ function eliminar_enfermedad_valoracion(id_folio, id_enfermedad) {
     });
 }
 
-function realizar_valoracion(id_folio, id_cliente, nombre_cliente, telefono) {
+function realizar_valoracion(id_folio, id_cliente, nombre_cliente, telefono, fecha_nacimiento, ocupacion, estado_civil) {
 
+    edad = calcularEdad(fecha_nacimiento);
     $("#id_cliente_valoracion").val(id_cliente);
     $("#id_folio_cita").val(id_folio);
     $("#nombre_valoracion").val(nombre_cliente);
     $("#telefono_valoracion").val(telefono);
+    $("#estado_civil_valoracion").val(estado_civil);
+    
+    $('#edad_valoracion').val(edad);
 
-    cargarOcupaciones();
+    cargarOcupaciones()
+    .then(function () {
+        $('#ocupacion_valoracion').val(ocupacion);
+    });
     cargarEnfermedades();
     cargar_datos_tabla_enfermedades()
 
@@ -187,7 +208,7 @@ function enviar_valoracion() {
             'escalaDolor': escalaDolor,
         },
     }).done(function (resultado) {
-        console.log(resultado);
+        // console.log(resultado);
         if (resultado == 'ok') {
             Swal.fire({
                 icon: "success",

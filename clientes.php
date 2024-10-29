@@ -88,6 +88,50 @@ if (!isset($_SESSION['nombre_usuario'])) {
                                             <input type="text" class="form-control" placeholder="Nombre de la persona" id="nombre_social" onfocus="resetear('nombre_social')" maxlength="150">
                                         </div>
                                     </div>
+                                    <div class="col-4">
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fas fa-info-circle"></i></span>
+                                            </div>
+                                            <select class="form-control" id="estado_civil">
+                                                <option value="" selected disabled>Estado Civil</option>
+                                                <option value="1">Soltero/a</option>
+                                                <option value="2">Casado/a</option>
+                                                <!-- Agrega más opciones si es necesario -->
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-3">
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fas fa-birthday-cake"></i></span>
+                                            </div>
+                                            <input type="date" class="form-control" id="fecha_nac" placeholder="Ingrese su fecha de nacimiento" onfocus="resetear('fecha_nac')">
+                                        </div>
+                                    </div>
+                                    <div class="col-4">
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fas fa-briefcase"></i></span>
+                                            </div>
+                                            <select class="form-control" id="ocupacion" onfocus="resetear('ocupacion')">
+                                                <!-- Opciones dinámicas de ocupaciones -->
+                                            </select>
+                                            <button type="button" class="btn btn-info ml-2" onclick="abrir_modal('modal_nueva_ocupacion')">
+                                                <i class="fas fa-plus-circle"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="col-5">
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fas fa-mobile-alt"></i></span>
+                                            </div>
+                                            <input type="text" class="form-control" placeholder="N&uacute;mero telef&oacute;nico" id="telefono" onfocus="resetear('telefono')" maxlength="10" onKeypress="if (event.keyCode < 45 || event.keyCode > 57) event.returnValue = false;">
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-4">
@@ -96,14 +140,6 @@ if (!isset($_SESSION['nombre_usuario'])) {
                                                 <span class="input-group-text"><i class="fas fa-envelope"></i></span>
                                             </div>
                                             <input type="text" class="form-control" placeholder="Correo electr&oacute;nico" id="correo" onfocus="resetear('correo')" maxlength="150">
-                                        </div>
-                                    </div>
-                                    <div class="col-4">
-                                        <div class="input-group mb-3">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text"><i class="fas fa-mobile-alt"></i></span>
-                                            </div>
-                                            <input type="text" class="form-control" placeholder="N&uacute;mero telef&oacute;nico" id="telefono" onfocus="resetear('telefono')" maxlength="10" onKeypress="if (event.keyCode < 45 || event.keyCode > 57) event.returnValue = false;">
                                         </div>
                                     </div>
                                     <div class="col-4">
@@ -131,6 +167,40 @@ if (!isset($_SESSION['nombre_usuario'])) {
                                     </div>
                                 </div>
 
+                                <!-- Modal nueva ocupacion -->
+                                <div class="modal fade" id="modal_nueva_ocupacion" role="dialog" style="overflow: scroll;">
+                                    <div class="modal-dialog modal-lg">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h4 class="modal-title text-success">Registrar Nueva Ocupacion</h4>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="card-body">
+                                                <h6><i class="fas fa-id-card"></i> Datos de identificaci&oacute;n</h6>
+                                                <hr>
+
+                                                <div class="row">
+                                                    <div class="col-8">
+                                                        <div class="input-group mb-3">
+                                                            <div class="input-group-prepend">
+                                                                <span class="input-group-text"><i class="fas fa-file-signature"></i></span>
+                                                            </div>
+                                                            <input type="text" class="form-control" placeholder="Nombre de la Ocupacion" id="nombre_ocupacion" onfocus="resetear('nombre_ocupacion')" maxlength="150" required>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="cerrar_modal('modal_nueva_ocupacion')">Cerrar</button>
+                                                <center><button type="button" class="btn btn-success" onclick="gestionar_ocupacion('modal_valoracion', 'modal_nueva_ocupacion');">Guardar Ocupación</button></center><br><br><br>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Modal nueva ocupacion -->
+                                
                                 <!-- Modal Perfiles Facturacion -->
                                 <div class="modal fade" id="modal_perfiles" role="dialog" style="overflow: scroll;">
                                     <div class="modal-dialog modal-xl">

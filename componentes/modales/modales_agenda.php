@@ -368,8 +368,6 @@
 <script src="js/peticiones_clientes.js"></script>
 <!-- Modal Nuevo cliente -->
 
-
-
 <!-- Modal nuevo terapeuta -->
 <div class="modal fade" id="modal_nuevo_terapeuta" role="dialog" style="overflow: scroll;">
     <div class="modal-dialog modal-lg">
@@ -721,7 +719,7 @@
                             </div>
                             <div class="col-md-4">
                                 <label for="estado_civil_valoracion">Estado Civil:</label>
-                                <select class="form-control" id="estado_civil_valoracion">
+                                <select class="form-control" id="estado_civil_valoracion" disabled>
                                     <option value="" selected disabled>Estado Civil</option>
                                     <option value="1">Soltero/a</option>
                                     <option value="2">Casado/a</option>
@@ -730,12 +728,12 @@
                             </div>
                             <div class="col-md-3">
                                 <label for="edad_valoracion">Edad:</label>
-                                <input type="number" class="form-control" id="edad_valoracion" placeholder="Ingrese su edad" onfocus="resetear('edad_valoracion')">
+                                <input type="number" class="form-control" id="edad_valoracion" placeholder="Ingrese su edad" onfocus="resetear('edad_valoracion')" disabled> 
                             </div>
                             <div class="col-md-5">
                                 <label for="ocupacion_valoracion">Ocupación:</label>
                                 <div class="d-flex">
-                                    <select class="form-control" id="ocupacion_valoracion" onfocus="resetear('ocupacion_valoracion')">
+                                    <select class="form-control" id="ocupacion_valoracion" onfocus="resetear('ocupacion_valoracion')" disabled>
                                         <!-- Opciones dinámicas de ocupaciones -->
                                     </select>
                                     <button type="button" class="btn btn-info ml-2" onclick="abrir_modal('modal_valoracion', 'modal_nueva_ocupacion')">
@@ -745,7 +743,7 @@
                             </div>
                             <div class="col-md-5">
                                 <label for="telefono_valoracion">Teléfono:</label>
-                                <input type="text" class="form-control" id="telefono_valoracion" placeholder="Teléfono" maxlength="10" onfocus="resetear('telefono_valoracion')">
+                                <input type="text" class="form-control" id="telefono_valoracion" placeholder="Teléfono" maxlength="10" onfocus="resetear('telefono_valoracion')" disabled>
                             </div>
                         </div>
                     </div>

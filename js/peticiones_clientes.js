@@ -1,3 +1,25 @@
+function isRequired(idInput) {
+    var variable = $("#" + idInput).val();
+
+    if (!variable || Number(variable) == 0 || variable.length == 0) {
+        $("#" + idInput).addClass('is-invalid');
+        return false; // Retornar 'false' si falla la validación
+    } else {
+        $("#" + idInput).removeClass('is-invalid'); // Remover la clase si es válido
+        return variable; // Retornar el valor válido
+    }
+}
+
+function pantallaCarga(texto) {
+    Swal.fire({
+        title: texto,
+        allowEscapeKey: false,
+        allowOutsideClick: false,
+        didOpen: () => {
+            Swal.showLoading()
+        }
+    });
+}
 function buscar_cp() {
     var codigo = $("#codigo_postal").val();
     var rfc = $("#rfc").val();
@@ -87,10 +109,76 @@ function activar_forma() {
     }
 }
 
+function cargarOcupaciones() {
+    $.ajax({
+        cache: false,
+        url: "componentes/catalogos/cargar/cargar_ocupaciones.php",
+        type: 'POST',
+        dataType: 'html',
+        data: {},
+    }).done(function (resultado) {
+        //console.log(resultado)
+        $("#ocupacion").html(resultado);
+    });
+}
+
+function gestionar_ocupacion(modal_show = '', modal_hide = '') {
+    var nombre_ocupacion = isRequired('nombre_ocupacion');
+    if (nombre_ocupacion) {
+        pantallaCarga('Registrando Ocupación...');
+        $.ajax({
+            cache: false,
+            url: "componentes/catalogos/registrar/registrar_ocupacion.php",
+            type: 'POST',
+            dataType: 'html',
+            data: { 'nombre_ocupacion': nombre_ocupacion },
+        }).done(function (resultado) {
+            //console.log(resultado)
+            if (resultado == "ok") {
+                Swal.fire({
+                    icon: "success",
+                    title: "Ocupación Registrada",
+                    html: "La informaci&oacute;n se registro exitosamente",
+                    showConfirmButton: false,
+                    timer: 2000
+                }).then(function () {
+
+                    if (modal_show && modal_hide) {
+
+                        cargarOcupaciones();
+
+                        $('#' + modal_hide).modal('hide');
+                        $("#" + modal_show).modal("show");
+
+                    }
+                });
+            } else if( resultado == 'ex'){
+                Swal.fire({
+                    icon: "warning",
+                    title: "La Ocupación Ya Existe",
+                    showConfirmButton: false,
+                    timer: 2000
+                });
+            }
+            else {
+                Swal.fire({
+                    icon: "warning",
+                    title: "Ocupación No Registrado",
+                    html: "La informaci&oacute;n no se logro registrar",
+                    showConfirmButton: false,
+                    timer: 2000
+                });
+            }
+        });
+    }
+}
 function gestionar_cliente() {
 
     var tipo_gestion = $('#tipo_gestion').val();
     var nombre_social = $('#nombre_social').val();
+    var estado_civil = $("#estado_civil").val();
+    var ocupacion = $("#ocupacion").val();
+    var fecha_nacimiento = $("#fecha_nac").val();
     var correo = $('#correo').val();
     var telefono = $('#telefono').val();
 
@@ -117,11 +205,19 @@ function gestionar_cliente() {
 
     $.ajax({
         cache: false,
-        url: "componentes/catalogos/registrar_cliente.php",
+        url: "componentes/catalogos/registrar/registrar_cliente.php",
         type: 'POST',
         dataType: 'html',
-        data: { 'nombre_social': nombre_social, 'correo': correo, 'telefono': telefono, 'id_cliente': tipo_gestion },
+        data: { 'nombre_social': nombre_social, 
+                'correo': correo, 
+                'telefono': telefono, 
+                'id_cliente': tipo_gestion,  
+                'estado_civil': estado_civil,
+                'ocupacion': ocupacion,
+                'fecha_nacimiento': fecha_nacimiento,
+            },
     }).done(function (resultado) {
+        //console.log(resultado)
         if (resultado == "ok") {
             Swal.fire({
                 icon: "success",
@@ -165,7 +261,7 @@ function gestionar_cliente() {
 function ver_catalogo() {
     $.ajax({
         cache: false,
-        url: 'componentes/catalogos/cargar_clientes.php',
+        url: 'componentes/catalogos/cargar/cargar_clientes.php',
         type: 'POST',
         dataType: 'html',
     }).done(function (resultado) {
@@ -195,12 +291,15 @@ function actualizar_estatus_cliente(id_cliente, estatus) {
     });
 }
 
-function editar_cliente(id_cliente, nombre_social, correo, telefono) {
+function editar_cliente(id_cliente, nombre_social, correo, telefono, fecha_nacimiento, ocupacion, estado_civil) {
     $("#leyenda").html("Modificar datos del cliente");
     $("#tipo_gestion").val(id_cliente);
     $("#nombre_social").val(nombre_social);
     $("#correo").val(correo);
     $("#telefono").val(telefono);
+    $("#estado_civil").val(estado_civil);
+    $("#ocupacion").val(ocupacion);
+    $("#fecha_nac").val(fecha_nacimiento);
 
 
     $("#modal_clientes").modal("hide");
@@ -554,4 +653,23 @@ function eliminar_perfil(id_perfil, id_cliente)
         }
         
     });
+}
+
+//* funcion se ejecutara al iniciar la pantalla
+$(document).ready(function() {
+    cargarOcupaciones();
+});
+
+function abrir_modal(modal){
+    if (modal.length != 0) {
+        //ocultamos el modal de agendar cita
+        $('#' + modal).modal('show');
+    }
+}
+
+function cerrar_modal(modal){
+    if (modal.length != 0) {
+        //ocultamos el modal de agendar cita
+        $('#' + modal).modal('hide');
+    }
 }

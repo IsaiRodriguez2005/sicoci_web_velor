@@ -1,6 +1,6 @@
 <?php
     session_start();
-    require("../conexion.php");
+    require("../../conexion.php");
     date_default_timezone_set('America/Mexico_City');
 
     if(empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario']))
@@ -27,7 +27,17 @@
             $max = mysqli_fetch_array($resMAX);
             $ultimo = $max['no_registro'] + 1;
 
-            $insertCliente = "INSERT INTO emisores_clientes VALUES(".$ultimo.", ".$_SESSION['id_emisor'].",'".trim($nuevo_social)."','".strtolower($_POST['correo'])."','".$_POST['telefono']."', '".$fecha_alta."', 1)";
+            $insertCliente = "INSERT INTO emisores_clientes VALUES(
+                                                        
+                                                                ".$ultimo.", 
+                                                                ".$_SESSION['id_emisor'].",
+                                                                '".trim($nuevo_social)."',
+                                                                '".$_POST['fecha_nacimiento']."',
+                                                                ".intval($_POST['ocupacion']).",
+                                                                '".intval($_POST['estado_civil'])."',
+                                                                '".strtolower($_POST['correo'])."',
+                                                                '".$_POST['telefono']."', 
+                                                                '".$fecha_alta."', 1)";
             $resultado=mysqli_query($conexion, $insertCliente);
             if($resultado)
             {
