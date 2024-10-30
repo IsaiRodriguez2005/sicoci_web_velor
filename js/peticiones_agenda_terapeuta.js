@@ -77,6 +77,35 @@ function cargar_datos_tabla_enfermedades() {
         $("#form_enfermedad").html(resultado);
     });
 }
+
+function cargarDatosCliente( id ){
+    return $.ajax({
+        cache: false,
+        url: 'componentes/catalogos/cargar/cargar_datos_cientes_valoracion.php',
+        type: 'POST',
+        dataType: 'json',
+        data: {
+            'id_cliente': id,
+        },
+    }).done(function (resultado){
+
+        // console.log(resultado[0])
+        $("#estado_civil_valoracion").val(resultado[0].est_civ);
+        $("#estado_civil_valoracion").attr('disabled', true);
+
+        $("#fecha_nacimiento").val(resultado[0].fec_nac);
+        $("#fecha_nacimiento").attr('disabled', true);
+
+        edad = calcularEdad(resultado[0].fec_nac);
+        $('#edad_valoracion').val(edad);
+
+        $('#ocupacion_valoracion').val(resultado[0].ocupacion);
+        $('#ocupacion_valoracion').attr('disabled', true);
+
+        $("#boton_confirmar").html('');
+    })
+}
+
 function eliminar_enfermedad_valoracion(id_folio, id_enfermedad) {
     pantallaCarga('Eliminando Enfermedad');
     $.ajax({
@@ -104,13 +133,14 @@ function eliminar_enfermedad_valoracion(id_folio, id_enfermedad) {
 
 function realizar_valoracion(id_folio, id_cliente, nombre_cliente, telefono, fecha_nacimiento, ocupacion, estado_civil) {
 
-    edad = calcularEdad(fecha_nacimiento);
     $("#id_cliente_valoracion").val(id_cliente);
     $("#id_folio_cita").val(id_folio);
     $("#nombre_valoracion").val(nombre_cliente);
     $("#telefono_valoracion").val(telefono);
     $("#estado_civil_valoracion").val(estado_civil);
+    $("#fecha_nacimiento").val(fecha_nacimiento);
     
+    edad = calcularEdad(fecha_nacimiento);
     $('#edad_valoracion').val(edad);
 
     cargarOcupaciones()
@@ -126,11 +156,9 @@ function realizar_valoracion(id_folio, id_cliente, nombre_cliente, telefono, fec
 function enviar_valoracion() {
     var id_cliente = $("#id_cliente_valoracion").val();
     var id_folio = $("#id_folio_cita").val();
-    // Validaciones de los campos obligatorios
     var edad = isRequired('edad_valoracion');
     var ocupacion = isRequired('ocupacion_valoracion');
     var telefono = isRequired('telefono_valoracion');
-    //var toximanias = isRequired('toximanias_valoracion');
     var motivo_consulta = isRequired('motivo_consulta_valoracion');
     var act_fisica = isRequired('act_fisica_valoracion');
     var farmacos = isRequired('farmacos');
@@ -138,16 +166,6 @@ function enviar_valoracion() {
     if (!escalaDolor || escalaDolor == '0') {
         $("#escaDolMessage").html('Campo obligatorio')
     }
-
-
-    // Si alguna de las validaciones falla, detener la ejecución
-    /*
-    if (!edad || !ocupacion || !telefono || !toximanias || !motivo_consulta || !act_fisica || !farmacos || !escalaDolor) {
-        alert("Faltan campos obligatorios.");
-        return; // Detener la función si hay algún campo inválido
-    }
-        */
-    // Si alguna de las validaciones falla, detener la ejecución
     if (!edad || !ocupacion || !telefono || !motivo_consulta || !act_fisica || !farmacos || !escalaDolor) {
         let camposFaltantes = [];
 
@@ -165,7 +183,7 @@ function enviar_valoracion() {
             html: camposFaltantes.join(", "),
             showConfirmButton: true,
         });
-        return; // Detener la función si hay algún campo inválido
+        return; //! Detener la función si hay algún campo inválido
     }
 
 
@@ -179,7 +197,7 @@ function enviar_valoracion() {
     var glucosa = $("#glucosa").val();
     var diagnosticoMedico = $("#diagnosticoMedico").val();
 
-    // Si todas las validaciones son correctas, mostrar pantalla de carga y realizar la petición
+    //* Si todas las validaciones son correctas, mostrar pantalla de carga y realizar la petición
     pantallaCarga('Guardando valoracion...');
 
     $.ajax({
@@ -358,8 +376,47 @@ function agregarEnfermedadValoracion() {
 
 }
 
+function habilitarParaModificar( id_input  ){
+    $("#" + id_input).removeAttr('disabled');
 
+    $("#boton_confirmar").html('<button type="button" class="btn btn-success" onclick="modificarDatos()">Modificar Datos</button>')
+}
 
+function modificarDatos(){
+
+    var id_cliente = $("#id_cliente_valoracion").val();
+    var estado_civil = $("#estado_civil_valoracion").val();
+    var fecha_nacimiento = $("#fecha_nacimiento").val();
+    var ocupacion = $("#ocupacion_valoracion").val();
+
+    $.ajax({
+        cache: false,
+        url: 'componentes/catalogos/actualizar/actualizar_datos_cliente_valoracion.php',
+        type: 'POST',
+        dataType: 'html',
+        data: {
+            'id_cliente': id_cliente,
+            'estado_civil': estado_civil,
+            'fecha_nacimiento': fecha_nacimiento,
+            'ocupacion': ocupacion,
+        },
+    }).done(function (resultado){
+        //console.log(resultado)
+        if(resultado == 'ok'){
+            Swal.fire({
+                icon: "success",
+                title: "Datos de Cliente Actualizados",
+                showConfirmButton: false,
+                timer: 2000
+            })
+        }
+    }).then(function () {
+        cargarDatosCliente( id_cliente ).then(function () {
+            Swal.close();
+        });
+    });
+
+}
 
 
 

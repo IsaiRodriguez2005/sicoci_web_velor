@@ -717,35 +717,52 @@
                                 <label for="nombre_valoracion">Nombre:</label>
                                 <input type="text" class="form-control" id="nombre_valoracion" placeholder="Ingrese su nombre" disabled>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <label for="estado_civil_valoracion">Estado Civil:</label>
-                                <select class="form-control" id="estado_civil_valoracion" disabled>
-                                    <option value="" selected disabled>Estado Civil</option>
-                                    <option value="1">Soltero/a</option>
-                                    <option value="2">Casado/a</option>
-                                    <!-- Agrega más opciones si es necesario -->
-                                </select>
+                                <div class="d-flex">
+                                    <select class="form-control" id="estado_civil_valoracion" disabled>
+                                        <option value="" selected disabled>Estado Civil</option>
+                                        <option value="1">Soltero/a</option>
+                                        <option value="2">Casado/a</option>
+                                        <!-- Agrega más opciones si es necesario -->
+                                    </select>
+                                    <button type="button" class="btn btn-info ml-2" onclick="habilitarParaModificar('estado_civil_valoracion')" title="Modificar Estado Civil">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                </div>
                             </div>
                             <div class="col-md-3">
                                 <label for="edad_valoracion">Edad:</label>
-                                <input type="number" class="form-control" id="edad_valoracion" placeholder="Ingrese su edad" onfocus="resetear('edad_valoracion')" disabled> 
+                                    <input type="number" class="form-control" id="edad_valoracion" placeholder="Ingrese su edad" onfocus="resetear('edad_valoracion')" disabled>
                             </div>
                             <div class="col-md-5">
                                 <label for="ocupacion_valoracion">Ocupación:</label>
                                 <div class="d-flex">
-                                    <select class="form-control" id="ocupacion_valoracion" onfocus="resetear('ocupacion_valoracion')" disabled>
+                                    <select class="form-control" id="ocupacion_valoracion" onfocus="resetear('ocupacion_valoracion')" disabled >
                                         <!-- Opciones dinámicas de ocupaciones -->
                                     </select>
-                                    <button type="button" class="btn btn-info ml-2" onclick="abrir_modal('modal_valoracion', 'modal_nueva_ocupacion')">
-                                        <i class="fas fa-plus-circle"></i>
+                                    <button type="button" class="btn btn-info ml-2" onclick="habilitarParaModificar('ocupacion_valoracion')" title="Modificar Ocupación">
+                                        <i class="fas fa-edit"></i>
                                     </button>
                                 </div>
                             </div>
-                            <div class="col-md-5">
+                            <div class="col-md-3">
                                 <label for="telefono_valoracion">Teléfono:</label>
                                 <input type="text" class="form-control" id="telefono_valoracion" placeholder="Teléfono" maxlength="10" onfocus="resetear('telefono_valoracion')" disabled>
                             </div>
+                            <div class="col-md-3">
+                                <label for="fecha_nacimiento">Fecha Nacimiento:</label>
+                                <div class="d-flex">
+                                <input type="date" class="form-control" id="fecha_nacimiento" onfocus="resetear('fecha_nacimiento')" disabled>
+                                    <button type="button" class="btn btn-info ml-2" onclick="habilitarParaModificar('fecha_nacimiento')" title="Modificar Edad">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                </div>
+                            </div>
                         </div>
+                    </div>
+                    <div class="card-body" id="boton_confirmar">
+                        
                     </div>
                 </div>
 
