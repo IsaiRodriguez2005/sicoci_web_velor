@@ -70,7 +70,7 @@ function colonia_select() {
 }
 
 function gestionar_personal(redireccion, modal_agenda = '', modal_cliente = '') {
-    console.log(redireccion)
+    //console.log(redireccion)
     var tipo_gestion = $('#tipo_gestion').val();
 
     var fiscal = "";

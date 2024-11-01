@@ -291,10 +291,20 @@ function buscar_cliente(nombre_social) {
         cache: false,
         url: 'componentes/catalogos/buscar_clientes.php',
         type: 'POST',
+        dataType: 'json',
         data: { 'nombre_social': nombre_social.value }
     }).done(function (data) {
-        //console.log(data)
-        $("#id_cliente2").val(data);
+        //console.log(Number(data.total_registros));
+        $("#id_cliente2").val(data.id_cliente);
+
+        if(Number(data.total_registros) > 0){
+            var tipo = '1'
+        } else {
+            var tipo = '2' 
+        }
+
+        $("#tipo_cita_form").val(tipo);
+
     })
 }
 

@@ -305,7 +305,7 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
                             <div class="datos">
                                 <div class="escala-valor">
                                     <div class="titulo_receptor">
-                                        ESCALA DE DOLOR
+                                        ESCALA DE EVA
                                     </div>
                                     <div class="escala-valor-num">
                                         <div class="contenedor">

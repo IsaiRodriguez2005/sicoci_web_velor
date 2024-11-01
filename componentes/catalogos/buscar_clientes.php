@@ -17,37 +17,14 @@
         $html = '';
         if(true)
         {
-            $sql = "SELECT id_cliente, nombre_cliente FROM emisores_clientes WHERE nombre_cliente = '".$_POST['nombre_social']."';";
+            $sql = "SELECT c.id_cliente, c.nombre_cliente, (SELECT COUNT(*) FROM emisores_agenda AS a WHERE a.id_cliente = c.id_cliente) AS total_registros
+                        FROM emisores_clientes AS c
+                        WHERE c.nombre_cliente = '".$_POST['nombre_social']."' AND c.id_emisor = ".$_SESSION['id_emisor'].";";
         }
+        //echo $sql;
         $res = mysqli_query($conexion, $sql);
         $cliente = mysqli_fetch_array($res);
 
-        echo $cliente['id_cliente'];
+        echo json_encode($cliente);
     }
 ?>
-
-
-<?php
-/*
-<script>
-  $(function () {
-    $('#productos').DataTable({
-      "paging": true,
-      "lengthChange": false,
-      "searching": true,
-      "ordering": true,
-      "info": true,
-      "autoWidth": false,
-      "responsive": true,
-      "language": {
-        "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
-        }
-    });
-  });
-</script>
-
-
-
-
-$sql = "SELECT id_cliente, nombre_social FROM emisores_clientes WHERE nombre_social LIKE '%".strtoupper($_POST['cliente'])."%' LIMIT 0, 25;";
-*/
