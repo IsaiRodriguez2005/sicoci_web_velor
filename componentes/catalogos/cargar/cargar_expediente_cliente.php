@@ -25,9 +25,11 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
                 <tbody id="mostrar_expediente">
         ';
 
+
     $consExpedientes = "SELECT e.fecha_emision, e.folio, e.id_cliente, c.nombre_cliente 
                                     FROM emisores_historial_expediente AS e INNER JOIN emisores_clientes AS c ON e.id_cliente = c.id_cliente 
                                     WHERE e.id_cliente = " . $_POST['id_cliente'] . " AND e.id_emisor = " . $_SESSION['id_emisor'] . "";
+                                    //echo $consExpedientes;
     $resultado = mysqli_query($conexion, $consExpedientes);
 
     while ($expediente = mysqli_fetch_array($resultado)) {

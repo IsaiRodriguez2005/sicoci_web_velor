@@ -131,8 +131,10 @@ function eliminar_enfermedad_valoracion(id_folio, id_enfermedad) {
     });
 }
 
-function realizar_valoracion(id_folio, id_cliente, nombre_cliente, telefono, fecha_nacimiento, ocupacion, estado_civil) {
+function realizar_valoracion_primera_v(id_folio, id_cliente, nombre_cliente, telefono, fecha_nacimiento, ocupacion, estado_civil) {
 
+    $("#observaciones").html('<a class="nav-link" id="custom-tabs-one-obs-tab" data-toggle="pill" href="#custom-tabs-one-obs-pv" role="tab" aria-controls="custom-tabs-one-obs-pv" aria-selected="false"> <i class="fas fa-info"></i> &nbsp;Observaciones</a>');
+    //* Esta funcion carga los datos y activa el formulario de 1ra vez
     $("#id_cliente_valoracion").val(id_cliente);
     $("#id_folio_cita").val(id_folio);
     $("#nombre_valoracion").val(nombre_cliente);
@@ -151,6 +153,32 @@ function realizar_valoracion(id_folio, id_cliente, nombre_cliente, telefono, fec
     cargar_datos_tabla_enfermedades()
 
     $('#modal_valoracion').modal('show');
+}
+
+function realizar_valoracion_subs(id_folio, id_cliente, nombre_cliente, telefono, fecha_nacimiento, ocupacion, estado_civil){
+
+    //* Esta funcion carga la informacion activa el formulario de las sitas tipo subsecuente
+
+    $("#observaciones").html('<a class="nav-link" id="custom-tabs-one-obs-tab" data-toggle="pill" href="#custom-tabs-one-obs-sb" role="tab" aria-controls="custom-tabs-one-obs-sb" aria-selected="false"> <i class="fas fa-info"></i> &nbsp;Observaciones</a>');
+    $("#id_cliente_valoracion").val(id_cliente);
+    $("#id_folio_cita").val(id_folio);
+    $("#nombre_valoracion").val(nombre_cliente);
+    $("#telefono_valoracion").val(telefono);
+    $("#estado_civil_valoracion").val(estado_civil);
+    $("#fecha_nacimiento").val(fecha_nacimiento);
+    
+    edad = calcularEdad(fecha_nacimiento);
+    $('#edad_valoracion').val(edad);
+
+    cargarOcupaciones()
+    .then(function () {
+        $('#ocupacion_valoracion').val(ocupacion);
+    });
+    cargarEnfermedades();
+    cargar_datos_tabla_enfermedades()
+
+    $('#modal_valoracion').modal('show');
+
 }
 
 function enviar_valoracion() {

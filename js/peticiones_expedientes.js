@@ -39,16 +39,18 @@ function buscar_cliente(nombre_social) {
         cache: false,
         url: 'componentes/catalogos/buscar_clientes.php',
         type: 'POST',
+        dataType: 'json',
         data: { 'nombre_social': nombre_social.value }
     }).done(function (data) {
-        //console.log(data)
-        $("#id_cliente2").val(data);
+        //console.log(data.id_cliente)
+        $("#id_cliente2").val(data.id_cliente);
     })
 }
 
 function mostrar_expedientes_clientes() {
 
-    id_cliente = $("#id_cliente2").val();
+    let id_cliente = $("#id_cliente2").val();
+    console.log(id_cliente)
 
     if (id_cliente) {
 

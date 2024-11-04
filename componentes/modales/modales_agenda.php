@@ -74,8 +74,8 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="tipo_cita">Tipo de Cita</label>
-                                <select class="form-control" id="tipo_cita_form" required>
-                                    <option value="" disabled selected>Selecciona Tipo de Cita</option>
+                                <select class="form-control" id="tipo_cita_form" require disabled>
+                                    <option value="" disabled selected>Selecciona un cliente</option>
                                     <option value="1">Subsecuente</option>
                                     <option value="2">Primera vez</option>
                                 </select>
@@ -690,10 +690,8 @@
                             <i class="fas fa-user"></i> &nbsp;Datos Personales
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" id="custom-tabs-one-obs-tab" data-toggle="pill" href="#custom-tabs-one-obs" role="tab" aria-controls="custom-tabs-one-obs" aria-selected="false">
-                            <i class="fas fa-info"></i> &nbsp;Observaciones
-                        </a>
+                    <li class="nav-item" id="observaciones">
+
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" id="custom-tabs-one-enf-tab" data-toggle="pill" href="#custom-tabs-one-enf" role="tab" aria-controls="custom-tabs-one-enf" aria-selected="false">
@@ -733,12 +731,12 @@
                             </div>
                             <div class="col-md-3">
                                 <label for="edad_valoracion">Edad:</label>
-                                    <input type="number" class="form-control" id="edad_valoracion" placeholder="Ingrese su edad" onfocus="resetear('edad_valoracion')" disabled>
+                                <input type="number" class="form-control" id="edad_valoracion" placeholder="Ingrese su edad" onfocus="resetear('edad_valoracion')" disabled>
                             </div>
                             <div class="col-md-5">
                                 <label for="ocupacion_valoracion">Ocupación:</label>
                                 <div class="d-flex">
-                                    <select class="form-control" id="ocupacion_valoracion" onfocus="resetear('ocupacion_valoracion')" disabled >
+                                    <select class="form-control" id="ocupacion_valoracion" onfocus="resetear('ocupacion_valoracion')" disabled>
                                         <!-- Opciones dinámicas de ocupaciones -->
                                     </select>
                                     <button type="button" class="btn btn-info ml-2" onclick="habilitarParaModificar('ocupacion_valoracion')" title="Modificar Ocupación">
@@ -753,7 +751,7 @@
                             <div class="col-md-3">
                                 <label for="fecha_nacimiento">Fecha Nacimiento:</label>
                                 <div class="d-flex">
-                                <input type="date" class="form-control" id="fecha_nacimiento" onfocus="resetear('fecha_nacimiento')" disabled>
+                                    <input type="date" class="form-control" id="fecha_nacimiento" onfocus="resetear('fecha_nacimiento')" disabled>
                                     <button type="button" class="btn btn-info ml-2" onclick="habilitarParaModificar('fecha_nacimiento')" title="Modificar Edad">
                                         <i class="fas fa-edit"></i>
                                     </button>
@@ -762,12 +760,12 @@
                         </div>
                     </div>
                     <div class="card-body" id="boton_confirmar">
-                        
+
                     </div>
                 </div>
 
-                <!-- Observaciones Tab -->
-                <div class="tab-pane fade" id="custom-tabs-one-obs" role="tabpanel" aria-labelledby="custom-tabs-one-obs-tab">
+                <!-- Observaciones Tab PRIMERA VEZ-->
+                <div class="tab-pane fade" id="custom-tabs-one-obs-pv" role="tabpanel" aria-labelledby="custom-tabs-one-obs-tab">
                     <div class="card-body">
                         <!-- Aquí va el contenido de las observaciones -->
                         <div class="form-group">
@@ -799,6 +797,49 @@
                             <div class="d-flex align-items-center ">
                                 <input type="range" class="custom-range ml-2" min="0" max="10" id="escalaDolor" value="0" oninput="updateValue(this.value)">
                                 <span id="escalaValor" class="ml-2">0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Observaciones Tab SUBSECUENTE-->
+                <div class="tab-pane fade" id="custom-tabs-one-obs-sb" role="tabpanel" aria-labelledby="custom-tabs-one-obs-tab">
+                    <div class="card-body">
+                        <!-- Aquí va el contenido de las observaciones -->
+                        <div class="form-group">
+                            <label for="motivo_consulta_valoracion">N&uacute;mero de terapia:</label>
+                            <textarea class="form-control" id="num_terapia" rows="3" placeholder="Número de terapia..." onfocus="resetear('motivo_consulta_valoracion')"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="act_fisica_valoracion">Continuo/Intermitente:</label>
+                            <input type="text" class="form-control" id="cont_int" placeholder="Toximanias" onfocus="resetear('act_fisica_valoracion')">
+                        </div>
+                        <div class="form-group">
+                            <label for="toximanias_valoracion">Avance:</label>
+                            <input type="text" class="form-control" id="diagnosticoMedico" placeholder="Toximanias" onfocus="resetear('toximanias_valoracion')">
+                        </div>
+                        <div class="form-group">
+                            <label for="farmacos">Paquete:</label>
+                            <textarea class="form-control" id="farmacos" rows="2" placeholder="Ejemplo: Diclofenaco inyectado" onfocus="resetear('farmacos')" disabled></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="farmacos">No. Terapia:</label>
+                            <textarea class="form-control" id="farmacos" rows="2" placeholder="Ejemplo: Diclofenaco inyectado" onfocus="resetear('farmacos')" disabled></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="escalaDolor">Escala de Dolor EVA:</label>
+                            <div class="text-danger d-flex align-items-center" id="escaDolMessage1">
+
+                            </div>
+
+                            <div class="d-flex align-items-center ">
+                                <input type="range" class="custom-range ml-2" min="0" max="10" id="escalaDolor" value="0" oninput="updateValue(this.value)">
+                                <span id="escalaValor" class="ml-2">0</span>
+                                <script>
+                                    function updateValue(val) {
+                                        $("#escaDolMessage1").html('');
+                                        document.getElementById('escalaValor').innerText = val;
+                                    }
+                                </script>
                             </div>
                         </div>
                     </div>
@@ -898,12 +939,7 @@
         </div>
     </div>
 </div>
-<script>
-    function updateValue(val) {
-        $("#escaDolMessage").html('');
-        document.getElementById('escalaValor').innerText = val;
-    }
-</script>
+
 
 <!-- Modal Valoracion Cita -->
 
