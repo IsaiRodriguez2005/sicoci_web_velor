@@ -46,7 +46,7 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
 
     $datosEnfermedades = 'SELECT ee.id_folio, ee.id_enfermedad, ee.tiempo_enfermedad, ee.medicamento, e.nombre FROM emisores_historial_expediente_enfermedades AS ee
                                     LEFT JOIN emisores_enfermedades AS e ON ee.id_enfermedad = e.id_enfermedad                 
-                            WHERE ee.id_folio = ' . $folio_valoracion . ' AND ee.id_emisor = ' . $_SESSION['id_emisor'] . ';';
+                            WHERE ee.id_folio = ' . $dataVal['id_folio_cita'] . ' AND ee.id_emisor = ' . $_SESSION['id_emisor'] . ';';
     $resultado = mysqli_query($conexion, $datosEnfermedades);
 
     //* Antecedentes de enfermedades (referenciando a el expediente del paciente)

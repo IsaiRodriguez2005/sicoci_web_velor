@@ -733,6 +733,9 @@
                                 <label for="edad_valoracion">Edad:</label>
                                 <input type="number" class="form-control" id="edad_valoracion" placeholder="Ingrese su edad" onfocus="resetear('edad_valoracion')" disabled>
                             </div>
+
+                        </div>
+                        <div class="form-row pt-2">
                             <div class="col-md-5">
                                 <label for="ocupacion_valoracion">Ocupación:</label>
                                 <div class="d-flex">
@@ -764,6 +767,7 @@
                     </div>
                 </div>
 
+                <input type="hidden" id="tipo_consulta">
                 <!-- Observaciones Tab PRIMERA VEZ-->
                 <div class="tab-pane fade" id="custom-tabs-one-obs-pv" role="tabpanel" aria-labelledby="custom-tabs-one-obs-tab">
                     <div class="card-body">
@@ -795,8 +799,8 @@
                             </div>
 
                             <div class="d-flex align-items-center ">
-                                <input type="range" class="custom-range ml-2" min="0" max="10" id="escalaDolor" value="0" oninput="updateValue(this.value)">
-                                <span id="escalaValor" class="ml-2">0</span>
+                                <input type="range" class="custom-range ml-2" min="0" max="10" id="escalaDolorP" value="0" oninput="updateValue(1,this.value)">
+                                <span id="escalaValorP" class="ml-2">0</span>
                             </div>
                         </div>
                     </div>
@@ -805,42 +809,58 @@
                 <div class="tab-pane fade" id="custom-tabs-one-obs-sb" role="tabpanel" aria-labelledby="custom-tabs-one-obs-tab">
                     <div class="card-body">
                         <!-- Aquí va el contenido de las observaciones -->
-                        <div class="form-group">
-                            <label for="motivo_consulta_valoracion">N&uacute;mero de terapia:</label>
-                            <textarea class="form-control" id="num_terapia" rows="3" placeholder="Número de terapia..." onfocus="resetear('motivo_consulta_valoracion')"></textarea>
+                        <div class="form-row">
+                            <div class="col-md-2">
+                                <label for="motivo_consulta_valoracion">N&uacute;mero de terapia:</label>
+                                <input class="form-control" id="num_terapia" placeholder="Número de terapia..." onfocus="resetear('motivo_consulta_valoracion')" disabled>
+                            </div>
+                            <div class="col-md-5">
+                                <label for="act_fisica_valoracion">Continuo/Intermitente:</label>
+                                <select id="cont_int" class="form-control" onfocus="resetear('cont_int')" disabled>
+                                    <option value="1">Continuo</option>
+                                    <option value="2">Intermintente</option>
+                                </select>
+                            </div>
+                            <div class="col-md-5">
+                                <label for="toximanias_valoracion">Avance:</label>
+                                <input type="text" class="form-control" id="avance" placeholder="Ejemplo: 20%" onfocus="resetear('toximanias_valoracion')">
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label for="act_fisica_valoracion">Continuo/Intermitente:</label>
-                            <input type="text" class="form-control" id="cont_int" placeholder="Toximanias" onfocus="resetear('act_fisica_valoracion')">
+                        <div class="form-group pt-2">
+                            <label for="observaciones">Observaciones:</label>
+                            <textarea class="form-control" id="observacionesSubSec" rows="3" placeholder="Obcervaciones"></textarea>
                         </div>
-                        <div class="form-group">
-                            <label for="toximanias_valoracion">Avance:</label>
-                            <input type="text" class="form-control" id="diagnosticoMedico" placeholder="Toximanias" onfocus="resetear('toximanias_valoracion')">
+                        <div class="form-row pt-2">
+                            <div class="col-md-3">
+                                <label for="farmacos">Paquete:</label>
+                                <input class="form-control" id="farmacos" placeholder="Ejemplo: Paquete de 5 sesiones" onfocus="resetear('farmacos')" disabled>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="farmacos">No. Terapia:</label>
+                                <input class="form-control" id="farmacos" placeholder="Ejemplo: 2/3" onfocus="resetear('farmacos')" disabled>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label for="farmacos">Paquete:</label>
-                            <textarea class="form-control" id="farmacos" rows="2" placeholder="Ejemplo: Diclofenaco inyectado" onfocus="resetear('farmacos')" disabled></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label for="farmacos">No. Terapia:</label>
-                            <textarea class="form-control" id="farmacos" rows="2" placeholder="Ejemplo: Diclofenaco inyectado" onfocus="resetear('farmacos')" disabled></textarea>
-                        </div>
-                        <div class="form-group">
+                        <div class="form-group pt-2">
                             <label for="escalaDolor">Escala de Dolor EVA:</label>
                             <div class="text-danger d-flex align-items-center" id="escaDolMessage1">
 
                             </div>
 
-                            <div class="d-flex align-items-center ">
-                                <input type="range" class="custom-range ml-2" min="0" max="10" id="escalaDolor" value="0" oninput="updateValue(this.value)">
-                                <span id="escalaValor" class="ml-2">0</span>
-                                <script>
-                                    function updateValue(val) {
-                                        $("#escaDolMessage1").html('');
-                                        document.getElementById('escalaValor').innerText = val;
-                                    }
-                                </script>
+                            <div class="d-flex align-items-center">
+                                <input type="range" class="custom-range ml-2" min="0" max="10" id="escalaDolorS" value="0" oninput="updateValue(2,this.value)">
+                                <span id="escalaValorS" class="ml-2">0</span>
                             </div>
+
+                            <script>
+                                function updateValue(num, val) {
+                                    if (num == 1) {
+                                        document.getElementById('escalaValorP').innerText = val;
+                                    } else if (num == 2) {
+                                        document.getElementById('escalaValorS').innerText = val;
+                                    }
+                                }
+                            </script>
+
                         </div>
                     </div>
                 </div>

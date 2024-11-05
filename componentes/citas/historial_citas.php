@@ -82,8 +82,8 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
             $consulta .= "'" . $_POST['fecha_inicial'] . " 08:00:00 ' AND a.fecha_agenda <= '" . $_POST['fecha_final'] . " 16:00:00 '";
         }
 
-        if(!empty($_SESSION['id_personal'])){
-            $consulta .= 'AND a.id_terapeuta = '.$_SESSION['id_personal'].'';
+        if (!empty($_SESSION['id_personal'])) {
+            $consulta .= 'AND a.id_terapeuta = ' . $_SESSION['id_personal'] . '';
         }
 
 
@@ -105,16 +105,16 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
         $hora = $dateTime->format('H:i:s');
 
 
-        $query_valoacion = 'SELECT folio FROM emisores_historial_expediente WHERE id_folio_cita = ' . $citas['id_folio']. '';
+        $query_valoacion = 'SELECT folio FROM emisores_historial_expediente WHERE id_folio_cita = ' . $citas['id_folio'] . '';
         $res_val = mysqli_query($conexion, $query_valoacion);
-        
-        if($res_val){
+
+        if ($res_val) {
 
             $row = mysqli_fetch_array($res_val);
-            if($row && isset($row['folio']) && $row['folio'] > 0){
-                $pdfValoracion = "<button type='button' id='btn_pdf_".$row['folio']."' class='btn btn-primary btn-sm' title='Ver PDF' onclick='ver_pdf(".$row['folio'].")' >
+            if ($row && isset($row['folio']) && $row['folio'] > 0) {
+                $pdfValoracion = "<button type='button' id='btn_pdf_" . $row['folio'] . "' class='btn btn-primary btn-sm' title='Ver PDF' onclick='ver_pdf(" . $row['folio'] . ")' >
                                     <i class='fas fa-copy'></i>
-                                </button>"; 
+                                </button>";
             } else {
                 $pdfValoracion = '';
             }
@@ -155,27 +155,22 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
         switch ($citas['tipo_cita']) {
             case 1:
                 $tipo_cita = 'SEGUIMIENTO';
-                $btn_realizar_valoracion = "<button type='button' id='btn_rea_" . $citas['id_folio'] . "' class='btn btn-success btn-sm' " . $boton_cancelar . " ".$valoracion." title='Realizar Valoracion' onclick='realizar_valoracion_subs(" . $citas['id_folio'] . ", " . $citas['id_cliente'] . ", &quot;" . $citas['nombre_cliente'] . "&quot;, &quot;".$citas['telefono_cliente']." &quot;, &quot;".$citas['fecha_nacimiento']."&quot;, ".$citas['ocupacion'].", ".$citas['estado_civil'].")'>
-                                                <i class='fas fa-check'></i>
-                                            </button>";
+                $btn_realizar_valoracion = "onclick='realizar_valoracion_subs(" . $citas['id_folio'] . ", " . $citas['id_cliente'] . ")'";
                 break;
 
             case 2:
                 $tipo_cita = 'PRIMERA VEZ';
-                $btn_realizar_valoracion = "<button type='button' id='btn_rea_" . $citas['id_folio'] . "' class='btn btn-success btn-sm' " . $boton_cancelar . " ".$valoracion." title='Realizar Valoracion' onclick='realizar_valoracion_primera_v(" . $citas['id_folio'] . ", " . $citas['id_cliente'] . ", &quot;" . $citas['nombre_cliente'] . "&quot;, &quot;".$citas['telefono_cliente']." &quot;, &quot;".$citas['fecha_nacimiento']."&quot;, ".$citas['ocupacion'].", ".$citas['estado_civil'].")'>
-                                                <i class='fas fa-check'></i>
-                                            </button>";
+                $btn_realizar_valoracion = "onclick='realizar_valoracion_primera_v(" . $citas['id_folio'] . ", " . $citas['id_cliente'] . ")'";
         }
 
         switch ($citas['tipo_servicio']) {
             case 1:
                 $tipo_servicio = 'CONSULTORIO';
-                
+
                 break;
 
             case 2:
                 $tipo_servicio = 'DOMICILIO';
-                
         }
 
 
@@ -189,13 +184,15 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
                                 <i class='fas fa-ban'></i>
                             </button>
                             &nbsp;
-                            ".$pdfValoracion."
+                            " . $pdfValoracion . "
                             ";
         } else {
             $acciones = "
-                            ".$btn_realizar_valoracion."
+                            <button type='button' id='btn_rea_" . $citas['id_folio'] . "' class='btn btn-success btn-sm' " . $boton_cancelar . " " . $valoracion . " title='Realizar Valoracion' " . $btn_realizar_valoracion . ">
+                                <i class='fas fa-check'></i>
+                            </button>
                             &nbsp;
-                            ".$pdfValoracion."
+                            " . $pdfValoracion . "
             ";
         }
 
@@ -240,7 +237,11 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
             "language": {
                 "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
             },
-            "order" : [[3, 'asc'], [2, 'asc']],
+            "order": [
+                [3, 'asc'],
+                [2, 'asc'],
+                [1, 'des'],
+            ],
         });
     });
 </script>

@@ -26,49 +26,100 @@
             $ultimo = $max['no_registro'] + 1;
 
             //print_r($_POST);
-            $valorcionSQL = "INSERT INTO emisores_historial_expediente (`folio`, 
-                                                                            `id_emisor`, 
-                                                                            `id_folio_cita`, 
-                                                                            `fecha_emision`, 
-                                                                            `id_cliente`, 
-                                                                            `edad`, 
-                                                                            `id_ocupacion`, 
-                                                                            `estado_civil`, 
-                                                                            `taxicomanias`, 
-                                                                            `motivo_consulta`, 
-                                                                            `actividad_fisica`,
-                                                                            `ta`, 
-                                                                            `fc`, 
-                                                                            `fr`, 
-                                                                            `oxigeno`, 
-                                                                            `temperatura`, 
-                                                                            `glucosa`, 
-                                                                            `farmacos`, 
-                                                                            `diagnostico_medico`, 
-                                                                            `escala_eva`) 
-                                                                            VALUES (
-                                                                            $ultimo, 
-                                                                            ".intval($_SESSION['id_emisor']).",
-                                                                            ".intval($_POST['id_folio']).",
-                                                                            '".$fecha."',
-                                                                            ".intval($_POST['id_cliente']).",
-                                                                            ".intval($_POST['edad']).",
-                                                                            ".intval($_POST['id_ocupacion']).",
-                                                                            ".intval($_POST['estado_civil']).",
-                                                                            '".strtoupper($_POST['toximanias'])."',
-                                                                            '".strtoupper($_POST['motivo_consulta'])."',
-                                                                            '".strtoupper($_POST['act_fisica'])."',
-                                                                            '".strtoupper($_POST['ta'])."',
-                                                                            '".strtoupper($_POST['fc'])."',
-                                                                            '".strtoupper($_POST['fr'])."',
-                                                                            '".strtoupper($_POST['satO2'])."',
-                                                                            '".strtoupper($_POST['temp'])."',
-                                                                            '".strtoupper($_POST['glucosa'])."',
-                                                                            '".strtoupper($_POST['farmacos'])."',
-                                                                            '".strtoupper($_POST['diagnostico_medico'])."',
-                                                                            ".intval($_POST['escalaDolor'])."
-                                                                                );";
-            //print_r($valorcionSQL);
+            if(intval($_POST['tipo_consulta']) == 1) {
+
+                $valorcionSQL = "INSERT INTO emisores_historial_expediente (`folio`, 
+                                                                                `id_emisor`, 
+                                                                                `id_folio_cita`, 
+                                                                                `fecha_emision`, 
+                                                                                `id_cliente`, 
+                                                                                `edad`, 
+                                                                                `id_ocupacion`, 
+                                                                                `estado_civil`, 
+                                                                                `taxicomanias`, 
+                                                                                `motivo_consulta`, 
+                                                                                `actividad_fisica`,
+                                                                                `ta`, 
+                                                                                `fc`, 
+                                                                                `fr`, 
+                                                                                `oxigeno`, 
+                                                                                `temperatura`, 
+                                                                                `glucosa`, 
+                                                                                `farmacos`, 
+                                                                                `diagnostico_medico`, 
+                                                                                `escala_eva`) 
+                                                                                VALUES (
+                                                                                $ultimo, 
+                                                                                ".intval($_SESSION['id_emisor']).",
+                                                                                ".intval($_POST['id_folio']).",
+                                                                                '".$fecha."',
+                                                                                ".intval($_POST['id_cliente']).",
+                                                                                ".intval($_POST['edad']).",
+                                                                                ".intval($_POST['id_ocupacion']).",
+                                                                                ".intval($_POST['estado_civil']).",
+                                                                                '".strtoupper($_POST['toximanias'])."',
+                                                                                '".strtoupper($_POST['motivo_consulta'])."',
+                                                                                '".strtoupper($_POST['act_fisica'])."',
+                                                                                '".strtoupper($_POST['ta'])."',
+                                                                                '".strtoupper($_POST['fc'])."',
+                                                                                '".strtoupper($_POST['fr'])."',
+                                                                                '".strtoupper($_POST['satO2'])."',
+                                                                                '".strtoupper($_POST['temp'])."',
+                                                                                '".strtoupper($_POST['glucosa'])."',
+                                                                                '".strtoupper($_POST['farmacos'])."',
+                                                                                '".strtoupper($_POST['diagnostico_medico'])."',
+                                                                                ".intval($_POST['escalaDolor'])."
+                                                                                    );";
+            } else {
+                //* el campo de diagnostico medico: almacenaremos observaciones de sitas subsecuentes
+                $valorcionSQL = "INSERT INTO emisores_historial_expediente (`folio`, 
+                                                                                `id_emisor`, 
+                                                                                `id_folio_cita`, 
+                                                                                `fecha_emision`, 
+                                                                                `id_cliente`, 
+                                                                                `edad`, 
+                                                                                `id_ocupacion`, 
+                                                                                `estado_civil`, 
+                                                                                `taxicomanias`, 
+                                                                                `motivo_consulta`, 
+                                                                                `actividad_fisica`,
+                                                                                `ta`, 
+                                                                                `fc`, 
+                                                                                `fr`, 
+                                                                                `oxigeno`, 
+                                                                                `temperatura`, 
+                                                                                `glucosa`, 
+                                                                                `farmacos`, 
+                                                                                `diagnostico_medico`, 
+                                                                                `avance`, 
+                                                                                `escala_eva`) 
+                                                                                VALUES (
+                                                                                $ultimo, 
+                                                                                ".intval($_SESSION['id_emisor']).",
+                                                                                ".intval($_POST['id_folio']).",
+                                                                                '".$fecha."',
+                                                                                ".intval($_POST['id_cliente']).",
+                                                                                ".intval($_POST['edad']).",
+                                                                                ".intval($_POST['id_ocupacion']).",
+                                                                                ".intval($_POST['estado_civil']).",
+                                                                                '".strtoupper($_POST['toximanias'])."',
+                                                                                '".strtoupper($_POST['motivo_consulta'])."',
+                                                                                '".strtoupper($_POST['act_fisica'])."',
+                                                                                '".strtoupper($_POST['ta'])."',
+                                                                                '".strtoupper($_POST['fc'])."',
+                                                                                '".strtoupper($_POST['fr'])."',
+                                                                                '".strtoupper($_POST['satO2'])."',
+                                                                                '".strtoupper($_POST['temp'])."',
+                                                                                '".strtoupper($_POST['glucosa'])."',
+                                                                                '".strtoupper($_POST['farmacos'])."',
+                                                                                '".strtoupper($_POST['observaciones'])."',
+                                                                                '".strtoupper($_POST['avance'])."',
+                                                                                ".intval($_POST['escalaDolor'])."
+                                                                                    );";
+            }
+            
+            // print_r($valorcionSQL);
+            // return;
             $resValoracion = mysqli_query($conexion, $valorcionSQL);
             
 

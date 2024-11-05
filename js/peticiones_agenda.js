@@ -7,7 +7,21 @@ $(document).ready(function () {
     }
 });
 
+function limpiar_form() {
+    $("#folio_gestion").val(0);
+    $("#id_cliente2").val(0);
+    $("#clientes").empty();
+    $("#fecha_cita_form").val('');
+    $("#hora_cita_form").val('');
+    $("#terapeuta_form").val('');
+    $("#tipo_servicio_form").val('');
+    $("#tipo_cita_form").val('');
+    $("#consultorio_form").val('');
+    $("#observaciones_form").val('');    
+}
+
 function form_nueva_cita() {
+    limpiar_form();
     $("#modal_nueva_cita").modal("show");
 }
 
