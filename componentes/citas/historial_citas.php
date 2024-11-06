@@ -112,7 +112,7 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
 
             $row = mysqli_fetch_array($res_val);
             if ($row && isset($row['folio']) && $row['folio'] > 0) {
-                $pdfValoracion = "<button type='button' id='btn_pdf_" . $row['folio'] . "' class='btn btn-primary btn-sm' title='Ver PDF' onclick='ver_pdf(" . $row['folio'] . ")' >
+                $pdfValoracion = "<button type='button' id='btn_pdf_" . $row['folio'] . "' class='btn btn-primary btn-sm' title='Ver PDF' onclick='ver_pdf(" . $row['folio'] . ", " . $citas['tipo_cita'] . ")' >
                                     <i class='fas fa-copy'></i>
                                 </button>";
             } else {

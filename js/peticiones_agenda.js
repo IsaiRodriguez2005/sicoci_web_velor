@@ -527,10 +527,15 @@ function enfermedades_form(){
 
 }
 
-function ver_pdf(id_folio)
+function ver_pdf(id_folio, tipo_cita)
 {
-    //var ruta = "ver_pdf_valoracion.php?id_folio=" + id_folio + "&folio_factura=" + folio_factura + "&serie_factura=" + serie_factura + "";
-    var ruta = "ver_pdf_valoracion.php?id_folio=" + id_folio;
+    let ruta;
+    
+    if (tipo_cita == 2){
+        ruta = "componentes/formatos_pdf/ver_pdf_valoracion_pv.php?id_folio=" + id_folio;
+    } else {
+        ruta = "componentes/formatos_pdf/ver_pdf_valoracion_sb.php?id_folio=" + id_folio;
+    }
     $("#ruta_pdf").prop("src", ruta);
     $("#pdf_ffactura").html(id_folio);
     $("#ver_pdf_factura").modal("show");

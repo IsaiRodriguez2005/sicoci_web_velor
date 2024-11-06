@@ -2,8 +2,8 @@
 session_start();
 date_default_timezone_set('America/Mexico_City');
 //error_reporting(0);
-require("componentes/conexion.php");
-require './vendor/autoload.php';
+require("../conexion.php");
+require '../../vendor/autoload.php';
 
 use Mpdf\Mpdf;
 use Mpdf\HTMLParserMode;
@@ -52,7 +52,7 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
     //* Antecedentes de enfermedades (referenciando a el expediente del paciente)
     $antecedentes .= '<div class="renglon">
                         <div class="titulo_receptor">
-                            DATOS BASICOS
+                            DATOS ENFERMEDAD
                         </div>
                         <div class="datos_receptor">
                             <table class="datos_parrafo" width="100%">
@@ -78,17 +78,6 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
                     </div>';
 
     //* Esacala de valor
-    // $escalaValHTML = '';
-
-    // for ($i = 0; $i < $dataVal['escala_eva']; $i++) {
-    //     $escalaValHTML .= '<td class="filled escala-dolor" align="center"></td>';
-    // }
-
-    // if ($dataVal['escala_eva'] < 10) {
-    //     for ($dataVal['escala_eva']; $dataVal['escala_eva'] < 10; $dataVal['escala_eva']++) {
-    //         $escalaValHTML .= '<td class="filled" align="center"></td>';
-    //     }
-    // }
     switch ($dataVal['escala_eva']) {
         case 1:
             $color = '#D4EDDA'; // Verde claro
@@ -124,8 +113,6 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
             $color = '#FFFFFF'; // Color por defecto (blanco)
             break;
     }
-
-
 
     //* estado civil
     if ($dataVal['estado_civil'] == 1) {
@@ -186,7 +173,7 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
                 break;
         }
 
-        $logo = '<img src="emisores/' . $_SESSION['id_emisor'] . '/archivos/generales/logo.jpg" ' . $medidas . '>';
+        $logo = '<img src="../../emisores/' . $_SESSION['id_emisor'] . '/archivos/generales/logo.jpg" ' . $medidas . '>';
         // $logo = '"emisores/' . $_SESSION['id_emisor'] . '/archivos/generales/logo.jpg" ' . $medidas . '';
     } else {
         $logo = '';
@@ -199,6 +186,15 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
     $qr = '';
     $mensaje_footer = '';
 
+    //* CITA CONTINUA O INTERMITENTE---------------------------------
+    //* Conusa para saer si el cliente, a la ultima consulta, asistio.
+
+    $consUltimoEstado = "SELECT estatus, id_folio FROM emisores_agenda WHERE id_cliente = " . intval($dataVal['id_cliente']) . " AND id_folio < " . intval($dataVal['id_folio_cita']) . " AND id_emisor = " . intval($dataVal['id_emisor']) . " ORDER BY id_folio DESC LIMIT 1;";
+    $resultado = mysqli_query($conexion, $consUltimoEstado);
+
+    $res = mysqli_fetch_array($resultado);
+    // $res['estatus'] == 3 ? $respuesta['continuo'] =  true : $respuesta['continuo'] = false;
+    $res['estatus'] == 3 ? $cont_inter =  true : $cont_inter = false;
 
     //ARMO EL HTML
     $html = '
@@ -225,7 +221,7 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
                                             <td align="right">' . $dataVal['fecha_emision'] . '</td>
                                         </tr>
                                         <tr>
-                                            <td width="50%" align="left"><b>FISIO</b></td>
+                                            <td width="30%" align="left"><b>FISIO:</b></td>
                                             <td align="right">' . $dataVal['nombre_personal'] . '</td>
                                         </tr>
                                     </table>
@@ -270,6 +266,27 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
                                 <tr>
                                     <td align="left"><b>ACTIVIDAD FÍSICA:</b></td>
                                     <td colspan="3" align="left">' . $dataVal['actividad_fisica'] . '</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="renglon">
+                        <div class="titulo_receptor">
+                            DATOS BASICOS
+                        </div>
+                        <div class="datos_receptor">
+                            <table class="datos_parrafo" width="100%">
+                                <tr>
+                                    <td width="15%" align="left"><b>NO. TERAPIA:</b></td>
+                                    <td width="35%" align="left">' . $dataVal['nombre_cliente'] . '</td>
+                                    <td width="20%" align="left"><b>CONTINUO/INTERMITENTE:</b></td>
+                                    <td width="30%" align="left">' . $dataVal['regimen_fiscal'] . '</td>
+                                </tr>
+                                <tr>
+                                    <td align="left"><b>AVANCE:</b></td>
+                                    <td align="left">' . $dataVal['avance'] . '</td>
+                                    <td align="left"><b>PAQUETE:</b></td>
+                                    <td align="left"></td>
                                 </tr>
                             </table>
                         </div>
@@ -319,16 +336,17 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
                     </div>
                     <div class="renglon">
                         <div class="titulo_receptor">
-                            F&Aacute;RMACOS
+                            Observaciones
                         </div>
                         <div class="datos_receptor">
                             <table class="datos_parrafo" width="100%">
                                 <tr>
-                                    <td width="35%" align="center">' . $dataVal['farmacos'] . '</td>
+                                    <td width="35%" align="center">' . $dataVal['diagnostico_medico'] . '</td>
                                 </tr>
                             </table>
                         </div>
                     </div>
+                    <!--
                     <div class="renglon">
                         <div class="titulo_receptor">
                             DIAGN&Oacute;STICO M&Eacute;DICO
@@ -341,6 +359,7 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
                             </table>
                         </div>
                     </div>
+                    -->
                     
             <!--
                     <div class="renglon">
@@ -449,7 +468,7 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
     $html = mb_convert_encoding($html, 'UTF-8', 'UTF-8');
 
     $mpdf = new Mpdf();
-    $css = file_get_contents("css/estilos_factura.css");
+    $css = file_get_contents("../../css/estilos_factura.css");
     $mpdf->SetHTMLFooter($footer);
     $mpdf->writeHTML($css, HTMLParserMode::HEADER_CSS);
     $mpdf->writeHTML($html, HTMLParserMode::HTML_BODY);
