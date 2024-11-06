@@ -1,6 +1,6 @@
 <?php
 session_start();
-require("../conexion.php");
+require("../../conexion.php");
 date_default_timezone_set('America/Mexico_City');
 
 if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
@@ -23,7 +23,7 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
                                 emisores_agenda a 
                                 LEFT JOIN emisores_personal p ON a.id_terapeuta = p.id_personal AND a.id_emisor = p.id_emisor AND p.tipo = 2
                                 LEFT JOIN emisores_clientes c ON a.id_cliente = c.id_cliente AND a.id_emisor = c.id_emisor 
-                                WHERE a.estatus = 2";
+                                ";
 
         $resCitas = mysqli_query($conexion, $consulta);
 
@@ -35,6 +35,7 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
         }
 
         echo json_encode($citas);
+        
     } else {
         $id_terapeuta = intval($_POST['id_terapeuta']);
         $consulta = "SELECT a.id_folio, 
@@ -51,7 +52,6 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
                     LEFT JOIN emisores_clientes c ON a.id_cliente = c.id_cliente 
                                                 AND a.id_emisor = c.id_emisor 
             WHERE 
-                    a.estatus = 2 AND
                     a.id_terapeuta = " . $id_terapeuta;
 
         //print_r($consulta);

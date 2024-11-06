@@ -194,7 +194,7 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
 
     $res = mysqli_fetch_array($resultado);
     // $res['estatus'] == 3 ? $respuesta['continuo'] =  true : $respuesta['continuo'] = false;
-    $res['estatus'] == 3 ? $cont_inter =  true : $cont_inter = false;
+    $res['estatus'] == 3 ? $cont_inter =  'Continuo' : $cont_inter = 'Intermitente';
 
     //ARMO EL HTML
     $html = '
@@ -280,7 +280,7 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
                                     <td width="15%" align="left"><b>NO. TERAPIA:</b></td>
                                     <td width="35%" align="left">' . $dataVal['nombre_cliente'] . '</td>
                                     <td width="20%" align="left"><b>CONTINUO/INTERMITENTE:</b></td>
-                                    <td width="30%" align="left">' . $dataVal['regimen_fiscal'] . '</td>
+                                    <td width="30%" align="left">' . $cont_inter . '</td>
                                 </tr>
                                 <tr>
                                     <td align="left"><b>AVANCE:</b></td>

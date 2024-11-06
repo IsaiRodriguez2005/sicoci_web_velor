@@ -43,26 +43,42 @@ $(function () {
   var calendarEl = document.getElementById("calendar");
 
   get_citas_agenda().then(function (resultado) {
-    // Convierte el resultado a un objeto JavaScript (array de objetos)
-    let citas = JSON.parse(resultado);
 
+    let citas = resultado;
 
-    
+    //console.log(citas);
+
     let eventos = citas.map(cita => {
-      if(Number( $("#id_terapeuta").val() ) == 0){
+      let colorCita;
+      switch (Number(cita.estatus)) {
+        case 1:
+          colorCita = '#dc3545';
+          break
+        case 2:
+          colorCita = '#ffc107';
+          break
+        case 3:
+          colorCita = '#28a745';
+          break
+        case 4:
+          colorCita = '#6c757d';
+          break
+      }
+
+      if (Number($("#id_terapeuta").val()) == 0) {
         return {
           title: cita.nombre_personal,
           start: cita.fecha_agenda,
-          backgroundColor: '#00a65a',
-          borderColor: '#00a65a',
+          backgroundColor: colorCita,
+          borderColor: colorCita,
           allDay: false
         };
-      } else{
+      } else {
         return {
           title: cita.nombre_cliente,
           start: cita.fecha_agenda,
-          backgroundColor: '#00a65a',
-          borderColor: '#00a65a',
+          backgroundColor: colorCita,
+          borderColor: colorCita,
           allDay: false
         };
       }
@@ -71,7 +87,7 @@ $(function () {
 
     var calendarEl = document.getElementById("calendar");
 
-    if(Number( $("#id_terapeuta").val() ) == 0){
+    if (Number($("#id_terapeuta").val()) == 0) {
       var calendar = new FullCalendar.Calendar(calendarEl, {
         headerToolbar: {
           left: "prev,next today",
@@ -181,16 +197,16 @@ function get_citas_agenda() {
   id_terapeuta = $("#id_terapeuta").val()
 
   //console.log(id_terapeuta)
-  if(Number(id_terapeuta) == 0){
+  if (Number(id_terapeuta) == 0) {
     return new Promise(function (resolve, reject) {
       $.ajax({
         cache: false,
-        url: 'componentes/citas/cargar_historial_calendario.php',
+        url: 'componentes/catalogos/cargar/cargar_historial_calendario.php',
         type: 'POST',
-        dataType: 'html',
+        dataType: 'json',
         data: {},
       }).done(function (resultado) {
-        //console.log('hola')
+        console.log('hola')
         resolve(resultado);
       }).fail(function (jqXHR, textStatus, errorThrown) {
         reject(errorThrown);
@@ -200,10 +216,10 @@ function get_citas_agenda() {
     return new Promise(function (resolve, reject) {
       $.ajax({
         cache: false,
-        url: 'componentes/citas/cargar_historial_calendario.php',
+        url: 'componentes/catalogos/cargar/cargar_historial_calendario.php',
         type: 'POST',
-        dataType: 'html',
-        data: {'id_terapeuta' : id_terapeuta},
+        dataType: 'json',
+        data: { 'id_terapeuta': id_terapeuta },
       }).done(function (resultado) {
         //console.log(resultado)
         resolve(resultado);
