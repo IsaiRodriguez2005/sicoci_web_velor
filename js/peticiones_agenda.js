@@ -98,7 +98,6 @@ function gestionar_cita() {
     });
     $.ajax({
         cache: false,
-
         url: "componentes/catalogos/registrar_cita.php",
         type: 'POST',
         dataType: 'html',
@@ -178,8 +177,8 @@ function gestionar_cita() {
         else {
             Swal.fire({
                 icon: "warning",
-                //title: "El Personal Ya Existe",
-                title: resultado,
+                title: "Error interno, notifica a Soporte",
+                //title: resultado,
                 showConfirmButton: true,
                 //timer: 2000
             });

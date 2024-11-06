@@ -62,15 +62,25 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
                         $datosConsultorio =  getDatosConsultorio(intval($_POST['id_consultorio']), $conexion);
 
 
+
                         if ($datosCliente['correo']) {
                             $fecha = obtenerFechaEspaniol($fecha_hora);
                             $asunto = 'CITA AGENDADA!';
-                            $mensaje = '
-                                Que tal <b>' . strtoupper($datosCliente['nombre_cliente']) . '</b>.<br><br>
-                                Para confirmar el registro de la cita con el fisioterapeuta <b>' . $datosTerap['nombre_personal'] . '</b> para el día <b>' . $fecha['dia'] . ' ' . $fecha['num_dia'] . ' de ' . $fecha['mes'] . '</b> del <b>' . $fecha['anio'] . '</b> 
-                                a las <b>' . $fecha['hora'] . '</b> en el <b>' . $datosConsultorio['nombre'] . '</b> <br><br>
-                                PD. Este correo es informativo por lo que no es necesario responder dicho correo.
-                                ';
+                            if(intval($_POST['tipo_servicio']) == 1) {
+                                $mensaje = '
+                                    Que tal <b>' . strtoupper($datosCliente['nombre_cliente']) . '</b>.<br><br>
+                                    Para confirmar el registro de la cita con el fisioterapeuta <b>' . $datosTerap['nombre_personal'] . '</b> para el día <b>' . $fecha['dia'] . ' ' . $fecha['num_dia'] . ' de ' . $fecha['mes'] . '</b> del <b>' . $fecha['anio'] . '</b> 
+                                    a las <b>' . $fecha['hora'] . '</b> en el <b>' . $datosConsultorio['nombre'] . '</b> <br><br>
+                                    PD. Este correo es informativo por lo que no es necesario responder dicho correo.
+                                    ';
+                            } else {
+                                $mensaje = '
+                                    Que tal <b>' . strtoupper($datosCliente['nombre_cliente']) . '</b>.<br><br>
+                                    Para confirmar el registro de la cita con el fisioterapeuta <b>' . $datosTerap['nombre_personal'] . '</b> para el día <b>' . $fecha['dia'] . ' ' . $fecha['num_dia'] . ' de ' . $fecha['mes'] . '</b> del <b>' . $fecha['anio'] . '</b> 
+                                    a las <b>' . $fecha['hora'] . '</b> en su <b>DOMICILIO</b> <br><br>
+                                    PD. Este correo es informativo por lo que no es necesario responder dicho correo.
+                                    ';
+                            }
                             $correo = enviarCorreo($datosCliente['correo'], $asunto, $mensaje);
                         }
 
@@ -78,13 +88,23 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
 
                             $fecha = obtenerFechaEspaniol($fecha_hora);
                             $asunto = 'CITA AGENDADA!';
-                            $mensaje = '
-                                Que tal <b>' . strtoupper($datosTerap['nombre_personal']) . '</b>,.<br><br>
-                                El cliente/paciente <b>' . $datosCliente['nombre_cliente'] . '</b> agendó una cita contigo para el día <b>' . $fecha['dia'] . ' ' . $fecha['num_dia'] . ' de ' . $fecha['mes'] . '</b> del <b>' . $fecha['anio'] . '</b> 
-                                a las <b>' . $fecha['hora'] . '</b> en el <b>' . $datosConsultorio['nombre'] . '</b> <br><br>
-                                <b>Observaciones:</b> ' . strtoupper($_POST['observaciones']) . '
-                                PD. Este correo es informativo por lo que no es necesario responder dicho correo.
-                                ';
+                            if(intval($_POST['tipo_servicio']) == 1) { 
+                                $mensaje = '
+                                    Que tal <b>' . strtoupper($datosTerap['nombre_personal']) . '</b>,.<br><br>
+                                    El cliente/paciente <b>' . $datosCliente['nombre_cliente'] . '</b> agendó una cita contigo para el día <b>' . $fecha['dia'] . ' ' . $fecha['num_dia'] . ' de ' . $fecha['mes'] . '</b> del <b>' . $fecha['anio'] . '</b> 
+                                    a las <b>' . $fecha['hora'] . '</b> en <b>' . $datosConsultorio['nombre'] . '</b> <br><br>
+                                    <b>Observaciones:</b> ' . strtoupper($_POST['observaciones']) . '
+                                    PD. Este correo es informativo por lo que no es necesario responder dicho correo.
+                                    ';
+                            } else {
+                                $mensaje = '
+                                    Que tal <b>' . strtoupper($datosTerap['nombre_personal']) . '</b>,.<br><br>
+                                    El cliente/paciente <b>' . $datosCliente['nombre_cliente'] . '</b> agendó una cita contigo para el día <b>' . $fecha['dia'] . ' ' . $fecha['num_dia'] . ' de ' . $fecha['mes'] . '</b> del <b>' . $fecha['anio'] . '</b> 
+                                    a las <b>' . $fecha['hora'] . '</b> en su <b>DOMICILIO</b> <br><br>
+                                    <b>Observaciones:</b> ' . strtoupper($_POST['observaciones']) . '
+                                    PD. Este correo es informativo por lo que no es necesario responder dicho correo.
+                                    ';
+                            }
                             $correo = enviarCorreo($datosTerap['correo'], $asunto, $mensaje);
                         }
 
