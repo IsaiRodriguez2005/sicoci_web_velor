@@ -828,7 +828,7 @@
                         </div>
                         <div class="form-group pt-2">
                             <label for="observaciones">Observaciones:</label>
-                            <textarea class="form-control" id="observacionesSubSec" rows="3" placeholder="Obcervaciones"></textarea>
+                            <textarea class="form-control" id="observacionesSubSec" rows="3" placeholder="Observaciones"></textarea>
                         </div>
                         <div class="form-row pt-2">
                             <div class="col-md-3">

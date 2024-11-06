@@ -26,8 +26,10 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
         ';
 
 
-    $consExpedientes = "SELECT e.fecha_emision, e.folio, e.id_cliente, c.nombre_cliente 
-                                    FROM emisores_historial_expediente AS e INNER JOIN emisores_clientes AS c ON e.id_cliente = c.id_cliente 
+    $consExpedientes = "SELECT e.fecha_emision, e.folio, e.id_cliente, c.nombre_cliente, a.id_folio as folio_cita
+                                    FROM emisores_historial_expediente AS e 
+                                    INNER JOIN emisores_agenda AS a ON e.id_folio_cita = a.id_folio
+                                    INNER JOIN emisores_clientes AS c ON e.id_cliente = c.id_cliente 
                                     WHERE e.id_cliente = " . $_POST['id_cliente'] . " AND e.id_emisor = " . $_SESSION['id_emisor'] . "";
                                     //echo $consExpedientes;
     $resultado = mysqli_query($conexion, $consExpedientes);
@@ -96,7 +98,7 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
                                 <i class='far fa-file'></i>
                             </button>
                             -->
-                            <button type='button' id='btn_pdf_".$expediente['folio']."' class='btn btn-primary btn-sm' title='Ver PDF' onclick='ver_pdf(".$expediente['folio'].")' >
+                            <button type='button' id='btn_pdf_".$expediente['folio']."' class='btn btn-primary btn-sm' title='Ver PDF' onclick='ver_pdf(".$expediente['folio'].", ".$expediente['folio_cita'].")' >
                                 <i class='fas fa-copy'></i>
                             </button>
             ";
