@@ -12,15 +12,17 @@
             </div>
             <div class="modal-body">
                 <form id="form_nueva_cita">
-                    <div class="row">
+                    <div class="row mt-3">
                         <!-- Cliente -->
                         <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="cliente">Cliente</label>
-                                <div class="d-flex">
-                                    <input type="text" class="form-control" id="cliente_form" list="clientes" placeholder="Nombre del Cliente" autocomplete="off" onchange="buscar_cliente(this)" onfocus="actualizar_lista_clientes()" required>
-                                    <!-- <button type="button" class="btn btn-info ml-2" onclick="abrir_modal('modal_nueva_cita', 'modal_nuevo_cliente')"><i class="fas fa-user-plus"></i></button>-->
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-user"></i></span>
                                 </div>
+                                <input type="text" class="form-control" id="cliente_form" list="clientes" placeholder="Nombre del Cliente" autocomplete="off" onchange="buscar_cliente(this)" onfocus="actualizar_lista_clientes()" required>
+                                <!-- <div class="d-flex"> -->
+                                <!-- <button type="button" class="btn btn-info ml-2" onclick="abrir_modal('modal_nueva_cita', 'modal_nuevo_cliente')"><i class="fas fa-user-plus"></i></button>-->
+                                <!-- </div> -->
                                 <datalist id="clientes">
 
                                 </datalist>
@@ -28,41 +30,52 @@
                         </div>
                         <!-- Fecha de Cita -->
                         <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="fecha_hora_cita">Fecha de Cita</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                                </div>
+
                                 <input type="date" class="form-control" id="fecha_cita_form" required onchange="cargar_datos();">
                             </div>
                         </div>
                     </div>
-                    <div class="row">
+
+                    <div class="row mt-3">
                         <!-- Terapeuta -->
                         <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="terapeuta">Terapeuta</label>
-                                <div class="d-flex">
-                                    <select class="form-control" id="terapeuta_form" required onchange="cargar_horarios_disponibles();">
-                                        <option value="" disabled selected>Selecciona Terapeuta</option>
-                                    </select>
-                                    <!--<button type="button" class="btn btn-info ml-2" onclick="abrir_modal('modal_nueva_cita', 'modal_nuevo_terapeuta')"><i class="fas fa-user-plus"></i></button>-->
-                                    <button type="button" class="btn btn-info ml-2" onclick="disponibilidad_terapeutas()"><i class="far fa-eye"></i></button>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-user-md"></i></span>
                                 </div>
+                                <select class="form-control" id="terapeuta_form" required onchange="cargar_horarios_disponibles();">
+                                    <option value="" disabled selected>Selecciona Terapeuta</option>
+                                </select>
+                                <button type="button" class="btn btn-info ml-2" onclick="disponibilidad_terapeutas()">
+                                    <i class="far fa-eye"></i>
+                                </button>
                             </div>
                         </div>
+
                         <!-- Hora de Cita -->
                         <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="fecha_hora_cita">Hora de Cita</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-clock"></i></span>
+                                </div>
                                 <select class="form-control" id="hora_cita_form" required onchange="cargar_consultorios_disponibles();">
                                     <option value="" disabled selected>Selecciona Hora de Cita</option>
                                 </select>
                             </div>
                         </div>
                     </div>
-                    <div class="row">
+
+                    <div class="row mt-3">
                         <!-- Tipo de Servicio -->
                         <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="tipo_servicio">Tipo de Servicio</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-briefcase-medical"></i></span>
+                                </div>
                                 <select class="form-control" id="tipo_servicio_form" onchange="tipo_servicio();" required>
                                     <option value="" disabled selected>Selecciona Tipo de Servicio</option>
                                     <option value="1">Consultorio</option>
@@ -70,34 +83,41 @@
                                 </select>
                             </div>
                         </div>
+
                         <!-- Tipo de Cita -->
                         <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="tipo_cita">Tipo de Cita</label>
-                                <select class="form-control" id="tipo_cita_form" require disabled>
-                                    <option value="" disabled selected>Selecciona un cliente</option>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-stethoscope"></i></span>
+                                </div>
+                                <select class="form-control" id="tipo_cita_form" required disabled>
+                                    <option value="" disabled selected>Tipo de Cita</option>
                                     <option value="1">Subsecuente</option>
                                     <option value="2">Primera vez</option>
                                 </select>
                             </div>
                         </div>
                     </div>
-                    <div class="row">
+
+                    <div class="row mt-3">
                         <!-- Consultorio -->
                         <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="consultorio">Consultorio</label>
-                                <div class="d-flex">
-                                    <select class="form-control" id="consultorio_form" required>
-
-                                    </select>
-                                    <button type="button" class="btn btn-info ml-2" onclick="abrir_modal('modal_nueva_cita', 'modal_nuevo_consultorio')"><i class="fas fa-plus-circle"></i></button>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-clinic-medical"></i></span>
                                 </div>
+                                <select class="form-control" id="consultorio_form" required>
+                                    <option value="" disabled selected>Selecciona Consultorio</option>
+                                </select>
+                                <button type="button" class="btn btn-info ml-2" onclick="abrir_modal('modal_nueva_cita', 'modal_nuevo_consultorio')">
+                                    <i class="fas fa-plus-circle"></i>
+                                </button>
                             </div>
                         </div>
                     </div>
+
                     <!-- Observaciones -->
-                    <div class="form-group">
+                    <div class="form-group mt-3">
                         <label for="observaciones">Observaciones</label>
                         <textarea class="form-control" id="observaciones_form" rows="4" placeholder="Escribe aqu&iacute; tus observaciones" required></textarea>
                     </div>
@@ -709,59 +729,95 @@
             <div class="tab-content">
                 <!-- Datos Personales Tab -->
                 <div class="tab-pane fade show active" id="custom-tabs-one-dp" role="tabpanel" aria-labelledby="custom-tabs-one-dp-tab">
-                    <div class="card-body">
-                        <div class="form-row">
-                            <div class="col-md-5">
-                                <label for="nombre_valoracion">Nombre:</label>
-                                <input type="text" class="form-control" id="nombre_valoracion" placeholder="Ingrese su nombre" disabled>
-                            </div>
-                            <div class="col-md-3">
-                                <label for="estado_civil_valoracion">Estado Civil:</label>
-                                <div class="d-flex">
-                                    <select class="form-control" id="estado_civil_valoracion" disabled>
-                                        <option value="" selected disabled>Estado Civil</option>
-                                        <option value="1">Soltero/a</option>
-                                        <option value="2">Casado/a</option>
-                                        <!-- Agrega más opciones si es necesario -->
-                                    </select>
-                                    <button type="button" class="btn btn-info ml-2" onclick="habilitarParaModificar('estado_civil_valoracion')" title="Modificar Estado Civil">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
+                    <div class="modal-body">
+                        <form id="form_valoracion">
+                            <div class="row mt-3">
+                                <!-- Nombre -->
+                                <div class="col-md-4">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                        </div>
+                                        <input type="text" class="form-control" id="nombre_valoracion" placeholder="Ingrese su nombre" disabled>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-md-3">
-                                <label for="edad_valoracion">Edad:</label>
-                                <input type="number" class="form-control" id="edad_valoracion" placeholder="Ingrese su edad" onfocus="resetear('edad_valoracion')" disabled>
+
+                                <!-- Estado Civil -->
+                                <div class="col-md-4">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="fas fa-heart"></i></span>
+                                        </div>
+                                        <select class="form-control" id="estado_civil_valoracion" disabled>
+                                            <option value="" selected disabled>Estado Civil</option>
+                                            <option value="1">Soltero/a</option>
+                                            <option value="2">Casado/a</option>
+                                        </select>
+                                        <div class="input-group-append">
+                                            <button type="button" class="btn btn-info" onclick="habilitarParaModificar('estado_civil_valoracion')" title="Modificar Estado Civil">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Edad -->
+                                <div class="col-md-4">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="fas fa-birthday-cake"></i></span>
+                                        </div>
+                                        <input type="number" class="form-control" id="edad_valoracion" placeholder="Ingrese su edad" onfocus="resetear('edad_valoracion')" disabled>
+                                    </div>
+                                </div>
                             </div>
 
-                        </div>
-                        <div class="form-row pt-2">
-                            <div class="col-md-5">
-                                <label for="ocupacion_valoracion">Ocupación:</label>
-                                <div class="d-flex">
-                                    <select class="form-control" id="ocupacion_valoracion" onfocus="resetear('ocupacion_valoracion')" disabled>
-                                        <!-- Opciones dinámicas de ocupaciones -->
-                                    </select>
-                                    <button type="button" class="btn btn-info ml-2" onclick="habilitarParaModificar('ocupacion_valoracion')" title="Modificar Ocupación">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
+                            <div class="row mt-3">
+                                <!-- Ocupación -->
+                                <div class="col-md-6">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="fas fa-briefcase"></i></span>
+                                        </div>
+                                        <select class="form-control" id="ocupacion_valoracion" onfocus="resetear('ocupacion_valoracion')" disabled>
+                                            <!-- Opciones dinámicas de ocupaciones -->
+                                        </select>
+                                        <div class="input-group-append">
+                                            <button type="button" class="btn btn-info" onclick="habilitarParaModificar('ocupacion_valoracion')" title="Modificar Ocupación">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Teléfono -->
+                                <div class="col-md-3">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                                        </div>
+                                        <input type="text" class="form-control" id="telefono_valoracion" placeholder="Teléfono" maxlength="10" onfocus="resetear('telefono_valoracion')" disabled>
+                                    </div>
+                                </div>
+
+                                <!-- Fecha Nacimiento -->
+                                <div class="col-md-3">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
+                                        </div>
+                                        <input type="date" class="form-control" id="fecha_nacimiento" onfocus="resetear('fecha_nacimiento')" disabled>
+                                        <div class="input-group-append">
+                                            <button type="button" class="btn btn-info" onclick="habilitarParaModificar('fecha_nacimiento')" title="Modificar Edad">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-md-3">
-                                <label for="telefono_valoracion">Teléfono:</label>
-                                <input type="text" class="form-control" id="telefono_valoracion" placeholder="Teléfono" maxlength="10" onfocus="resetear('telefono_valoracion')" disabled>
-                            </div>
-                            <div class="col-md-3">
-                                <label for="fecha_nacimiento">Fecha Nacimiento:</label>
-                                <div class="d-flex">
-                                    <input type="date" class="form-control" id="fecha_nacimiento" onfocus="resetear('fecha_nacimiento')" disabled>
-                                    <button type="button" class="btn btn-info ml-2" onclick="habilitarParaModificar('fecha_nacimiento')" title="Modificar Edad">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
+                        </form>
                     </div>
+
                     <div class="card-body" id="boton_confirmar">
 
                     </div>
@@ -770,99 +826,182 @@
                 <input type="hidden" id="tipo_consulta">
                 <!-- Observaciones Tab PRIMERA VEZ-->
                 <div class="tab-pane fade" id="custom-tabs-one-obs-pv" role="tabpanel" aria-labelledby="custom-tabs-one-obs-tab">
-                    <div class="card-body">
-                        <!-- Aquí va el contenido de las observaciones -->
-                        <div class="form-group">
-                            <label for="motivo_consulta_valoracion">Motivo de consulta:</label>
-                            <textarea class="form-control" id="motivo_consulta_valoracion" rows="3" placeholder="Motivo de consulta..." onfocus="resetear('motivo_consulta_valoracion')"></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label for="act_fisica_valoracion">Actividad física:</label>
-                            <input type="text" class="form-control" id="act_fisica_valoracion" placeholder="Toximanias" onfocus="resetear('act_fisica_valoracion')">
-                        </div>
-                        <div class="form-group">
-                            <label for="toximanias_valoracion">Toxicomanías:</label>
-                            <input type="text" class="form-control" id="toximanias_valoracion" placeholder="Toximanias" onfocus="resetear('toximanias_valoracion')">
-                        </div>
-                        <div class="form-group">
-                            <label for="farmacos">Fármacos:</label>
-                            <textarea class="form-control" id="farmacos" rows="2" placeholder="Ejemplo: Diclofenaco inyectado" onfocus="resetear('farmacos')"></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label for="diagnosticoMedico">Diagnóstico Médico:</label>
-                            <textarea class="form-control" id="diagnosticoMedico" rows="3" placeholder="Diagnóstico"></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label for="escalaDolor">Escala de Dolor EVA:</label>
-                            <div class="text-danger d-flex align-items-center" id="escaDolMessage">
-
+                    <div class="modal-body">
+                        <form id="form_observaciones">
+                            <!-- Motivo de Consulta -->
+                            <div class="row mt-3">
+                                <div class="col-md-12">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="fas fa-comment-medical"></i></span>
+                                        </div>
+                                        <textarea class="form-control" id="motivo_consulta_valoracion" rows="3" placeholder="Motivo de consulta..." onfocus="resetear('motivo_consulta_valoracion')"></textarea>
+                                    </div>
+                                </div>
                             </div>
 
-                            <div class="d-flex align-items-center ">
-                                <input type="range" class="custom-range ml-2" min="0" max="10" id="escalaDolorP" value="0" oninput="updateValue(1,this.value)">
-                                <span id="escalaValorP" class="ml-2">0</span>
+                            <!-- Actividad Física y Toxicomanías -->
+                            <div class="row mt-3">
+                                <div class="col-md-6">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="fas fa-running"></i></span>
+                                        </div>
+                                        <input type="text" class="form-control" id="act_fisica_valoracion" placeholder="Actividad física" onfocus="resetear('act_fisica_valoracion')">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="fas fa-skull"></i></span>
+                                        </div>
+                                        <input type="text" class="form-control" id="toximanias_valoracion" placeholder="Toxicomanías" onfocus="resetear('toximanias_valoracion')">
+                                    </div>
+                                </div>
                             </div>
-                        </div>
+
+                            <!-- Fármacos -->
+                            <div class="row mt-3">
+                                <div class="col-md-12">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="fas fa-pills"></i></span>
+                                        </div>
+                                        <textarea class="form-control" id="farmacos" rows="2" placeholder="Ejemplo: Diclofenaco inyectado" onfocus="resetear('farmacos')"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Diagnóstico Médico -->
+                            <div class="row mt-3">
+                                <div class="col-md-12">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="fas fa-notes-medical"></i></span>
+                                        </div>
+                                        <textarea class="form-control" id="diagnosticoMedico" rows="3" placeholder="Diagnóstico médico"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Escala de Dolor EVA -->
+                            <div class="row mt-3">
+                                <div class="col-md-12">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="fas fa-thermometer-half"></i></span>
+                                        </div>
+                                        <div class="form-control">
+                                            <div class="text-danger d-flex align-items-center" id="escaDolMessage"></div>
+                                            <div class="d-flex align-items-center">
+                                                <input type="range" class="custom-range ml-2" min="0" max="10" id="escalaDolorP" value="0" oninput="updateValue(1,this.value)">
+                                                <span id="escalaValorP" class="ml-2">0</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
                     </div>
+
                 </div>
                 <!-- Observaciones Tab SUBSECUENTE-->
                 <div class="tab-pane fade" id="custom-tabs-one-obs-sb" role="tabpanel" aria-labelledby="custom-tabs-one-obs-tab">
-                    <div class="card-body">
-                        <!-- Aquí va el contenido de las observaciones -->
-                        <div class="form-row">
-                            <div class="col-md-2">
-                                <label for="motivo_consulta_valoracion">N&uacute;mero de terapia:</label>
-                                <input class="form-control" id="num_terapia" placeholder="Número de terapia..." onfocus="resetear('motivo_consulta_valoracion')" disabled>
-                            </div>
-                            <div class="col-md-5">
-                                <label for="act_fisica_valoracion">Continuo/Intermitente:</label>
-                                <select id="cont_int" class="form-control" onfocus="resetear('cont_int')" disabled>
-                                    <option value="1">Continuo</option>
-                                    <option value="2">Intermintente</option>
-                                </select>
-                            </div>
-                            <div class="col-md-5">
-                                <label for="toximanias_valoracion">Avance:</label>
-                                <input type="text" class="form-control" id="avance" placeholder="Ejemplo: 20%" onfocus="resetear('toximanias_valoracion')">
-                            </div>
-                        </div>
-                        <div class="form-group pt-2">
-                            <label for="observaciones">Observaciones:</label>
-                            <textarea class="form-control" id="observacionesSubSec" rows="3" placeholder="Observaciones"></textarea>
-                        </div>
-                        <div class="form-row pt-2">
-                            <div class="col-md-3">
-                                <label for="farmacos">Paquete:</label>
-                                <input class="form-control" id="farmacos" placeholder="Ejemplo: Paquete de 5 sesiones" onfocus="resetear('farmacos')" disabled>
-                            </div>
-                            <div class="col-md-3">
-                                <label for="farmacos">No. Terapia:</label>
-                                <input class="form-control" id="farmacos" placeholder="Ejemplo: 2/3" onfocus="resetear('farmacos')" disabled>
-                            </div>
-                        </div>
-                        <div class="form-group pt-2">
-                            <label for="escalaDolor">Escala de Dolor EVA:</label>
-                            <div class="text-danger d-flex align-items-center" id="escaDolMessage1">
-
+                    <div class="modal-body">
+                        <form id="form_terapia">
+                            <!-- Número de Terapia, Continuo/Intermitente, y Avance -->
+                            <div class="row">
+                                <div class="col-md-2 mt-3">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="fas fa-hashtag"></i></span>
+                                        </div>
+                                        <input class="form-control" id="num_terapia" placeholder="Número de terapia..." onfocus="resetear('motivo_consulta_valoracion')" disabled>
+                                    </div>
+                                </div>
+                                <div class="col-md-5 mt-3">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="fas fa-exchange-alt"></i></span>
+                                        </div>
+                                        <select id="cont_int" class="form-control" onfocus="resetear('cont_int')" disabled>
+                                            <option value="1">Continuo</option>
+                                            <option value="2">Intermitente</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-5 mt-3">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="fas fa-chart-line"></i></span>
+                                        </div>
+                                        <input type="text" class="form-control" id="avance" placeholder="Ejemplo: 20%" onfocus="resetear('toximanias_valoracion')">
+                                    </div>
+                                </div>
                             </div>
 
-                            <div class="d-flex align-items-center">
-                                <input type="range" class="custom-range ml-2" min="0" max="10" id="escalaDolorS" value="0" oninput="updateValue(2,this.value)">
-                                <span id="escalaValorS" class="ml-2">0</span>
+                            <!-- Observaciones -->
+                            <div class="row mt-3">
+                                <div class="col-md-12">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="fas fa-sticky-note"></i></span>
+                                        </div>
+                                        <textarea class="form-control" id="observacionesSubSec" rows="3" placeholder="Observaciones"></textarea>
+                                    </div>
+                                </div>
                             </div>
 
-                            <script>
-                                function updateValue(num, val) {
-                                    if (num == 1) {
-                                        document.getElementById('escalaValorP').innerText = val;
-                                    } else if (num == 2) {
-                                        document.getElementById('escalaValorS').innerText = val;
-                                    }
-                                }
-                            </script>
+                            <!-- Paquete y No. Terapia -->
+                            <div class="row mt-3">
+                                <div class="col-md-3">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="fas fa-box"></i></span>
+                                        </div>
+                                        <input class="form-control" id="farmacos" placeholder="Ejemplo: Paquete de 5 sesiones" onfocus="resetear('farmacos')" disabled>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="fas fa-clipboard-list"></i></span>
+                                        </div>
+                                        <input class="form-control" id="farmacos" placeholder="Ejemplo: 2/3" onfocus="resetear('farmacos')" disabled>
+                                    </div>
+                                </div>
+                            </div>
 
-                        </div>
+                            <!-- Escala de Dolor EVA -->
+                            <div class="row mt-3">
+                                <div class="col-md-12">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="fas fa-thermometer-half"></i></span>
+                                        </div>
+                                        <div class="form-control">
+                                            <div class="text-danger d-flex align-items-center" id="escaDolMessage1"></div>
+                                            <div class="d-flex align-items-center">
+                                                <input type="range" class="custom-range ml-2" min="0" max="10" id="escalaDolorS" value="0" oninput="updateValue(2,this.value)">
+                                                <span id="escalaValorS" class="ml-2">0</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
                     </div>
+
+                    <script>
+                        function updateValue(num, val) {
+                            if (num == 1) {
+                                document.getElementById('escalaValorP').innerText = val;
+                            } else if (num == 2) {
+                                document.getElementById('escalaValorS').innerText = val;
+                            }
+                        }
+                    </script>
+
                 </div>
 
                 <!-- Enfermedades Tab -->
@@ -870,43 +1009,51 @@
                     <div class="col-md-12 mt-4 mb-4 mx-auto">
                         <div class="card shadow-sm">
                             <div class="card-body d-flex align-items-center justify-content-between">
-                                <!-- Contenedor para la etiqueta y el select de enfermedades -->
+                                <!-- Enfermedades y botón para añadir una nueva -->
                                 <div class="d-flex col-md-4">
-                                    <div>
-                                        <label for="enfermedades" class="font-weight-bold mr-2">Enfermedades:</label>
-                                        <select class="form-control mr-2" id="enfermedades" onfocus="resetear('enfermedades')"></select>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="fas fa-notes-medical"></i></span>
+                                        </div>
+                                        <select class="form-control" id="enfermedades" onfocus="resetear('enfermedades')">
+                                            <!-- Opciones de enfermedades -->
+                                        </select>
                                     </div>
-                                    <div class="d-flex align-items-end ml-2">
-                                        <button type="button" class="btn btn-info" onclick="abrir_modal('modal_valoracion', 'modal_nueva_enfermedad')">
-                                            <i class="fas fa-plus-circle"></i>
-                                        </button>
-                                    </div>
-
+                                    <button type="button" class="btn btn-info ml-2" onclick="abrir_modal('modal_valoracion', 'modal_nueva_enfermedad')" title="Agregar nueva enfermedad">
+                                        <i class="fas fa-plus-circle"></i>
+                                    </button>
                                 </div>
 
                                 <!-- Tiempo con la enfermedad -->
-                                <div class="col-md-3">
-                                    <label for="tiempo_enfermedad" class="font-weight-bold">Tiempo con la enfermedad:</label>
-                                    <input type="text" class="form-control" id="tiempo_enfermedad" placeholder="Ingrese el tiempo con la enfermedad" onfocus="resetear('tiempo_enfermedad')">
+                                <div class="col-md-3 mt-3 mt-md-0">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="fas fa-clock"></i></span>
+                                        </div>
+                                        <input type="text" class="form-control" id="tiempo_enfermedad" placeholder="Tiempo con la enfermedad" onfocus="resetear('tiempo_enfermedad')">
+                                    </div>
                                 </div>
 
-                                <!-- Selección de toma de medicamentos -->
-                                <div class="col-md-3">
-                                    <label for="toma_medicamento" class="font-weight-bold">¿Toma algún medicamento?</label>
-                                    <select class="form-control" id="toma_medicamento" onfocus="resetear('toma_medicamento')">
-                                        <option value="" selected disabled>Selecciona una opción</option>
-                                        <option value="NO">No</option>
-                                        <option value="SI">Sí</option>
-                                    </select>
+                                <!-- ¿Toma algún medicamento? -->
+                                <div class="col-md-3 mt-3 mt-md-0">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="fas fa-pills"></i></span>
+                                        </div>
+                                        <select class="form-control" id="toma_medicamento" onfocus="resetear('toma_medicamento')">
+                                            <option value="" selected disabled>¿Toma medicamento?</option>
+                                            <option value="NO">No</option>
+                                            <option value="SI">Sí</option>
+                                        </select>
+                                    </div>
                                 </div>
 
                                 <!-- Botón Agregar -->
-                                <div class="d-flex align-items-end">
-                                    <div class="col-md-2 text-right">
-                                        <button type="button" class="btn btn-success" onclick="agregarEnfermedadValoracion()">Agregar</button>
-                                    </div>
+                                <div class="col-md-2 mt-3 mt-md-0 text-right">
+                                    <button type="button" class="btn btn-success" onclick="agregarEnfermedadValoracion()">Agregar</button>
                                 </div>
                             </div>
+
 
                         </div>
                         <!-- Contenedor de los formularios de enfermedades -->
@@ -921,32 +1068,63 @@
                 <!-- Signos Vitales Tab -->
                 <div class="tab-pane fade" id="custom-tabs-one-sv" role="tabpanel" aria-labelledby="custom-tabs-one-sv-tab">
                     <div class="card-body">
-                        <!-- Aquí va el contenido de signos vitales -->
+                        <!-- Signos Vitales -->
                         <div class="form-group">
-                            <label for="ta">Signos Vitales:</label>
+                            <!-- Línea de tensión arterial, FC, FR -->
                             <div class="form-row">
                                 <div class="col-md-4">
-                                    <input type="text" class="form-control" id="tension_art" placeholder="Tención Arterial">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="fas fa-heartbeat"></i></span>
+                                        </div>
+                                        <input type="text" class="form-control" id="tension_art" placeholder="Tensión Arterial">
+                                    </div>
                                 </div>
                                 <div class="col-md-4">
-                                    <input type="text" class="form-control" id="fc" placeholder="FC">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="fas fa-heart"></i></span>
+                                        </div>
+                                        <input type="text" class="form-control" id="fc" placeholder="FC">
+                                    </div>
                                 </div>
                                 <div class="col-md-4">
-                                    <input type="text" class="form-control" id="fr" placeholder="FR">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="fas fa-lungs"></i></span>
+                                        </div>
+                                        <input type="text" class="form-control" id="fr" placeholder="FR">
+                                    </div>
                                 </div>
                             </div>
+
+                            <!-- Línea de oxigenación, temperatura, glucosa -->
                             <div class="form-row mt-3">
                                 <div class="col-md-4">
-                                    <input type="text" class="form-control" id="oxigeno" placeholder="Saturación de O2">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="fas fa-lungs-virus"></i></span>
+                                        </div>
+                                        <input type="text" class="form-control" id="oxigeno" placeholder="Saturación de O2">
+                                    </div>
                                 </div>
                                 <div class="col-md-4">
-                                    <input type="text" class="form-control" id="temperatura" placeholder="Temperatura">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="fas fa-thermometer-half"></i></span>
+                                        </div>
+                                        <input type="text" class="form-control" id="temperatura" placeholder="Temperatura">
+                                    </div>
                                 </div>
                                 <div class="col-md-4">
-                                    <input type="text" class="form-control" id="glucosa" placeholder="Glucosa">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="fas fa-tint"></i></span>
+                                        </div>
+                                        <input type="text" class="form-control" id="glucosa" placeholder="Glucosa">
+                                    </div>
                                 </div>
                             </div>
-                            <!-- Agrega más campos aquí -->
                         </div>
                     </div>
                 </div>
@@ -974,7 +1152,7 @@
                 </button>
             </div>
             <div class="card-body">
-                <h6><i class="fas fa-id-card"></i> Datos de identificaci&oacute;n</h6>
+                <h6><i class="fas fa-id-card"></i> Datos de identificación</h6>
                 <hr>
 
                 <div class="row">
@@ -983,11 +1161,12 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fas fa-file-signature"></i></span>
                             </div>
-                            <input type="text" class="form-control" placeholder="Nombre de la Ocupacion" id="nombre_ocupacion" onfocus="resetear('nombre_ocupacion')" maxlength="150" required>
+                            <input type="text" class="form-control" placeholder="Nombre de la Ocupación" id="nombre_ocupacion" onfocus="resetear('nombre_ocupacion')" maxlength="150" required>
                         </div>
                     </div>
                 </div>
             </div>
+
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="cerrar_modal('modal_nueva_ocupacion', 'modal_valoracion')">Cerrar</button>
                 <center><button type="button" class="btn btn-success" onclick="gestionar_ocupacion('modal_valoracion', 'modal_nueva_ocupacion');">Guardar Ocupación</button></center><br><br><br>
@@ -1008,7 +1187,7 @@
                 </button>
             </div>
             <div class="card-body">
-                <h6><i class="fas fa-id-card"></i> Datos de identificaci&oacute;n</h6>
+                <h6><i class="fas fa-id-card"></i> Datos de identificación</h6>
                 <hr>
 
                 <div class="row">
@@ -1022,6 +1201,7 @@
                     </div>
                 </div>
             </div>
+
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="cerrar_modal('modal_nueva_enfermedad', 'modal_valoracion')">Cerrar</button>
                 <center><button type="button" class="btn btn-success" onclick="gestionar_enfermedad('modal_valoracion', 'modal_nueva_enfermedad');">Guardar Enfermedad</button></center><br><br><br>

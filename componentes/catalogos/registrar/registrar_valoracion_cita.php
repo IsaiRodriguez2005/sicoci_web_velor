@@ -25,7 +25,7 @@
             $max = mysqli_fetch_array($resMAX);
             $ultimo = $max['no_registro'] + 1;
 
-            //print_r($_POST);
+
             if(intval($_POST['tipo_consulta']) == 1) {
 
                 $valorcionSQL = "INSERT INTO emisores_historial_expediente (`folio`, 
