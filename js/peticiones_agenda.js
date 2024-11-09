@@ -187,7 +187,6 @@ function gestionar_cita() {
 
 }
 
-
 function cargar_datos() {
     return new Promise((resolve, reject) => {
         let id_cliente = $("#id_cliente2").val();
@@ -237,12 +236,12 @@ function cargar_horarios_disponibles() {
     $.ajax({
         cache: false,
 
-        url: "componentes/catalogos/cargar_horarios_disponibles.php",
+        url: "componentes/catalogos/cargar/cargar_horarios_disponibles.php",
         type: 'POST',
         dataType: 'html',
         data: { 'fecha_hora': fecha_cita, 'id_terapeuta': id_terapeuta, 'folio_gestion': folio_gestion, 'hora_gestion': hora_gestion },
     }).done(function (resultado) {
-        //console.log(resultado)
+        // console.log(resultado)
         $("#hora_cita_form").html(resultado);
     })
 }
@@ -471,8 +470,6 @@ function enviar_cancelacion() {
     });
 }
 
-
-
 // Peticiones Modales
 function abrir_modal(modal1, modal2) {
 
@@ -487,7 +484,6 @@ function abrir_modal(modal1, modal2) {
     }
 
 }
-
 
 function disponibilidad_terapeutas() {
 
@@ -506,7 +502,6 @@ function disponibilidad_terapeutas() {
     });
 
 }
-
 
 function enfermedades_form(){
 
