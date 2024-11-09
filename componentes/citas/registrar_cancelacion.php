@@ -3,6 +3,7 @@ session_start();
 require("../conexion.php");
 include '../correos/enviar_correo.php';
 date_default_timezone_set('America/Mexico_City');
+error_reporting(0);
 
 if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
     session_destroy();
@@ -16,7 +17,7 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
     $sql_cancelacion = "INSERT INTO emisores_cancelaciones VALUES(" . $_SESSION['id_emisor'] . ", 0, " . $_POST['id_folio'] . ", '" . $fecha_cancelado . "', 0, 0, 0, 0, '" . strtoupper($_POST['motivo']) . "', 1)";
     $cancelado = mysqli_query($conexion, $sql_cancelacion);
     if ($cancelado) {
-        $sql_estatus = "UPDATE emisores_agenda SET estatus = 4 WHERE id_emisor = " . $_SESSION['id_emisor'] . " AND id_folio = " . $_POST['id_folio'];
+        $sql_estatus = "UPDATE emisores_agenda SET estatus = 2 WHERE id_emisor = " . $_SESSION['id_emisor'] . " AND id_folio = " . $_POST['id_folio'];
         $estatus = mysqli_query($conexion, $sql_estatus);
         if ($estatus) {
 
@@ -28,9 +29,10 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
 
             $datosConsultorio =  getDatosConsultorio(intval($datosAgenda['id_consultorio']), $conexion);
 
-
             if ($datosCliente['correo']) {
-                $fecha = obtenerFechaEspaniol($_POST['fecha_hora']);
+                
+                $fecha = obtenerFechaEspaniol($datosAgenda['fecha_agenda']);
+
                 $asunto = 'CITA CANCELADA!';
                 $mensaje = '
                         Que tal <b>' . strtoupper($datosCliente['nombre_cliente']) . '</b>.<br><br>
@@ -43,7 +45,8 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
 
             if ($datosTerap['correo']) {
 
-                $fecha = obtenerFechaEspaniol($_POST['fecha_hora']);
+                $fecha = obtenerFechaEspaniol($datosAgenda['fecha_agenda']);
+
                 $asunto = 'CITA CANCELADA!';
                 $mensaje = '
                         Que tal <b>' . strtoupper($datosTerap['nombre_personal']) . '</b>,.<br><br>
@@ -53,7 +56,7 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
                         ';
                 $correo = enviarCorreo($datosTerap['correo'], $asunto, $mensaje);
             }
-
+            // print_r($fecha);
             echo "ok";
         } else {
             echo "error2";

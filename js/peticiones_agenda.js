@@ -438,6 +438,7 @@ function enviar_cancelacion() {
         dataType: 'html',
         data: { 'id_folio': id_folio, 'motivo': motivo },
     }).done(function (resultado) {
+        console.log(resultado)
         Swal.close();
         if (resultado == "ok") {
             Swal.fire({

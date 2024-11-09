@@ -1,7 +1,7 @@
 <?php
 session_start();
 date_default_timezone_set('America/Mexico_City');
-//error_reporting(0);
+error_reporting(0);
 require("../conexion.php");
 require '../../vendor/autoload.php';
 
