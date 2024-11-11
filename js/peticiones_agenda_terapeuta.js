@@ -102,6 +102,9 @@ function cargarDatosActualizarCliente(id) {
 
         $('#ocupacion_valoracion').val(resultado[0].ocupacion);
         $('#ocupacion_valoracion').attr('disabled', true);
+        
+        $('#telefono_valoracion').val(resultado[0].telefono);
+        $('#telefono_valoracion').attr('disabled', true);
 
         $("#boton_confirmar").html('');
     })
@@ -161,7 +164,7 @@ async function realizar_valoracion_primera_v(id_folio, id_cliente) {
 
     $("#tipo_consulta").val(1);
     const dataVal = await cargarDatosValoracion(id_folio, id_cliente, 1);
-    $("#observaciones").html('<a class="nav-link" id="custom-tabs-one-obs-tab" data-toggle="pill" href="#custom-tabs-one-obs-pv" role="tab" aria-controls="custom-tabs-one-obs-pv" aria-selected="false"> <i class="fas fa-info"></i> &nbsp;Observaciones</a>');
+    $("#observaciones").html('<a class="nav-link" id="custom-tabs-one-dg-pv-tab" data-toggle="pill" href="#custom-tabs-one-dg-pv" role="tab" aria-controls="custom-tabs-one-dg-pv" aria-selected="false"> <i class="fas fa-info"></i> &nbsp;Datos Generales</a>');
     //* Esta funcion carga los datos y activa el formulario de 1ra vez
     $("#id_cliente_valoracion").val(dataVal[0].id_cliente);
     $("#id_folio_cita").val(dataVal[0].id_folio);
@@ -191,7 +194,7 @@ async function realizar_valoracion_subs(id_folio, id_cliente) {
     // console.log(dataVal);
 
     //* Esta funcion carga la informacion activa el formulario de las sitas tipo subsecuente
-    $("#observaciones").html('<a class="nav-link" id="custom-tabs-one-obs-tab" data-toggle="pill" href="#custom-tabs-one-obs-sb" role="tab" aria-controls="custom-tabs-one-obs-sb" aria-selected="false"> <i class="fas fa-info"></i> &nbsp;Observaciones</a>');
+    $("#observaciones").html('<a class="nav-link" id="custom-tabs-one-dg-sb-tab" data-toggle="pill" href="#custom-tabs-one-dg-sb" role="tab" aria-controls="custom-tabs-one-dg-sb" aria-selected="false"> <i class="fas fa-info"></i> &nbsp;Datos Generales</a>');
     $("#id_cliente_valoracion").val(dataVal[0].id_cliente);
     $("#id_folio_cita").val(dataVal[0].id_folio);
     $("#nombre_valoracion").val(dataVal[0].nombre_cliente);
@@ -279,7 +282,7 @@ function enviar_valoracion() {
     var glucosa = $("#glucosa").val();
     var diagnosticoMedico = $("#diagnosticoMedico").val();
     var avance = $("#avance").val();
-    var observaciones = $("#observacionesSubSec").val();
+    var observaciones = $("#observacionesForm").val();
 
     pantallaCarga('Guardando valoracion...');
 
@@ -312,7 +315,7 @@ function enviar_valoracion() {
             'observaciones': observaciones,
         },
     }).done(function (resultado) {
-        //console.log(resultado);
+        console.log(resultado);
         if (resultado == 'ok') {
             Swal.fire({
                 icon: "success",
@@ -482,6 +485,7 @@ function modificarDatos() {
     var id_cliente = $("#id_cliente_valoracion").val();
     var estado_civil = $("#estado_civil_valoracion").val();
     var fecha_nacimiento = $("#fecha_nacimiento").val();
+    var telefono = $("#telefono_valoracion").val();
     var ocupacion = $("#ocupacion_valoracion").val();
 
     $.ajax({
@@ -494,6 +498,7 @@ function modificarDatos() {
             'estado_civil': estado_civil,
             'fecha_nacimiento': fecha_nacimiento,
             'ocupacion': ocupacion,
+            'telefono': telefono,
         },
     }).done(function (resultado) {
         //console.log(resultado)

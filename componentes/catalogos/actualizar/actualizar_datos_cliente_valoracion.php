@@ -17,6 +17,7 @@
         
         $sqlCliente = "UPDATE emisores_clientes SET est_civ = ".intval($_POST['estado_civil'])." ,
                                                     fec_nac = '".$_POST['fecha_nacimiento']."',
+                                                    telefono = ".strtoupper($_POST['telefono']).",
                                                     ocupacion = ".intval($_POST['ocupacion'])."
                                                     WHERE id_cliente=".$_POST['id_cliente']." AND id_emisor=".$_SESSION['id_emisor'];
         $resultado = mysqli_query($conexion, $sqlCliente);

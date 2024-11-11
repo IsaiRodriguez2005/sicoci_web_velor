@@ -199,7 +199,7 @@ if (!isset($_SESSION['nombre_usuario'])) {
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col-12">
-                                            <div id="historial_citas"></div>
+                                            <div id="historial_citas" class="table-responsive"></div>
                                         </div>
                                     </div>
                                 </div>

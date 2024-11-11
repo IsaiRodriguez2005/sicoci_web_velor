@@ -206,7 +206,7 @@ function get_citas_agenda() {
         dataType: 'json',
         data: {},
       }).done(function (resultado) {
-        console.log('hola')
+        // console.log('hola')
         resolve(resultado);
       }).fail(function (jqXHR, textStatus, errorThrown) {
         reject(errorThrown);

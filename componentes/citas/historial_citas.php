@@ -16,11 +16,11 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
             <table class="table table-striped" id="tabla_facturas" width="100%">
                 <thead>
                     <tr>
-                        <th class="sticky text-center text-sm">Acciones</th>
-                        <th class="sticky text-center text-sm">Folio</th>
+                        <th class="text-center text-sm" style="position: sticky; left: 0; background: white;">Acciones</th>
+                        <th class="text-center text-sm">Folio</th>
                         <th class="text-center text-sm">Fecha de Agenda</th>
                         <th class="text-center text-sm">Estatus</th>
-                        <th class="sticky text-center text-sm">Cliente</th>
+                        <th class="text-center text-sm">Cliente</th>
                         <th class="text-center text-sm">Terapeuta</th>
                         <th class="text-center text-sm">Consultorio</th>
                         <th class="text-center text-sm">Tipo de Cita</th>
@@ -199,7 +199,7 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
 
         $html .= "
                 <tr id='tr_" . $citas['id_folio'] . "'>
-                    <td class='text-center'>
+                    <td class='text-center' style='position: sticky; left: 0; background: whitesmoke;'>
                         <div class='btn-group'>
                             $acciones
 
@@ -232,8 +232,8 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
             "searching": true,
             "ordering": true,
             "info": true,
-            "autoWidth": true,
-            "responsive": true,
+            // "autoWidth": true,
+            // "responsive": true,
             "language": {
                 "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
             },

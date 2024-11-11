@@ -11,7 +11,7 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
         ";
 } else {
 
-    $consCliente = "SELECT fec_nac, ocupacion, est_civ
+    $consCliente = "SELECT fec_nac, ocupacion, est_civ, telefono
                                 FROM emisores_clientes
                                 WHERE id_cliente = " . $_POST['id_cliente'] . " AND id_emisor = " . $_SESSION['id_emisor'] . "";
     $resultado = mysqli_query($conexion, $consCliente);

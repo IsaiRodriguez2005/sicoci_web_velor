@@ -328,6 +328,18 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
                             </table>
                         </div>
                     </div>
+                    <div class="renglon">
+                        <div class="titulo_receptor">
+                            Observaciones
+                        </div>
+                        <div class="datos_receptor">
+                            <table class="datos_parrafo" width="100%">
+                                <tr>
+                                    <td width="35%" align="center">' . $dataVal['observaciones'] . '</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
                     
             <!--
                     <div class="renglon">
@@ -429,7 +441,7 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
     $footer = '
             <div class="footer">
                 ' . $mensaje_footer . '<br>
-                DOCUMENTO ELABORADO MEDIANTE VELOR FACTURACION | www.velor.mx | P&aacute;gina: {PAGENO}/{nbpg}
+                DOCUMENTO ELABORADO MEDIANTE COSERA WEB | https://kyosoft.mx | P&aacute;gina: {PAGENO}/{nbpg}
             </div>
         ';
 

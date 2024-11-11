@@ -723,6 +723,11 @@
                             <i class="fas fa-heartbeat"></i> &nbsp;Signos Vitales
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="custom-tabs-one-obs-tab" data-toggle="pill" href="#custom-tabs-one-obs" role="tab" aria-controls="custom-tabs-one-obs" aria-selected="false">
+                            <i class="fas fa-heartbeat"></i> &nbsp;Observaciones
+                        </a>
+                    </li>
                 </ul>
             </div>
 
@@ -787,6 +792,11 @@
                                                 <i class="fas fa-edit"></i>
                                             </button>
                                         </div>
+                                        <div class="input-group-append ml-1">
+                                            <button type="button" class="btn btn-info" onclick="cerrar_modal('modal_valoracion', 'modal_nueva_ocupacion')" title="Modificar Ocupación">
+                                                <i class="fas fa-plus"></i>
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -797,6 +807,11 @@
                                             <span class="input-group-text"><i class="fas fa-phone"></i></span>
                                         </div>
                                         <input type="text" class="form-control" id="telefono_valoracion" placeholder="Teléfono" maxlength="10" onfocus="resetear('telefono_valoracion')" disabled>
+                                        <div class="input-group-append">
+                                            <button type="button" class="btn btn-info" onclick="habilitarParaModificar('telefono_valoracion')" title="Modificar Estado Civil">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -824,10 +839,10 @@
                 </div>
 
                 <input type="hidden" id="tipo_consulta">
-                <!-- Observaciones Tab PRIMERA VEZ-->
-                <div class="tab-pane fade" id="custom-tabs-one-obs-pv" role="tabpanel" aria-labelledby="custom-tabs-one-obs-tab">
+                <!-- Datos Generales Tab PRIMERA VEZ-->
+                <div class="tab-pane fade" id="custom-tabs-one-dg-pv" role="tabpanel" aria-labelledby="custom-tabs-one-dg-pv-tab">
                     <div class="modal-body">
-                        <form id="form_observaciones">
+                        <form id="form_datos_generales_pv">
                             <!-- Motivo de Consulta -->
                             <div class="row mt-3">
                                 <div class="col-md-12">
@@ -853,7 +868,7 @@
                                 <div class="col-md-6">
                                     <div class="input-group">
                                         <div class="input-group-prepend">
-                                            <span class="input-group-text"><i class="fas fa-skull"></i></span>
+                                            <span class="input-group-text"><i class="fas fa-stethoscope"></i></span>
                                         </div>
                                         <input type="text" class="form-control" id="toximanias_valoracion" placeholder="Toxicomanías" onfocus="resetear('toximanias_valoracion')">
                                     </div>
@@ -905,10 +920,10 @@
                     </div>
 
                 </div>
-                <!-- Observaciones Tab SUBSECUENTE-->
-                <div class="tab-pane fade" id="custom-tabs-one-obs-sb" role="tabpanel" aria-labelledby="custom-tabs-one-obs-tab">
+                <!-- Datos Generales Tab SUBSECUENTE-->
+                <div class="tab-pane fade" id="custom-tabs-one-dg-sb" role="tabpanel" aria-labelledby="custom-tabs-one-dg-sb-tab">
                     <div class="modal-body">
-                        <form id="form_terapia">
+                        <form id="form_datos_generales_sub">
                             <!-- Número de Terapia, Continuo/Intermitente, y Avance -->
                             <div class="row">
                                 <div class="col-md-2 mt-3">
@@ -935,19 +950,7 @@
                                         <div class="input-group-prepend">
                                             <span class="input-group-text"><i class="fas fa-chart-line"></i></span>
                                         </div>
-                                        <input type="text" class="form-control" id="avance" placeholder="Ejemplo: 20%" onfocus="resetear('toximanias_valoracion')">
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Observaciones -->
-                            <div class="row mt-3">
-                                <div class="col-md-12">
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text"><i class="fas fa-sticky-note"></i></span>
-                                        </div>
-                                        <textarea class="form-control" id="observacionesSubSec" rows="3" placeholder="Observaciones"></textarea>
+                                        <input type="text" class="form-control" id="avance" placeholder="Avance" onfocus="resetear('toximanias_valoracion')">
                                     </div>
                                 </div>
                             </div>
@@ -1077,7 +1080,7 @@
                                         <div class="input-group-prepend">
                                             <span class="input-group-text"><i class="fas fa-heartbeat"></i></span>
                                         </div>
-                                        <input type="text" class="form-control" id="tension_art" placeholder="Tensión Arterial">
+                                        <input type="number" class="form-control" id="tension_art" placeholder="Tensión Arterial">
                                     </div>
                                 </div>
                                 <div class="col-md-4">
@@ -1085,7 +1088,7 @@
                                         <div class="input-group-prepend">
                                             <span class="input-group-text"><i class="fas fa-heart"></i></span>
                                         </div>
-                                        <input type="text" class="form-control" id="fc" placeholder="FC">
+                                        <input type="number" class="form-control" id="fc" placeholder="FC">
                                     </div>
                                 </div>
                                 <div class="col-md-4">
@@ -1093,7 +1096,7 @@
                                         <div class="input-group-prepend">
                                             <span class="input-group-text"><i class="fas fa-lungs"></i></span>
                                         </div>
-                                        <input type="text" class="form-control" id="fr" placeholder="FR">
+                                        <input type="number" class="form-control" id="fr" placeholder="FR">
                                     </div>
                                 </div>
                             </div>
@@ -1105,7 +1108,7 @@
                                         <div class="input-group-prepend">
                                             <span class="input-group-text"><i class="fas fa-lungs-virus"></i></span>
                                         </div>
-                                        <input type="text" class="form-control" id="oxigeno" placeholder="Saturación de O2">
+                                        <input type="number" class="form-control" id="oxigeno" placeholder="Saturación de O2">
                                     </div>
                                 </div>
                                 <div class="col-md-4">
@@ -1113,7 +1116,7 @@
                                         <div class="input-group-prepend">
                                             <span class="input-group-text"><i class="fas fa-thermometer-half"></i></span>
                                         </div>
-                                        <input type="text" class="form-control" id="temperatura" placeholder="Temperatura">
+                                        <input type="number" class="form-control" id="temperatura" placeholder="Temperatura">
                                     </div>
                                 </div>
                                 <div class="col-md-4">
@@ -1121,11 +1124,30 @@
                                         <div class="input-group-prepend">
                                             <span class="input-group-text"><i class="fas fa-tint"></i></span>
                                         </div>
-                                        <input type="text" class="form-control" id="glucosa" placeholder="Glucosa">
+                                        <input type="number" class="form-control" id="glucosa" placeholder="Glucosa">
                                     </div>
                                 </div>
                             </div>
                         </div>
+                    </div>
+                </div>
+
+                <!-- Observaciones Tab -->
+                <div class="tab-pane fade" id="custom-tabs-one-obs" role="tabpanel" aria-labelledby="custom-tabs-one-obs-tab">
+                    <div class="card-body">
+                        <form id="form_observaciones">
+                            <!-- Observaciones -->
+                            <div class="row mt-3">
+                                <div class="col-md-12">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="fas fa-sticky-note"></i></span>
+                                        </div>
+                                        <textarea class="form-control" id="observacionesForm" rows="3" placeholder="Observaciones"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -1210,3 +1232,6 @@
     </div>
 </div>
 <!-- Modal nueva enfermedad-->
+
+
+<!-- Lorem ipsum dolor, sit amet consectetur adipisicing elit. Fugit accusamus doloribus nisi autem dolorum fugiat voluptatem non magnam eaque laudantium animi natus architecto obcaecati, nesciunt a? Nesciunt suscipit quis id. -->

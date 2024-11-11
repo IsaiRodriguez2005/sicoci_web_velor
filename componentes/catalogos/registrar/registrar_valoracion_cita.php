@@ -25,7 +25,8 @@
             $max = mysqli_fetch_array($resMAX);
             $ultimo = $max['no_registro'] + 1;
 
-
+            // print_r($_POST);
+            // return;
             if(intval($_POST['tipo_consulta']) == 1) {
 
                 $valorcionSQL = "INSERT INTO emisores_historial_expediente (`folio`, 
@@ -47,6 +48,7 @@
                                                                                 `glucosa`, 
                                                                                 `farmacos`, 
                                                                                 `diagnostico_medico`, 
+                                                                                `observaciones`, 
                                                                                 `escala_eva`) 
                                                                                 VALUES (
                                                                                 $ultimo, 
@@ -60,18 +62,18 @@
                                                                                 '".strtoupper($_POST['toximanias'])."',
                                                                                 '".strtoupper($_POST['motivo_consulta'])."',
                                                                                 '".strtoupper($_POST['act_fisica'])."',
-                                                                                '".strtoupper($_POST['ta'])."',
-                                                                                '".strtoupper($_POST['fc'])."',
-                                                                                '".strtoupper($_POST['fr'])."',
-                                                                                '".strtoupper($_POST['satO2'])."',
-                                                                                '".strtoupper($_POST['temp'])."',
-                                                                                '".strtoupper($_POST['glucosa'])."',
+                                                                                ".$_POST['ta'].",
+                                                                                ".$_POST['fc'].",
+                                                                                ".$_POST['fr'].",
+                                                                                ".$_POST['satO2'].",
+                                                                                ".$_POST['temp'].",
+                                                                                ".$_POST['glucosa'].",
                                                                                 '".strtoupper($_POST['farmacos'])."',
                                                                                 '".strtoupper($_POST['diagnostico_medico'])."',
+                                                                                '".strtoupper($_POST['observaciones'])."',
                                                                                 ".intval($_POST['escalaDolor'])."
                                                                                     );";
-            } else {
-                //* el campo de diagnostico medico: almacenaremos observaciones de sitas subsecuentes
+            } else { 
                 $valorcionSQL = "INSERT INTO emisores_historial_expediente (`folio`, 
                                                                                 `id_emisor`, 
                                                                                 `id_folio_cita`, 
@@ -90,7 +92,7 @@
                                                                                 `temperatura`, 
                                                                                 `glucosa`, 
                                                                                 `farmacos`, 
-                                                                                `diagnostico_medico`, 
+                                                                                `observaciones`,  
                                                                                 `avance`, 
                                                                                 `escala_eva`) 
                                                                                 VALUES (
@@ -105,12 +107,12 @@
                                                                                 '".strtoupper($_POST['toximanias'])."',
                                                                                 '".strtoupper($_POST['motivo_consulta'])."',
                                                                                 '".strtoupper($_POST['act_fisica'])."',
-                                                                                '".strtoupper($_POST['ta'])."',
-                                                                                '".strtoupper($_POST['fc'])."',
-                                                                                '".strtoupper($_POST['fr'])."',
-                                                                                '".strtoupper($_POST['satO2'])."',
-                                                                                '".strtoupper($_POST['temp'])."',
-                                                                                '".strtoupper($_POST['glucosa'])."',
+                                                                                ".$_POST['ta'].",
+                                                                                ".$_POST['fc'].",
+                                                                                ".$_POST['fr'].",
+                                                                                ".$_POST['satO2'].",
+                                                                                ".$_POST['temp'].",
+                                                                                ".$_POST['glucosa'].",
                                                                                 '".strtoupper($_POST['farmacos'])."',
                                                                                 '".strtoupper($_POST['observaciones'])."',
                                                                                 '".strtoupper($_POST['avance'])."',
@@ -118,10 +120,7 @@
                                                                                     );";
             }
             
-            // print_r($valorcionSQL);
-            // return;
             $resValoracion = mysqli_query($conexion, $valorcionSQL);
-            
 
             if($resValoracion)
             {
