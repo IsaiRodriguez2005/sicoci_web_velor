@@ -219,7 +219,7 @@ function gestionar_personal(redireccion, modal_agenda = '', modal_cliente = '') 
 function ver_catalogo() {
     $.ajax({
         cache: false,
-        url: 'componentes/catalogos/cargar_personal.php',
+        url: 'componentes/catalogos/cargar/cargar_personal.php',
         type: 'POST',
         dataType: 'html',
     }).done(function (resultado) {
@@ -241,7 +241,7 @@ function actualizar_estatus_personal(id_personal, estatus) {
             showConfirmButton: false,
             timer: 2000
         }).then(function () {
-            window.location = 'personal.php';
+            ver_catalogo();
         });
     });
 }

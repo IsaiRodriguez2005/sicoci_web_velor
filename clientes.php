@@ -111,7 +111,7 @@ if (!isset($_SESSION['nombre_usuario'])) {
                                             <input type="date" class="form-control" id="fecha_nac" placeholder="Ingrese su fecha de nacimiento" onfocus="resetear('fecha_nac')">
                                         </div>
                                     </div>
-                                    <div class="col-4">
+                                    <div class="col-5">
                                         <div class="input-group mb-3">
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text"><i class="fas fa-briefcase"></i></span>
@@ -124,7 +124,7 @@ if (!isset($_SESSION['nombre_usuario'])) {
                                             </button>
                                         </div>
                                     </div>
-                                    <div class="col-5">
+                                    <div class="col-4">
                                         <div class="input-group mb-3">
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text"><i class="fas fa-mobile-alt"></i></span>

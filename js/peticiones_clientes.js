@@ -286,7 +286,7 @@ function actualizar_estatus_cliente(id_cliente, estatus) {
             showConfirmButton: false,
             timer: 2000
         }).then(function () {
-            window.location = 'clientes.php';
+            ver_catalogo();
         });
     });
 }

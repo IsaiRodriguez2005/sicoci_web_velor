@@ -173,6 +173,8 @@ function gestionar_producto()
                     title: "Se registro el producto/servicio",
                     showConfirmButton: false,
                     timer: 1500
+                }).then(function(){
+                    window.location = 'servicios.php';
                 });
             }
             else if(resultado == "actualizado")
@@ -236,7 +238,7 @@ function actualizar_estatus_producto( id_poducto, codigo_estatus)
             showConfirmButton: false,
             timer: 2000
         }).then(function() {
-            window.location = 'servicios.php';
+            ver_catalogo();
         });
     }); 
 }
@@ -266,7 +268,7 @@ function ver_catalogo()
 {
     $.ajax({
         cache: false,
-        url : 'componentes/catalogos/cargar_productos.php',
+        url : 'componentes/catalogos/cargar/cargar_productos.php',
         type : 'POST',
         dataType : 'html',
     }).done(function(resultado){

@@ -115,25 +115,25 @@ if (!isset($_SESSION['nombre_usuario'])) {
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text"><i class="fas fa-percent"></i></span>
                                             </div>
-                                            <input type="number" class="form-control" placeholder="Descuento por consulta" id="dsc_conul" onfocus="resetear('dsc_conul')" max="100" min="0" disabled>
+                                            <input type="number" class="form-control" placeholder="Descuento por consulta" id="pct_consul" onfocus="resetear('pct_consul')" max="100" min="0" disabled>
                                         </div>
                                     </div>
                                     <div class="col-4">
-                                        <button type="button" class="btn btn-success" onclick="gestionar_cliente();">Guardar Cliente</button>
+                                        <button type="button" class="btn btn-success" id="btn-convenios" onclick="gestionar_convenio();">Guardar Convenio</button>
                                     </div>
                                 </div>
                                 <br>
 
                                 <!-- INICIA MODAL MODAL PARA EDITAR CLIENTE -->
-                                <div class="modal fade" id="modal_clientes" role="dialog" style="overflow: scroll;">
+                                <div class="modal fade" id="modal_convenios" role="dialog" style="overflow: scroll;">
                                     <div class="modal-dialog modal-lg">
                                         <div class="modal-content">
                                             <div class="modal-header">
-                                                <h4 class="modal-title text-success">Clientes/Pacientes Registrados</h4>
+                                                <h4 class="modal-title text-success">Convenios Registrados</h4>
                                             </div>
                                             <div class="modal-body">
                                                 <div class="row">
-                                                    <div class="col-12" id="vista_clientes"></div>
+                                                    <div class="col-12" id="vista_convenios"></div>
                                                 </div>
                                             </div>
                                             <div class="modal-footer">

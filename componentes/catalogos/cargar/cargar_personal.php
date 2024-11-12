@@ -1,6 +1,6 @@
 <?php
     session_start();
-    require("../conexion.php");
+    require("../../conexion.php");
 
     if(empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario']))
     {
@@ -17,76 +17,68 @@
             <table class="table table-striped" id="tabla_proveedores" width="100%">
                 <thead>
                     <tr>
-                        <th class="sticky text-center">Acciones</th>
+                        <th class="sticky text-center" style="position: sticky; left: 0; background: white;">Acciones</th>
                         <th class="sticky text-center">ID</th>
-                        <th class="text-center">Nombre del Producto</th>
+                        <th class="text-center">Nombre del Personal</th>
                         <th class="text-center">Tipo</th>
-                        <th class="text-center">Stock</th>
-                        <th class="text-center">Stock minimo</th>
-                        <th class="text-center">IVA</th>
-                        <th class="text-center">Precio</th>
+                        <th class="text-center">Correo</th>
+                        <th class="text-center">Telefono</th>
                         <th class="text-center">Estado</th>
                     </tr>
                 </thead>
                 <tbody id="mostrar_proveedores">
         ';
-                $consultaProducto = "SELECT * FROM productos_servicios WHERE id_emisor = ".$_SESSION['id_emisor']." ORDER BY nombre ASC";
-                $resProducto = mysqli_query($conexion, $consultaProducto);
-                while($producto = mysqli_fetch_array($resProducto))
+                $consultaPersonal = "SELECT * FROM emisores_personal WHERE id_emisor = ".$_SESSION['id_emisor']." ORDER BY nombre_personal ASC";
+                $resPersonal = mysqli_query($conexion, $consultaPersonal);
+                while($personal = mysqli_fetch_array($resPersonal))
                 {
                     $reemplazo = array("&", '"', "'");
                     $caracteres = array("&amp;", "&quot;", "&apos;");
-                    $nuevo_comercial = str_replace($caracteres, $reemplazo, $producto['nombre']);
+                    $nuevo_comercial = str_replace($caracteres, $reemplazo, $personal['nombre_personal']);
 
-                    if($producto['estatus'] == 1)
+                    if($personal['estatus'] == 1)
                     {
                         $estado = "Activo";
-                        $titulo = "Desactivar";
+                        $titulo = "Desactivar cliente";
                         $color = "btn-secondary";
                         $desactive = "<i class='fas fa-ban'></i>";
                         $codigo_estatus = 2;
                         $disabled_edicion = "";
                     }else{
                         $estado = "Inactivo";
-                        $titulo = "Activar";
+                        $titulo = "Activar cliente";
                         $color = "btn-success";
                         $desactive = "<i class='fas fa-check'></i>";
                         $codigo_estatus = 1;
                         $disabled_edicion = "disabled";
                     }
 
-                    // producto o servicio
-                    if($producto['tipo'] == 1)
+                    if($personal['tipo'] == 1)
                     {
-                        $tipo = 'SERVICIO';
+                        $tipo = 'Recepción';
                     }
                     else
                     {
-                        $tipo = 'PRODUCTO';
+                        $tipo = 'Terapeuta';
                     }
-
-
-                    // contenido de la tabla
                     $html .= "
                         <tr>
-                            <td class='text-center'>
-                                <div class='btn-group' id='div-check".$producto['id_producto']."'>
-                                    <button type='button' class='btn btn-warning btn-sm' ".$disabled_edicion." title='Editar registro' onclick='editar_producto(".$producto['id_producto'].",&quot;".$producto['nombre']."&quot;, ".$producto['tipo'].", ".$producto['stock'].", ".$producto['stock_minimo'].", ".$producto['precio'].", ".$producto['iva'].")'>
+                            <td class='text-center' style='position: sticky; left: 0; background: white;'>
+                                <div class='btn-group' id='div-check".$personal['id_personal']."'>
+                                    <button type='button' class='btn btn-warning btn-sm' ".$disabled_edicion." title='Editar registro' onclick='editar_personal(".$personal['id_personal'].", &quot;".$personal['nombre_personal']."&quot;, &quot;".$personal['tipo']."&quot;, &quot;".$personal['calle']."&quot;, &quot;".$personal['no_exterior']."&quot;, &quot;".$personal['no_interior']."&quot;, &quot;".$personal['codigo_postal']."&quot;, &quot;".$personal['colonia']."&quot;, &quot;".$personal['municipio']."&quot;, &quot;".$personal['estado']."&quot;, &quot;".$personal['pais']."&quot;, &quot;".$personal['correo']."&quot;, &quot;".$personal['telefono']."&quot;)'>
                                         <i class='fas fa-edit'></i>
                                     </button>
                                     &nbsp;
-                                    <button type='button' class='btn ".$color." btn-sm' title='".$titulo."' onclick='actualizar_estatus_producto(".$producto['id_producto'].",".$codigo_estatus.");'>
+                                    <button type='button' class='btn ".$color." btn-sm' title='".$titulo."' onclick='actualizar_estatus_personal(".$personal['id_personal'].",".$codigo_estatus.");'>
                                         ".$desactive."
                                     </button>
                                 </div>
                             </td>
-                            <td class='text-center'>".$producto['id_producto']."</td>
-                            <td class='text-center'>".$producto['nombre']."</td>
+                            <td class='text-center'>".$personal['id_personal']."</td>
+                            <td class='text-center'>".$personal['nombre_personal']."</td>
                             <td class='text-center'>".$tipo."</td>
-                            <td class='text-center'>".$producto['stock']."</td>
-                            <td class='text-center'>".$producto['stock_minimo']."</td>
-                            <td class='text-center'>% ".$producto['iva']."</td>
-                            <td class='text-center'>$ ".$producto['precio']."</td>
+                            <td class='text-center'>".$personal['correo']."</td>
+                            <td class='text-center'>".$personal['telefono']."</td>
                             <td class='text-center'>".$estado."</td>
                         </tr>
                     ";

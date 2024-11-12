@@ -11,10 +11,11 @@ function generar_password() {
 function ver_catalogo() {
     $.ajax({
         cache: false,
-        url: 'componentes/catalogos/cargar_usuarios.php',
+        url: 'componentes/catalogos/cargar/cargar_usuarios.php',
         type: 'POST',
         dataType: 'html',
     }).done(function (resultado) {
+        // console.log(resultado)
         $("#vista").html(resultado);
         $("#modal_cargar").modal("show");
     });
@@ -217,7 +218,7 @@ function actualizar_estatus_usuario(id_usuario, estatus) {
             showConfirmButton: true,
             //timer: 2000
         }).then(function () {
-            window.location = 'usuarios.php';
+            ver_catalogo();
         });
     });
 }

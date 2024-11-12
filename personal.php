@@ -285,7 +285,7 @@ if (!isset($_SESSION['nombre_usuario'])) {
                                         </div>
                                         <div class="modal-body">
                                             <div class="row">
-                                                <div class="col-12" id="vista_personal"></div>
+                                                <div class="col-12 table-responsive" id="vista_personal"></div>
                                             </div>
                                         </div>
                                         <div class="modal-footer">

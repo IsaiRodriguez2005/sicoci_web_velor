@@ -1,6 +1,6 @@
 <?php
     session_start();
-    require("../conexion.php");
+    require("../../conexion.php");
 
     if(empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario']))
     {
@@ -17,7 +17,7 @@
             <table class="table table-striped" id="tabla_cliente" width="100%">
                 <thead>
                     <tr>
-                        <th class="sticky text-center">Acciones</th>
+                        <th class="sticky text-center" style="position: sticky; left: 0; background: white;">Acciones</th>
                         <th class="sticky text-center">ID</th>
                         <th class="text-center">Nombre del Usuario</th>
                         <th class="text-center">Correo</th>
@@ -57,7 +57,7 @@
 
                     $html .= "
                         <tr>
-                            <td class='text-center'>
+                            <td class='text-center' style='position: sticky; left: 0; background: white;'>
                                 <div class='btn-group' id='div-check".$clientes['id_usuario']."'>
                                     <button type='button' class='btn btn-warning btn-sm' ".$disabled_edicion." title='Editar registro' onclick='editar_usuario(".$clientes['id_usuario'].", &quot;".$clientes['nombre']."&quot;, &quot;".$clientes['correo']."&quot;, &quot;".$clientes['password']."&quot;,".$permisos['configuraciones'].",".$permisos['agenda'].",".$permisos['clientes'].",".$permisos['usuarios'].",".$permisos['productos'].",".$permisos['proveedores'].",".$permisos['personal'].",".$permisos['tickets'].",".$permisos['facturacion'].",".$permisos['pago_proveedores'].",".$permisos['reportes'].",".$permisos['dash_directivo'].")'>
                                         <i class='fas fa-edit'></i>

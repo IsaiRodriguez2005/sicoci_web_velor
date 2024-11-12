@@ -57,7 +57,7 @@
                                         <i class='fas fa-dollar-sign'></i>
                                     </button>
                                     &nbsp;
-                                    <button type='button' class='btn btn-warning btn-sm' ".$disabled_edicion." title='Editar registro' onclick='editar_cliente(".$clientes['id_cliente'].", &quot;".$clientes['nombre_cliente']."&quot;, &quot;".$clientes['correo']."&quot;, &quot;".$clientes['telefono']."&quot;, &quot;".$clientes['fec_nac']."&quot;, ".$clientes['ocupacion'].", , ".$clientes['est_civ'].")'>
+                                    <button type='button' class='btn btn-warning btn-sm' ".$disabled_edicion." title='Editar registro' onclick='editar_cliente(".$clientes['id_cliente'].", &quot;".$clientes['nombre_cliente']."&quot;, &quot;".$clientes['correo']."&quot;, &quot;".$clientes['telefono']."&quot;, &quot;".$clientes['fec_nac']."&quot;, ".$clientes['ocupacion']." , ".$clientes['est_civ'].")'>
                                         <i class='fas fa-edit'></i>
                                     </button>
                                     &nbsp;

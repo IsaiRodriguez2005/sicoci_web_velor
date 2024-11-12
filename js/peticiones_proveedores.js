@@ -235,7 +235,7 @@ function ver_catalogo()
 {
     $.ajax({
         cache: false,
-        url : 'componentes/catalogos/cargar_proveedores.php',
+        url : 'componentes/catalogos/cargar/cargar_proveedores.php',
         type : 'POST',
         dataType : 'html',
     }).done(function(resultado){
@@ -258,7 +258,7 @@ function actualizar_estatus_proveedor(id_proveedor, estatus)
             showConfirmButton: false,
             timer: 2000
         }).then(function() {
-            window.location = 'proveedores.php';
+            ver_catalogo()
         });
     }); 
 }

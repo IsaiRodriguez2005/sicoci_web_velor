@@ -1,6 +1,6 @@
 <?php
 session_start();
-require("../conexion.php");
+require("../../conexion.php");
 
 if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
     session_destroy();
@@ -14,7 +14,7 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
             <table class="table table-striped" id="tabla_proveedores" width="100%">
                 <thead>
                     <tr>
-                        <th class="sticky text-center">Acciones</th>
+                        <th class="sticky text-center" style="position: sticky; left: 0; background: white;">Acciones</th>
                         <th class="sticky text-center">ID</th>
                         <th class="text-center">Nombre del Proveedor</th>
                         <th class="text-center">Correo</th>
@@ -58,7 +58,7 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
                         */
         $html .= "
                         <tr>
-                            <td class='text-center'>
+                            <td class='text-center' style='position: sticky; left: 0; background: white;'>
                                 <div class='btn-group' id='div-check" . $proveedores['id_proveedor'] . "'>
                                     <button type='button' class='btn btn-warning btn-sm' " . $disabled_edicion . " title='Editar registro' onclick='editar_proveedor(" . $proveedores['id_proveedor'] . ", &quot;" . $proveedores['nombre_comercial'] . "&quot;, &quot;" . $proveedores['calle'] . "&quot;, &quot;" . $proveedores['no_exterior'] . "&quot;, &quot;" . $proveedores['no_interior'] . "&quot;, &quot;" . $proveedores['codigo_postal'] . "&quot;, &quot;" . $proveedores['colonia'] . "&quot;, &quot;" . $proveedores['municipio'] . "&quot;, &quot;" . $proveedores['estado'] . "&quot;, &quot;" . $proveedores['pais'] . "&quot;, &quot;" . $proveedores['regimen_fiscal'] . "&quot;, &quot;" . $proveedores['correo'] . "&quot;, " . $proveedores['telefono'] . ")'>
                                         <i class='fas fa-edit'></i>

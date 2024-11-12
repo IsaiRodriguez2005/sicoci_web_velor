@@ -50,7 +50,13 @@
         }
         else
         {
-            $updateCliente = "UPDATE emisores_clientes SET nombre_cliente='".trim($nuevo_social)."', correo='".strtolower($_POST['correo'])."', telefono='".$_POST['telefono']."' WHERE id_cliente=".$_POST['id_cliente']." AND id_emisor=".$_SESSION['id_emisor'];
+            $updateCliente = "UPDATE emisores_clientes SET nombre_cliente='".trim($nuevo_social)."', 
+                                                            correo='".strtolower($_POST['correo'])."', 
+                                                            telefono='".$_POST['telefono']."',
+                                                            fec_nac = '".$_POST['fecha_nacimiento']."',
+                                                            ocupacion = ".intval($_POST['ocupacion']).",
+                                                            est_civ = '".intval($_POST['estado_civil'])."'
+                                                            WHERE id_cliente=".$_POST['id_cliente']." AND id_emisor=".$_SESSION['id_emisor'];
             $resultado=mysqli_query($conexion, $updateCliente);
             if($resultado)
             {
