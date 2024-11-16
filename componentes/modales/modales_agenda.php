@@ -35,7 +35,7 @@
                                     <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
                                 </div>
 
-                                <input type="date" class="form-control" id="fecha_cita_form" required onchange="cargar_datos();">
+                                <input type="date" class="form-control" id="fecha_cita_form" required onchange="cargar_datos();" onfocus="resetear('fecha_cita_form')">
                             </div>
                         </div>
                     </div>
@@ -47,10 +47,10 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"><i class="fas fa-user-md"></i></span>
                                 </div>
-                                <select class="form-control" id="terapeuta_form" required onchange="cargar_horarios_disponibles();">
+                                <select class="form-control" id="terapeuta_form" required onchange="cargar_horarios_disponibles();" onfocus="resetear('terapeuta_form')">
                                     <option value="" disabled selected>Selecciona Terapeuta</option>
                                 </select>
-                                <button type="button" class="btn btn-info ml-2" onclick="disponibilidad_terapeutas()">
+                                <button type="button" class="btn btn-info ml-2" onclick="disponibilidad_terapeutas()" >
                                     <i class="far fa-eye"></i>
                                 </button>
                             </div>
@@ -62,7 +62,7 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"><i class="fas fa-clock"></i></span>
                                 </div>
-                                <select class="form-control" id="hora_cita_form" required onchange="cargar_consultorios_disponibles();">
+                                <select class="form-control" id="hora_cita_form" required onchange="cargar_consultorios_disponibles();" onfocus="resetear('hora_cita_form')">
                                     <option value="" disabled selected>Selecciona Hora de Cita</option>
                                 </select>
                             </div>
@@ -76,7 +76,7 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"><i class="fas fa-briefcase-medical"></i></span>
                                 </div>
-                                <select class="form-control" id="tipo_servicio_form" onchange="tipo_servicio();" required>
+                                <select class="form-control" id="tipo_servicio_form" onchange="tipo_servicio();" required onfocus="resetear('tipo_servicio_form')">
                                     <option value="" disabled selected>Selecciona Tipo de Servicio</option>
                                     <option value="1">Consultorio</option>
                                     <option value="2">Domicilio</option>
@@ -90,7 +90,7 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"><i class="fas fa-stethoscope"></i></span>
                                 </div>
-                                <select class="form-control" id="tipo_cita_form" required disabled>
+                                <select class="form-control" id="tipo_cita_form" required disabled onchange="resetear('tipo_cita_form')">
                                     <option value="" disabled selected>Tipo de Cita</option>
                                     <option value="1">Subsecuente</option>
                                     <option value="2">Primera vez</option>
@@ -106,7 +106,7 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"><i class="fas fa-clinic-medical"></i></span>
                                 </div>
-                                <select class="form-control" id="consultorio_form" required>
+                                <select class="form-control" id="consultorio_form" required onfocus="resetear('consultorio_form')">
                                     <option value="" disabled selected>Selecciona Consultorio</option>
                                 </select>
                                 <button type="button" class="btn btn-info ml-2" onclick="abrir_modal('modal_nueva_cita', 'modal_nuevo_consultorio')">

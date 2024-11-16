@@ -3,9 +3,9 @@
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-require '../../vendor/autoload.php';
-require '../correos/estructura_mensaje.php';
-include '../correos/funciones.php';
+require __DIR__ .'../../../vendor/autoload.php';
+require __DIR__ .'../../correos/estructura_mensaje.php';
+include __DIR__ .'../../correos/funciones.php';
 
 function enviarCorreo($correoDestinatario, $a, $c)
 {

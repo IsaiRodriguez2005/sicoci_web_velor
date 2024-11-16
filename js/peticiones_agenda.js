@@ -17,7 +17,7 @@ function limpiar_form() {
     $("#tipo_servicio_form").val('');
     $("#tipo_cita_form").val('');
     $("#consultorio_form").val('');
-    $("#observaciones_form").val('');    
+    $("#observaciones_form").val('');
 }
 
 function form_nueva_cita() {
@@ -25,82 +25,99 @@ function form_nueva_cita() {
     $("#modal_nueva_cita").modal("show");
 }
 
-function gestionar_cita() {
-
-    var id_folio = $("#folio_gestion").val();
-
-    var id_cliente = $("#id_cliente2").val();
-    if (id_cliente == '0') {
-
-        $("#cliente_form").addClass('is-invalid');
-        return;
-    }
-
-    var fecha_cita = $("#fecha_cita_form").val();
-    if (!fecha_cita) {
-
-        $("#fecha_hora_cita_form").addClass('is-invalid');
-
-        return;
-    }
-    var hora_cita = $("#hora_cita_form").val();
-    if (!hora_cita) {
-
-        $("#hora_cita_form").addClass('is-invalid');
-
-        return;
-    }
-
-    var id_terapeuta = $("#terapeuta_form").val();
-    if (!id_terapeuta) {
-
-        $("#terapeuta_form").addClass('is-invalid');
-
-        return;
-    }
-
-    var tipo_servicio = $("#tipo_servicio_form").val();
-    if (!tipo_servicio) {
-
-        $("#tipo_servicio_form").addClass('is-invalid');
-
-        return;
-    }
-
-    var tipo_cita = $("#tipo_cita_form").val();
-    if (!tipo_cita) {
-
-        $("#tipo_cita_form").addClass('is-invalid');
-
-        return;
-    }
-
-    var id_consultorio = $("#consultorio_form").val();
-    if (tipo_servicio == '1') {
-        if (!id_consultorio) {
-
-            $("#consultorio_form").addClass('is-invalid');
-
-            return;
-        }
-    }
-
-    var observaciones = $("#observaciones_form").val();
-
+function pantallaCarga(texto) {
     Swal.fire({
-        title: 'Registrando cita...',
+        title: texto,
         allowEscapeKey: false,
         allowOutsideClick: false,
         didOpen: () => {
             Swal.showLoading()
         }
-
     });
+}
+
+function recargar_hisorial_citas(folio, tipo) {
+    //* esta funcion carga la ultima modificacion de la tabla de agenda
+    //* la bariable [tipo] sifnifica que, si es 1 = apertura (se creo una nueva cita), 2 = actualizacion (se actualizo la informacion del registro)
+
     $.ajax({
         cache: false,
-        url: "componentes/catalogos/registrar_cita.php",
+        url: 'componentes/catalogos/recargar/recargar_historial_citas.php',
         type: 'POST',
         dataType: 'html',
+        data: { 'id_folio': folio }
+    }).done(function (resultado) {
+        if (tipo == 1) {
+            $("#tabla_facturas tr:first").after(resultado);
+        } else {
+            $('#tr_' + folio).replaceWith(resultado);
+        }
+        limpiar_form();
+        $("#modal_nueva_cita").modal("hide");
+    });
+
+}
+
+function gestionar_cita() {
+
+    let id_folio = $("#folio_gestion").val();
+    let id_cliente = $("#id_cliente2").val();
+    let fecha_cita = $("#fecha_cita_form").val();
+    let hora_cita = $("#hora_cita_form").val();
+    let id_terapeuta = $("#terapeuta_form").val();
+    let tipo_servicio = $("#tipo_servicio_form").val();
+    let id_consultorio = $("#consultorio_form").val();
+    let tipo_cita = $("#tipo_cita_form").val();
+    let observaciones = $("#observaciones_form").val();
+    let camposFaltantes = [];
+
+    if (id_cliente == '0') {
+        $("#cliente_form").addClass('is-invalid');
+        camposFaltantes.push('Cliente');
+    }
+    if (!fecha_cita) {
+        $("#fecha_cita_form").addClass('is-invalid');
+        camposFaltantes.push('Fecha de Cita');
+    }
+
+    if (!hora_cita) {
+        $("#hora_cita_form").addClass('is-invalid');
+        camposFaltantes.push('Hora de Cita');
+    }
+
+    if (!id_terapeuta) {
+        $("#terapeuta_form").addClass('is-invalid');
+        camposFaltantes.push('Terapeuta');
+    }
+
+    if (!tipo_servicio) {
+        $("#tipo_servicio_form").addClass('is-invalid');
+        camposFaltantes.push('Tipo de Servicio');
+    }
+
+    if (tipo_servicio == '1' && !id_consultorio) {
+        $("#consultorio_form").addClass('is-invalid');
+        camposFaltantes.push('Tipo Servicio');
+    }
+
+    if (!id_folio || !id_cliente || !fecha_cita || !hora_cita || !id_terapeuta || !tipo_servicio) {
+            Swal.fire({
+                icon: "warning",
+                title: "Por favor, complete los siguientes campos obligatorios:",
+                html: camposFaltantes.join(", "),
+                showConfirmButton: true,
+            });
+        return; //* Para la funcion
+    }
+
+
+    pantallaCarga('Registrando cita...');
+
+    $.ajax({
+        cache: false,
+        url: "componentes/catalogos/registrar/registrar_cita.php",
+        type: 'POST',
+        dataType: 'json',
         data: {
             'tipo_gestion': id_folio,
             'id_cliente': id_cliente,
@@ -113,8 +130,9 @@ function gestionar_cita() {
             'observaciones': observaciones
         },
     }).done(function (resultado) {
-
-        if (resultado == "ok") {
+        //* desestructuramos la respuesta
+        const { id_folio, actualizacion, mensaje } = resultado;
+        if (id_folio > 0 && actualizacion === false) {
             Swal.fire({
                 icon: "success",
                 title: "Cita Registrada",
@@ -122,10 +140,11 @@ function gestionar_cita() {
                 showConfirmButton: false,
                 timer: 2000
             }).then(function () {
-                window.location = 'agenda.php';
+                //* agrega la tupla de la tabla
+                recargar_hisorial_citas(id_folio, 1);
             });
         }
-        else if (resultado == "actualizado") {
+        else if (id_folio > 0 && actualizacion === true) {
             Swal.fire({
                 icon: "success",
                 title: "Cita Actializada",
@@ -133,10 +152,11 @@ function gestionar_cita() {
                 showConfirmButton: false,
                 timer: 2000
             }).then(function () {
-                window.location = 'agenda.php';
+                //* agrega la tupla de la tabla
+                recargar_hisorial_citas(id_folio, 2);
             });
         }
-        else if (resultado == "error") {
+        else if (mensaje == "error") {
             Swal.fire({
                 icon: "warning",
                 title: "Cita No Registrada",
@@ -144,10 +164,8 @@ function gestionar_cita() {
                 timer: 2000
             });
         }
-
         //-------------VALIDACIONES DE EXISTENCIA EN LA AGENDA -------------
-
-        else if (resultado == 1) // validacion para cliente y hora
+        else if (mensaje == 'clo') // validacion para cliente y hora
         {
             Swal.fire({
                 icon: "warning",
@@ -156,7 +174,7 @@ function gestionar_cita() {
                 timer: 2000
             });
         }
-        else if (resultado == 2) // validacion para conultorio y hora
+        else if (mensaje == 'co') // validacion para conultorio y hora
         {
             Swal.fire({
                 icon: "warning",
@@ -165,7 +183,7 @@ function gestionar_cita() {
                 timer: 2000
             });
         }
-        else if (resultado == 3) // validacion para terapeuta y hora
+        else if (mensaje == 'to') // validacion para terapeuta y hora
         {
             Swal.fire({
                 icon: "warning",
@@ -309,10 +327,10 @@ function buscar_cliente(nombre_social) {
         //console.log(Number(data.total_registros));
         $("#id_cliente2").val(data.id_cliente);
 
-        if(Number(data.total_registros) > 0){
+        if (Number(data.total_registros) > 0) {
             var tipo = '1'
         } else {
-            var tipo = '2' 
+            var tipo = '2'
         }
 
         $("#tipo_cita_form").val(tipo);
@@ -504,7 +522,7 @@ function disponibilidad_terapeutas() {
 
 }
 
-function enfermedades_form(){
+function enfermedades_form() {
 
     diabetes = $("#diabetes").prop('checked');
     hta = $("#hta").prop('checked');
@@ -516,17 +534,16 @@ function enfermedades_form(){
     transfusiones = $("#transfusiones").prop('checked');
     otros = $("#otros").prop('checked');
 
-    if(diabetes){
-        
+    if (diabetes) {
+
     }
 
 }
 
-function ver_pdf(id_folio, tipo_cita)
-{
+function ver_pdf(id_folio, tipo_cita) {
     let ruta;
-    
-    if (tipo_cita == 2){
+
+    if (tipo_cita == 2) {
         ruta = "componentes/formatos_pdf/ver_pdf_valoracion_pv.php?id_folio=" + id_folio;
     } else {
         ruta = "componentes/formatos_pdf/ver_pdf_valoracion_sb.php?id_folio=" + id_folio;

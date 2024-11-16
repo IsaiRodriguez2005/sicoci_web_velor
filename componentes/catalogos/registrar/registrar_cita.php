@@ -1,7 +1,7 @@
 <?php
 session_start();
-require("../conexion.php");
-include '../correos/enviar_correo.php';
+require("../../conexion.php");
+include '../../correos/enviar_correo.php';
 
 date_default_timezone_set('America/Mexico_City');
 
@@ -54,14 +54,9 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
                     $resultado = mysqli_query($conexion, $insertCliente);
                     if ($resultado) {
 
-
                         $datosCliente = getDatosClientes(intval($_POST['id_cliente']), $conexion);
-
                         $datosTerap = getDatosTerapeuta(intval($_POST['id_terapeuta']), $conexion);
-
                         $datosConsultorio =  getDatosConsultorio(intval($_POST['id_consultorio']), $conexion);
-
-
 
                         if ($datosCliente['correo']) {
                             $fecha = obtenerFechaEspaniol($fecha_hora);
@@ -81,6 +76,7 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
                                     PD. Este correo es informativo por lo que no es necesario responder dicho correo.
                                     ';
                             }
+
                             $correo = enviarCorreo($datosCliente['correo'], $asunto, $mensaje);
                         }
 
@@ -108,18 +104,36 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
                             $correo = enviarCorreo($datosTerap['correo'], $asunto, $mensaje);
                         }
 
-                        echo "ok";
+                        $respuesta = [
+                            'id_folio' => $ultimo,
+                            'actualizacion' => false,
+                            'mensaje' => ''
+                        ];
+                        
+                        echo json_encode($respuesta);
                     } else {
-                        echo "error";
+                        $respuesta = [
+                            'mensaje' => "error"
+                        ];
+                        echo json_encode($respuesta);
                     }
                 } else {
-                    echo 3; // validacion de terapeuta ocupado
+                    $respuesta = [
+                        'mensaje' => 'to'
+                    ]; // validacion de terapeuta ocupado
+                    echo json_encode($respuesta);
                 }
             } else {
-                echo 2; // validacion de consultorio ocupado
+                $respuesta = [
+                    'mensaje' => 'co'
+                ]; // validacion de consultorio ocupado
+                echo json_encode($respuesta);
             }
         } else {
-            echo 1; // validacion de cliente y hora 
+            $respuesta = [
+                'mensaje' => 'clo'
+            ]; // validacion de cliente y hora 
+            echo json_encode($respuesta);
         }
     } else {
         //print_r($_POST);
@@ -182,6 +196,10 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
                 $correo = enviarCorreo($datosTerap['correo'], $asunto, $mensaje);
             }
         }
-        echo 'actualizado';
+        $respuesta = [
+            'id_folio' => $_POST['tipo_gestion'],
+            'actualizacion' => true
+        ];
+        echo json_encode($respuesta);
     }
 }

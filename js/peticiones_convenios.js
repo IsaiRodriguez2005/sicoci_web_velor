@@ -18,7 +18,7 @@ function gestionar_convenio() {
     let id_convenio = $("#tipo_gestion").val();
     let nombre = $("#nombre").val();
     let tipo = $("#tipo").val();
-    let pct_consul = $("#pct_consull").val();
+    let pct_consul = $("#pct_consul").val();
     let cost_consul = $("#cost_consul").val();
 
     if (!pct_consul) pct_consul = 0;
@@ -133,14 +133,14 @@ function editar_convenio(id_convenio) {
         if (pct_consul > 0) $("#pct_consul").removeAttr('disabled');
         if (cost_consul > 0) $("#cost_consul").removeAttr('disabled');
 
-        $("#pct_consull").val(pct_consul);
+        $("#pct_consul").val(pct_consul);
         $("#cost_consul").val(cost_consul);
 
         $("#btn-convenios").html('Actualizar Convenio');
     });
 }
 
-function actualizar_estatus_convenio(id_convenio, codigo_estatus){
+function actualizar_estatus_convenio(id_convenio, codigo_estatus) {
     $.ajax({
         cache: false,
         url: 'componentes/catalogos/actualizar/actualizar_estatus_convenio.php',

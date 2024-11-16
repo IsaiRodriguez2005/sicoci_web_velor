@@ -1,7 +1,7 @@
 <?php
 session_start();
 require("../conexion.php");
-include '../correos/enviar_correo.php';
+require('../correos/enviar_correo.php');
 date_default_timezone_set('America/Mexico_City');
 error_reporting(0);
 

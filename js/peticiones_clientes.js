@@ -109,6 +109,20 @@ function activar_forma() {
     }
 }
 
+function recargar_lista_clientes(id_cliente, estatus) {
+    //* esta funcion carga la ultima modificacion de la tabla de clientes
+
+    $.ajax({
+        cache: false,
+        url: 'componentes/catalogos/recargar/recargar_lista_clientes.php',
+        type: 'POST',
+        dataType: 'html',
+        data: { 'id_cliente': id_cliente, 'estatus': estatus}
+    }).done(function (resultado) {
+        $('#tr_cli_' + id_cliente).replaceWith(resultado);
+    });
+}
+
 function cargarOcupaciones() {
     $.ajax({
         cache: false,
@@ -152,7 +166,7 @@ function gestionar_ocupacion(modal_show = '', modal_hide = '') {
 
                     }
                 });
-            } else if( resultado == 'ex'){
+            } else if (resultado == 'ex') {
                 Swal.fire({
                     icon: "warning",
                     title: "La Ocupación Ya Existe",
@@ -208,14 +222,15 @@ function gestionar_cliente() {
         url: "componentes/catalogos/registrar/registrar_cliente.php",
         type: 'POST',
         dataType: 'html',
-        data: { 'nombre_social': nombre_social, 
-                'correo': correo, 
-                'telefono': telefono, 
-                'id_cliente': tipo_gestion,  
-                'estado_civil': estado_civil,
-                'ocupacion': ocupacion,
-                'fecha_nacimiento': fecha_nacimiento,
-            },
+        data: {
+            'nombre_social': nombre_social,
+            'correo': correo,
+            'telefono': telefono,
+            'id_cliente': tipo_gestion,
+            'estado_civil': estado_civil,
+            'ocupacion': ocupacion,
+            'fecha_nacimiento': fecha_nacimiento,
+        },
     }).done(function (resultado) {
         //console.log(resultado)
         if (resultado == "ok") {
@@ -270,8 +285,6 @@ function ver_catalogo() {
     });
 }
 
-
-
 function actualizar_estatus_cliente(id_cliente, estatus) {
     $.ajax({
         cache: false,
@@ -286,7 +299,7 @@ function actualizar_estatus_cliente(id_cliente, estatus) {
             showConfirmButton: false,
             timer: 2000
         }).then(function () {
-            ver_catalogo();
+            recargar_lista_clientes(id_cliente, estatus)
         });
     });
 }
@@ -316,7 +329,7 @@ function cargar_perfil(id_cliente, nombre_cliente = "") {
     }).done(function (resultado) {
         $("#vista_perfil_facturacion").html(resultado);
         $("#perfil_id_cliente").val(id_cliente);
-        if(nombre_cliente){
+        if (nombre_cliente) {
             $("#perfil_nombre_cliente").val(nombre_cliente);
         } else {
             $.ajax({
@@ -326,8 +339,8 @@ function cargar_perfil(id_cliente, nombre_cliente = "") {
                 dataType: 'html',
                 data: { 'id_cliente': id_cliente }
             }).done(function (resultado) {
-                    $("#perfil_id_cliente").val(id_cliente);
-                    $("#perfil_nombre_cliente").val(resultado);
+                $("#perfil_id_cliente").val(id_cliente);
+                $("#perfil_nombre_cliente").val(resultado);
             });
         }
 
@@ -343,87 +356,33 @@ function cargar_perfil(id_cliente, nombre_cliente = "") {
 function agregar_perfil() {
 
     // recompilacion de informacion------------------------------------------
-    var id_perfil = $("#tipo_gestion").val();
-    var id_cliente = $("#perfil_id_cliente").val();
-    var nombre = $("#perfil_nombre_cliente").val();
-    var rfc = $("#rfc").val();
-    var nombre_social = $("#nombre_perfil").val();
-    var calle = $("#calle").val();
-    var no_interior = $("#no_interior").val();
-    var no_exterior = $("#no_exterior").val();
-    var codigo_postal = $("#codigo_postal").val();
-    var colonia = $("#colonia").val();
-    var estado = $("#estado").val();
-    var municipio = $("#municipio").val();
-    var pais = $("#pais").val();
-    var regimen = $("#regimen").val();
-    var uso_cfdi = $("#uso_cfdi").val();
-    var metodo_pago = $("#metodo_pago").val();
-    var forma_pago = $("#forma_pago").val();
-
-    var bandera = 0;
-
-    // validaciones------------------------------------------------
+    let id_perfil = $("#tipo_gestion").val();
+    let id_cliente = $("#perfil_id_cliente").val();
+    let nombre = $("#perfil_nombre_cliente").val();
+    let rfc = $("#rfc").val();
+    let nombre_social = $("#nombre_perfil").val();
+    let calle = $("#calle").val();
+    let no_interior = $("#no_interior").val();
+    let no_exterior = $("#no_exterior").val();
+    let codigo_postal = $("#codigo_postal").val();
+    let colonia = $("#colonia").val();
+    let estado = $("#estado").val();
+    let municipio = $("#municipio").val();
+    let pais = $("#pais").val();
+    let regimen = $("#regimen").val();
+    let uso_cfdi = $("#uso_cfdi").val();
+    let metodo_pago = $("#metodo_pago").val();
+    let forma_pago = $("#forma_pago").val();
+    let bandera = 0;
 
 
-    if (rfc.length != 13) {
-        $("#rfc").addClass('is-invalid');
-        Swal.fire({
-            icon: "error",
-            title: "Debes especificar un RFC valido",
-            showConfirmButton: false,
-            timer: 1500
-        });
 
-        bandera = 1;
-    }
-
-    if (nombre_social.length == 0) {
-        $("#nombre_perfil").addClass('is-invalid');
-        Swal.fire({
-            icon: "error",
-            title: "Debes especificar el nombre del cliente/paciente",
-            showConfirmButton: false,
-            timer: 1500
-        });
-
-        bandera = 1;
-    }
-
-
-    if (calle.length == 0) {
-        $("#calle").addClass('is-invalid');
-        Swal.fire({
-            icon: "error",
-            title: "Debes especificar el nombre de la calle",
-            showConfirmButton: false,
-            timer: 1500
-        });
-
-        bandera = 1;
-    }
-    if (no_exterior.length == 0) {
-        $("#no_exterior").addClass('is-invalid');
-        Swal.fire({
-            icon: "error",
-            title: "Debes especificar el n&uacute;mero exterior del domicilio",
-            showConfirmButton: false,
-            timer: 1500
-        });
-
-        bandera = 1;
-    }
-    if (codigo_postal.length == 0) {
-        $("#codigo_postal").addClass('is-invalid');
-        Swal.fire({
-            icon: "error",
-            title: "Debes especificar el c&oacute;digo postal del domicilio",
-            showConfirmButton: false,
-            timer: 1500
-        });
-
-        bandera = 1;
-    }
+    //* validaciones------------------------------------------------
+    if (rfc.length != 13) $("#rfc").addClass('is-invalid');
+    if (nombre_social.length == 0) $("#nombre_perfil").addClass('is-invalid');
+    if (calle.length == 0) $("#calle").addClass('is-invalid');
+    if (no_exterior.length == 0) $("#no_exterior").addClass('is-invalid');
+    if (codigo_postal.length == 0) $("#codigo_postal").addClass('is-invalid');
     if (colonia.length == 0 || colonia == 0) {
         if (tipo_colonia == 2 || extranjero == 2) {
             $("#colonia_text").addClass('is-invalid');
@@ -431,94 +390,23 @@ function agregar_perfil() {
         else {
             $("#colonia").addClass('is-invalid');
         }
-
-        Swal.fire({
-            icon: "error",
-            title: "Debes especificar la colonia del domicilio",
-            showConfirmButton: false,
-            timer: 1500
-        });
-
-        bandera = 1;
     }
-    if (estado == 0 || estado.length == 0) {
-        $("#estado").addClass('is-invalid');
-        Swal.fire({
-            icon: "error",
-            title: "Debes especificar el estado",
-            showConfirmButton: false,
-            timer: 1500
-        });
+    if (estado == 0 || estado.length == 0) $("#estado").addClass('is-invalid');
+    if (municipio == 0 || municipio.length == 0) $("#municipio").addClass('is-invalid');
+    if (pais == 0 || pais.length == 0) $("#pais").addClass('is-invalid');
+    if (regimen == 0) $("#regimen").addClass('is-invalid');
+    if (uso_cfdi == 0) $("#uso_cfdi").addClass('is-invalid');
+    if (metodo_pago == 0) $("#metodo_pago").addClass('is-invalid');
+    if (forma_pago == 0) $("#forma_pago").addClass('is-invalid');
 
-        bandera = 1;
+    const camposFaltantes = [];
+    if(
+        rfc.length != 13 ||
+        nombre_social.length == 0
+    ) {
+        
     }
-    if (municipio == 0 || municipio.length == 0) {
-        $("#municipio").addClass('is-invalid');
-        Swal.fire({
-            icon: "error",
-            title: "Debes especificar el municipio",
-            showConfirmButton: false,
-            timer: 1500
-        });
-
-        bandera = 1;
-    }
-    if (pais == 0 || pais.length == 0) {
-        $("#pais").addClass('is-invalid');
-        Swal.fire({
-            icon: "error",
-            title: "Debes especificar el pais",
-            showConfirmButton: false,
-            timer: 1500
-        });
-
-        bandera = 1;
-    }
-    if (regimen == 0) {
-        $("#regimen").addClass('is-invalid');
-        Swal.fire({
-            icon: "error",
-            title: "Debes especificar el regimen fiscal",
-            showConfirmButton: false,
-            timer: 1500
-        });
-
-        bandera = 1;
-    }
-    if (uso_cfdi == 0) {
-        $("#uso_cfdi").addClass('is-invalid');
-        Swal.fire({
-            icon: "error",
-            title: "Debes especificar el uso cfdi",
-            showConfirmButton: false,
-            timer: 1500
-        });
-
-        bandera = 1;
-    }
-    if (metodo_pago == 0) {
-        $("#metodo_pago").addClass('is-invalid');
-        Swal.fire({
-            icon: "error",
-            title: "Debes especificar el metodo de pago",
-            showConfirmButton: false,
-            timer: 1500
-        });
-
-        bandera = 1;
-    }
-    if (forma_pago == 0) {
-        $("#forma_pago").addClass('is-invalid');
-        Swal.fire({
-            icon: "error",
-            title: "Debes especificar la forma de pago",
-            showConfirmButton: false,
-            timer: 1500
-        });
-
-        bandera = 1;
-    }
-
+    return;
     // peticin ajax-------------------------------------------
     if (bandera == 0) {
         Swal.fire({
@@ -603,8 +491,7 @@ function editar_perfil(id_cliente, id_perfil, rfc, nombre_perfil, calle, no_exte
     $("#forma_pago").val(forma_pago);
 }
 
-function actualizar_estatus_perfil(id_cliente, id_perfil, estatus)
-{
+function actualizar_estatus_perfil(id_cliente, id_perfil, estatus) {
     $.ajax({
         cache: false,
         url: 'componentes/catalogos/actualizar_estatus_perfil_fact.php',
@@ -625,8 +512,7 @@ function actualizar_estatus_perfil(id_cliente, id_perfil, estatus)
 }
 
 
-function eliminar_perfil(id_perfil, id_cliente)
-{
+function eliminar_perfil(id_perfil, id_cliente) {
     $.ajax({
         cache: false,
         url: 'componentes/catalogos/eliminar_perfil_facturacion.php',
@@ -634,7 +520,7 @@ function eliminar_perfil(id_perfil, id_cliente)
         dataType: 'html',
         data: { 'id_perfil': id_perfil },
     }).done(function (resultado) {
-        if(resultado == 'ok'){
+        if (resultado == 'ok') {
             Swal.fire({
                 icon: 'success',
                 title: 'Perfil Eliminado',
@@ -643,7 +529,7 @@ function eliminar_perfil(id_perfil, id_cliente)
             }).then(function () {
                 cargar_perfil(id_cliente);
             });
-        }else{
+        } else {
             Swal.fire({
                 icon: 'error',
                 title: 'Ocurrio un Error',
@@ -651,23 +537,23 @@ function eliminar_perfil(id_perfil, id_cliente)
                 timer: 2000
             })
         }
-        
+
     });
 }
 
 //* funcion se ejecutara al iniciar la pantalla
-$(document).ready(function() {
+$(document).ready(function () {
     cargarOcupaciones();
 });
 
-function abrir_modal(modal){
+function abrir_modal(modal) {
     if (modal.length != 0) {
         //ocultamos el modal de agendar cita
         $('#' + modal).modal('show');
     }
 }
 
-function cerrar_modal(modal){
+function cerrar_modal(modal) {
     if (modal.length != 0) {
         //ocultamos el modal de agendar cita
         $('#' + modal).modal('hide');

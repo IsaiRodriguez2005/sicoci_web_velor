@@ -19,7 +19,6 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
         $terapeutas_Activos = "SELECT id_terapeuta FROM emisores_agenda WHERE fecha_agenda = '" . $_POST['fecha_hora'] . "' 
                                                                                 UNION 
                                 SELECT id_personal FROM emisores_personal_permisos WHERE fecha_inicial >= '" . $fecha . "' OR fecha_final <= '" . $fecha . "'";
-        echo $terapeutas_Activos;
         $resultado = mysqli_query($conexion, $terapeutas_Activos);
 
         // si contiene alguna respuesa

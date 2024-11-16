@@ -35,14 +35,14 @@
 
                     if($clientes['estatus'] == 1)
                     {
-                        $estado = "Activo";
+                        $estado = '<span class="badge badge-success" style="width: 100%; color:white;">ACTIVO</span>';
                         $titulo = "Desactivar cliente";
                         $color = "btn-secondary";
                         $desactive = "<i class='fas fa-ban'></i>";
                         $codigo_estatus = 2;
                         $disabled_edicion = "";
                     }else{
-                        $estado = "Inactivo";
+                        $estado = '<span class="badge badge-secondary" style="width: 100%; color:white;">INACTIVO</span>';
                         $titulo = "Activar cliente";
                         $color = "btn-success";
                         $desactive = "<i class='fas fa-check'></i>";
@@ -50,25 +50,25 @@
                         $disabled_edicion = "disabled";
                     }
                     $html .= "
-                        <tr>
+                        <tr id='tr_cli_".$clientes['id_cliente']."'>
                             <td class='text-center'>
                                 <div class='btn-group' id='div-check".$clientes['id_cliente']."'>
-                                    <button type='button' class='btn btn-primary btn-sm' ".$disabled_edicion." title='Perfiles de facturaci&oacute;n' onclick='cargar_perfil(".$clientes['id_cliente'].", &quot;".$clientes['nombre_cliente']."&quot;)'>
+                                    <button id='btn_per_".$clientes['id_cliente']."' type='button' class='btn btn-primary btn-sm' ".$disabled_edicion." title='Perfiles de facturaci&oacute;n' onclick='cargar_perfil(".$clientes['id_cliente'].", &quot;".$clientes['nombre_cliente']."&quot;)'>
                                         <i class='fas fa-dollar-sign'></i>
                                     </button>
                                     &nbsp;
-                                    <button type='button' class='btn btn-warning btn-sm' ".$disabled_edicion." title='Editar registro' onclick='editar_cliente(".$clientes['id_cliente'].", &quot;".$clientes['nombre_cliente']."&quot;, &quot;".$clientes['correo']."&quot;, &quot;".$clientes['telefono']."&quot;, &quot;".$clientes['fec_nac']."&quot;, ".$clientes['ocupacion']." , ".$clientes['est_civ'].")'>
+                                    <button id='btn_edit_".$clientes['id_cliente']."' type='button' class='btn btn-warning btn-sm' ".$disabled_edicion." title='Editar registro' onclick='editar_cliente(".$clientes['id_cliente'].", &quot;".$clientes['nombre_cliente']."&quot;, &quot;".$clientes['correo']."&quot;, &quot;".$clientes['telefono']."&quot;, &quot;".$clientes['fec_nac']."&quot;, ".$clientes['ocupacion']." , ".$clientes['est_civ'].")'>
                                         <i class='fas fa-edit'></i>
                                     </button>
                                     &nbsp;
-                                    <button type='button' class='btn ".$color." btn-sm' title='".$titulo."' onclick='actualizar_estatus_cliente(".$clientes['id_cliente'].",".$codigo_estatus.");'>
+                                    <button id='btn_est_".$clientes['id_cliente']."' type='button' class='btn ".$color." btn-sm' title='".$titulo."' onclick='actualizar_estatus_cliente(".$clientes['id_cliente'].",".$codigo_estatus.");'>
                                         ".$desactive."
                                     </button>
                                 </div>
                             </td>
                             <td class='text-center'>".$clientes['id_cliente']."</td>
                             <td class='text-center'>".$clientes['nombre_cliente']."</td>
-                            <td class='text-center'>".$estado."</td>
+                            <td class='text-center' id='td_est_".$clientes['id_cliente']."'>".$estado."</td>
                         </tr>
                     ";
                 }

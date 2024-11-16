@@ -38,11 +38,13 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
             echo "error";
         }
     } else {
+        // print_r($_POST);
         $updateConvenio = "UPDATE emisores_convenios SET nombre='" . trim($nuevo_social) . "', 
                                                             tipo='" . ($_POST['tipo']) . "', 
                                                             pct_consul =" . $_POST['pct_consul'] . ",
                                                             cost_consul = " . $_POST['cost_consul'] . "
                                                             WHERE id_convenio=" . $_POST['id_convenio'] . " AND id_emisor=" . $_SESSION['id_emisor'];
+        // return;
         $resultado = mysqli_query($conexion, $updateConvenio);
         if ($resultado) {
             echo "actualizado";
