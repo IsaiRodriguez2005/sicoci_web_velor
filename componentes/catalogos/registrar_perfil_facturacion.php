@@ -35,7 +35,7 @@
                                                                             ".$_SESSION['id_emisor'].",
                                                                             '".strtoupper($_POST['rfc'])."',
                                                                             '".trim($nuevo_social)."',
-                                                                            '".strtolower($_POST['calle'])."',
+                                                                            '".strtoupper($_POST['calle'])."',
                                                                             '".strtolower($_POST['no_exterior'])."',
                                                                             '".strtolower($_POST['no_interior'])."',
                                                                             '".strtolower($_POST['codigo_postal'])."',
@@ -52,7 +52,7 @@
             $resultado=mysqli_query($conexion, $insertCliente);
             if($resultado)
             {
-                echo "1";
+                echo $ultimo;
             }
             else
             {
@@ -63,7 +63,7 @@
         {
             $updateCliente = "UPDATE emisores_clientes_facturacion SET 
                                                                         rfc='".trim($_POST['rfc'])."',  
-                                                                        nombre_social='".strtolower($_POST['nombre_social'])."', 
+                                                                        nombre_social='".strtoupper($_POST['nombre_social'])."', 
                                                                         calle='".strtolower($_POST['calle'])."', 
                                                                         no_exterior='".strtolower($_POST['no_exterior'])."', 
                                                                         no_interior='".strtolower($_POST['no_interior'])."', 
@@ -77,8 +77,9 @@
                                                                         forma_pago='".strtolower($_POST['forma_pago'])."', 
                                                                         uso_cfdi='".strtolower($_POST['uso_cfdi'])."' 
                                                                     WHERE 
-                                                                        id_cliente=".$_POST['id_perfil']." AND 
-                                                                        id_emisor=".$_SESSION['id_emisor'];
+                                                                        id_cliente=".$_POST['id_cliente']." AND 
+                                                                        id_emisor=".$_SESSION['id_emisor'] ." AND 
+                                                                        id_perfil = ".$_POST['id_perfil'].";";
             $resultado=mysqli_query($conexion, $updateCliente);
             if($resultado)
             {

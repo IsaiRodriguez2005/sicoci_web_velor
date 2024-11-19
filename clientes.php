@@ -200,7 +200,7 @@ if (!isset($_SESSION['nombre_usuario'])) {
                                     </div>
                                 </div>
                                 <!-- Modal nueva ocupacion -->
-                                
+
                                 <!-- Modal Perfiles Facturacion -->
                                 <div class="modal fade" id="modal_perfiles" role="dialog" style="overflow: scroll;">
                                     <div class="modal-dialog modal-xl">
@@ -513,6 +513,22 @@ if (!isset($_SESSION['nombre_usuario'])) {
         <script>
             $(function() {
                 $('#tabla_cliente').DataTable({
+                    "paging": true,
+                    "lengthChange": false,
+                    "searching": true,
+                    "ordering": true,
+                    "info": true,
+                    "autoWidth": true,
+                    "responsive": true,
+                    "language": {
+                        "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
+                    }
+                });
+            });
+        </script>
+        <script>
+            $(function() {
+                $('#tabla_perfil_facturacion').DataTable({
                     "paging": true,
                     "lengthChange": false,
                     "searching": true,

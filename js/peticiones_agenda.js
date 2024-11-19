@@ -1,3 +1,5 @@
+import { pantallaCarga } from './peticiones_generales';
+
 $(document).ready(function () {
 
     id_terapeuta = $("#id_personal").val();
@@ -25,17 +27,6 @@ function form_nueva_cita() {
     $("#modal_nueva_cita").modal("show");
 }
 
-function pantallaCarga(texto) {
-    Swal.fire({
-        title: texto,
-        allowEscapeKey: false,
-        allowOutsideClick: false,
-        didOpen: () => {
-            Swal.showLoading()
-        }
-    });
-}
-
 function recargar_hisorial_citas(folio, tipo) {
     //* esta funcion carga la ultima modificacion de la tabla de agenda
     //* la bariable [tipo] sifnifica que, si es 1 = apertura (se creo una nueva cita), 2 = actualizacion (se actualizo la informacion del registro)
@@ -60,16 +51,16 @@ function recargar_hisorial_citas(folio, tipo) {
 
 function gestionar_cita() {
 
-    let id_folio = $("#folio_gestion").val();
-    let id_cliente = $("#id_cliente2").val();
-    let fecha_cita = $("#fecha_cita_form").val();
-    let hora_cita = $("#hora_cita_form").val();
-    let id_terapeuta = $("#terapeuta_form").val();
-    let tipo_servicio = $("#tipo_servicio_form").val();
-    let id_consultorio = $("#consultorio_form").val();
-    let tipo_cita = $("#tipo_cita_form").val();
-    let observaciones = $("#observaciones_form").val();
-    let camposFaltantes = [];
+    const id_folio = $("#folio_gestion").val();
+    const id_cliente = $("#id_cliente2").val();
+    const fecha_cita = $("#fecha_cita_form").val();
+    const hora_cita = $("#hora_cita_form").val();
+    const id_terapeuta = $("#terapeuta_form").val();
+    const tipo_servicio = $("#tipo_servicio_form").val();
+    const id_consultorio = $("#consultorio_form").val();
+    const tipo_cita = $("#tipo_cita_form").val();
+    const observaciones = $("#observaciones_form").val();
+    const camposFaltantes = [];
 
     if (id_cliente == '0') {
         $("#cliente_form").addClass('is-invalid');
@@ -111,6 +102,7 @@ function gestionar_cita() {
     }
 
 
+    // pantallaCarga('Registrando cita...');
     pantallaCarga('Registrando cita...');
 
     $.ajax({
