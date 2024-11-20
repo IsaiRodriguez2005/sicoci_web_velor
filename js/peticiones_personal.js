@@ -70,100 +70,138 @@ function colonia_select() {
 }
 
 function gestionar_personal(redireccion, modal_agenda = '', modal_cliente = '') {
+
     //console.log(redireccion)
-    var tipo_gestion = $('#tipo_gestion').val();
+    // const no_fisico = $('input:radio[id=no_fisico]:checked').val();
+    // const fisico = $('input:radio[id=fisico]:checked').val();
+    // const fiscal = no_fisico == 1 ? 1 : 2;
 
-    var fiscal = "";
-    var no_fisico = $('input:radio[id=no_fisico]:checked').val()
-    var fisico = $('input:radio[id=fisico]:checked').val()
-    if (no_fisico == 1) {
-        fiscal = 1;
-    }
-    else {
-        fiscal = 2;
-    }
+    const tipo_gestion = $('#tipo_gestion').val();
+    const nombre_personal = $('#nombre_personal').val();
+    const tipo_personal = $('#tipo_personal').val();
+    const calle = $('#calle').val();
+    const no_exterior = $('#no_exterior').val();
+    const no_interior = $('#no_interior').val();
+    const codigo_postal = $('#codigo_postal').val();
+    const tipo_colonia = $("#colonia_oculta").val();
+    const colonia = tipo_colonia == 2 ? $('#colonia_text').val() : $('#colonia').val();
+    const estado = $('#estado').val();
+    const municipio = $('#municipio').val();
+    const pais = $('#pais').val();
+    const correo = $('#correo').val();
+    const telefono = $('#telefono').val();
+    const estatus = 1;
 
-    var nombre_personal = $('#nombre_personal').val();
-    var tipo_personal = $('#tipo_personal').val();
+    // Arreglo para almacenar campos faltantes
+    const camposFaltantes = [];
 
-    // ojoooo ------------------------------------------
+    // Validación de tipo de personal
     if (!tipo_personal) {
-
         $("#tipo_personal").addClass('is-invalid');
-        Swal.fire({
-            icon: "error",
-            title: "Debes especificar el tipo de personal",
-            showConfirmButton: false,
-            timer: 1500
-        });
+        camposFaltantes.push("Tipo de personal");
+    }
 
+    // Validación del nombre del personal
+    if (!nombre_personal) {
+        $("#nombre_personal").addClass('is-invalid');
+        camposFaltantes.push("Nombre del personal");
+    }
+
+    // Validaciones adicionales
+    /*
+    if (!calle) {
+        $("#calle").addClass('is-invalid');
+        camposFaltantes.push("Calle");
+    }
+
+    if (!no_exterior) {
+        $("#no_exterior").addClass('is-invalid');
+        camposFaltantes.push("Número exterior");
+    }
+
+    if (!codigo_postal) {
+        $("#codigo_postal").addClass('is-invalid');
+        camposFaltantes.push("Código Postal");
+    }
+
+    if (!colonia) {
+        if (tipo_colonia == 2) {
+            $("#colonia_text").addClass('is-invalid');
+        } else {
+            $("#colonia").addClass('is-invalid');
+        }
+        camposFaltantes.push("Colonia");
+    }
+
+    if (!estado) {
+        $("#estado").addClass('is-invalid');
+        camposFaltantes.push("Estado");
+    }
+
+    if (!municipio) {
+        $("#municipio").addClass('is-invalid');
+        camposFaltantes.push("Municipio");
+    }
+
+    if (!pais) {
+        $("#pais").addClass('is-invalid');
+        camposFaltantes.push("País");
+    }
+        */
+
+    if (!correo) {
+        $("#correo").addClass('is-invalid');
+        camposFaltantes.push("Correo");
+    }
+
+    if (!telefono) {
+        $("#telefono").addClass('is-invalid');
+        camposFaltantes.push("Teléfono");
+    }
+
+    // Mostrar errores si hay campos faltantes
+    if (camposFaltantes.length > 0) {
+        Swal.fire({
+            icon: "warning",
+            title: "Por favor, complete los siguientes campos obligatorios:",
+            html: camposFaltantes.join(", "),
+            showConfirmButton: true,
+        });
         return;
     }
 
-
-    var calle = $('#calle').val();
-    var no_exterior = $('#no_exterior').val();
-    var no_interior = $('#no_interior').val();
-    var codigo_postal = $('#codigo_postal').val();
-    var tipo_colonia = $("#colonia_oculta").val();
-    if (tipo_colonia == 2) {
-        var colonia = $('#colonia_text').val();
-    }
-    else {
-        var colonia = $('#colonia').val();
-    }
-    var estado = $('#estado').val();
-    var municipio = $('#municipio').val();
-    var pais = $('#pais').val();
-    var correo = $('#correo').val();
-    var telefono = $('#telefono').val();
-    var estatus = 1;
-
-
-
-    if (fiscal == 1) {
-        if (nombre_personal.length == 0) {
-            $("#nombre_personal").addClass('is-invalid');
-            Swal.fire({
-                icon: "error",
-                title: "Debes especificar el nombre del personal",
-                showConfirmButton: false,
-                timer: 1500
-            });
-
-            return false;
-        }
-    }
-    else {
-        if (nombre_personal.length == 0) {
-            $("#nombre_personal").addClass('is-invalid');
-            Swal.fire({
-                icon: "error",
-                title: "Debes especificar el nombre del personal",
-                showConfirmButton: false,
-                timer: 1500
-            });
-
-            return false;
-        }
-    }
-
-
+    // Si todas las validaciones pasan, mostrar el mensaje de registro
     Swal.fire({
         title: 'Registrando personal...',
         allowEscapeKey: false,
         allowOutsideClick: false,
         didOpen: () => {
-            Swal.showLoading()
+            Swal.showLoading();
         }
     });
+
 
     $.ajax({
         cache: false,
         url: "componentes/catalogos/registrar_personal.php",
         type: 'POST',
         dataType: 'html',
-        data: { 'nombre_personal': nombre_personal, 'tipo_personal': tipo_personal, 'calle': calle, 'no_exterior': no_exterior, 'no_interior': no_interior, 'codigo_postal': codigo_postal, 'colonia': colonia, 'estado': estado, 'municipio': municipio, 'pais': pais, 'correo': correo, 'telefono': telefono, 'estatus': estatus, 'id_personal': tipo_gestion },
+        data: {
+            'nombre_personal': nombre_personal,
+            'tipo_personal': tipo_personal,
+            'calle': calle,
+            'no_exterior': no_exterior,
+            'no_interior': no_interior,
+            'codigo_postal': codigo_postal,
+            'colonia': colonia,
+            'estado': estado,
+            'municipio': municipio,
+            'pais': pais,
+            'correo': correo,
+            'telefono': telefono,
+            'estatus': estatus,
+            'id_personal': tipo_gestion
+        },
     }).done(function (resultado) {
 
         if (resultado == "ok") {
@@ -241,8 +279,24 @@ function actualizar_estatus_personal(id_personal, estatus) {
             showConfirmButton: false,
             timer: 2000
         }).then(function () {
-            ver_catalogo();
+            recargar_tabla_personal(id_personal, 2)
         });
+    });
+}
+
+function recargar_tabla_personal(id_personal, tipo = 1) {
+    $.ajax({
+        cache: false,
+        url: 'componentes/catalogos/cargar/cargar_personal.php',
+        type: 'POST',
+        dataType: 'html',
+        data: {
+            'id_personal': id_personal,
+            'tipo': tipo
+        },
+    }).done(function (resultado) {
+        // console.log(resultado);
+        $("#tr_pers_" + id_personal).replaceWith(resultado);
     });
 }
 
@@ -512,13 +566,13 @@ function editar_permiso(id_permiso, id_personal, fecha_inicial, fecha_final, mot
 }
 
 
-function cancelar_permiso(id_permiso, estatus){
+function cancelar_permiso(id_permiso, estatus) {
     $.ajax({
         cache: false,
         url: 'componentes/catalogos/actualizar_estatus_permiso.php',
         type: 'POST',
         dataType: 'html',
-        data: { 'id_permiso': id_permiso, 'estatus' : estatus },
+        data: { 'id_permiso': id_permiso, 'estatus': estatus },
     }).done(function (resultado) {
         console.log(resultado)
         mostrar_historial_permisos()

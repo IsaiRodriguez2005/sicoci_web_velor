@@ -29,7 +29,6 @@
                                     LEFT JOIN emisores e ON u.id_emisor = e.id_emisor
                                     WHERE u.id_emisor = '.$_SESSION['id_emisor'].' 
                                     AND u.id_usuario = '.$_POST['id_usuario'].';';
-            echo $sqlUsuario;
             $resultado = mysqli_query($conexion, $sqlUsuario);
 
             while ($res = mysqli_fetch_array($resultado)) {

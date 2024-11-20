@@ -123,10 +123,10 @@ if (!isset($_SESSION['nombre_usuario'])) {
                                                 <?php
                                                 $consTerapeutas = "SELECT id_personal, nombre_personal FROM emisores_personal WHERE tipo = 2";
                                                 $resultado = mysqli_query($conexion, $consTerapeutas);
-                                                
-                                                
-                                                while($filas = mysqli_fetch_array($resultado)){
-                                                    echo "<option value='".$filas['id_personal']."'>".$filas['nombre_personal']."</option>";
+
+
+                                                while ($filas = mysqli_fetch_array($resultado)) {
+                                                    echo "<option value='" . $filas['id_personal'] . "'>" . $filas['nombre_personal'] . "</option>";
                                                 }
                                                 ?>
                                             </select>
@@ -325,6 +325,22 @@ if (!isset($_SESSION['nombre_usuario'])) {
         <script>
             $(function() {
                 $('#tabla_usuarios').DataTable({
+                    "paging": true,
+                    "lengthChange": false,
+                    "searching": true,
+                    "ordering": true,
+                    "info": true,
+                    "autoWidth": true,
+                    "responsive": true,
+                    "language": {
+                        "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
+                    }
+                });
+            });
+        </script>
+        <script>
+            $(function() {
+                $('#tabla_cliente').DataTable({
                     "paging": true,
                     "lengthChange": false,
                     "searching": true,

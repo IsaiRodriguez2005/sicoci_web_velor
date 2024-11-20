@@ -363,7 +363,7 @@ if (!isset($_SESSION['nombre_usuario'])) {
         <!-- Page specific script -->
         <script>
             $(function() {
-                $('#tabla_cliente').DataTable({
+                $('#tabla_personal').DataTable({
                     "paging": true,
                     "lengthChange": false,
                     "searching": true,

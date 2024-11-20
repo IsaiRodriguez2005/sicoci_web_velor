@@ -15,43 +15,51 @@ function select_tipo_desc() {
 
 function gestionar_convenio() {
     //* esta funcion crea y edita regitros de convenios
-    let id_convenio = $("#tipo_gestion").val();
-    let nombre = $("#nombre").val();
-    let tipo = $("#tipo").val();
+    const id_convenio = $("#tipo_gestion").val();
+    const nombre = $("#nombre").val();
+    const tipo = $("#tipo").val();
     let pct_consul = $("#pct_consul").val();
     let cost_consul = $("#cost_consul").val();
 
-    if (!pct_consul) pct_consul = 0;
-    if (!cost_consul) cost_consul = 0;
+    // Asignar valores predeterminados si están vacíos
+    pct_consul = pct_consul || 0;
+    cost_consul = cost_consul || 0;
 
-    let camposFaltantes = [];
-    if (!nombre || !tipo) {
-        if (!nombre) {
-            $("#nombre").addClass('is-invalid');
-            camposFaltantes.push('nombre');
-        }
-        if (!tipo) {
-            $("#tipo").addClass('is-invalid');
-            camposFaltantes.push('tipo');
-        }
-        Swal.fire({
-            icon: "error",
-            title: "Debes especificar el " + camposFaltantes.join(" y ") + " del convenio",
-            showConfirmButton: false,
-            timer: 1500
-        });
+    // Arreglo para campos faltantes
+    const camposFaltantes = [];
 
-        return false;
+    // Validaciones
+    if (!nombre) {
+        $("#nombre").addClass('is-invalid');
+        camposFaltantes.push('nombre');
     }
 
+    if (!tipo) {
+        $("#tipo").addClass('is-invalid');
+        camposFaltantes.push('tipo');
+    }
+
+    // Mostrar alerta si hay campos faltantes
+    if (camposFaltantes.length > 0) {
+        Swal.fire({
+            icon: "error",
+            title: `Debes especificar el ${camposFaltantes.join(" y ")} del convenio`,
+            showConfirmButton: false,
+            timer: 1500,
+        });
+        return;
+    }
+
+    // Si todas las validaciones pasan, mostrar el mensaje de registro
     Swal.fire({
         title: 'Registrando convenio...',
         allowEscapeKey: false,
         allowOutsideClick: false,
         didOpen: () => {
-            Swal.showLoading()
+            Swal.showLoading();
         }
     });
+
 
     $.ajax({
         cache: false,
@@ -112,6 +120,21 @@ function ver_catalogo() {
     });
 }
 
+function recargar_tabla_convenios(id_convenio, operacion = 1){
+    $.ajax({
+        cache: false,
+        url: 'componentes/catalogos/cargar/cargar_convenios.php',
+        type: 'POST',
+        dataType: 'html',
+        data: {
+            'id_convenio': id_convenio,
+            'operacion': operacion,
+        },
+    }).done(function (resultado) {
+        $("#tr_conve_" + id_convenio).replaceWith(resultado);
+    });
+}
+
 function editar_convenio(id_convenio) {
 
     $.ajax({
@@ -148,7 +171,6 @@ function actualizar_estatus_convenio(id_convenio, codigo_estatus) {
         dataType: 'html',
         data: { 'id_convenio': id_convenio, 'codigo_estatus': codigo_estatus }
     }).done(function (resultado) {
-        console.log(resultado);
         if (resultado == "ok") {
             Swal.fire({
                 icon: "success",

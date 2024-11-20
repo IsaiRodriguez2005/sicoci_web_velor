@@ -15,7 +15,6 @@ function ver_catalogo() {
         type: 'POST',
         dataType: 'html',
     }).done(function (resultado) {
-        // console.log(resultado)
         $("#vista").html(resultado);
         $("#modal_cargar").modal("show");
     });
@@ -150,27 +149,28 @@ function gestionar_usuario() {
             url: url_destino,
             type: 'POST',
             dataType: 'html',
-            data: { 'nombre': nombre, 
-                    'correo': correo, 
-                    'password': password, 
-                    'id_usuario': id_usuario, 
-                    'id_personal': id_personal, 
-                    'configuraciones': configuraciones, 
-                    'agenda': agenda, 
-                    'clientes': clientes, 
-                    'usuarios': usuarios, 
-                    'productos': productos, 
-                    'proveedores': proveedores, 
-                    'personal': personal, 
-                    'tickets': tickets, 
-                    'facturacion': facturacion, 
-                    'pago_proveedores': pago_proveedores, 
-                    'reportes': reportes, 
-                    'dash_directivo': dash_directivo },
+            data: {
+                'nombre': nombre,
+                'correo': correo,
+                'password': password,
+                'id_usuario': id_usuario,
+                'id_personal': id_personal,
+                'configuraciones': configuraciones,
+                'agenda': agenda,
+                'clientes': clientes,
+                'usuarios': usuarios,
+                'productos': productos,
+                'proveedores': proveedores,
+                'personal': personal,
+                'tickets': tickets,
+                'facturacion': facturacion,
+                'pago_proveedores': pago_proveedores,
+                'reportes': reportes,
+                'dash_directivo': dash_directivo
+            },
         }).done(function (resultado) {
             //console.log(resultado)
-            if(Number(resultado) == 1)
-            {
+            if (Number(resultado) == 1) {
                 Swal.fire({
                     icon: "error",
                     title: "El Usuario Ya Tiene Personal Asociado",
@@ -195,6 +195,19 @@ function gestionar_usuario() {
     }
 }
 
+function recargar_tabla_usuarios(id_usuario) {
+    const tipo = 2;
+    $.ajax({
+        cache: false,
+        url: 'componentes/catalogos/cargar/cargar_usuarios.php',
+        type: 'POST',
+        dataType: 'html',
+        data: { 'id_usuario': id_usuario, 'tipo': tipo },
+    }).done(function (resultado) {
+        $('#tr_usuario_' + id_usuario ).replaceWith(resultado);
+    });
+}
+
 function actualizar_estatus_usuario(id_usuario, estatus) {
     Swal.fire({
         title: 'Actualizando Estatus Usuario...',
@@ -211,14 +224,13 @@ function actualizar_estatus_usuario(id_usuario, estatus) {
         dataType: 'html',
         data: { 'id_usuario': id_usuario, 'estatus': estatus },
     }).done(function (resultado) {
-        //console.log(resultado)
         Swal.fire({
             icon: 'success',
             title: 'Estatus actualizado!',
             showConfirmButton: true,
-            //timer: 2000
+            timer: 2000
         }).then(function () {
-            ver_catalogo();
+            recargar_tabla_usuarios(id_usuario);
         });
     });
 }
@@ -322,21 +334,21 @@ function getDatosTerapeuta() {
             cache: false,
             url: 'componentes/catalogos/cargar/cargar_datos_terapeuta.php',
             type: 'POST',
-            dataType: 'json', 
+            dataType: 'json',
             data: { 'id_terapeuta': id_terapeuta },
         }).done(function (resultado) {
-            resolve(resultado); 
+            resolve(resultado);
         }).fail(function (jqXHR, textStatus, errorThrown) {
             reject(errorThrown); // Rechaza la promesa en caso de error en la solicitud
         });
     }).then(function (r) {
-        if (r) { 
-            $("#nombre").val(r[0].nombre_personal); 
-            $("#correo").val(r[0].correo); 
+        if (r) {
+            $("#nombre").val(r[0].nombre_personal);
+            $("#correo").val(r[0].correo);
         } else {
-            
-            $("#nombre").val(''); 
-            $("#correo").val(''); 
+
+            $("#nombre").val('');
+            $("#correo").val('');
         }
     }).catch(function (error) {
         // Manejar errores en caso de rechazo

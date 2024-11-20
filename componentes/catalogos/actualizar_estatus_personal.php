@@ -14,7 +14,7 @@
     }
     else
     {
-        $sqlEmisor = "UPDATE emisores_personal SET estatus=".$_POST['estatus']." WHERE id_personal = ".$_SESSION['id_emisor']." AND id_personal=".$_POST['id_personal'];
+        $sqlEmisor = "UPDATE emisores_personal SET estatus=".$_POST['estatus']." WHERE id_emisor = ".$_SESSION['id_emisor']." AND id_personal=".$_POST['id_personal'];
         mysqli_query($conexion, $sqlEmisor);
     }
 ?>
