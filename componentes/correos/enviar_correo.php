@@ -7,11 +7,12 @@ require __DIR__ .'../../../vendor/autoload.php';
 require __DIR__ .'../../correos/estructura_mensaje.php';
 include __DIR__ .'../../correos/funciones.php';
 
-function enviarCorreo($correoDestinatario, $a, $c)
+function enviarCorreo($correoDestinatario, $a, $c, $folioCita = null, $idCliente = null, $idTerapeuta = null)
 {
     $mail = new PHPMailer();
 
-    $body = estuturaCorreoHTML($c);
+    // print_r($mail);
+    $body = estuturaCorreoHTML($c, intval($folioCita), intval($idCliente), intval($idTerapeuta));
     try {
         // Configuraciones del servidor SMTP
         $mail->isSMTP();                                            // Usar SMTP
@@ -19,8 +20,8 @@ function enviarCorreo($correoDestinatario, $a, $c)
         $mail->SMTPAuth   = true;                                   // Habilitar autenticación SMTP
         $mail->Username   = 'cosera@velor.mx';                   // Tu correo de Gmail
         $mail->Password   = 'JlkTbGyv?F@B';                  // Contraseña o token de Gmail
-        $mail->SMTPSecure = 'ssl';         // Habilitar TLS (seguridad)
-        $mail->Port       = 465;                                    // Puerto SMTP para TLS
+        $mail->SMTPSecure = 'tsl';         // Habilitar TLS (seguridad)
+        $mail->Port       = 587;                                    // Puerto SMTP para TLS
 
         // Configuración del correo
         $mail->setFrom('cosera@velor.mx', 'COSERA NOTIFICADOR');          // Dirección del remitente
@@ -33,7 +34,7 @@ function enviarCorreo($correoDestinatario, $a, $c)
         if($mail->send()){
             return 1;
         } else {
-            return 0;
+            return $mail->ErrorInfo;
         }
     } catch (Exception $e) {
         return 2;

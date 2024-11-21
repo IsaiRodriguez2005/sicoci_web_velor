@@ -57,11 +57,12 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
                         $datosCliente = getDatosClientes(intval($_POST['id_cliente']), $conexion);
                         $datosTerap = getDatosTerapeuta(intval($_POST['id_terapeuta']), $conexion);
                         $datosConsultorio =  getDatosConsultorio(intval($_POST['id_consultorio']), $conexion);
-
+                        $idCliente = $_POST['id_cliente'];
+                        $idTerapeuta = $_POST['id_terapeuta'];
                         if ($datosCliente['correo']) {
                             $fecha = obtenerFechaEspaniol($fecha_hora);
                             $asunto = 'CITA AGENDADA!';
-                            if(intval($_POST['tipo_servicio']) == 1) {
+                            if (intval($_POST['tipo_servicio']) == 1) {
                                 $mensaje = '
                                     Que tal <b>' . strtoupper($datosCliente['nombre_cliente']) . '</b>.<br><br>
                                     Para confirmar el registro de la cita con el fisioterapeuta <b>' . $datosTerap['nombre_personal'] . '</b> para el día <b>' . $fecha['dia'] . ' ' . $fecha['num_dia'] . ' de ' . $fecha['mes'] . '</b> del <b>' . $fecha['anio'] . '</b> 
@@ -77,14 +78,14 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
                                     ';
                             }
 
-                            $correo = enviarCorreo($datosCliente['correo'], $asunto, $mensaje);
+                            $correo = enviarCorreo($datosCliente['correo'], $asunto, $mensaje, $ultimo, idCliente:$idCliente);
                         }
 
                         if ($datosTerap['correo']) {
 
                             $fecha = obtenerFechaEspaniol($fecha_hora);
                             $asunto = 'CITA AGENDADA!';
-                            if(intval($_POST['tipo_servicio']) == 1) { 
+                            if (intval($_POST['tipo_servicio']) == 1) {
                                 $mensaje = '
                                     Que tal <b>' . strtoupper($datosTerap['nombre_personal']) . '</b>,.<br><br>
                                     El cliente/paciente <b>' . $datosCliente['nombre_cliente'] . '</b> agendó una cita contigo para el día <b>' . $fecha['dia'] . ' ' . $fecha['num_dia'] . ' de ' . $fecha['mes'] . '</b> del <b>' . $fecha['anio'] . '</b> 
@@ -101,15 +102,16 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
                                     PD. Este correo es informativo por lo que no es necesario responder dicho correo.
                                     ';
                             }
-                            $correo = enviarCorreo($datosTerap['correo'], $asunto, $mensaje);
+                            $correo = enviarCorreo($datosTerap['correo'], $asunto, $mensaje, $ultimo, idTerapeuta:$idTerapeuta);
                         }
 
                         $respuesta = [
                             'id_folio' => $ultimo,
                             'actualizacion' => false,
-                            'mensaje' => ''
+                            'mensaje' => '',
+                            'correo' => $correo,
                         ];
-                        
+
                         echo json_encode($respuesta);
                     } else {
                         $respuesta = [
@@ -136,9 +138,7 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
             echo json_encode($respuesta);
         }
     } else {
-        //print_r($_POST);
-        //$fecha = $_POST['fecha_cita'] . 'T' . $_POST['hora_cita'] . ':00' ;
-        //print_r($fecha);
+
         $sqlUpdate = "UPDATE emisores_agenda SET 
                                     id_cliente=" . intval($_POST['id_cliente']) . ", 
                                     id_consultorio=" . intval($_POST['id_consultorio']) . ", 
@@ -151,14 +151,17 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
                                     id_emisor = " . intval($_SESSION['id_emisor']) . " 
                                         AND 
                                     id_folio=" . intval($_POST['tipo_gestion']);
-                                    //echo $sqlUpdate;
         mysqli_query($conexion, $sqlUpdate);
 
         if (mysqli_affected_rows($conexion) > 0) {
 
-            $datosCliente = getDatosClientes(intval($_POST['id_cliente']), $conexion);
+            $idCliente = $_POST['id_cliente'];
+            $idTerapeuta = $_POST['id_terapeuta'];
+            $idFolio = $_POST['tipo_gestion'];
 
-            $datosTerap = getDatosTerapeuta(intval($_POST['id_terapeuta']), $conexion);
+            $datosCliente = getDatosClientes(intval($idCliente), $conexion);
+
+            $datosTerap = getDatosTerapeuta(intval($idTerapeuta), $conexion);
 
             $datosConsultorio =  getDatosConsultorio(intval($_POST['id_consultorio']), $conexion);
 
@@ -167,7 +170,7 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
                 $fecha = obtenerFechaEspaniol($fecha_hora);
                 $asunto = 'CITA ACTUALIZADA!';
                 $mensaje = '
-                                Que tal <b>' . strtoupper($datosCliente['nombre_cliente']) . '</b>,.<br><br>
+                                Que tal <b>' . strtoupper($datosCliente['nombre_cliente']) . '</b><br><br>
                                 Se ha registrado un cambio en tu cita previamente programada:<br>
                                 Fisioterapeuta: <b>' . $datosCliente['nombre_cliente'] . '</b><br>
                                 Fecha: <b>' . $fecha['dia'] . ' ' . $fecha['num_dia'] . ' de ' . $fecha['mes'] . '</b> del <b>' . $fecha['anio'] . '</b> 
@@ -176,7 +179,7 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
                                 
                                 PD. Este correo es informativo por lo que no es necesario responder dicho correo.
                                 ';
-                $correo = enviarCorreo($datosCliente['correo'], $asunto, $mensaje);
+                $correo = enviarCorreo($datosCliente['correo'], $asunto, $mensaje, $idFolio, idCliente:$idCliente);
             }
 
             if ($datosTerap['correo']) {
@@ -193,12 +196,13 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
                                 <b>Observaciones:</b> ' . strtoupper($_POST['observaciones']) . '
                                 PD. Este correo es informativo por lo que no es necesario responder dicho correo.
                                 ';
-                $correo = enviarCorreo($datosTerap['correo'], $asunto, $mensaje);
+                $correo = enviarCorreo($datosTerap['correo'], $asunto, $mensaje, $idFolio, idTerapeuta:$idTerapeuta);
             }
         }
         $respuesta = [
             'id_folio' => $_POST['tipo_gestion'],
-            'actualizacion' => true
+            'actualizacion' => true,
+            'correo' => $correo,
         ];
         echo json_encode($respuesta);
     }

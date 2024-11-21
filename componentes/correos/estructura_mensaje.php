@@ -1,8 +1,31 @@
 <?php
 
-function estuturaCorreoHTML($mensaje)
+function estuturaCorreoHTML($mensaje, $folioCita = 0, $idCliente = 0 , $idTerapeuta = 0)
 {
 
+    if($folioCita > 0){
+
+        if($idCliente > 0 && $idTerapeuta == 0){
+            $url = '&id_cliente='.$idCliente;
+        } else if ($idCliente == 0 && $idTerapeuta > 0){
+            $url = '&id_terapeuta='.$idTerapeuta;
+        }
+        $btnConformacion = '<table align="center" border="0" cellpadding="0" cellspacing="0" style="margin: 20px auto;">
+                                <tr>
+                                    <td align="center" bgcolor="#28A745" style="border-radius: 5px;">
+                                        <a href="http://localhost/Cosera/componentes/citas/confirmaciones/confirmar_cita.php?folio_cita='.$folioCita.''.$url.'" 
+                                        target="_blank" 
+                                        style="display: inline-block; font-family: Arial, sans-serif; font-size: 16px; color: #ffffff; text-decoration: none; padding: 10px 20px; border-radius: 5px; background-color: #28A745;">
+                                            Confirmar mi cita
+                                        </a>
+                                    </td>
+                                </tr>
+                            </table>';
+
+    } else {
+        $btnConformacion = '';
+    }
+    
     $reemplazo = array("&", '"', "'");
     $caracteres = array("&amp;", "&quot;", "&apos;");
     $h = [];
@@ -343,6 +366,8 @@ function estuturaCorreoHTML($mensaje)
                                                                 </td>
                                                             </tr>
                                                         </table>
+                                                        
+                                                        '.$btnConformacion.'
                                                         <table border="0" cellpadding="0" cellspacing="0"
                                                             class="divider_block block-6" role="presentation"
                                                             style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;"

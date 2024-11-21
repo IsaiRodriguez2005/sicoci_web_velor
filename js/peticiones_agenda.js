@@ -130,7 +130,9 @@ function gestionar_cita() {
         },
     }).done(function (resultado) {
         //* desestructuramos la respuesta
-        const { id_folio, actualizacion, mensaje } = resultado;
+        // console.log(resultado);
+        const { id_folio, actualizacion, mensaje, correo } = resultado;
+        // console.log(correo);
         if (id_folio > 0 && actualizacion === false) {
             Swal.fire({
                 icon: "success",
