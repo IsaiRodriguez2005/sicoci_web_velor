@@ -178,7 +178,7 @@ function actualizar_estatus_convenio(id_convenio, codigo_estatus) {
                 showConfirmButton: false,
                 timer: 1500
             }).then(function () {
-                ver_catalogo();
+                recargar_tabla_convenios(id_convenio, 2);
             });
         } else {
             Swal.fire({

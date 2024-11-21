@@ -100,18 +100,20 @@ function create_tr($res, $conexion)
 
 <script>
     $(function() {
-        $('#tabla_usuarios').DataTable({
-            "paging": true,
-            "lengthChange": false,
-            "searching": true,
-            "ordering": true,
-            "info": true,
-            "autoWidth": true,
-            "responsive": true,
-            "deferRender": true,
-            "language": {
-                "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
-            }
-        });
+        if (!$.fn.DataTable.isDataTable('#tabla_usuarios')) {
+            $('#tabla_usuarios').DataTable({
+                "paging": true,
+                "lengthChange": false,
+                "searching": true,
+                "ordering": true,
+                "info": true,
+                "autoWidth": true,
+                "responsive": true,
+                "deferRender": true,
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
+                }
+            });
+        }
     });
 </script>

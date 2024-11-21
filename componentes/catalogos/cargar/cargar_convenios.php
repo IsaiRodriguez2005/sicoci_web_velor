@@ -42,7 +42,7 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
         $consultaConvenios = "SELECT * FROM emisores_convenios WHERE id_emisor = " . $_SESSION['id_emisor'] . " AND id_convenio = " . $_POST['id_convenio'] . ";";
         $resConvenios = mysqli_query($conexion, $consultaConvenios);
 
-        return create_tr($resConvenios);
+        echo create_tr($resConvenios);
     }
 }
 
@@ -106,18 +106,20 @@ function create_tr($res)
 
 <script>
     $(function() {
-        $('#tabla_convenios').DataTable({
-            "paging": true,
-            "lengthChange": false,
-            "searching": true,
-            "ordering": true,
-            "info": true,
-            "autoWidth": true,
-            "responsive": true,
-            "deferRender": true,
-            "language": {
-                "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
-            }
-        });
+        if (!$.fn.DataTable.isDataTable('#tabla_convenios')) {
+            $('#tabla_convenios').DataTable({
+                "paging": true,
+                "lengthChange": false,
+                "searching": true,
+                "ordering": true,
+                "info": true,
+                "autoWidth": true,
+                "responsive": true,
+                "deferRender": true,
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
+                }
+            });
+        }
     });
 </script>
