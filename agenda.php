@@ -335,27 +335,6 @@ if (!isset($_SESSION['nombre_usuario'])) {
                 mostrar_historial_citas();
             });
         </script>
-        <script>
-            $(function() {
-                $('#tabla_facturas').DataTable({
-                    "paging": true,
-                    "lengthChange": false,
-                    "searching": true,
-                    "ordering": true,
-                    "info": true,
-                    // "autoWidth": true,
-                    // "responsive": true,
-                    "language": {
-                        "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
-                    },
-                    "order": [
-                        [3, 'asc'],
-                        [2, 'asc'],
-                        [1, 'des'],
-                    ],
-                });
-            });
-        </script>
     </body>
 
     </html>

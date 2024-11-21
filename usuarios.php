@@ -322,38 +322,7 @@ if (!isset($_SESSION['nombre_usuario'])) {
         <script src="plugins/datatables-buttons/js/buttons.print.min.js"></script>
         <script src="plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
         <!-- Page specific script -->
-        <script>
-            $(function() {
-                $('#tabla_usuarios').DataTable({
-                    "paging": true,
-                    "lengthChange": false,
-                    "searching": true,
-                    "ordering": true,
-                    "info": true,
-                    "autoWidth": true,
-                    "responsive": true,
-                    "language": {
-                        "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
-                    }
-                });
-            });
-        </script>
-        <script>
-            $(function() {
-                $('#tabla_cliente').DataTable({
-                    "paging": true,
-                    "lengthChange": false,
-                    "searching": true,
-                    "ordering": true,
-                    "info": true,
-                    "autoWidth": true,
-                    "responsive": true,
-                    "language": {
-                        "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
-                    }
-                });
-            });
-        </script>
+
     </body>
 
     </html>

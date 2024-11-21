@@ -102,7 +102,7 @@ function cargarDatosActualizarCliente(id) {
 
         $('#ocupacion_valoracion').val(resultado[0].ocupacion);
         $('#ocupacion_valoracion').attr('disabled', true);
-        
+
         $('#telefono_valoracion').val(resultado[0].telefono);
         $('#telefono_valoracion').attr('disabled', true);
 
@@ -201,7 +201,7 @@ async function realizar_valoracion_subs(id_folio, id_cliente) {
     $("#telefono_valoracion").val(dataVal[0].telefono);
     $("#estado_civil_valoracion").val(dataVal[0].est_civ);
     $("#fecha_nacimiento").val(dataVal[0].fec_nac);
-    
+
     edad = calcularEdad(dataVal[0].fec_nac);
     $('#edad_valoracion').val(edad);
 
@@ -219,19 +219,41 @@ async function realizar_valoracion_subs(id_folio, id_cliente) {
 
 }
 
+function recargar_hisorial_citas(folio, tipo) {
+    //* esta funcion carga la ultima modificacion de la tabla de agenda
+    //* la bariable [tipo] sifnifica que, si es 1 = apertura (se creo una nueva cita), 2 = actualizacion (se actualizo la informacion del registro)
+
+    $.ajax({
+        cache: false,
+        url: 'componentes/catalogos/recargar/recargar_historial_citas.php',
+        type: 'POST',
+        dataType: 'html',
+        data: { 'id_folio': folio }
+    }).done(function (resultado) {
+        if (tipo == 1) {
+            $("#tabla_facturas tr:first").after(resultado);
+        } else {
+            $('#tr_' + folio).replaceWith(resultado);
+        }
+        limpiar_form();
+        $("#modal_nueva_cita").modal("hide");
+    });
+
+}
+
 
 function enviar_valoracion() {
-    var tipo_consulta = $("#tipo_consulta").val();
-    var id_cliente = $("#id_cliente_valoracion").val();
-    var id_folio = $("#id_folio_cita").val();
-    var edad = isRequired('edad_valoracion');
-    var ocupacion = isRequired('ocupacion_valoracion');
-    var telefono = isRequired('telefono_valoracion');
-    var motivo_consulta = isRequired('motivo_consulta_valoracion');
-    var act_fisica = isRequired('act_fisica_valoracion');
-    var farmacos = isRequired('farmacos');
-    
-    var escalaDolor = $(Number(tipo_consulta) == 1 ? "#escalaDolorP" : "#escalaDolorS").val();
+    const tipo_consulta = $("#tipo_consulta").val();
+    const id_cliente = $("#id_cliente_valoracion").val();
+    const id_folio = $("#id_folio_cita").val();
+    const edad = isRequired('edad_valoracion');
+    const ocupacion = isRequired('ocupacion_valoracion');
+    const telefono = isRequired('telefono_valoracion');
+    const motivo_consulta = isRequired('motivo_consulta_valoracion');
+    const act_fisica = isRequired('act_fisica_valoracion');
+    const farmacos = isRequired('farmacos');
+
+    const escalaDolor = $(Number(tipo_consulta) == 1 ? "#escalaDolorP" : "#escalaDolorS").val();
     if (!escalaDolor || escalaDolor == '0') {
         $("#escaDolMessage").html('Campo obligatorio');
     }
@@ -272,17 +294,17 @@ function enviar_valoracion() {
         }
     }
 
-    var toximanias = $("#toximanias_valoracion").val();
-    var estado_civil = $("#estado_civil_valoracion").val();
-    var ta = $("#tension_art").val();
-    var fc = $("#fc").val();
-    var fr = $("#fr").val();
-    var satO2 = $("#oxigeno").val();
-    var temp = $("#temperatura").val();
-    var glucosa = $("#glucosa").val();
-    var diagnosticoMedico = $("#diagnosticoMedico").val();
-    var avance = $("#avance").val();
-    var observaciones = $("#observacionesForm").val();
+    const toximanias = $("#toximanias_valoracion").val();
+    const estado_civil = $("#estado_civil_valoracion").val();
+    const ta = $("#tension_art").val() || 0;
+    const fc = $("#fc").val() || 0;
+    const fr = $("#fr").val() || 0;
+    const satO2 = $("#oxigeno").val() || 0;
+    const temp = $("#temperatura").val() || 0;
+    const glucosa = $("#glucosa").val() || 0;
+    const diagnosticoMedico = $("#diagnosticoMedico").val();
+    const avance = $("#avance").val();
+    const observaciones = $("#observacionesForm").val();
 
     pantallaCarga('Guardando valoracion...');
 
@@ -315,7 +337,6 @@ function enviar_valoracion() {
             'observaciones': observaciones,
         },
     }).done(function (resultado) {
-        console.log(resultado);
         if (resultado == 'ok') {
             Swal.fire({
                 icon: "success",
@@ -323,7 +344,7 @@ function enviar_valoracion() {
                 showConfirmButton: false,
                 timer: 2000
             }).then(function () {
-                window.location = 'agenda.php';
+                recargar_hisorial_citas(id_folio, 2);
             });
         }
         $("#modal_valoracion").modal("hide");

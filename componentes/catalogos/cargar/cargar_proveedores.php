@@ -29,7 +29,7 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
         ';
         $consultaProveedores = "SELECT * FROM emisores_proveedores WHERE id_emisor = " . $_SESSION['id_emisor'] . " ORDER BY nombre_comercial ASC";
         $resProveedores = mysqli_query($conexion, $consultaProveedores);
-        
+
         $html .= create_tr($resProveedores);
 
         $html .= '
@@ -40,14 +40,15 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
         echo $html;
     } else {
 
-        $consultaProveedores = "SELECT * FROM emisores_proveedores WHERE id_emisor = " . $_SESSION['id_emisor'] . " AND id_proveedor = ".$_POST['id_proveedor'].";";
+        $consultaProveedores = "SELECT * FROM emisores_proveedores WHERE id_emisor = " . $_SESSION['id_emisor'] . " AND id_proveedor = " . $_POST['id_proveedor'] . ";";
         $resProveedores = mysqli_query($conexion, $consultaProveedores);
-        
+
         echo create_tr($resProveedores);
     }
 }
 
-function create_tr($res){
+function create_tr($res)
+{
 
     $html = '';
 
@@ -82,7 +83,7 @@ function create_tr($res){
                 }
                     */
         $html .= "
-                    <tr id='tr_prov_".$proveedores['id_proveedor']."'>
+                    <tr id='tr_prov_" . $proveedores['id_proveedor'] . "'>
                         <td class='text-center' style='position: sticky; left: 0; background: white;'>
                             <div class='btn-group' id='div-check" . $proveedores['id_proveedor'] . "'>
                                 <button type='button' class='btn btn-warning btn-sm' " . $disabled_edicion . " title='Editar registro' onclick='editar_proveedor(" . $proveedores['id_proveedor'] . ", &quot;" . $proveedores['nombre_comercial'] . "&quot;, &quot;" . $proveedores['calle'] . "&quot;, &quot;" . $proveedores['no_exterior'] . "&quot;, &quot;" . $proveedores['no_interior'] . "&quot;, &quot;" . $proveedores['codigo_postal'] . "&quot;, &quot;" . $proveedores['colonia'] . "&quot;, &quot;" . $proveedores['municipio'] . "&quot;, &quot;" . $proveedores['estado'] . "&quot;, &quot;" . $proveedores['pais'] . "&quot;, &quot;" . $proveedores['regimen_fiscal'] . "&quot;, &quot;" . $proveedores['correo'] . "&quot;, " . $proveedores['telefono'] . ")'>
@@ -104,3 +105,22 @@ function create_tr($res){
     }
     return $html;
 }
+
+?>
+<script>
+    $(function() {
+        $('#tabla_proveedores').DataTable({
+            "paging": true,
+            "lengthChange": false,
+            "searching": true,
+            "ordering": true,
+            "info": true,
+            "autoWidth": true,
+            "responsive": true,
+            "deferRender": true,
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
+            }
+        });
+    });
+</script>

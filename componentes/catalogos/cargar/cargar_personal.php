@@ -42,7 +42,7 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
         echo $html;
     } else {
 
-        $consultaPersonal = "SELECT * FROM emisores_personal WHERE id_emisor = " . $_SESSION['id_emisor'] . " AND id_personal=".$_POST['id_personal'].";";
+        $consultaPersonal = "SELECT * FROM emisores_personal WHERE id_emisor = " . $_SESSION['id_emisor'] . " AND id_personal=" . $_POST['id_personal'] . ";";
         $resPersonal = mysqli_query($conexion, $consultaPersonal);
 
         echo create_tr($resPersonal);
@@ -104,3 +104,22 @@ function create_tr($res)
 
     return $html;
 }
+
+?>
+<script>
+    $(function() {
+        $('#tabla_personal').DataTable({
+            "paging": true,
+            "lengthChange": false,
+            "searching": true,
+            "ordering": true,
+            "info": true,
+            "autoWidth": true,
+            "responsive": true,
+            "deferRender": true,
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
+            }
+        });
+    });
+</script>

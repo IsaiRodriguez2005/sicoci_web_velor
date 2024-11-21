@@ -67,6 +67,17 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
                 break;
         }
 
+        switch ($citas['tipo_cita']) {
+            case 1:
+                $tipo_cita = 'SEGUIMIENTO';
+                $btn_realizar_valoracion = "onclick='realizar_valoracion_subs(" . $citas['id_folio'] . ", " . $citas['id_cliente'] . ")'";
+                break;
+
+            case 2:
+                $tipo_cita = 'PRIMERA VEZ';
+                $btn_realizar_valoracion = "onclick='realizar_valoracion_primera_v(" . $citas['id_folio'] . ", " . $citas['id_cliente'] . ")'";
+        }
+
         if (empty($_SESSION['id_personal'])) {
             $acciones = "
                                 <button type='button' id='btn_edit_" . $citas['id_folio'] . "' class='btn btn-warning btn-sm' " . $boton_editar . " title='Editar cita' onclick='editar_cita(" . $citas['id_folio'] . ")'>
@@ -98,19 +109,7 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
             case 2:
                 $tipo_servicio = 'DOMICILIO';
         }
-
-        switch ($citas['tipo_cita']) {
-            case 1:
-                $tipo_cita = 'SEGUIMIENTO';
-                $btn_realizar_valoracion = "onclick='realizar_valoracion_subs(" . $citas['id_folio'] . ", " . $citas['id_cliente'] . ")'";
-                break;
-
-            case 2:
-                $tipo_cita = 'PRIMERA VEZ';
-                $btn_realizar_valoracion = "onclick='realizar_valoracion_primera_v(" . $citas['id_folio'] . ", " . $citas['id_cliente'] . ")'";
-        }
-
-
+        
         $html .= "
                 <tr id='tr_" . $citas['id_folio'] . "'>
                     <td class='text-center' style='position: sticky; left: 0; background: whitesmoke;'>

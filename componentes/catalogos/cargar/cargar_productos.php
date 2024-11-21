@@ -34,7 +34,7 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
         ';
         $consultaProducto = "SELECT * FROM productos_servicios WHERE id_emisor = " . $_SESSION['id_emisor'] . " ORDER BY nombre ASC";
         $resProducto = mysqli_query($conexion, $consultaProducto);
-        
+
         $html .= create_tr($resProducto);
 
         $html .= '
@@ -113,3 +113,22 @@ function create_tr($res)
 
     return $html;
 }
+?>
+
+<script>
+    $(function() {
+        $('#tabla_productos_servicios').DataTable({
+            "paging": true,
+            "lengthChange": false,
+            "searching": true,
+            "ordering": true,
+            "info": true,
+            "autoWidth": true,
+            "responsive": true,
+            "deferRender": true,
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
+            }
+        });
+    });
+</script>

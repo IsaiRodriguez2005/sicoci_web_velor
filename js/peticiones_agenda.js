@@ -1,5 +1,3 @@
-import { pantallaCarga } from './peticiones_generales';
-
 $(document).ready(function () {
 
     id_terapeuta = $("#id_personal").val();
@@ -21,7 +19,16 @@ function limpiar_form() {
     $("#consultorio_form").val('');
     $("#observaciones_form").val('');
 }
-
+function pantallaCarga(texto) {
+    Swal.fire({
+        title: texto,
+        allowEscapeKey: false,
+        allowOutsideClick: false,
+        didOpen: () => {
+            Swal.showLoading()
+        }
+    });
+}
 function form_nueva_cita() {
     limpiar_form();
     $("#modal_nueva_cita").modal("show");
@@ -92,12 +99,12 @@ function gestionar_cita() {
     }
 
     if (!id_folio || !id_cliente || !fecha_cita || !hora_cita || !id_terapeuta || !tipo_servicio) {
-            Swal.fire({
-                icon: "warning",
-                title: "Por favor, complete los siguientes campos obligatorios:",
-                html: camposFaltantes.join(", "),
-                showConfirmButton: true,
-            });
+        Swal.fire({
+            icon: "warning",
+            title: "Por favor, complete los siguientes campos obligatorios:",
+            html: camposFaltantes.join(", "),
+            showConfirmButton: true,
+        });
         return; //* Para la funcion
     }
 

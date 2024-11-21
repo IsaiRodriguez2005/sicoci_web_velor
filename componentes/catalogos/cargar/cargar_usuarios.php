@@ -14,7 +14,7 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
 
     if ($tipo == 1) {
         $html = '
-            <table class="table table-striped" id="tabla_cliente" width="100%">
+            <table class="table table-striped" id="tabla_usuarios" width="100%">
                 <thead>
                     <tr>
                         <th class="sticky text-center" style="position: sticky; left: 0; background: white;">Acciones</th>
@@ -30,7 +30,7 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
         $resClientes = mysqli_query($conexion, $consultaClientes);
 
         $html .= create_tr($resClientes, $conexion);
-        
+
         $html .= '
                 </tbody>
             </table>
@@ -96,3 +96,22 @@ function create_tr($res, $conexion)
         return $html;
     }
 }
+?>
+
+<script>
+    $(function() {
+        $('#tabla_usuarios').DataTable({
+            "paging": true,
+            "lengthChange": false,
+            "searching": true,
+            "ordering": true,
+            "info": true,
+            "autoWidth": true,
+            "responsive": true,
+            "deferRender": true,
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
+            }
+        });
+    });
+</script>
