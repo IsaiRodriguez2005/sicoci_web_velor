@@ -11,7 +11,7 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
         ";
 } else {
     $tipo = empty($_POST['tipo']) ? 1 : $_POST['tipo'];
-
+    
     if ($tipo == 1) {
         $html = '
             <table class="table table-striped" id="tabla_usuarios" width="100%">
@@ -49,6 +49,7 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
 
 function create_tr($res, $conexion)
 {
+    $html = '';
     while ($clientes = mysqli_fetch_array($res)) {
         $reemplazo = array("&", '"', "'");
         $caracteres = array("&amp;", "&quot;", "&apos;");
@@ -74,7 +75,7 @@ function create_tr($res, $conexion)
         $resultadoPermisos = mysqli_query($conexion, $consultaPermisos);
         $permisos = mysqli_fetch_array($resultadoPermisos);
 
-        $html = "
+        $html .= "
                     <tr id='tr_usuario_" . $clientes['id_usuario'] . "'>
                         <td class='text-center' style='position: sticky; left: 0; background: white;'>
                             <div class='btn-group' id='div-check" . $clientes['id_usuario'] . "'>
@@ -93,8 +94,8 @@ function create_tr($res, $conexion)
                         <td class='text-center'>" . $estado . "</td>
                     </tr>
                 ";
-        return $html;
     }
+    return $html;
 }
 ?>
 

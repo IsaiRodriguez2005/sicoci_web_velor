@@ -15,6 +15,7 @@ function ver_catalogo() {
         type: 'POST',
         dataType: 'html',
     }).done(function (resultado) {
+        // console.log(resultado);
         $("#vista").html(resultado);
         $("#modal_cargar").modal("show");
     });

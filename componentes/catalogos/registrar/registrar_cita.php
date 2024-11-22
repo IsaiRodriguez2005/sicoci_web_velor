@@ -59,6 +59,8 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
                         $datosConsultorio =  getDatosConsultorio(intval($_POST['id_consultorio']), $conexion);
                         $idCliente = $_POST['id_cliente'];
                         $idTerapeuta = $_POST['id_terapeuta'];
+
+                        //* Correo Cliente
                         if ($datosCliente['correo']) {
                             $fecha = obtenerFechaEspaniol($fecha_hora);
                             $asunto = 'CITA AGENDADA!';
@@ -78,9 +80,10 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
                                     ';
                             }
 
-                            $correo = enviarCorreo($datosCliente['correo'], $asunto, $mensaje, $ultimo, idCliente:$idCliente);
+                            $correo = enviarCorreo($datosCliente['correo'], $asunto, $mensaje);
                         }
 
+                        //* Correo Terapeuta */
                         if ($datosTerap['correo']) {
 
                             $fecha = obtenerFechaEspaniol($fecha_hora);
@@ -179,7 +182,7 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
                                 
                                 PD. Este correo es informativo por lo que no es necesario responder dicho correo.
                                 ';
-                $correo = enviarCorreo($datosCliente['correo'], $asunto, $mensaje, $idFolio, idCliente:$idCliente);
+                $correo = enviarCorreo($datosCliente['correo'], $asunto, $mensaje);
             }
 
             if ($datosTerap['correo']) {

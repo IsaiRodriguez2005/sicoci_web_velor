@@ -55,7 +55,7 @@ $(function () {
           colorCita = '#dc3545';
           break
         case 2:
-          colorCita = '#ffc107';
+          colorCita = cita.confirmada == true ? '#ffc107' : '#dc3545';
           break
         case 3:
           colorCita = '#28a745';
@@ -194,39 +194,27 @@ $(function () {
 
 
 function get_citas_agenda() {
-  id_terapeuta = $("#id_terapeuta").val()
+  const id_terapeuta = $("#id_terapeuta").val()
 
-  //console.log(id_terapeuta)
-  if (Number(id_terapeuta) == 0) {
-    return new Promise(function (resolve, reject) {
-      $.ajax({
-        cache: false,
-        url: 'componentes/catalogos/cargar/cargar_historial_calendario.php',
-        type: 'POST',
-        dataType: 'json',
-        data: {},
-      }).done(function (resultado) {
-        // console.log('hola')
-        resolve(resultado);
-      }).fail(function (jqXHR, textStatus, errorThrown) {
-        reject(errorThrown);
-      });
-    });
+  let data;
+
+  if (Number(id_terapeuta) === 0) {
+    data = {};
   } else {
+    data = { id_terapeuta: id_terapeuta }; 
+  }
     return new Promise(function (resolve, reject) {
       $.ajax({
         cache: false,
         url: 'componentes/catalogos/cargar/cargar_historial_calendario.php',
         type: 'POST',
         dataType: 'json',
-        data: { 'id_terapeuta': id_terapeuta },
+        data: data,
       }).done(function (resultado) {
-        //console.log(resultado)
         resolve(resultado);
       }).fail(function (jqXHR, textStatus, errorThrown) {
         reject(errorThrown);
       });
     });
-  }
 
 }

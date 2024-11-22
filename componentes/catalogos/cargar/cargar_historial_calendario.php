@@ -16,9 +16,10 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
         $consulta = " SELECT a.id_folio, 
                                 a.id_cliente,
                                 a.estatus,
+                                a.conf_ct_ter as confirmada,
                                 a.fecha_agenda,
                                 p.nombre_personal,
-                                c.nombre_cliente 
+                                c.nombre_cliente
                             FROM 
                                 emisores_agenda a 
                                 LEFT JOIN emisores_personal p ON a.id_terapeuta = p.id_personal AND a.id_emisor = p.id_emisor AND p.tipo = 2

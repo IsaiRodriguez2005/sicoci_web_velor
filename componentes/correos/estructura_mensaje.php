@@ -2,6 +2,13 @@
 
 function estuturaCorreoHTML($mensaje, $folioCita = 0, $idCliente = 0 , $idTerapeuta = 0)
 {
+    //** Si hay  alguna de los 3 atributos de la funcion como lo son
+    //* -folio de la cita 
+    //* -id del cliente 
+    //* -id del terapeuta 
+    //* se le habilitara el boton para confirmar la cita
+
+    //! deje la validación de el cliente para en un futuro, se pueda hacer, pero, no es necesario por el momento. 
 
     if($folioCita > 0){
 
@@ -9,6 +16,8 @@ function estuturaCorreoHTML($mensaje, $folioCita = 0, $idCliente = 0 , $idTerape
             $url = '&id_cliente='.$idCliente;
         } else if ($idCliente == 0 && $idTerapeuta > 0){
             $url = '&id_terapeuta='.$idTerapeuta;
+        } else {
+            $url = '';
         }
         $btnConformacion = '<table align="center" border="0" cellpadding="0" cellspacing="0" style="margin: 20px auto;">
                                 <tr>

@@ -9,6 +9,7 @@ include __DIR__ .'../../correos/funciones.php';
 
 function enviarCorreo($correoDestinatario, $a, $c, $folioCita = null, $idCliente = null, $idTerapeuta = null)
 {
+    
     $mail = new PHPMailer();
 
     // print_r($mail);
