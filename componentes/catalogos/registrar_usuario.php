@@ -50,6 +50,6 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
             enviarCorreo($_POST['correo'], $asunto, $mensaje);
         }
         
-        echo 1;
+        echo 2;
     }
 }

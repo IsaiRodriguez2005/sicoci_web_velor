@@ -81,6 +81,24 @@ if (!isset($_SESSION['nombre_usuario'])) {
                                 <input type="hidden" id="id_usuario" value="0">
                             </div>
                             <div class="card-body">
+                                <h6><i class="fas fa-id-card"></i> Ligar Personal</h6>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                            </div>
+                                            <select class="form-control" id="id_terapeuta" placeholder="Nombre del terapeuta"
+                                                onfocus="resetear('id_terapeuta')"
+                                                onchange="getDatosTerapeuta()">
+                                                
+                                            </select>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <br>
                                 <h6><i class="fas fa-id-card"></i> Datos de identificaci&oacute;n</h6>
                                 <hr>
                                 <div class="row">
@@ -110,31 +128,7 @@ if (!isset($_SESSION['nombre_usuario'])) {
                                         </div>
                                     </div>
                                 </div><br>
-                                <h6><i class="fas fa-id-card"></i> Ligar Personal</h6>
-                                <hr>
-                                <div class="row">
-                                    <div class="col-6">
-                                        <div class="input-group mb-3">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text"><i class="fas fa-user"></i></span>
-                                            </div>
-                                            <select class="form-control" id="id_terapeuta" placeholder="Nombre del terapeuta" onfocus="resetear('id_terapeuta')" onchange="getDatosTerapeuta()">
-                                                <option value="">Terapeuta Ligado</option>
-                                                <?php
-                                                $consTerapeutas = "SELECT id_personal, nombre_personal FROM emisores_personal WHERE tipo = 2";
-                                                $resultado = mysqli_query($conexion, $consTerapeutas);
 
-
-                                                while ($filas = mysqli_fetch_array($resultado)) {
-                                                    echo "<option value='" . $filas['id_personal'] . "'>" . $filas['nombre_personal'] . "</option>";
-                                                }
-                                                ?>
-                                            </select>
-
-                                        </div>
-                                    </div>
-                                </div>
-                                <br>
                                 <h6><i class="fas fa-lock"></i> Privilegios de acceso</h6>
                                 <hr>
                                 <div class="row">
@@ -324,6 +318,12 @@ if (!isset($_SESSION['nombre_usuario'])) {
         <!-- Page specific script -->
 
     </body>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            cargar_terapeutas();
+        });
+    </script>
 
     </html>
 <?php

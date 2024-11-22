@@ -15,7 +15,6 @@ function ver_catalogo() {
         type: 'POST',
         dataType: 'html',
     }).done(function (resultado) {
-        // console.log(resultado);
         $("#vista").html(resultado);
         $("#modal_cargar").modal("show");
     });
@@ -205,7 +204,7 @@ function recargar_tabla_usuarios(id_usuario) {
         dataType: 'html',
         data: { 'id_usuario': id_usuario, 'tipo': tipo },
     }).done(function (resultado) {
-        $('#tr_usuario_' + id_usuario ).replaceWith(resultado);
+        $('#tr_usuario_' + id_usuario).replaceWith(resultado);
     });
 }
 
@@ -320,41 +319,47 @@ function editar_usuario(id_usuario, nombre, correo, password, configuraciones, a
     $("#modal_cargar").modal("hide");
 }
 
+function cargar_terapeutas() {
+    $.ajax({
+        cache: false,
+        url: 'componentes/catalogos/cargar/options/options_terapeutas.php',
+        type: 'POST',
+        dataType: 'html',
+        data: {},
+    }).done(function (resultado) {
+        $("#id_terapeuta").html(resultado);
+    });
+}
 
 function getDatosTerapeuta() {
-    var id_terapeuta = $("#id_terapeuta").val(); // Declara la variable con const
+    const id_terapeuta = $("#id_terapeuta").val();
 
-    return new Promise(function (resolve, reject) {
-        // Validar que el id_terapeuta no sea cero
-        if (Number(id_terapeuta) === 0) {
-            reject("ID de terapeuta inválido."); // Rechaza la promesa si es inválido
-            return; // Salir de la función
-        }
+    if (id_terapeuta == 0) {
+        $('#nombre').prop('disabled', false);
+        $('#correo').prop('disabled', false);
+        $("#nombre").val('');
+        $("#correo").val('');
+        return;
+    } else {
+        $('#nombre').prop('disabled', true);
+        $('#correo').prop('disabled', true);
 
-        $.ajax({
-            cache: false,
-            url: 'componentes/catalogos/cargar/cargar_datos_terapeuta.php',
-            type: 'POST',
-            dataType: 'json',
-            data: { 'id_terapeuta': id_terapeuta },
-        }).done(function (resultado) {
-            resolve(resultado);
-        }).fail(function (jqXHR, textStatus, errorThrown) {
-            reject(errorThrown); // Rechaza la promesa en caso de error en la solicitud
-        });
-    }).then(function (r) {
-        if (r) {
-            $("#nombre").val(r[0].nombre_personal);
-            $("#correo").val(r[0].correo);
+    }
+    $.ajax({
+        cache: false,
+        url: 'componentes/catalogos/cargar/cargar_datos_terapeuta.php',
+        type: 'POST',
+        dataType: 'json',
+        data: { 'id_terapeuta': id_terapeuta },
+    }).done(function (resultado) {
+        const { nombre_personal, correo } = resultado[0];
+        if (resultado) {
+            $("#nombre").val(nombre_personal);
+            $("#correo").val(correo);
         } else {
-
             $("#nombre").val('');
             $("#correo").val('');
         }
-    }).catch(function (error) {
-        // Manejar errores en caso de rechazo
-        console.error("Error:", error);
-        alert(error); // Alerta al usuario sobre el error
     });
 }
 
