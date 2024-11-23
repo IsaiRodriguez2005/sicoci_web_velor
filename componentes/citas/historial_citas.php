@@ -212,7 +212,6 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
                             </button>
                             &nbsp;
                             " . $pdfValoracion . "
-                            
                             ";
         } else {
             $acciones = "

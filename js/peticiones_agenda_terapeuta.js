@@ -188,6 +188,7 @@ async function realizar_valoracion_primera_v(id_folio, id_cliente) {
 
 async function realizar_valoracion_subs(id_folio, id_cliente) {
 
+
     //* esta funcion inicializa la valoracion subsecuente con los tados necesarios
     $("#tipo_consulta").val(2);
     const dataVal = await cargarDatosValoracion(id_folio, id_cliente, 2);
@@ -243,119 +244,122 @@ function recargar_hisorial_citas(folio, tipo) {
 
 
 function enviar_valoracion() {
-    const tipo_consulta = $("#tipo_consulta").val();
-    const id_cliente = $("#id_cliente_valoracion").val();
-    const id_folio = $("#id_folio_cita").val();
-    const edad = isRequired('edad_valoracion');
-    const ocupacion = isRequired('ocupacion_valoracion');
-    const telefono = isRequired('telefono_valoracion');
-    const motivo_consulta = isRequired('motivo_consulta_valoracion');
-    const act_fisica = isRequired('act_fisica_valoracion');
-    const farmacos = isRequired('farmacos');
+    modificarDatos().then(function () {
+        const tipo_consulta = $("#tipo_consulta").val();
+        const id_cliente = $("#id_cliente_valoracion").val();
+        const id_folio = $("#id_folio_cita").val();
+        const edad = isRequired('edad_valoracion');
+        const ocupacion = isRequired('ocupacion_valoracion');
+        const telefono = isRequired('telefono_valoracion');
+        const motivo_consulta = isRequired('motivo_consulta_valoracion');
+        const act_fisica = isRequired('act_fisica_valoracion');
+        const farmacos = isRequired('farmacos');
 
-    const escalaDolor = $(Number(tipo_consulta) == 1 ? "#escalaDolorP" : "#escalaDolorS").val();
-    if (!escalaDolor || escalaDolor == '0') {
-        $("#escaDolMessage").html('Campo obligatorio');
-    }
-    if (Number(tipo_consulta) == 1) {
-        if (!edad || !ocupacion || !telefono || !motivo_consulta || !act_fisica || !farmacos || !escalaDolor) {
-            let camposFaltantes = [];
-            if (!edad) camposFaltantes.push("Edad");
-            if (!ocupacion) camposFaltantes.push("Ocupación");
-            if (!telefono) camposFaltantes.push("Teléfono");
-            if (!motivo_consulta) camposFaltantes.push("Motivo de consulta");
-            if (!act_fisica) camposFaltantes.push("Actividad física");
-            if (!farmacos) camposFaltantes.push("Fármacos");
-            if (!escalaDolor) camposFaltantes.push("Escala de dolor");
+        const escalaDolor = $(Number(tipo_consulta) == 1 ? "#escalaDolorP" : "#escalaDolorS").val();
+        if (!escalaDolor || escalaDolor == '0') {
+            $("#escaDolMessage").html('Campo obligatorio');
+        }
+        if (Number(tipo_consulta) == 1) {
+            if (!edad || !ocupacion || !telefono || !motivo_consulta || !act_fisica || !farmacos || !escalaDolor) {
+                let camposFaltantes = [];
+                if (!edad) camposFaltantes.push("Edad");
+                if (!ocupacion) camposFaltantes.push("Ocupación");
+                if (!telefono) camposFaltantes.push("Teléfono");
+                if (!motivo_consulta) camposFaltantes.push("Motivo de consulta");
+                if (!act_fisica) camposFaltantes.push("Actividad física");
+                if (!farmacos) camposFaltantes.push("Fármacos");
+                if (!escalaDolor) camposFaltantes.push("Escala de dolor");
 
+                Swal.fire({
+                    icon: "warning",
+                    title: "Por favor, complete los siguientes campos obligatorios:",
+                    html: camposFaltantes.join(", "),
+                    showConfirmButton: true,
+                });
+                return;
+            }
+        } else {
+            if (!edad || !ocupacion || !telefono || !escalaDolor) {
+                let camposFaltantes = [];
+                if (!edad) camposFaltantes.push("Edad");
+                if (!ocupacion) camposFaltantes.push("Ocupación");
+                if (!telefono) camposFaltantes.push("Teléfono");
+                if (!escalaDolor) camposFaltantes.push("Escala de dolor");
+
+                Swal.fire({
+                    icon: "warning",
+                    title: "Por favor, complete los siguientes campos obligatorios:",
+                    html: camposFaltantes.join(", "),
+                    showConfirmButton: true,
+                });
+                return;
+            }
+        }
+
+        const toximanias = $("#toximanias_valoracion").val();
+        const estado_civil = $("#estado_civil_valoracion").val();
+        const ta = $("#tension_art").val() || 0;
+        const fc = $("#fc").val() || 0;
+        const fr = $("#fr").val() || 0;
+        const satO2 = $("#oxigeno").val() || 0;
+        const temp = $("#temperatura").val() || 0;
+        const glucosa = $("#glucosa").val() || 0;
+        const diagnosticoMedico = $("#diagnosticoMedico").val();
+        const avance = $("#avance").val();
+        const observaciones = $("#observacionesForm").val();
+
+
+        pantallaCarga('Guardando valoracion...');
+
+        $.ajax({
+            cache: false,
+            url: 'componentes/catalogos/registrar/registrar_valoracion_cita.php',
+            type: 'POST',
+            dataType: 'html',
+            data: {
+                'tipo_consulta': tipo_consulta,
+                'id_cliente': id_cliente,
+                'id_folio': id_folio,
+                'edad': edad,
+                'id_ocupacion': ocupacion,
+                'telefono': telefono,
+                'estado_civil': estado_civil,
+                'toximanias': toximanias,
+                'motivo_consulta': motivo_consulta,
+                'act_fisica': act_fisica,
+                'ta': ta,
+                'fc': fc,
+                'fr': fr,
+                'satO2': satO2,
+                'temp': temp,
+                'glucosa': glucosa,
+                'farmacos': farmacos,
+                'diagnostico_medico': diagnosticoMedico,
+                'escalaDolor': escalaDolor,
+                'avance': avance,
+                'observaciones': observaciones,
+            },
+        }).done(function (resultado) {
+            if (resultado == 'ok') {
+                Swal.fire({
+                    icon: "success",
+                    title: "Valoración Enviada",
+                    showConfirmButton: false,
+                    timer: 2000
+                }).then(function () {
+                    recargar_hisorial_citas(id_folio, 2);
+                });
+            }
+            $("#modal_valoracion").modal("hide");
+            Swal.close();
+        }).fail(function (jqXHR, textStatus, errorThrown) {
+            console.error("Error: " + textStatus, errorThrown);
             Swal.fire({
-                icon: "warning",
-                title: "Por favor, complete los siguientes campos obligatorios:",
-                html: camposFaltantes.join(", "),
+                icon: "error",
+                title: "Error al enviar la valoración",
+                text: "Ocurrió un problema al intentar guardar los datos. Por favor, inténtelo nuevamente.",
                 showConfirmButton: true,
             });
-            return;
-        }
-    } else {
-        if (!edad || !ocupacion || !telefono || !escalaDolor) {
-            let camposFaltantes = [];
-            if (!edad) camposFaltantes.push("Edad");
-            if (!ocupacion) camposFaltantes.push("Ocupación");
-            if (!telefono) camposFaltantes.push("Teléfono");
-            if (!escalaDolor) camposFaltantes.push("Escala de dolor");
-
-            Swal.fire({
-                icon: "warning",
-                title: "Por favor, complete los siguientes campos obligatorios:",
-                html: camposFaltantes.join(", "),
-                showConfirmButton: true,
-            });
-            return;
-        }
-    }
-
-    const toximanias = $("#toximanias_valoracion").val();
-    const estado_civil = $("#estado_civil_valoracion").val();
-    const ta = $("#tension_art").val() || 0;
-    const fc = $("#fc").val() || 0;
-    const fr = $("#fr").val() || 0;
-    const satO2 = $("#oxigeno").val() || 0;
-    const temp = $("#temperatura").val() || 0;
-    const glucosa = $("#glucosa").val() || 0;
-    const diagnosticoMedico = $("#diagnosticoMedico").val();
-    const avance = $("#avance").val();
-    const observaciones = $("#observacionesForm").val();
-
-    pantallaCarga('Guardando valoracion...');
-
-    $.ajax({
-        cache: false,
-        url: 'componentes/catalogos/registrar/registrar_valoracion_cita.php',
-        type: 'POST',
-        dataType: 'html',
-        data: {
-            'tipo_consulta': tipo_consulta,
-            'id_cliente': id_cliente,
-            'id_folio': id_folio,
-            'edad': edad,
-            'id_ocupacion': ocupacion,
-            'telefono': telefono,
-            'estado_civil': estado_civil,
-            'toximanias': toximanias,
-            'motivo_consulta': motivo_consulta,
-            'act_fisica': act_fisica,
-            'ta': ta,
-            'fc': fc,
-            'fr': fr,
-            'satO2': satO2,
-            'temp': temp,
-            'glucosa': glucosa,
-            'farmacos': farmacos,
-            'diagnostico_medico': diagnosticoMedico,
-            'escalaDolor': escalaDolor,
-            'avance': avance,
-            'observaciones': observaciones,
-        },
-    }).done(function (resultado) {
-        if (resultado == 'ok') {
-            Swal.fire({
-                icon: "success",
-                title: "Valoración Enviada",
-                showConfirmButton: false,
-                timer: 2000
-            }).then(function () {
-                recargar_hisorial_citas(id_folio, 2);
-            });
-        }
-        $("#modal_valoracion").modal("hide");
-        Swal.close();
-    }).fail(function (jqXHR, textStatus, errorThrown) {
-        console.error("Error: " + textStatus, errorThrown);
-        Swal.fire({
-            icon: "error",
-            title: "Error al enviar la valoración",
-            text: "Ocurrió un problema al intentar guardar los datos. Por favor, inténtelo nuevamente.",
-            showConfirmButton: true,
         });
     });
 }
@@ -498,18 +502,18 @@ function agregarEnfermedadValoracion() {
 function habilitarParaModificar(id_input) {
     $("#" + id_input).removeAttr('disabled');
 
-    $("#boton_confirmar").html('<button type="button" class="btn btn-success" onclick="modificarDatos()">Modificar Datos</button>')
+    // $("#boton_confirmar").html('<button type="button" class="btn btn-success" onclick="modificarDatos()">Modificar Datos</button>')
 }
 
 function modificarDatos() {
 
-    var id_cliente = $("#id_cliente_valoracion").val();
-    var estado_civil = $("#estado_civil_valoracion").val();
-    var fecha_nacimiento = $("#fecha_nacimiento").val();
-    var telefono = $("#telefono_valoracion").val();
-    var ocupacion = $("#ocupacion_valoracion").val();
+    const id_cliente = $("#id_cliente_valoracion").val();
+    const estado_civil = $("#estado_civil_valoracion").val();
+    const fecha_nacimiento = $("#fecha_nacimiento").val();
+    const telefono = $("#telefono_valoracion").val();
+    const ocupacion = $("#ocupacion_valoracion").val();
 
-    $.ajax({
+    return $.ajax({
         cache: false,
         url: 'componentes/catalogos/actualizar/actualizar_datos_cliente_valoracion.php',
         type: 'POST',
@@ -523,21 +527,23 @@ function modificarDatos() {
         },
     }).done(function (resultado) {
         //console.log(resultado)
-        if (resultado == 'ok') {
-            Swal.fire({
-                icon: "success",
-                title: "Datos de Cliente Actualizados",
-                showConfirmButton: false,
-                timer: 2000
-            })
-        }
-    }).then(function () {
-        cargarDatosActualizarCliente(id_cliente).then(function () {
-            Swal.close();
+        // if (resultado == 'ok') {
+        //     Swal.fire({
+        //         icon: "success",
+        //         title: "Datos de Cliente Actualizados",
+        //         showConfirmButton: false,
+        //         timer: 2000
+        //     })
+        // }
+    })
+        .then(function () {
+            cargarDatosActualizarCliente(id_cliente).then(function () {
+                Swal.close();
+            });
         });
-    });
 
 }
+
 
 function confirmarCita(folio, idTerapeuta) {
     $.ajax({
@@ -563,3 +569,9 @@ function confirmarCita(folio, idTerapeuta) {
     })
 }
 
+
+function cambiar_edad(){
+    const fec_nac = $("#fecha_nacimiento").val();
+    const edad = calcularEdad(fec_nac);
+    $("#edad_valoracion").val(edad);
+}

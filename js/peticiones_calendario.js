@@ -203,7 +203,7 @@ function get_citas_agenda() {
   } else {
     data = { id_terapeuta: id_terapeuta };
   }
-  console.log(data);
+
   return new Promise(function (resolve, reject) {
     $.ajax({
       cache: false,
@@ -212,7 +212,6 @@ function get_citas_agenda() {
       dataType: 'json',
       data: data,
     }).done(function (resultado) {
-      console.log(resultado);
       resolve(resultado);
     }).fail(function (jqXHR, textStatus, errorThrown) {
       reject(errorThrown);

@@ -821,7 +821,7 @@
                                         <div class="input-group-prepend">
                                             <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
                                         </div>
-                                        <input type="date" class="form-control" id="fecha_nacimiento" onfocus="resetear('fecha_nacimiento')" disabled>
+                                        <input type="date" class="form-control" id="fecha_nacimiento" onfocus="resetear('fecha_nacimiento')" onchange='cambiar_edad();' disabled>
                                         <div class="input-group-append">
                                             <button type="button" class="btn btn-info" onclick="habilitarParaModificar('fecha_nacimiento')" title="Modificar Edad">
                                                 <i class="fas fa-edit"></i>
