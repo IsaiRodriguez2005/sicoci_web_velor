@@ -50,7 +50,19 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
                     $max = mysqli_fetch_array($resMAX);
                     $ultimo = $max['no_registro'] + 1;
 
-                    $insertCliente = "INSERT INTO emisores_agenda VALUES( " . $_SESSION['id_emisor'] . "," . $ultimo . "," . intval($_POST['id_cliente']) . "," . intval($_POST['id_consultorio']) . "," . intval($_POST['id_terapeuta']) . "," . intval($_POST['tipo_servicio']) . "," . intval($_POST['tipo_cita']) . ",'" . $fecha_alta . "','" . strtoupper(trim($fecha_hora)) . "','" . strtoupper($_POST['observaciones']) . "', 2)";
+                    $insertCliente = "INSERT INTO emisores_agenda VALUES ( 
+                                                                " . $_SESSION['id_emisor'] . ",
+                                                                " . $ultimo . ",
+                                                                " . intval($_POST['id_cliente']) . ",
+                                                                " . intval($_POST['id_consultorio']) . ",
+                                                                " . intval($_POST['id_terapeuta']) . ",
+                                                                " . intval($_POST['tipo_servicio']) . ",
+                                                                " . intval($_POST['tipo_cita']) . ",
+                                                                '" . $fecha_alta . "',
+                                                                '" . strtoupper(trim($fecha_hora)) . "',
+                                                                '" . strtoupper($_POST['observaciones']) . "',
+                                                                    2, 
+                                                                    0)";
                     $resultado = mysqli_query($conexion, $insertCliente);
                     if ($resultado) {
 

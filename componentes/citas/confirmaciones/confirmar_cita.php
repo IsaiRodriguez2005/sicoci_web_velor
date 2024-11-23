@@ -5,24 +5,33 @@ date_default_timezone_set('America/Mexico_City');
 
 if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
     session_destroy();
-
-    //* solo si existe las peticiones GET, osea, si se confira en el correo
-    if ($_SERVER['REQUEST_METHOD'] === 'GET' && !empty($_GET)) {
-        confirmacionPorCorreo($_GET, $conexion);
-    } elseif ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST)) {
-        echo 'Error: Sesión no válida. No puedes realizar esta acción.';
-    } else {
-        echo "No se puede procesar la solicitud. Sesión no válida.";
-    }
-    exit;
 } else {
 
-    //* pero si existe una peticion post, ejecutas este codigo
-    if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST)) {
-        confirmacionEnSistema($_POST, $conexion);
+    //* Validar la solicitud según el método (GET o POST)
+
+    //* si existe get, quieredecir que viene de correo
+    if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+        if (!empty($_GET)) {
+            confirmacionPorCorreo($_GET, $conexion);
+        } else {
+            echo "Error: No se proporcionaron parámetros en la solicitud GET.";
+        }
+
+    //* si existe post, quiere decir que viene del sistema 
+    } elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        if (!empty($_POST)) {
+            if (!isset($_SESSION['id_usuario']) || !isset($_SESSION['nombre_usuario'])) {
+                echo "Error: Sesión no válida. No puedes realizar esta acción.";
+            } else {
+                confirmacionEnSistema($_POST, $conexion);
+            }
+        } else {
+            echo "Error: No se proporcionaron parámetros en la solicitud POST.";
+        }
     } else {
-        echo "Error: Solicitud no válida para usuarios autenticados.";
+        echo "Error: Método de solicitud no permitido.";
     }
+
     exit;
 }
 
