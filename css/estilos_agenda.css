@@ -1,0 +1,18 @@
+.btn-success-dark {
+    background-color: #218838;
+    /* Verde oscuro */
+    border: none;
+    color: white;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.btn-success-dark:hover {
+    background-color: #196c2e;
+    /* Verde aún más oscuro al pasar el cursor */
+}
+
+.btn-success-dark:active {
+    background-color: #155623;
+    /* Verde más oscuro al hacer clic */
+    transform: scale(1);
+}

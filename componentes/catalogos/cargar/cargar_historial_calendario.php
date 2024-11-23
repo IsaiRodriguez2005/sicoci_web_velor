@@ -43,6 +43,7 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
                     a.id_cliente,
                     a.estatus,
                     a.fecha_agenda,
+                    a.conf_ct_ter as confirmada,
                     p.nombre_personal,
                     c.nombre_cliente 
             FROM 

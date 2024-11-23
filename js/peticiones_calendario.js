@@ -201,20 +201,22 @@ function get_citas_agenda() {
   if (Number(id_terapeuta) === 0) {
     data = {};
   } else {
-    data = { id_terapeuta: id_terapeuta }; 
+    data = { id_terapeuta: id_terapeuta };
   }
-    return new Promise(function (resolve, reject) {
-      $.ajax({
-        cache: false,
-        url: 'componentes/catalogos/cargar/cargar_historial_calendario.php',
-        type: 'POST',
-        dataType: 'json',
-        data: data,
-      }).done(function (resultado) {
-        resolve(resultado);
-      }).fail(function (jqXHR, textStatus, errorThrown) {
-        reject(errorThrown);
-      });
+  console.log(data);
+  return new Promise(function (resolve, reject) {
+    $.ajax({
+      cache: false,
+      url: 'componentes/catalogos/cargar/cargar_historial_calendario.php',
+      type: 'POST',
+      dataType: 'json',
+      data: data,
+    }).done(function (resultado) {
+      console.log(resultado);
+      resolve(resultado);
+    }).fail(function (jqXHR, textStatus, errorThrown) {
+      reject(errorThrown);
     });
+  });
 
 }

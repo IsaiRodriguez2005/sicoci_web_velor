@@ -1,20 +1,54 @@
-<!DOCTYPE html>
-<html lang="en">
+<?php
+session_start();
+require("../../conexion.php");
+date_default_timezone_set('America/Mexico_City');
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Confirmación de Cita</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="../../../css/estilos_correos_conf.css">
+if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
+    session_destroy();
 
-</head>
+    //* solo si existe las peticiones GET, osea, si se confira en el correo
+    if ($_SERVER['REQUEST_METHOD'] === 'GET' && !empty($_GET)) {
+        confirmacionPorCorreo($_GET, $conexion);
+    } elseif ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST)) {
+        echo 'Error: Sesión no válida. No puedes realizar esta acción.';
+    } else {
+        echo "No se puede procesar la solicitud. Sesión no válida.";
+    }
+    exit;
+} else {
 
-<body class="bg-light">
+    //* pero si existe una peticion post, ejecutas este codigo
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST)) {
+        confirmacionEnSistema($_POST, $conexion);
+    } else {
+        echo "Error: Solicitud no válida para usuarios autenticados.";
+    }
+    exit;
+}
 
-    <?php
-    require("../../conexion.php");
-    date_default_timezone_set('America/Mexico_City');
+function confirmacionEnSistema($post, $conexion)
+{
+    if (isset($post['folio_cita'], $post['id_terapeuta'])) {
+        $idTerapeuta = $post['id_terapeuta'];
+        $folioCita = $post['folio_cita'];
+        $idEmisor = $_SESSION['id_emisor'];
+
+        $sqlConfirmacion = "UPDATE emisores_agenda SET conf_ct_ter = 1 WHERE id_folio = ? AND id_terapeuta = ? AND id_emisor = $idEmisor;";
+        $confStmt = mysqli_prepare($conexion,  $sqlConfirmacion);
+        mysqli_stmt_bind_param($confStmt, 'ii', $folioCita, $idTerapeuta);
+        $respuesta = mysqli_stmt_execute($confStmt);
+        if ($respuesta) {
+            echo 'ok';
+        } else {
+            echo 'Error al conformar la cita. Por favor intentelo de nuevo';
+        }
+    } else {
+        echo 'error';
+    }
+}
+
+function confirmacionPorCorreo($get, $conexion)
+{
 
     // if (isset($_GET['id_cliente'])) {
     //     $idCliente = $_GET['id_cliente'];
@@ -29,42 +63,73 @@
     //     }
     // }
 
-    if (isset($_GET['id_terapeuta'])) {
-        $idTerapeuta = $_GET['id_terapeuta'];
-        $folioCita = $_GET['folio_cita'];
+    if (isset($get['id_terapeuta'], $get['folio_cita'])) {
+
+        $idTerapeuta = $get['id_terapeuta'];
+        $folioCita = $get['folio_cita'];
 
         $sqlTeraCita = "SELECT p.id_personal as id_terapeuta, 
-                                p.nombre_personal as nombre, 
-                                a.id_folio as folio  
-                        FROM emisores_agenda a INNER JOIN emisores_personal p on a.id_terapeuta = p.id_personal 
-                        WHERE a.id_folio = $folioCita AND a.id_terapeuta = $idTerapeuta;";
-        $respuesta = mysqli_query($conexion, $sqlTeraCita);
+                                        p.nombre_personal as nombre, 
+                                        a.id_folio as folio  
+                                FROM emisores_agenda a INNER JOIN emisores_personal p on a.id_terapeuta = p.id_personal 
+                                WHERE a.id_folio = ? AND a.id_terapeuta = ?;";
+        $stmt = mysqli_prepare($conexion, $sqlTeraCita);
+        mysqli_stmt_bind_param($stmt, 'ii', $folioCita, $idTerapeuta);
+        mysqli_stmt_execute($stmt);
+        $respuesta = mysqli_stmt_get_result($stmt);
         $datos = mysqli_fetch_array($respuesta);
 
         if ($datos) {
-            $sqlConfirmacion = "UPDATE emisores_agenda SET conf_ct_ter = 1 WHERE id_folio = $folioCita AND id_terapeuta = $idTerapeuta;";
-            $respuesta = mysqli_query($conexion, $sqlConfirmacion);
+
+            $sqlConfirmacion = "UPDATE emisores_agenda SET conf_ct_ter = 1 WHERE id_folio = ? AND id_terapeuta = ?;";
+            $confStmt = mysqli_prepare($conexion,  $sqlConfirmacion);
+            mysqli_stmt_bind_param($confStmt, 'ii', $folioCita, $idTerapeuta);
+            $respuesta = mysqli_stmt_execute($confStmt);
             if ($respuesta) {
-    ?>
-                <div class="card text-center">
-                    <div class="card-header">
-                        Confirmación Exitosa
-                    </div>
-                    <div class="card-body">
-                        <h5 class="card-title">¡Gracias por confirmar la cita!</h5>
-                        <p class="card-text">La cita con el paciente ha sido confirmada exitosamente.</p>
-                        <p><strong>Folio de la cita:</strong> <?php echo $datos['folio']; ?></p>
-                        <!-- <a href="agenda.php" class="btn btn-primary">Volver a la Agenda</a> -->
-                    </div>
-                </div>
-    <?php
+                renderPaginaConfirmacion($datos['folio']);
+            } else {
+                echo 'Error al conformar la cita. Por favor intentelo de nuevo';
             }
+        } else {
+            echo 'No se encontro el folio de la cita. Por favor comuniate con soporte.';
         }
     }
+}
 
-    ?>
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
-</body>
+function renderPaginaConfirmacion($folio)
+{
+    //* esta funcion renderiza la pagina, osea, solo si es por correo
+?>
+    <!DOCTYPE html>
+    <html lang="en">
 
-</html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Confirmación de Cita</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="../../../css/estilos_correos_conf.css">
+
+    </head>
+
+    <body class="bg-light">
+        <div class="card text-center">
+            <div class="card-header">
+                Confirmación Exitosa
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">¡Gracias por confirmar la cita!</h5>
+                <p class="card-text">La cita con el paciente ha sido confirmada exitosamente.</p>
+                <p><strong>Folio de la cita:</strong> <?php echo $folio; ?></p>
+                <!-- <a href="agenda.php" class="btn btn-primary">Volver a la Agenda</a> -->
+            </div>
+        </div>
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+    </body>
+
+    </html>
+
+<?php
+}
+?>

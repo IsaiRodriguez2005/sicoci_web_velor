@@ -42,6 +42,7 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
             a.fecha_agenda, 
             a.estatus, 
             a.observaciones,
+            a.conf_ct_ter as confirmado,
             p.nombre_personal,
             c.nombre as nombre_consultorio,
             cli.nombre_cliente as nombre_cliente,
@@ -131,7 +132,8 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
                 $boton_cancelar = '';
                 break;
             case 2:
-                $estatus = '<span class="badge badge-warning" style="width: 100%; color:white;">AGENDADO</span>';
+                $tipoColor = $citas['confirmado'] == true ? 'badge-warning' : 'badge-danger';
+                $estatus = '<span class="badge ' . $tipoColor . '" style="width: 100%; color:white;">AGENDADO</span>';
                 $boton_editar = '';
                 $valoracion = '';
                 $boton_cancelar = '';
@@ -173,6 +175,31 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
                 $tipo_servicio = 'DOMICILIO';
         }
 
+        if ($citas['confirmado'] == true) {
+            $btnConfirmacion = "";
+            $btnValoracion = "
+                    &nbsp;
+                    <button type='button' 
+                            id='btn_rea_" . $citas['id_folio'] . "' 
+                            class='btn btn-success btn-sm' " . $boton_cancelar . " " . $valoracion . " 
+                            title='Realizar Valoracion' " . $btn_realizar_valoracion . ">
+                        <i class='fas fa-check'></i>
+                    </button>
+            ";
+        } else {
+            $btnConfirmacion = "
+                    &nbsp;
+                    <button type='button' 
+                            id='btn_conf_" . $citas['id_folio'] . "' 
+                            class='btn btn-sm badge-danger' " . $boton_cancelar . " " . $valoracion . " 
+                            title='Confirmar Cita' 
+                            onclick='confirmarCita(" . $citas['id_folio'] . ", " . $citas['id_terapeuta'] . ")'>
+                        <i class='fas fa-handshake'></i>
+
+                    </button>
+            ";
+            $btnValoracion = "";
+        }
 
         if (empty($_SESSION['id_personal'])) {
             $acciones = "
@@ -185,14 +212,13 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
                             </button>
                             &nbsp;
                             " . $pdfValoracion . "
+                            
                             ";
         } else {
             $acciones = "
-                            <button type='button' id='btn_rea_" . $citas['id_folio'] . "' class='btn btn-success btn-sm' " . $boton_cancelar . " " . $valoracion . " title='Realizar Valoracion' " . $btn_realizar_valoracion . ">
-                                <i class='fas fa-check'></i>
-                            </button>
-                            &nbsp;
+                            ".$btnValoracion."
                             " . $pdfValoracion . "
+                            " . $btnConfirmacion . "
             ";
         }
 
@@ -239,9 +265,7 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
                 "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
             },
             "order": [
-                [3, 'asc'],
-                [2, 'asc'],
-                [1, 'des'],
+                [2, 'des'],
             ],
         });
     });

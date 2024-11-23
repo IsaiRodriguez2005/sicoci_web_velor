@@ -41,6 +41,8 @@ if (!isset($_SESSION['nombre_usuario'])) {
         <link rel="icon" type="image/icon" href="favicon.ico" />
         <!-- Sweet Alerts-->
         <script src="js/sweetalert2@11.js"></script>
+        <!-- estilos -->
+        <link rel="stylesheet" href="css/estilos_agenda.css">
     </head>
 
     <body class="hold-transition sidebar-mini layout-fixed">

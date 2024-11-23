@@ -539,5 +539,27 @@ function modificarDatos() {
 
 }
 
-
+function confirmarCita(folio, idTerapeuta) {
+    $.ajax({
+        cache: false,
+        url: 'componentes/citas/confirmaciones/confirmar_cita.php',
+        type: 'POST',
+        dataType: 'html',
+        data: {
+            'folio_cita': folio,
+            'id_terapeuta': idTerapeuta,
+        },
+    }).done(function (resultado) {
+        console.log(resultado);
+        if (resultado == 'ok') {
+            Swal.fire({
+                icon: "success",
+                title: "Cita Confirmada",
+                showConfirmButton: false,
+                timer: 2000
+            });
+            recargar_hisorial_citas(folio, 2);
+        }
+    })
+}
 
