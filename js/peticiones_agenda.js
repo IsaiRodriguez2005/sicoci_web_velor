@@ -244,11 +244,8 @@ function cargar_datos() {
 
 function cargar_horarios_disponibles() {
 
-    //console.log(id_terapeuta)
     id_terapeuta = $("#terapeuta_form").val();
-    //console.log(id_terapeuta)
     fecha_cita = $("#fecha_cita_form").val();
-
     folio_gestion = $("#folio_gestion").val();
     hora_gestion = $("#hora_gestion").val();
 
@@ -260,7 +257,7 @@ function cargar_horarios_disponibles() {
         dataType: 'html',
         data: { 'fecha_hora': fecha_cita, 'id_terapeuta': id_terapeuta, 'folio_gestion': folio_gestion, 'hora_gestion': hora_gestion },
     }).done(function (resultado) {
-        // console.log(resultado)
+        //console.log(resultado)
         $("#hora_cita_form").html(resultado);
     })
 }

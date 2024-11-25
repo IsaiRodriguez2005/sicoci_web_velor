@@ -17,19 +17,24 @@ function enviarCorreo($correoDestinatario, $a, $c, $folioCita = null, $idCliente
     try {
         // Configuraciones del servidor SMTP
         $mail->isSMTP();                                            // Usar SMTP
-        $mail->Host       = 'mail.velor.mx';                       // Servidor SMTP de Gmail
+        $mail->Host       = 'mail.kyosoft.mx';                       // Servidor SMTP de Gmail
         $mail->SMTPAuth   = true;                                   // Habilitar autenticación SMTP
-        $mail->Username   = 'cosera@velor.mx';                   // Tu correo de Gmail
-        $mail->Password   = 'JlkTbGyv?F@B';                  // Contraseña o token de Gmail
-        $mail->SMTPSecure = 'tsl';         // Habilitar TLS (seguridad)
+        $mail->Username   = 'cosera.notificaciones@kyosoft.mx';                   // Tu correo de Gmail
+        $mail->Password   = 'qaS*c;,nJ2Tv';                  // Contraseña o token de Gmail
+        $mail->SMTPSecure = 'tls';         // Habilitar TLS (seguridad)
         $mail->Port       = 587;                                    // Puerto SMTP para TLS
 
         // Configuración del correo
-        $mail->setFrom('cosera@velor.mx', 'COSERA NOTIFICADOR');          // Dirección del remitente
+        $mail->setFrom('cosera.notificaciones@kyosoft.mx', 'COSERA NOTIFICADOR');          // Dirección del remitente
         $mail->addAddress($correoDestinatario);   // Dirección del destinatario 
         $mail->isHTML(true);           
         $mail->Subject = $a;
         $mail->Body    = $body;
+        
+        //* depuracion 
+        //$mail->SMTPDebug = 3; // Nivel de depuración. Más detalles en el nivel 3.
+        //$mail->Debugoutput = 'html'; // Formato de salida de la depuración (puede ser 'html' o 'echo').
+
 
         // Enviar correo
         if($mail->send()){
@@ -41,4 +46,3 @@ function enviarCorreo($correoDestinatario, $a, $c, $folioCita = null, $idCliente
         return 2;
     }
 }
-

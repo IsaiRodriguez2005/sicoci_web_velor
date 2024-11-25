@@ -161,7 +161,8 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
                                     tipo_servicio=" . intval($_POST['tipo_servicio']) . ", 
                                     tipo_cita=" . intval($_POST['tipo_cita']) . ", 
                                     fecha_agenda='" . $fecha_hora . "', 
-                                    observaciones='" . strtoupper($_POST['observaciones']) . "'
+                                    observaciones='" . strtoupper($_POST['observaciones']) . "',
+                                    conf_ct_ter = 0
                                         WHERE 
                                     id_emisor = " . intval($_SESSION['id_emisor']) . " 
                                         AND 

@@ -58,7 +58,7 @@ if ($fecha < $fechaActual) {
 
         // Calcular horarios disponibles y generar opciones HTML
         $horariosDisponibles = array_diff($horarios, $horariosOcupados);
-        $html_horarios_disponibles = '';
+        $html_horarios_disponibles = '<option value="" disabled selected>Selecciona Hora de Cita</option>';
         $horaActual = (new DateTime())->format('H:i'); // Obtener la hora actual en formato 'H:i'
 
         foreach ($horariosDisponibles as $h) {

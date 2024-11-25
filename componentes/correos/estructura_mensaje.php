@@ -8,6 +8,8 @@ function estuturaCorreoHTML($mensaje, $folioCita = 0, $idCliente = 0 , $idTerape
     //* -id del terapeuta 
     //* se le habilitara el boton para confirmar la cita
 
+
+    // <a href="https://kyosoft.mx/cosera/componentes/citas/confirmaciones/confirmar_cita.php?folio_cita='.$folioCita.''.$url.'"
     //! deje la validación de el cliente para en un futuro, se pueda hacer, pero, no es necesario por el momento. 
 
     if($folioCita > 0){
@@ -312,7 +314,7 @@ function estuturaCorreoHTML($mensaje, $folioCita = 0, $idCliente = 0 , $idTerape
                                                                         style="line-height:10px">
                                                                         <div class="fullWidth" style="max-width: 352px;">
                                                                             <img alt="I&apos;m an image" height="auto"
-                                                                                src="https://velor.mx/cosera/img/logo.png"
+                                                                                src="https://kyosoft.mx/cosera/img/logo.png"
                                                                                 style="display: block; height: auto; border: 0; width: 100%;"
                                                                                 title="I&apos;m an image" width="352" />
                                                                         </div>

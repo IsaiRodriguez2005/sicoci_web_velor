@@ -17,7 +17,7 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
             echo "Error: No se proporcionaron parámetros en la solicitud GET.";
         }
 
-    //* si existe post, quiere decir que viene del sistema 
+        //* si existe post, quiere decir que viene del sistema 
     } elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (!empty($_POST)) {
             if (!isset($_SESSION['id_usuario']) || !isset($_SESSION['nombre_usuario'])) {
@@ -117,27 +117,146 @@ function renderPaginaConfirmacion($folio)
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Confirmación de Cita</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" rel="stylesheet">
-        <link rel="stylesheet" href="../../../css/estilos_correos_conf.css">
+        <!-- <link rel="stylesheet" href="./../../../css/estilos_correos_conf.css"> -->
+        <style>
+            /* Estilos personalizados */
+            body {
+                background-color: #f8f9fa;
+                /* Fondo claro para contraste */
+            }
 
+            .card {
+                border: none;
+                border-radius: 10px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                /* Sombra suave */
+                margin: 20px auto;
+                max-width: 500px;
+                /* Ajuste para pantallas móviles */
+                animation: fadeIn 1s ease-in-out;
+                /* Animación al aparecer */
+            }
+
+            .card-header {
+                background-color: #007bff;
+                /* Color azul para encabezado */
+                color: white;
+                font-size: 1.5rem;
+                font-weight: bold;
+            }
+
+            .card-body img {
+                max-width: 150px;
+                /* Tamaño del logo ajustado */
+                margin-bottom: 15px;
+                animation: bounceIn 1.5s ease-in-out;
+                /* Animación de rebote */
+            }
+
+            .card-title {
+                font-size: 1.25rem;
+                font-weight: bold;
+                margin-bottom: 10px;
+                animation: slideIn 1s ease-in-out;
+                /* Animación de entrada lateral */
+            }
+
+            .card-text {
+                font-size: 1rem;
+                color: #6c757d;
+                animation: slideIn 1s ease-in-out;
+                /* Animación de entrada lateral */
+            }
+
+            .card p strong {
+                color: #343a40;
+            }
+
+            /* Animaciones */
+            @keyframes fadeIn {
+                from {
+                    opacity: 0;
+                }
+
+                to {
+                    opacity: 1;
+                }
+            }
+
+            @keyframes bounceIn {
+                0% {
+                    transform: scale(0.5);
+                    opacity: 0;
+                }
+
+                50% {
+                    transform: scale(1.1);
+                    opacity: 0.8;
+                }
+
+                100% {
+                    transform: scale(1);
+                    opacity: 1;
+                }
+            }
+
+            @keyframes slideIn {
+                from {
+                    transform: translateX(-50%);
+                    opacity: 0;
+                }
+
+                to {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+            }
+
+            /* Ajustes para pantallas pequeñas */
+            @media (max-width: 576px) {
+                .card {
+                    padding: 15px;
+                }
+
+                .card-header {
+                    font-size: 1.25rem;
+                }
+
+                .card-title {
+                    font-size: 1.1rem;
+                }
+
+                .card-text {
+                    font-size: 0.95rem;
+                }
+            }
+        </style>
     </head>
 
-    <body class="bg-light">
+    <body>
         <div class="card text-center">
             <div class="card-header">
                 Confirmación Exitosa
             </div>
             <div class="card-body">
+                <!-- Logo con animación -->
+                <img src="https://velor.mx/cosera/img/logo.png" alt="Logo COSERA" title="Logo COSERA" />
+
+                <!-- Contenido animado -->
                 <h5 class="card-title">¡Gracias por confirmar la cita!</h5>
                 <p class="card-text">La cita con el paciente ha sido confirmada exitosamente.</p>
                 <p><strong>Folio de la cita:</strong> <?php echo $folio; ?></p>
-                <!-- <a href="agenda.php" class="btn btn-primary">Volver a la Agenda</a> -->
             </div>
         </div>
+
         <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
     </body>
 
     </html>
+
+
+
 
 <?php
 }
