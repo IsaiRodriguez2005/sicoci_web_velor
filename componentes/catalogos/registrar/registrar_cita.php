@@ -84,6 +84,8 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
                 $max = mysqli_fetch_array($resMAX);
                 $ultimo = $max['no_registro'] + 1;
 
+                $fecha_hora_limpia = strtoupper(trim($fecha_hora));
+
                 $insertCliente = "INSERT INTO emisores_agenda (
                                                                 `id_emisor`, 
                                                                 `id_folio`, 
@@ -109,7 +111,7 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
                     $tipo_servicio,      // Parámetros para cliente ocupado
                     $tipo_cita,
                     $fecha_alta,
-                    strtoupper(trim($fecha_hora)),
+                    $fecha_hora_limpia,
                     $observaciones    // Parámetros para terapeuta ocupado
                 );
                 
