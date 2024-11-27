@@ -550,3 +550,36 @@ function ver_pdf(id_folio, tipo_cita) {
     $("#pdf_fvaloracion").html(id_folio);
     $("#ver_pdf_valoracion").modal("show");
 }
+
+
+//TODO : Funciones de Funcion de [COBRO DE CITAS]
+
+async function cobrar_cita(folio_cita) {
+    //* en esta funcion se hace la peticion dependiendo de lo que necesite el cliente.
+    const necesitaFactura = await necesita_factura();
+    
+    if(necesitaFactura){
+        console.log('necesito factura')
+    } else {
+        console.log('solo ticket')
+    }
+}
+
+async function necesita_factura() {
+    //* esta funcion devuelve si el usuario o la compra necesita factura.
+    const necesitaFactura = await Swal.fire({
+        title: '¿Deseas confirmar esta acción?',
+        text: "Esta acción no se puede deshacer",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Con Factura',
+        cancelButtonText: 'Solo ticket',
+        reverseButtons: true,
+    });
+
+    if(necesitaFactura.isConfirmed){
+        return true;
+    } else {
+        return false;
+    }
+}

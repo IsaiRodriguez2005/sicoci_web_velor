@@ -4,7 +4,7 @@ require("componentes/conexion.php");
 date_default_timezone_set('America/Mexico_City');
 if (!isset($_SESSION['nombre_usuario'])) {
   session_destroy();
-  header('location: index.html');
+  header('location: index.php');
 } else {
 ?>
   <!DOCTYPE html>

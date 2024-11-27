@@ -16,3 +16,24 @@
     /* Verde más oscuro al hacer clic */
     transform: scale(1);
 }
+
+.cobrar-btn {
+    background: linear-gradient(45deg, #28a745, #218838);
+    color: white;
+    font-weight: bold;
+    border: 2px solid #1e7e34;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.cobrar-btn:hover {
+    background: linear-gradient(45deg, #218838, #1c7430);
+    transform: scale(1.05);
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+    color: #e9ffe9;
+}
+
+.cobrar-btn:active {
+    transform: scale(0.95);
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
+}

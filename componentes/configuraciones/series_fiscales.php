@@ -73,9 +73,9 @@
                                 </div>
                                 <select class="form-control" id="documento" onfocus="resetear(&quot;documento&quot;)">
                                     <option value="0">Selecciona el tipo de documento</option>
-                                    <option value="1">Ticket</option>
-                                    <option value="2">Factura</option>
-                                    <option value="3">Pago a proveedores</option>
+                                    <option value="7">Ticket</option>
+                                    <option value="1">Factura</option>
+                                    <option value="8">Pago a proveedores</option>
                                 </select>
                             </div>
                         </div>

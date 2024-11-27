@@ -114,14 +114,23 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
             $row = mysqli_fetch_array($res_val);
             if ($row && isset($row['folio']) && $row['folio'] > 0) {
                 $pdfValoracion = "
-                &nbsp;<button type='button' id='btn_pdf_" . $row['folio'] . "' class='btn btn-primary btn-sm' title='Ver PDF' onclick='ver_pdf(" . $row['folio'] . ", " . $citas['tipo_cita'] . ")' >
-                                    <i class='fas fa-copy'></i>
-                                </button>";
+                        &nbsp;
+                        <button type='button' id='btn_pdf_" . $row['folio'] . "' class='btn btn-primary btn-sm' title='Ver PDF' onclick='ver_pdf(" . $row['folio'] . ", " . $citas['tipo_cita'] . ")' >
+                            <i class='fas fa-copy'></i>
+                        </button>";
+                $btnCobrar = "
+                        &nbsp;
+                        <button type='button' id='btn_cobrar_" . $citas['id_folio'] . "' class='btn btn-success btn-sm cobrar-btn' title='Cobrar cita' onclick='cobrar_cita(" . $citas['id_folio'] . ")' >
+                            <i class='fas fa-dollar-sign'></i>
+                        </button>
+                        ";
             } else {
                 $pdfValoracion = '';
+                $btnCobrar = "";
             }
         } else {
             $pdfValoracion = '';
+            $btnCobrar = "";
         }
 
 
@@ -187,11 +196,6 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
                         <i class='fas fa-check'></i>
                     </button>
             ";
-
-            $btnCobar = '
-                    &nbsp;
-                    
-            ';
         } else {
             $btnConfirmacion = "
                     &nbsp;
@@ -201,11 +205,9 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
                             title='Confirmar Cita' 
                             onclick='confirmarCita(" . $citas['id_folio'] . ", " . $citas['id_terapeuta'] . ")'>
                         <i class='fas fa-handshake'></i>
-
                     </button>
             ";
             $btnValoracion = "";
-            $btnCobar = '';
         }
 
         if (empty($_SESSION['id_personal'])) {
@@ -217,12 +219,12 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
                             <button type='button' id='btn_can_" . $citas['id_folio'] . "' class='btn btn-danger btn-sm' " . $boton_cancelar . " title='Cancelar cita' onclick='cancelar_cita(" . $citas['id_folio'] . ", &quot;" . $citas['nombre_cliente'] . "&quot;, &quot;" . $citas['nombre_personal'] . "&quot;, &quot;" . $citas['nombre_consultorio'] . "&quot;)'>
                                 <i class='fas fa-ban'></i>
                             </button>
-                            &nbsp;
                             " . $pdfValoracion . "
+                            " . $btnCobrar . "
                             ";
         } else {
             $acciones = "
-                            ".$btnValoracion."
+                            " . $btnValoracion . "
                             " . $pdfValoracion . "
                             " . $btnConfirmacion . "
             ";
