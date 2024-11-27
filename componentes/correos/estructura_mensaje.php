@@ -10,6 +10,7 @@ function estuturaCorreoHTML($mensaje, $folioCita = 0, $idCliente = 0 , $idTerape
 
 
     // <a href="https://kyosoft.mx/cosera/componentes/citas/confirmaciones/confirmar_cita.php?folio_cita='.$folioCita.''.$url.'"
+    // <a href="https://kyosoft.mx/cosera_pruebas/componentes/citas/confirmaciones/confirmar_cita.php?folio_cita='.$folioCita.''.$url.'" 
     //! deje la validación de el cliente para en un futuro, se pueda hacer, pero, no es necesario por el momento. 
 
     if($folioCita > 0){

@@ -1,5 +1,3 @@
-
-
 $(function () {
   /* initialize the external events
     -----------------------------------------------------------------*/
@@ -64,84 +62,46 @@ $(function () {
           colorCita = '#6c757d';
           break
       }
+      const nombre = Number($("#id_terapeuta").val()) == 0 ? cita.nombre_personal : cita.nombre_cliente;
 
-      if (Number($("#id_terapeuta").val()) == 0) {
-        return {
-          title: cita.nombre_personal,
-          start: cita.fecha_agenda,
-          backgroundColor: colorCita,
-          borderColor: colorCita,
-          allDay: false
-        };
-      } else {
-        return {
-          title: cita.nombre_cliente,
-          start: cita.fecha_agenda,
-          backgroundColor: colorCita,
-          borderColor: colorCita,
-          allDay: false
-        };
-      }
+      return {
+        title: nombre,
+        start: cita.fecha_agenda,
+        backgroundColor: colorCita,
+        borderColor: colorCita,
+        allDay: false
+      };
     });
 
 
     var calendarEl = document.getElementById("calendar");
 
-    if (Number($("#id_terapeuta").val()) == 0) {
-      var calendar = new FullCalendar.Calendar(calendarEl, {
-        headerToolbar: {
-          left: "prev,next today",
-          center: "title",
-          right: "dayGridMonth,timeGridWeek,timeGridDay",
-        },
-        locale: 'es', // idioma español
-        themeSystem: "bootstrap",
-        initialView: 'timeGridDay',
-        //defaulView:'day',
-        buttonText: { // Textos de botones
-          today: 'Hoy',
-          month: 'Mes',
-          week: 'Semana',
-          day: 'Día',
-          list: 'list'
-        },
-        events: eventos, // eventos de promesa
-        editable: false,
-        droppable: true,
-        drop: function (info) {
-          if (checkbox.checked) {
-            info.draggedEl.parentNode.removeChild(info.draggedEl);
-          }
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+      headerToolbar: {
+        left: "prev,next today",
+        center: "title",
+        right: "dayGridMonth,timeGridWeek,timeGridDay",
+      },
+      locale: 'es', // idioma español
+      themeSystem: "bootstrap",
+      initialView: 'timeGridDay',
+      //defaulView:'day',
+      buttonText: { // Textos de botones
+        today: 'Hoy',
+        month: 'Mes',
+        week: 'Semana',
+        day: 'Día',
+        list: 'list'
+      },
+      events: eventos, // eventos de promesa
+      editable: false,
+      droppable: true,
+      drop: function (info) {
+        if (checkbox.checked) {
+          info.draggedEl.parentNode.removeChild(info.draggedEl);
         }
-      });
-    } else {
-      var calendar = new FullCalendar.Calendar(calendarEl, {
-        headerToolbar: {
-          left: "prev,next today",
-          center: "title",
-          right: "dayGridMonth,timeGridWeek,timeGridDay",
-        },
-        locale: 'es', // idioma español
-        themeSystem: "bootstrap",
-        initialView: 'timeGridWeek',
-        //defaulView:'day',
-        buttonText: { // Textos de botones
-          today: 'Hoy',
-          month: 'Mes',
-          week: 'Semana',
-          day: 'Día',
-          list: 'list'
-        },
-        events: eventos, // eventos de promesa
-        editable: false,
-        droppable: true,
-        drop: function (info) {
-          if (checkbox.checked) {
-            info.draggedEl.parentNode.removeChild(info.draggedEl);
-          }
-        }
-      });
-    }
+      }
+    });
 
     // renderizar el calendario
     calendar.render();

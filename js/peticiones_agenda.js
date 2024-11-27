@@ -547,6 +547,6 @@ function ver_pdf(id_folio, tipo_cita) {
         ruta = "componentes/formatos_pdf/ver_pdf_valoracion_sb.php?id_folio=" + id_folio;
     }
     $("#ruta_pdf").prop("src", ruta);
-    $("#pdf_ffactura").html(id_folio);
-    $("#ver_pdf_factura").modal("show");
+    $("#pdf_fvaloracion").html(id_folio);
+    $("#ver_pdf_valoracion").modal("show");
 }

@@ -239,11 +239,11 @@ if (!isset($_SESSION['nombre_usuario'])) {
                     </div>
                 </div>
             </div>
-            <div class="modal fade" id="ver_pdf_factura" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" style="overflow-y: scroll;">
+            <div class="modal fade" id="ver_pdf_valoracion" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" style="overflow-y: scroll;">
                 <div class="modal-dialog modal-xl">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h4 class="modal-title">Factura # <span class="text-danger" id="pdf_ffactura"></span></h4>
+                            <h4 class="modal-title">Valoraci&oacute;n # <span class="text-danger" id="pdf_fvaloracion"></span></h4>
                         </div>
                         <div class="modal-body">
                             <embed id="ruta_pdf" frameborder="0" width="100%" height="600px"></embed>
