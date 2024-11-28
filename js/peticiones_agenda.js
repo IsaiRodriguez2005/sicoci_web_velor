@@ -557,11 +557,11 @@ function ver_pdf(id_folio, tipo_cita) {
 async function cobrar_cita(folio_cita) {
     //* en esta funcion se hace la peticion dependiendo de lo que necesite el cliente.
     const necesitaFactura = await necesita_factura();
-    
-    if(necesitaFactura){
+
+    if (necesitaFactura) {
         console.log('necesito factura')
     } else {
-        console.log('solo ticket')
+
     }
 }
 
@@ -577,9 +577,106 @@ async function necesita_factura() {
         reverseButtons: true,
     });
 
-    if(necesitaFactura.isConfirmed){
+    if (necesitaFactura.isConfirmed) {
         return true;
     } else {
-        return false;
+
+        const resultado = await comprobar_existencia_serie_ticket();
+
+        const { existe, seriesTickets } = resultado;
+
+        if (existe) {
+            $("#modal_opciones_series_tickets").modal("show");
+            rellenar_tbody_seies_tickets(seriesTickets);
+        } else {
+            console.error('No existen series de tickets')
+        }
     }
+}
+
+async function comprobar_existencia_serie_ticket() {
+    try {
+        const respuesta = await $.ajax({
+            cache: false,
+            url: 'componentes/tickets/existencias/series_tickets.php',
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                'funcion': 'existenciaSeriesTickets',
+                'id_documento': 7,
+            },
+        });
+
+        const { success, folios } = respuesta;
+        if (success) {
+            return {
+                existe: success,
+                seriesTickets: folios
+            };
+        } else {
+            return {
+                existe: success
+            };
+        }
+    } catch (error) {
+        console.error('error al comprobar la existencia de la serie de tickets:', error);
+        return {
+            existe: success,
+            error: 'error de solicitud'
+        };
+    }
+
+}
+
+
+function rellenar_tbody_seies_tickets(series) {
+
+    const tbody = $("#mostrar_series_tickets");
+
+    tbody.html('');
+
+    series.forEach(ticket => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td class="text-center">
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-primary btn-sm" title="Seleccionar Serie" onclick="seleccionarSerie('${ticket.id}')">
+                                <i class="fas fa-check"></i>
+                            </button>
+                        </div>
+                    </td>
+                    <td class="text-center">${ticket.id}</td>
+                    <td class="text-center">${ticket.documento}</td>
+                    <td class="text-center">${ticket.serie}</td>
+                    <td class="text-center">${ticket.codigoPostal}</td>
+                    <td class="text-center">
+                        <span class="badge ${ticket.estatus === 'ACTIVO' ? 'badge-success' : 'badge-secondary'}" style="width: 100%; color:white;">
+                            ${ticket.estatus}
+                        </span>
+                    </td>
+        `;
+
+        tbody.append(row);
+
+        inizializar_tabla('#tabla_series_tickets');
+    });
+}
+
+function inizializar_tabla(idTabla) {
+    if ($.fn.DataTable.isDataTable()) {
+        $('#' + idTabla).DataTable().destroy('#' + idTabla);
+    }
+    $('#' + idTabla).DataTable({
+        paging: true,
+        lengthChange: false,
+        searching: true,
+        ordering: true,
+        info: true,
+        autoWidth: true,
+        responsive: true,
+        deferRender: true,
+        language: {
+            url: "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
+        }
+    });
 }

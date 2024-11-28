@@ -263,6 +263,7 @@ if (!isset($_SESSION['nombre_usuario'])) {
         <!--Modales-->
         <?php
         require("componentes/modales/modales_agenda.php");
+        require("componentes/modales/pagos/modales_tickets.php");
         ?>
         <!-- ./wrapper -->
 
