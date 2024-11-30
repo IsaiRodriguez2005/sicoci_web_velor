@@ -29,11 +29,11 @@ function traer_claves_SAT($conexion, $descripcion)
                             clave_producto as clave,
                             descripcion
                         FROM _cat_sat_productos 
-                        WHERE descripcion LIKE ? AND estatus = 1
+                        WHERE (descripcion LIKE ? OR clave_producto LIKE ?) AND estatus = 1
                         ORDER BY descripcion
                         LIMIT 10;";
     $stmt = mysqli_prepare($conexion, $sqlProductos);
-    mysqli_stmt_bind_param($stmt, "s", $descripcion);
+    mysqli_stmt_bind_param($stmt, "ss", $descripcion,$descripcion);
     mysqli_stmt_execute($stmt);
     $result = mysqli_stmt_get_result($stmt);
 

@@ -345,7 +345,7 @@ function actualizar_lista_claves(claves) {
     const ul = $("#suggestions_calve_sat");
     ul.empty(); // limpiamos
 
-    if (claves.length === 0) {
+    if (!claves) {
         ul.addClass('hidden');
         return;
     }
@@ -361,8 +361,8 @@ function actualizar_lista_claves(claves) {
 function filtrar_lista_clave_sat() {
 
     const input = $("#search_clave_sat");
+    cargar_claves_sat(input.val()).then(actualizar_lista_claves);
     const filter = input.val().toLowerCase();
-    cargar_claves_sat(filter).then(actualizar_lista_claves);
     const ul = $("#suggestions_calve_sat");
     const li = ul.find('li');
     let hasVisibleItems = false;
