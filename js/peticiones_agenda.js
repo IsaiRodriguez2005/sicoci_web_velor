@@ -562,9 +562,22 @@ async function cobrar_cita(folio_cita) {
         console.log('necesito factura')
     } else {
 
+        const resultado = await comprobar_existencia_serie_ticket();
+        const { existe, seriesTickets } = resultado;
+
+        if (existe) {
+            if (seriesTickets.length == 1) {
+                seleccionar_serie(seriesTickets[0].id)
+            } else {
+                $("#modal_opciones_series_tickets").modal("show");
+                rellenar_tbody_seies_tickets(seriesTickets);
+            }
+        } else {
+            console.error('No existen series de tickets')
+        }
+
     }
 }
-
 async function necesita_factura() {
     //* esta funcion devuelve si el usuario o la compra necesita factura.
     const necesitaFactura = await Swal.fire({
@@ -580,21 +593,11 @@ async function necesita_factura() {
     if (necesitaFactura.isConfirmed) {
         return true;
     } else {
-
-        const resultado = await comprobar_existencia_serie_ticket();
-
-        const { existe, seriesTickets } = resultado;
-
-        if (existe) {
-            $("#modal_opciones_series_tickets").modal("show");
-            rellenar_tbody_seies_tickets(seriesTickets);
-        } else {
-            console.error('No existen series de tickets')
-        }
+        return false;
     }
 }
-
 async function comprobar_existencia_serie_ticket() {
+    //* esta funcion comprueba la existencia de las series
     try {
         const respuesta = await $.ajax({
             cache: false,
@@ -627,8 +630,6 @@ async function comprobar_existencia_serie_ticket() {
     }
 
 }
-
-
 function rellenar_tbody_seies_tickets(series) {
 
     const tbody = $("#mostrar_series_tickets");
@@ -640,28 +641,27 @@ function rellenar_tbody_seies_tickets(series) {
         row.innerHTML = `
             <td class="text-center">
                         <div class="btn-group">
-                            <button type="button" class="btn btn-primary btn-sm" title="Seleccionar Serie" onclick="seleccionarSerie('${ticket.id}')">
+                            <button type="button" class="btn btn-primary btn-sm" title="Seleccionar Serie" onclick="seleccionar_serie('${ticket.id}')">
                                 <i class="fas fa-check"></i>
                             </button>
                         </div>
                     </td>
                     <td class="text-center">${ticket.id}</td>
                     <td class="text-center">${ticket.documento}</td>
-                    <td class="text-center">${ticket.serie}</td>
+                    <td class="text-center">${ticket.serie ? ticket.serie : 'N/A'}</td>
                     <td class="text-center">${ticket.codigoPostal}</td>
                     <td class="text-center">
-                        <span class="badge ${ticket.estatus === 'ACTIVO' ? 'badge-success' : 'badge-secondary'}" style="width: 100%; color:white;">
-                            ${ticket.estatus}
+                        <span class="badge ${ticket.estatus == 1 ? 'badge-success' : 'badge-secondary'}" style="width: 100%; color:white;">
+                            ${ticket.estatus == 1 ? 'Activo' : 'Inactivo'}
                         </span>
                     </td>
         `;
 
         tbody.append(row);
 
-        inizializar_tabla('#tabla_series_tickets');
+        inizializar_tabla('tabla_series_tickets');
     });
 }
-
 function inizializar_tabla(idTabla) {
     if ($.fn.DataTable.isDataTable()) {
         $('#' + idTabla).DataTable().destroy('#' + idTabla);
@@ -680,3 +680,80 @@ function inizializar_tabla(idTabla) {
         }
     });
 }
+
+//TODO: funciones de series tickets
+
+async function seleccionar_serie(idSerie) {
+    $("#idSerieTicket").val(idSerie);
+
+    const data_productos = await cargar_productos_servicios();
+    // console.log(data_productos)
+    const { productos, success } = data_productos;
+    // console.log(productos)
+    if (success) {
+        const ul = $("#suggestions");
+        ul.empty();
+        productos.forEach(producto => {
+            const li = `<li data-value="${producto.id_producto}">${producto.nombre}</li>`;
+            ul.append(li);
+        });
+    }
+    // $("#articulos_servicios").html();
+
+    $("#modal_orden_compra_ticket").modal("show");
+}
+
+async function cargar_productos_servicios() {
+    const resProductos = await $.ajax({
+        cache: false,
+        url: 'componentes/tickets/productos_servicios/productos.php',
+        type: 'POST',
+        dataType: 'json',
+        data: {
+            'funcion': 'cargarProdutos',
+        },
+    });
+
+    return resProductos;
+}
+
+function filtrar_lista() {
+    const input = $("#search");
+    const filter = input.val().toLowerCase();
+    const ul = $("#suggestions")
+    const li = ul.find('li');
+    let hasVisibleItems = false;
+
+    li.each(function () {
+        const textValue = $(this).text().toLowerCase(); // Obtén el texto del <li>
+        if (textValue.indexOf(filter) > -1) {
+            $(this).show(); // Muestra el <li> si coincide con el filtro
+            hasVisibleItems = true;
+        } else {
+            $(this).hide(); // Oculta el <li> si no coincide
+        }
+    });
+
+    // Oculta la lista completa si no hay elementos visibles
+    ul.toggleClass('hidden', !hasVisibleItems);
+}
+
+// Maneja el evento de clic en un elemento <li> para seleccionar una sugerencia
+$("#suggestions").on("click", "li", function () {
+    const input = $("#search");
+    const hiddenInput = $("#id_producto");
+    const selectedValue = $(this).data("value"); // Obtiene el valor del atributo 'data-value' del <li>
+    const selectedText = $(this).text(); // Obtiene el valor del atributo 'data-value' del <li>
+    
+    input.val(selectedText);
+    hiddenInput.val(selectedValue);
+    
+    $("#suggestions").addClass("hidden"); // Oculta la lista de sugerencias
+});
+
+// Opcional: Ocultar la lista de sugerencias si se hace clic fuera del contenedor
+$(document).on("click", function (e) {
+    if (!$(e.target).closest(".search-container").length) {
+        $("#suggestions").addClass("hidden");
+    }
+});
