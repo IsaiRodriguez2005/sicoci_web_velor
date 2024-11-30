@@ -278,7 +278,7 @@ function calcular_precio_neto() {
     const precioBruto = Number($("#precio_bruto").val());
     const inputPrecio = $("#precio");
 
-    if(precioBruto && precioBruto != 0){
+    if (precioBruto && precioBruto != 0) {
         const precioNeto = (100 * precioBruto) / (100 + iva);
         inputPrecio.val(precioNeto);
     } else {
@@ -292,7 +292,7 @@ function calcular_precio_bruto() {
     const precioNeto = Number($("#precio").val());
     const inputPrecio = $("#precio_bruto");
 
-    if(precioNeto && precioNeto != 0){
+    if (precioNeto && precioNeto != 0) {
         const precioBruto = ((100 + iva) * precioNeto) / 100;
         inputPrecio.val(precioBruto);
     } else {
@@ -317,3 +317,84 @@ function app_iva() {
     }
 
 }
+
+
+//TODO: funciones de datos del SAT
+
+//! CLAVES DEL SAT  
+async function cargar_claves_sat(descrip) {
+    //* esta funcion solamente devuelve las claves en json 
+    const data = await $.ajax({
+        cache: false,
+        url: 'componentes/tickets/productos_servicios/claves_sat.php',
+        type: 'POST',
+        dataType: 'json',
+        data: {
+            'funcion': 'cargarClavesSAT',
+            'descripcion': descrip,
+        },
+    });
+    const { success, claves } = data;
+    if (success) {
+        return claves;
+    }
+}
+
+function actualizar_lista_claves(claves) {
+
+    const ul = $("#suggestions_calve_sat");
+    ul.empty(); // limpiamos
+
+    if (claves.length === 0) {
+        ul.addClass('hidden');
+        return;
+    }
+
+    claves.forEach(clave => {
+        const li = $(`<li data-value="${clave.clave}">[${clave.clave}] ${clave.descripcion}</li>`);
+        ul.append(li);
+    });
+
+    ul.removeClass('hidden');
+}
+
+function filtrar_lista_clave_sat() {
+
+    const input = $("#search_clave_sat");
+    const filter = input.val().toLowerCase();
+    cargar_claves_sat(filter).then(actualizar_lista_claves);
+    const ul = $("#suggestions_calve_sat");
+    const li = ul.find('li');
+    let hasVisibleItems = false;
+
+    li.each(function () {
+        const textValue = $(this).text().toLowerCase(); // Obtén el texto del <li>
+        if (textValue.indexOf(filter) > -1) {
+            $(this).show(); // Muestra el <li> si coincide con el filtro
+            hasVisibleItems = true;
+        } else {
+            $(this).hide(); // Oculta el <li> si no coincide
+        }
+    });
+
+    // Oculta la lista completa si no hay elementos visibles
+    ul.toggleClass('hidden', !hasVisibleItems);
+}
+
+$("#suggestions_calve_sat").on("click", "li", function () {
+    const input = $("#search_clave_sat");
+    const hiddenInput = $("#clave_sat");
+    const selectedValue = $(this).data("value"); // Obtiene el valor del atributo 'data-value' del <li>
+    const selectedText = $(this).text(); // Obtiene el valor del atributo 'data-value' del <li>
+
+    input.val(selectedText);
+    hiddenInput.val(selectedValue);
+
+    $("#suggestions_calve_sat").addClass("hidden"); // Oculta la lista de sugerencias
+});
+
+$(document).on("click", function (e) {
+    if (!$(e.target).closest(".search-container").length) {
+        $("#suggestions_calve_sat").addClass("hidden");
+    }
+});

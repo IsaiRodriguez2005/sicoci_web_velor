@@ -41,6 +41,8 @@ if (!isset($_SESSION['nombre_usuario'])) {
         <link rel="icon" type="image/icon" href="favicon.ico" />
         <!-- Sweet Alerts-->
         <script src="js/sweetalert2@11.js"></script>
+
+        <link rel="stylesheet" href="./css/estilos_search.css">
     </head>
 
     <body class="hold-transition sidebar-mini layout-fixed">
@@ -106,6 +108,32 @@ if (!isset($_SESSION['nombre_usuario'])) {
                                     <div class="col-4">
                                         <div class="input-group mb-3">
                                             <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
+                                            </div>
+                                            <input type="number" class="form-control" placeholder="Precio Neto" id="precio" onfocus="resetear('precio')" oninput="calcular_precio_bruto()">
+                                        </div>
+                                    </div>
+                                    <div class="col-4">
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fas fa-percentage"></i></span>
+                                            </div>
+                                            <input type="number" class="form-control" placeholder="IVA" id="iva" onfocus="resetear('iva')" oninput="app_iva()">
+                                        </div>
+                                    </div>
+                                    <div class="col-4">
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
+                                            </div>
+                                            <input type="number" class="form-control" placeholder="Precio Bruto" id="precio_bruto" onfocus="resetear('precio_bruto')" oninput="calcular_precio_neto()">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-4">
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
                                                 <span class="input-group-text"><i class="fas fa-cubes"></i></span>
                                             </div>
                                             <input type="number" class="form-control" placeholder="Stock" id="stock" onfocus="resetear('stock')">
@@ -119,35 +147,46 @@ if (!isset($_SESSION['nombre_usuario'])) {
                                             <input type="number" class="form-control" placeholder="Stock minimo" id="stock_minimo" onfocus="resetear('stock_minimo')">
                                         </div>
                                     </div>
-                                    <div class="col-4">
-                                        <div class="input-group mb-3">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
-                                            </div>
-                                            <input type="number" class="form-control" placeholder="Precio Neto" id="precio" onfocus="resetear('precio')" oninput="calcular_precio_bruto()">
-                                        </div>
-                                    </div>
-                                </div>
 
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <h6><i class="fas fa-university"></i> Datos del SAT</h6>
+                                <hr>
                                 <div class="row">
-                                    <div class="col-4">
+                                    <!-- Columna para el primer input -->
+                                    <div class="col-md-8">
                                         <div class="input-group mb-3">
                                             <div class="input-group-prepend">
-                                                <span class="input-group-text"><i class="fas fa-percentage"></i></span>
+                                                <span class="input-group-text"><i class="fas fa-store"></i></span>
                                             </div>
-                                            <input type="number" class="form-control" placeholder="IVA" id="iva" onfocus="resetear('iva')" oninput="app_iva()">
+                                            <div class="search-container">
+                                                <input type="hidden" id="clave_sat" />
+                                                <input type="text" id="search_clave_sat" class="form-control" placeholder="Buscar clave SAT del Producto/Servicio" oninput="filtrar_lista_clave_sat()" />
+                                                <ul id="suggestions_calve_sat" class="suggestions hidden">
+                                                    <li data-value="1">PAQUETE 5</li>
+                                                    <li data-value="2">PAQUETE 4</li>
+                                                    <li data-value="3">PAQUETE 3</li>
+                                                    <li data-value="4">PAQUETE 2</li>
+                                                    <li data-value="5">PAQUETE 1</li>
+                                                    <li data-value="6">PAQUETE 6</li>
+                                                </ul>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="col-4">
+
+                                    <!-- Columna para el segundo input -->
+                                    <div class="col-md-4">
                                         <div class="input-group mb-3">
                                             <div class="input-group-prepend">
-                                            <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
+                                                <span class="input-group-text"><i class="fas fa-store"></i></span>
                                             </div>
-                                            <input type="number" class="form-control" placeholder="Precio Bruto" id="precio_bruto" onfocus="resetear('precio_bruto')" oninput="calcular_precio_neto()">
+                                            <input type="text" id="search_2" class="form-control" placeholder="Buscar clave SAT de la unidad de medida" oninput="filtrar_lista_unidad_medida_sat()" />
+                                            <ul id="suggestions_2" class="suggestions hidden"></ul>
                                         </div>
                                     </div>
                                 </div>
-
+                                <br>
                                 <center><button type="button" class="btn btn-info" onclick="gestionar_producto();">Guardar</button></center><br>
                             </div>
 
