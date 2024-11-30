@@ -124,7 +124,7 @@ if (!isset($_SESSION['nombre_usuario'])) {
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
                                             </div>
-                                            <input type="number" class="form-control" placeholder="Precio" id="precio" onfocus="resetear('precio')">
+                                            <input type="number" class="form-control" placeholder="Precio Neto" id="precio" onfocus="resetear('precio')" oninput="calcular_precio_bruto()">
                                         </div>
                                     </div>
                                 </div>
@@ -135,7 +135,15 @@ if (!isset($_SESSION['nombre_usuario'])) {
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text"><i class="fas fa-percentage"></i></span>
                                             </div>
-                                            <input type="number" class="form-control" placeholder="Iva" id="iva" onfocus="resetear('iva')">
+                                            <input type="number" class="form-control" placeholder="IVA" id="iva" onfocus="resetear('iva')" oninput="app_iva()">
+                                        </div>
+                                    </div>
+                                    <div class="col-4">
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
+                                            </div>
+                                            <input type="number" class="form-control" placeholder="Precio Bruto" id="precio_bruto" onfocus="resetear('precio_bruto')" oninput="calcular_precio_neto()">
                                         </div>
                                     </div>
                                 </div>

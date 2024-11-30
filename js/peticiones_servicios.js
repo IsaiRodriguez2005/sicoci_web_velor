@@ -27,8 +27,6 @@ function deshabilitar() {
         $('#stock_minimo').prop('disabled', false);
     }
 }
-
-
 function activar_iva() {
     $("#iva").val("16");
     $("#iva").prop("disabled", false);
@@ -36,7 +34,6 @@ function activar_iva() {
     $("#retencion").val("0");
     $("#retencion").prop("disabled", false);
 }
-
 function desactivar_iva() {
     $("#iva").val("0");
     $("#iva").prop("disabled", "disabled");
@@ -273,4 +270,50 @@ function recargar_tabla_prod_serv(id_producto, tipo = 1) {
     }).done(function (resultado) {
         $("#tr_prod_" + id_producto).replaceWith(resultado);
     });
+}
+
+function calcular_precio_neto() {
+    //* esat funcion, calcula de precio bruto a precio neto 
+    const iva = Number($("#iva").val());
+    const precioBruto = Number($("#precio_bruto").val());
+    const inputPrecio = $("#precio");
+
+    if(precioBruto && precioBruto != 0){
+        const precioNeto = (100 * precioBruto) / (100 + iva);
+        inputPrecio.val(precioNeto);
+    } else {
+        inputPrecio.val('');
+    }
+}
+
+function calcular_precio_bruto() {
+    //* esta funcion, calcula de precio neto a precio bruto
+    const iva = Number($("#iva").val());
+    const precioNeto = Number($("#precio").val());
+    const inputPrecio = $("#precio_bruto");
+
+    if(precioNeto && precioNeto != 0){
+        const precioBruto = ((100 + iva) * precioNeto) / 100;
+        inputPrecio.val(precioBruto);
+    } else {
+        inputPrecio.val('');
+    }
+
+}
+
+function app_iva() {
+    //* esta funcion, se basa en dependiendo de lo que haya seleccionado o rellenado primero el usuario
+    //* ya sea por pn o pb.
+
+    const precioBruto = Number($("#precio_bruto").val());
+    const precioNeto = Number($("#precio").val());
+
+    if (precioNeto && precioBruto) {
+        calcular_precio_bruto();
+    } else if (precioBruto) {
+        calcular_precio_neto();
+    } else if (precioNeto) {
+        calcular_precio_bruto();
+    }
+
 }
