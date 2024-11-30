@@ -18,6 +18,11 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
             $descript = $_POST['descripcion'];
             echo traer_claves_SAT($conexion, $descript);
         }
+
+        if ($_POST['funcion'] == 'cargarClavesUnidadMedidaSAT') {
+            $descript = $_POST['descripcion'];
+            echo traer_claves_unidades_medida_SAT($conexion, $descript);
+        }
     }
 }
 
@@ -33,6 +38,35 @@ function traer_claves_SAT($conexion, $descripcion)
                         ORDER BY descripcion
                         LIMIT 10;";
     $stmt = mysqli_prepare($conexion, $sqlProductos);
+    mysqli_stmt_bind_param($stmt, "ss", $descripcion,$descripcion);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
+
+    $claves = [];
+
+    while ($clave = mysqli_fetch_assoc($result)) {
+        $claves[] = $clave;
+    }
+
+    mysqli_stmt_close($stmt);
+
+    return json_encode([
+        "success" => !empty($claves),
+        "claves" => $claves
+    ]);
+}
+function traer_claves_unidades_medida_SAT($conexion, $descripcion)
+{
+    header('Content-Type: application/json; charset=utf-8');
+    $descripcion = "%{$descripcion}%";
+    $sqlMedida = "SELECT 
+                            clave_medida as clave,
+                            descripcion
+                        FROM _cat_sat_medidas 
+                        WHERE (descripcion LIKE ? OR clave_medida LIKE ?) AND estatus = 1
+                        ORDER BY descripcion
+                        LIMIT 10;";
+    $stmt = mysqli_prepare($conexion, $sqlMedida);
     mysqli_stmt_bind_param($stmt, "ss", $descripcion,$descripcion);
     mysqli_stmt_execute($stmt);
     $result = mysqli_stmt_get_result($stmt);

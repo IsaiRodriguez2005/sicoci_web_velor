@@ -321,7 +321,7 @@ function app_iva() {
 
 //TODO: funciones de datos del SAT
 
-//! CLAVES DEL SAT  
+//! CLAVES DEL SAT  [ PRODUCTOS/SERVICIOS ]
 async function cargar_claves_sat(descrip) {
     //* esta funcion solamente devuelve las claves en json 
     const data = await $.ajax({
@@ -396,5 +396,84 @@ $("#suggestions_calve_sat").on("click", "li", function () {
 $(document).on("click", function (e) {
     if (!$(e.target).closest(".search-container").length) {
         $("#suggestions_calve_sat").addClass("hidden");
+    }
+});
+
+//! CLAVES DEL SAT  [ UNIDAD DE MEDIDA ]
+
+async function cargar_claves_unidad_medida(descrip) {
+    //* esta funcion solamente devuelve las claves en json 
+    const data = await $.ajax({
+        cache: false,
+        url: 'componentes/tickets/productos_servicios/claves_sat.php',
+        type: 'POST',
+        dataType: 'json',
+        data: {
+            'funcion': 'cargarClavesUnidadMedidaSAT',
+            'descripcion': descrip,
+        },
+    });
+    const { success, claves } = data;
+    if (success) {
+        return claves;
+    }
+}
+
+function actualizar_lista_unidad_medida(claves) {
+
+    const ul = $("#suggestions_clave_unidad_medida");
+    ul.empty(); // limpiamos
+
+    if (!claves) {
+        ul.addClass('hidden');
+        return;
+    }
+
+    claves.forEach(clave => {
+        const li = $(`<li data-value="${clave.clave}">[${clave.clave}] ${clave.descripcion}</li>`);
+        ul.append(li);
+    });
+
+    ul.removeClass('hidden');
+}
+
+function filtrar_lista_unidad_medida_sat() {
+
+    const input = $("#search_clave_unidad_medida");
+    cargar_claves_unidad_medida(input.val()).then(actualizar_lista_unidad_medida);
+    const filter = input.val().toLowerCase();
+    const ul = $("#suggestions_clave_unidad_medida");
+    const li = ul.find('li');
+    let hasVisibleItems = false;
+
+    li.each(function () {
+        const textValue = $(this).text().toLowerCase(); // Obtén el texto del <li>
+        if (textValue.indexOf(filter) > -1) {
+            $(this).show(); // Muestra el <li> si coincide con el filtro
+            hasVisibleItems = true;
+        } else {
+            $(this).hide(); // Oculta el <li> si no coincide
+        }
+    });
+
+    // Oculta la lista completa si no hay elementos visibles
+    ul.toggleClass('hidden', !hasVisibleItems);
+}
+
+$("#suggestions_clave_unidad_medida").on("click", "li", function () {
+    const input = $("#search_clave_unidad_medida");
+    const hiddenInput = $("#clave_unidad_medida");
+    const selectedValue = $(this).data("value"); // Obtiene el valor del atributo 'data-value' del <li>
+    const selectedText = $(this).text(); // Obtiene el valor del atributo 'data-value' del <li>
+
+    input.val(selectedText);
+    hiddenInput.val(selectedValue);
+
+    $("#suggestions_clave_unidad_medida").addClass("hidden"); // Oculta la lista de sugerencias
+});
+
+$(document).on("click", function (e) {
+    if (!$(e.target).closest(".search-container").length) {
+        $("#suggestions_clave_unidad_medida").addClass("hidden");
     }
 });

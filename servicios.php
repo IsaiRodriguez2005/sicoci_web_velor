@@ -161,15 +161,10 @@ if (!isset($_SESSION['nombre_usuario'])) {
                                                 <span class="input-group-text"><i class="fas fa-store"></i></span>
                                             </div>
                                             <div class="search-container">
-                                                <input type="hidden" id="clave_sat" />
+                                                <input type="hidden" id="clave_sat"/>
                                                 <input type="text" id="search_clave_sat" class="form-control" placeholder="Buscar clave SAT del Producto/Servicio" oninput="filtrar_lista_clave_sat()" />
                                                 <ul id="suggestions_calve_sat" class="suggestions hidden">
-                                                    <li data-value="1">PAQUETE 5</li>
-                                                    <li data-value="2">PAQUETE 4</li>
-                                                    <li data-value="3">PAQUETE 3</li>
-                                                    <li data-value="4">PAQUETE 2</li>
-                                                    <li data-value="5">PAQUETE 1</li>
-                                                    <li data-value="6">PAQUETE 6</li>
+
                                                 </ul>
                                             </div>
                                         </div>
@@ -181,8 +176,9 @@ if (!isset($_SESSION['nombre_usuario'])) {
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text"><i class="fas fa-store"></i></span>
                                             </div>
-                                            <input type="text" id="search_2" class="form-control" placeholder="Buscar clave SAT de la unidad de medida" oninput="filtrar_lista_unidad_medida_sat()" />
-                                            <ul id="suggestions_2" class="suggestions hidden"></ul>
+                                            <input type="hidden" id="clave_unidad_medida"/>
+                                            <input type="text" id="search_clave_unidad_medida" class="form-control" placeholder="Buscar clave SAT de la unidad de medida" oninput="filtrar_lista_unidad_medida_sat()" />
+                                            <ul id="suggestions_clave_unidad_medida" class="suggestions hidden"></ul>
                                         </div>
                                     </div>
                                 </div>
