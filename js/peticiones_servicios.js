@@ -164,17 +164,17 @@ function gestionar_producto() {
         url: 'componentes/catalogos/registrar_producto.php',
         type: 'POST',
         dataType: 'html',
-        data: { 
-                'tipo_gestion': id_producto, 
-                'nombre': nombre, 
-                'tipo': tipo, 
-                'stock': stock, 
-                'stock_minimo': stock_minimo, 
-                'precio': precio, 
-                'iva': iva,
-                'clave_producto': claveProductoServicio,
-                'clave_medida': claveUnidadMedida,
-            },
+        data: {
+            'tipo_gestion': id_producto,
+            'nombre': nombre,
+            'tipo': tipo,
+            'stock': stock,
+            'stock_minimo': stock_minimo,
+            'precio': precio,
+            'iva': iva,
+            'clave_producto': claveProductoServicio,
+            'clave_medida': claveUnidadMedida,
+        },
     }).done(function (resultado) {
         if (resultado == "ok") {
             Swal.fire({
@@ -209,7 +209,7 @@ function gestionar_producto() {
     });
 }
 
-function editar_producto(id_producto, nombre, tipo, stock, stock_minimo, precio, iva) {
+async function editar_producto(id_producto, nombre, tipo, stock, stock_minimo, precio, iva, claveProSAT, claveMedSAT) {
     $("#leyenda").html("Modificar datos del producto/servicio");
     $("html, body").animate({ scrollTop: 0 }, 600);
 
@@ -223,9 +223,44 @@ function editar_producto(id_producto, nombre, tipo, stock, stock_minimo, precio,
     $("#precio").val(precio);
     $("#iva").val(iva);
 
+    await cargar_para_editar_claves(claveProSAT, claveMedSAT);
+
     deshabilitar();
 
     $("#modal_productos").modal("hide");
+}
+
+async function cargar_para_editar_claves(claveProd, claveMed) {
+    return await $.ajax({
+        cache: false,
+        url: 'componentes/catalogos/cargar/datos/claves_producto_sat.php',
+        type: 'POST',
+        dataType: 'json',
+        data: {
+            'claveProducto': claveProd,
+            'claveMedida': claveMed
+        },
+    }).done(function (resultado) {
+        const { medida: {
+                        clave_medida, 
+                        descr_medida
+                }, 
+                producto: {
+                        clave_producto,
+                        descr_producto
+                }
+            } = resultado;
+
+        const inputProducto = $("#search_clave_sat");
+        const hiddenInputProducto = $("#clave_sat");
+        const inputMedida = $("#search_clave_unidad_medida");
+        const hiddenInputMedida = $("#clave_unidad_medida");
+
+        inputProducto.val(`[${clave_producto}]${descr_producto}`);
+        inputMedida.val(`[${clave_producto}]${descr_medida}`);
+        hiddenInputProducto.val(clave_producto);
+        hiddenInputMedida.val(clave_medida);
+    });
 }
 
 function actualizar_estatus_producto(id_poducto, codigo_estatus) {
