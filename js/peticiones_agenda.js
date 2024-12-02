@@ -684,12 +684,12 @@ function inizializar_tabla(idTabla) {
 //TODO: funciones de series tickets
 
 async function seleccionar_serie(idSerie) {
-    $("#idSerieTicket").val(idSerie);
 
+    $("#idSerieTicket").val(idSerie);
     const data_productos = await cargar_productos_servicios();
-    // console.log(data_productos)
+
     const { productos, success } = data_productos;
-    // console.log(productos)
+
     if (success) {
         const ul = $("#suggestions");
         ul.empty();
@@ -698,7 +698,6 @@ async function seleccionar_serie(idSerie) {
             ul.append(li);
         });
     }
-    // $("#articulos_servicios").html();
 
     $("#modal_orden_compra_ticket").modal("show");
 }
@@ -744,10 +743,11 @@ $("#suggestions").on("click", "li", function () {
     const hiddenInput = $("#id_producto");
     const selectedValue = $(this).data("value"); // Obtiene el valor del atributo 'data-value' del <li>
     const selectedText = $(this).text(); // Obtiene el valor del atributo 'data-value' del <li>
-    
+
     input.val(selectedText);
     hiddenInput.val(selectedValue);
-    
+    cargar_info_producto(selectedValue);
+
     $("#suggestions").addClass("hidden"); // Oculta la lista de sugerencias
 });
 
@@ -757,3 +757,24 @@ $(document).on("click", function (e) {
         $("#suggestions").addClass("hidden");
     }
 });
+
+function cargar_info_producto(idProducto) {
+
+    const cantidadInput = $("#cantidad");
+    const precioInput = $("#precio");
+    const ivaInput = $("#iva");
+    const precioBrutoInput = $("#precio_bruto");
+
+    $.ajax({
+        cache: false,
+        url: 'componentes/tickets/productos_servicios/productos.php',
+        type: 'POST',
+        dataType: 'html',
+        data: {
+            'funcion' : 'cargarProductoPorId',
+            'id_producto': idProducto
+        },
+    }).done(function (resultado) {
+        
+    });
+}
