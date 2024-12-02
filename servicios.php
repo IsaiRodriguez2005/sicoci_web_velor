@@ -162,7 +162,9 @@ if (!isset($_SESSION['nombre_usuario'])) {
                                             </div>
                                             <div class="search-container">
                                                 <input type="hidden" id="clave_sat"/>
-                                                <input type="text" id="search_clave_sat" class="form-control" placeholder="Buscar clave SAT del Producto/Servicio" oninput="filtrar_lista_clave_sat()" />
+                                                <input type="text" id="search_clave_sat" class="form-control" placeholder="Buscar clave SAT del Producto/Servicio" 
+                                                onfocus="resetear('search_clave_sat')"
+                                                oninput="filtrar_lista_clave_sat()" />
                                                 <ul id="suggestions_calve_sat" class="suggestions hidden">
 
                                                 </ul>
@@ -177,7 +179,9 @@ if (!isset($_SESSION['nombre_usuario'])) {
                                                 <span class="input-group-text"><i class="fas fa-store"></i></span>
                                             </div>
                                             <input type="hidden" id="clave_unidad_medida"/>
-                                            <input type="text" id="search_clave_unidad_medida" class="form-control" placeholder="Buscar clave SAT de la unidad de medida" oninput="filtrar_lista_unidad_medida_sat()" />
+                                            <input type="text" id="search_clave_unidad_medida" class="form-control" placeholder="Buscar clave SAT de la unidad de medida" 
+                                            onfocus="resetear('search_clave_unidad_medida')"
+                                            oninput="filtrar_lista_unidad_medida_sat()" />
                                             <ul id="suggestions_clave_unidad_medida" class="suggestions hidden"></ul>
                                         </div>
                                     </div>

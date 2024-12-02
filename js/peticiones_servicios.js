@@ -104,6 +104,9 @@ function gestionar_producto() {
     const iva = $("#iva").val();
     const camposFaltantes = [];
 
+    const claveProductoServicio = $("#clave_sat").val();
+    const claveUnidadMedida = $("#clave_unidad_medida").val();
+
     if (!nombre) {
         $("#nombre").addClass('is-invalid');
         camposFaltantes.push('Nombre del Producto');
@@ -136,6 +139,15 @@ function gestionar_producto() {
         }
     }
 
+    if (!claveProductoServicio) {
+        $("#search_clave_sat").addClass('is-invalid');
+        camposFaltantes.push('Clave de Producto/Servicio');
+    }
+    if (!claveUnidadMedida) {
+        $("#search_clave_unidad_medida").addClass('is-invalid');
+        camposFaltantes.push('Unidad de medida');
+    }
+
     if (camposFaltantes.length > 0) {
         Swal.fire({
             icon: "warning",
@@ -152,7 +164,17 @@ function gestionar_producto() {
         url: 'componentes/catalogos/registrar_producto.php',
         type: 'POST',
         dataType: 'html',
-        data: { 'tipo_gestion': id_producto, 'nombre': nombre, 'tipo': tipo, 'stock': stock, 'stock_minimo': stock_minimo, 'precio': precio, 'iva': iva },
+        data: { 
+                'tipo_gestion': id_producto, 
+                'nombre': nombre, 
+                'tipo': tipo, 
+                'stock': stock, 
+                'stock_minimo': stock_minimo, 
+                'precio': precio, 
+                'iva': iva,
+                'clave_producto': claveProductoServicio,
+                'clave_medida': claveUnidadMedida,
+            },
     }).done(function (resultado) {
         if (resultado == "ok") {
             Swal.fire({
