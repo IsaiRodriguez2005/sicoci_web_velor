@@ -12,7 +12,7 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
 } else {
     $html = "";
 
-    $sql = "SELECT id_cliente, nombre_cliente FROM emisores_clientes;";
+    $sql = "SELECT id_cliente, nombre_cliente FROM emisores_clientes WHERE id_emisor = ".$_SESSION['id_emisor'].";";
     $res = mysqli_query($conexion, $sql);
     if (mysqli_num_rows($res) == 0) {
         $html.= "<option value='No existen clientes'></option>";

@@ -16,9 +16,9 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
 
         $fecha = date('Y-m-d', strtotime($_POST['fecha_hora']));
         // revisamos la fecha de la agenda, para sacar los terapeutas que estan en ese dia y hora ocupados
-        $terapeutas_Activos = "SELECT id_terapeuta FROM emisores_agenda WHERE fecha_agenda = '" . $_POST['fecha_hora'] . "' 
+        $terapeutas_Activos = "SELECT id_terapeuta FROM emisores_agenda WHERE fecha_agenda = '" . $_POST['fecha_hora'] . "' AND id_emisor = ".$_SESSION['id_emisor']."
                                                                                 UNION 
-                                SELECT id_personal FROM emisores_personal_permisos WHERE fecha_inicial >= '" . $fecha . "' OR fecha_final <= '" . $fecha . "'";
+                                SELECT id_personal FROM emisores_personal_permisos WHERE (fecha_inicial >= '" . $fecha . "' OR fecha_final <= '" . $fecha . "')  AND id_emisor = ".$_SESSION['id_emisor'].";";
         $resultado = mysqli_query($conexion, $terapeutas_Activos);
 
         // si contiene alguna respuesa
@@ -35,7 +35,7 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
             $ids .= "0";
 
             // si es que hubo, vamos ahacr una busqueda en emisores_personal para descartar los terapeutas que esten ocuados en ese dia y hora
-            $consultaTerapeuta = "SELECT * FROM emisores_personal WHERE tipo = 2 AND id_personal NOT IN (" . $ids . ") ORDER BY nombre_personal ASC";
+            $consultaTerapeuta = "SELECT * FROM emisores_personal WHERE tipo = 2 AND id_personal NOT IN (" . $ids . ") AND id_emisor = ".$_SESSION['id_emisor']." ORDER BY nombre_personal ASC";
             $resTerapeutas = mysqli_query($conexion, $consultaTerapeuta);
 
             // echo $consultaTerapeuta;
@@ -49,7 +49,7 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
         }
         // si no hay ningun terapeuta a esa hora, cargaremos todos 
         else {
-            $consultaTerapeuta = "SELECT * FROM emisores_personal WHERE tipo = 2 AND estatus = 1 ORDER BY nombre_personal ASC";
+            $consultaTerapeuta = "SELECT * FROM emisores_personal WHERE tipo = 2 AND estatus = 1 AND id_emisor = ".$_SESSION['id_emisor']." ORDER BY nombre_personal ASC";
             $resTerapeutas = mysqli_query($conexion, $consultaTerapeuta);
             while ($terapeuta = mysqli_fetch_array($resTerapeutas)) {
                 $html .= "<option value='" . $terapeuta['id_personal'] . "'>" . $terapeuta['nombre_personal'] . "</option>";
@@ -142,7 +142,15 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
 
                 if (intval($dia_semana) != 0) {
                     // buscamos los horarios que esten ocudos en el dia establecido por el usuario
-                    $query = "SELECT id_terapeuta, fecha_agenda FROM emisores_agenda WHERE fecha_agenda >= '" . $fecha . "T" . $_SESSION['hora_entrada'] . "' AND fecha_agenda <= '" . $fecha . "T" . $_SESSION['hora_salida'] . "' AND id_terapeuta = " . $terapeuta['id_personal'] . "";
+                    $query = "SELECT 
+                                    id_terapeuta, 
+                                    fecha_agenda 
+                                FROM emisores_agenda 
+                                WHERE 
+                                    fecha_agenda >= '" . $fecha . "T" . $_SESSION['hora_entrada'] . "' 
+                                    AND fecha_agenda <= '" . $fecha . "T" . $_SESSION['hora_salida'] . "' 
+                                    AND id_terapeuta = " . $terapeuta['id_personal'] . "
+                                    AND id_emisor = ".$_SESSION['id_emisor'].";";
                     $resultado = mysqli_query($conexion, $query);
 
                     // array para almacenar horarios en formato de 1hora

@@ -251,16 +251,24 @@ function cargar_horarios_disponibles() {
 
     $.ajax({
         cache: false,
-
         url: "componentes/catalogos/cargar/cargar_horarios_disponibles.php",
         type: 'POST',
-        dataType: 'html',
+        dataType: 'json',
         data: { 'fecha_hora': fecha_cita, 'id_terapeuta': id_terapeuta, 'folio_gestion': folio_gestion, 'hora_gestion': hora_gestion },
     }).done(function (resultado) {
-        //console.log(resultado)
-        $("#hora_cita_form").html(resultado);
-    })
+        const { horarios } = resultado;
+        const select = $("#hora_cita_form");
+        select.empty();
+        select.append('<option value="" disabled selected>Selecciona Hora de Cita</option>'); // Opción por defecto
+
+        //* Insertar los horarios en el select
+        horarios.forEach(horario => {
+            select.append(`<option value="${horario}">${horario}</option>`);
+        });
+
+    });
 }
+
 function cargar_consultorios_disponibles() {
     return new Promise(function (resolve, reject) {
         fecha_cita = $("#fecha_cita_form").val();
@@ -771,10 +779,10 @@ function cargar_info_producto(idProducto) {
         type: 'POST',
         dataType: 'html',
         data: {
-            'funcion' : 'cargarProductoPorId',
+            'funcion': 'cargarProductoPorId',
             'id_producto': idProducto
         },
     }).done(function (resultado) {
-        
+
     });
 }
