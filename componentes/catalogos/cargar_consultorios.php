@@ -39,7 +39,6 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
         while ($consultorio = mysqli_fetch_array($resTerapeutas)) {
             $html.= "<option value='" . $consultorio['id_consultorio'] . "'>" . $consultorio['nombre'] . "</option>";
         }
-
         echo $html;
     }
 }

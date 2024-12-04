@@ -31,14 +31,14 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
         <tbody id="mostrar_clientes">
     ';
     // revisamos la fecha de la agenda, para sacar los cosltorios que estan en ese dia y hora ocupados
-    $consultorios_Activos = "SELECT id_consultorio FROM emisores_agenda WHERE fecha_agenda = '" . $_POST['fecha_hora'] . "'";
+    $consultorios_Activos = "SELECT id_consultorio FROM emisores_agenda WHERE fecha_agenda = '" . $_POST['fecha_hora'] . "' AND id_emisor = ".$_SESSION['id_emisor'].";";
     $resultado = mysqli_query($conexion, $consultorios_Activos);
     $filas = mysqli_fetch_assoc($resultado);
     // validamos si hay alguno
     if ($filas) {
 
         // si es que hubo, vamos ahacr una busqueda en emisores_personal para descartar los cosltorios que esten ocuados en ese dia y hora
-        $consultaTerapeuta = "SELECT * FROM emisores_consultorios WHERE id_consultorio != ".$filas['id_consultorio']." ORDER BY nombre ASC";
+        $consultaTerapeuta = "SELECT * FROM emisores_consultorios WHERE id_consultorio != ".$filas['id_consultorio']." AND id_emisor = ".$_SESSION['id_emisor']." ORDER BY nombre ASC";
         $resTerapeutas = mysqli_query($conexion, $consultaTerapeuta);
         while ($consultorio = mysqli_fetch_array($resTerapeutas)) {
             // cargamos los cosltorios que estan disponibles
@@ -50,7 +50,7 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
     // si no hay ningun consultorio a esa hora, cargaremos todos 
     else 
     {
-        $consultaTerapeuta = "SELECT * FROM emisores_consultorios ORDER BY nombre ASC";
+        $consultaTerapeuta = "SELECT * FROM emisores_consultorios AND id_emisor = ".$_SESSION['id_emisor']." ORDER BY nombre ASC";
         $resTerapeutas = mysqli_query($conexion, $consultaTerapeuta);
         while ($consultorio = mysqli_fetch_array($resTerapeutas)) {
             $html.= "<option value='" . $consultorio['id_consultorio'] . "'>" . $consultorio['nombre'] . "</option>";
@@ -77,9 +77,14 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
     else
     {
        
-        $consulta = "
-            SELECT 
-                f.id_documento, f.folio_factura, f.serie_factura, f.fecha_emision, f.estatus, f.estatus_cobranza, f.nombre, f.uuid, f.total, f.referencia, u.nombre AS usuario FROM emisores_facturas f INNER JOIN usuarios u ON u.id_usuario = f.id_usuario AND u.id_emisor = f.id_emisor WHERE f.id_emisor = ".$_SESSION['id_emisor']." AND f.fecha_emision >= '".$_POST['finicial']."' AND f.fecha_emision <= '".$_POST['ffinal']."' ORDER BY f.folio_factura DESC";
+        $consulta = " SELECT 
+                            f.id_documento, 
+                            f.folio_factura, 
+                            f.serie_factura, 
+                            f.fecha_emision, 
+                            f.estatus, 
+                            f.estatus_cobranza, 
+                            f.nombre, f.uuid, f.total, f.referencia, u.nombre AS usuario FROM emisores_facturas f INNER JOIN usuarios u ON u.id_usuario = f.id_usuario AND u.id_emisor = f.id_emisor WHERE f.id_emisor = ".$_SESSION['id_emisor']." AND f.fecha_emision >= '".$_POST['finicial']."' AND f.fecha_emision <= '".$_POST['ffinal']."' ORDER BY f.folio_factura DESC";
         $resFacturas = mysqli_query($conexion, $consulta);
         while($facturas = mysqli_fetch_array($resFacturas))
         {

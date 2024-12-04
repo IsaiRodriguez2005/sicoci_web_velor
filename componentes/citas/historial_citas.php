@@ -106,7 +106,7 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
         $hora = $dateTime->format('H:i:s');
 
 
-        $query_valoacion = 'SELECT folio FROM emisores_historial_expediente WHERE id_folio_cita = ' . $citas['id_folio'] . '';
+        $query_valoacion = 'SELECT folio FROM emisores_historial_expediente WHERE id_folio_cita = ' . $citas['id_folio'] . ' AND id_emisor = '.$_SESSION['id_emisor'].';';
         $res_val = mysqli_query($conexion, $query_valoacion);
 
         if ($res_val) {
