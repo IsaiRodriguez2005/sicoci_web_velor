@@ -11,6 +11,7 @@ function limpiar_form() {
     $("#folio_gestion").val(0);
     $("#id_cliente2").val(0);
     $("#clientes").empty();
+    $("#cliente_form").val('');
     $("#fecha_cita_form").val('');
     $("#hora_cita_form").val('');
     $("#terapeuta_form").val('');
@@ -95,10 +96,10 @@ function gestionar_cita() {
 
     if (tipo_servicio == '1' && !id_consultorio) {
         $("#consultorio_form").addClass('is-invalid');
-        camposFaltantes.push('Tipo Servicio');
+        camposFaltantes.push('Consultorio');
     }
 
-    if (!id_folio || !id_cliente || !fecha_cita || !hora_cita || !id_terapeuta || !tipo_servicio) {
+    if (!id_folio || !id_cliente || !fecha_cita || !hora_cita || !id_terapeuta || !tipo_servicio || !id_consultorio) {
         Swal.fire({
             icon: "warning",
             title: "Por favor, complete los siguientes campos obligatorios:",
@@ -244,18 +245,19 @@ function cargar_datos() {
 
 function cargar_horarios_disponibles() {
 
-    id_terapeuta = $("#terapeuta_form").val();
-    fecha_cita = $("#fecha_cita_form").val();
-    folio_gestion = $("#folio_gestion").val();
-    hora_gestion = $("#hora_gestion").val();
+    const id_terapeuta = $("#terapeuta_form").val();
+    const fecha_cita = $("#fecha_cita_form").val();
+    const folio_gestion = $("#folio_gestion").val();
+    const hora_gestion = $("#hora_gestion").val();
 
-    $.ajax({
+    return $.ajax({
         cache: false,
         url: "componentes/catalogos/cargar/cargar_horarios_disponibles.php",
         type: 'POST',
         dataType: 'json',
         data: { 'fecha_hora': fecha_cita, 'id_terapeuta': id_terapeuta, 'folio_gestion': folio_gestion, 'hora_gestion': hora_gestion },
     }).done(function (resultado) {
+
         const { horarios } = resultado;
         const select = $("#hora_cita_form");
         select.empty();
@@ -265,7 +267,6 @@ function cargar_horarios_disponibles() {
         horarios.forEach(horario => {
             select.append(`<option value="${horario}">${horario}</option>`);
         });
-
     });
 }
 
@@ -404,23 +405,23 @@ function editar_cita(folio_cita) {
         // Cargar datos del select antes de asignar el terapeuta
         cargar_datos().then(function () {
             $("#terapeuta_form").val(citaData[0].id_terapeuta);
+            cargar_horarios_disponibles().then(function () {
+                $("#hora_cita").val(hora);
+
+                cargar_consultorios_disponibles().then(function () {
+                    $("#consultorio_form").val(citaData[0].id_consultorio);
+                }).catch(function () {
+                    console.error("Ocurrió un error al cargar los consultorios: ", error);
+                });
+            });
+
         }).catch(function (error) {
             console.error("Ocurrió un error al cargar los terapeutas: ", error);
         });
-        cargar_horarios_disponibles();
-
-        $("#hora_cita").val(hora);
 
         $("#tipo_gestion").val(citaData[0].id_folio);
         $("#tipo_cita_form").val(citaData[0].tipo_cita);
         $("#tipo_servicio_form").val(citaData[0].tipo_servicio);
-
-        cargar_consultorios_disponibles().then(function () {
-            $("#consultorio_form").val(citaData[0].id_consultorio);
-        }).catch(function () {
-            console.error("Ocurrió un error al cargar los consultorios: ", error);
-        });
-
         $("#observaciones_form").val(citaData[0].observaciones);
         $("#fecha_hora_form").val(hora);
 

@@ -50,8 +50,9 @@ function obtenerFechaEspaniol($fecha_hora)
 
 function getDatosClientes($id, $conex)
 {
+    $idEmisor = $_SESSION['id_emisor'];
     // consulta para saber si hay correo 
-    $consulCliente = "SELECT nombre_cliente, correo FROM emisores_clientes WHERE id_cliente = $id ";
+    $consulCliente = "SELECT nombre_cliente, correo FROM emisores_clientes WHERE id_cliente = $id AND id_emisor = $idEmisor";
     $resCliente = mysqli_query($conex, $consulCliente);
     $datosCliente = mysqli_fetch_array($resCliente);
 
@@ -61,7 +62,8 @@ function getDatosClientes($id, $conex)
 function getDatosTerapeuta($id, $conex)
 {
 
-    $consulNomTerap = "SELECT nombre_personal, correo FROM emisores_personal WHERE id_personal = $id AND tipo = 2";
+    $idEmisor = $_SESSION['id_emisor'];
+    $consulNomTerap = "SELECT nombre_personal, correo FROM emisores_personal WHERE id_personal = $id AND tipo = 2 AND id_emisor = $idEmisor";
     $resTerap = mysqli_query($conex, $consulNomTerap);
     $datosTerap = mysqli_fetch_array($resTerap);
 
@@ -70,7 +72,8 @@ function getDatosTerapeuta($id, $conex)
 
 function getDatosConsultorio($id, $conex)
 {
-    $consulConsultorio = "SELECT nombre FROM emisores_consultorios WHERE id_consultorio = $id ";
+    $idEmisor = $_SESSION['id_emisor'];
+    $consulConsultorio = "SELECT nombre FROM emisores_consultorios WHERE id_consultorio = $id AND id_emisor = $idEmisor";
     $resConsultorio = mysqli_query($conex, $consulConsultorio);
     $datosConsultorio = mysqli_fetch_array($resConsultorio);
 
@@ -79,7 +82,8 @@ function getDatosConsultorio($id, $conex)
 
 function getDatosAgenda($id, $conex)
 {
-    $consulAgenda = "SELECT * FROM emisores_agenda WHERE id_folio = $id";
+    $idEmisor = $_SESSION['id_emisor'];
+    $consulAgenda = "SELECT * FROM emisores_agenda WHERE id_folio = $id AND id_emisor = $idEmisor";
     $resAgenda = mysqli_query($conex, $consulAgenda);
     $datosAgenda = mysqli_fetch_array($resAgenda);
 
@@ -88,7 +92,8 @@ function getDatosAgenda($id, $conex)
 
 function getDatosPermisos($id, $conex){
 
-    $consultaPermiso = "SELECT * FROM emisores_personal_permisos WHERE id_permiso = $id";
+    $idEmisor = $_SESSION['id_emisor'];
+    $consultaPermiso = "SELECT * FROM emisores_personal_permisos WHERE id_permiso = $id AND id_emisor = $idEmisor";
     $resPermiso = mysqli_query($conex, $consultaPermiso);
     $datosAgenda = mysqli_fetch_array($resPermiso);
 
