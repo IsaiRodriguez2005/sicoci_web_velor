@@ -14,7 +14,7 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
     $consTerapeutas = "SELECT a.*, c.nombre_cliente, c.est_civ, c.telefono, c.fec_nac, c.ocupacion, 
                                 (SELECT COUNT(*) FROM emisores_agenda AS a WHERE a.id_cliente = c.id_cliente) AS total_registros
                                 FROM emisores_agenda AS a
-                                INNER JOIN emisores_clientes AS c ON c.id_cliente = a.id_cliente 
+                                INNER JOIN emisores_clientes AS c ON c.id_cliente = a.id_cliente AND c.id_emisor = a.id_emisor
                                 WHERE a.id_cliente = " . intval($_POST['id_cliente']) . " AND a.id_folio = " . intval($_POST['folio']) . " AND a.id_emisor = " . intval($_SESSION['id_emisor']) . ";";
     //echo $consTerapeutas;
     $resultado = mysqli_query($conexion, $consTerapeutas);

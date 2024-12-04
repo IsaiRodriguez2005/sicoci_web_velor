@@ -76,14 +76,15 @@ function confirmacionPorCorreo($get, $conexion)
 
         $idTerapeuta = $get['id_terapeuta'];
         $folioCita = $get['folio_cita'];
+        $idEmisor = $_SESSION['id_emisor'];
 
         $sqlTeraCita = "SELECT p.id_personal as id_terapeuta, 
                                         p.nombre_personal as nombre, 
                                         a.id_folio as folio  
-                                FROM emisores_agenda a INNER JOIN emisores_personal p on a.id_terapeuta = p.id_personal 
-                                WHERE a.id_folio = ? AND a.id_terapeuta = ?;";
+                                FROM emisores_agenda a INNER JOIN emisores_personal p on a.id_terapeuta = p.id_personal AND a.id_emisor = p.id_emisor
+                                WHERE a.id_folio = ? AND a.id_terapeuta = ? AND a.id_emisor = ?;";
         $stmt = mysqli_prepare($conexion, $sqlTeraCita);
-        mysqli_stmt_bind_param($stmt, 'ii', $folioCita, $idTerapeuta);
+        mysqli_stmt_bind_param($stmt, 'iii', $folioCita, $idTerapeuta, $idEmisor);
         mysqli_stmt_execute($stmt);
         $respuesta = mysqli_stmt_get_result($stmt);
         $datos = mysqli_fetch_array($respuesta);
