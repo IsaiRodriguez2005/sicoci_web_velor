@@ -68,6 +68,7 @@ function gestionar_cita() {
     const id_consultorio = $("#consultorio_form").val();
     const tipo_cita = $("#tipo_cita_form").val();
     const observaciones = $("#observaciones_form").val();
+    const fecha_hora_cita = `${fecha_cita} a las ${hora_cita}`;
     const camposFaltantes = [];
 
     if (id_cliente == '0') {
@@ -167,29 +168,27 @@ function gestionar_cita() {
             });
         }
         //-------------VALIDACIONES DE EXISTENCIA EN LA AGENDA -------------
-        else if (mensaje == 'clo') // validacion para cliente y hora
-        {
+        else if (mensaje === 'clo') { // Validación para cliente y hora
             Swal.fire({
                 icon: "warning",
-                title: "El Cliente Ya Tiene Cita En El Horario: " + fecha_hora_cita,
+                title: "Conflicto de Horario",
+                text: `El cliente ya tiene una cita programada el ${fecha_hora_cita}.`,
                 showConfirmButton: false,
                 timer: 2000
             });
-        }
-        else if (mensaje == 'co') // validacion para conultorio y hora
-        {
+        } else if (mensaje === 'co') { // Validación para consultorio y hora
             Swal.fire({
                 icon: "warning",
-                title: "El Consultorio Esta Ocupado En El Horario: " + fecha_hora_cita,
+                title: "Consultorio Ocupado",
+                text: `El consultorio ya está reservado para el ${fecha_hora_cita}.`,
                 showConfirmButton: false,
                 timer: 2000
             });
-        }
-        else if (mensaje == 'to') // validacion para terapeuta y hora
-        {
+        } else if (mensaje === 'to') { // Validación para terapeuta y hora
             Swal.fire({
                 icon: "warning",
-                title: "El Terapeuta Esta Ocupado En El Horario: " + fecha_hora_cita,
+                title: "Terapeuta Ocupado",
+                text: `El terapeuta ya tiene una cita programada el ${fecha_hora_cita}.`,
                 showConfirmButton: false,
                 timer: 2000
             });
