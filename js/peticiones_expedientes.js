@@ -50,7 +50,7 @@ function buscar_cliente(nombre_social) {
 function mostrar_expedientes_clientes() {
 
     let id_cliente = $("#id_cliente2").val();
-    console.log(id_cliente)
+    //console.log(id_cliente)
 
     if (id_cliente) {
 
