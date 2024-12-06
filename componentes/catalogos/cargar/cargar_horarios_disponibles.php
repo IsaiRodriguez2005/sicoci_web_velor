@@ -20,6 +20,23 @@ if ($fecha < $fechaActual) {
     exit;
 }
 
+if (
+    $_SESSION['hora_entrada'] == $_SESSION['hora_salida'] ||
+    $_SESSION['hora_salida'] < $_SESSION['hora_entrada'] ||
+    $_SESSION['hora_comida_inicio'] < $_SESSION['hora_entrada'] ||
+    $_SESSION['hora_comida_fin'] > $_SESSION['hora_salida'] ||
+    $_SESSION['hora_comida_inicio'] >= $_SESSION['hora_comida_fin'] ||
+    $_SESSION['hora_salida_sabado'] < $_SESSION['hora_entrada_sabado'] ||
+    $_SESSION['rango_citas'] <= 0
+) {
+    echo json_encode([
+        'alert_error' => 'Hay inconsistencias en la configuración de horarios. <br>
+        Verifica que los horarios de entrada, salida, comida y citas sean válidos y estén correctamente configurados en: <strong>Configuraciones > Parámetros Fiscales</strong>.'
+    ]);
+    exit;
+}
+
+
 if ($dia_semana != 0) {
     $query = "SELECT TIME(fecha_agenda) AS hora_ocupada 
                 FROM emisores_agenda 

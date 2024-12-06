@@ -130,6 +130,10 @@ function gestionar_emisor() {
         bandera = 2;
     }
 
+    if(!comprobar_consistencia_horarios()){
+        bandera = 2;
+    }
+
     if (bandera == 1) {
         Swal.fire({
             title: 'Actualizando datos...',
@@ -139,7 +143,7 @@ function gestionar_emisor() {
                 Swal.showLoading()
             }
         });
-
+    
         $.ajax({
             cache: false,
             url: "componentes/configuraciones/actualizar_emisor.php",
@@ -186,6 +190,69 @@ function gestionar_emisor() {
         $("html, body").animate({ scrollTop: 0 }, 600);
     }
 }
+
+function comprobar_consistencia_horarios() {
+    var hora_entrada = $('#hora_entrada');
+    var hora_salida = $('#hora_salida');
+    var rango_citas = $('#rango_citas');
+
+    var hora_entrada_sabado = $('#hora_entrada_sabado');
+    var hora_salida_sabado = $('#hora_salida_sabado');
+
+    var hora_comida_inicio = $('#hora_comida_inicio');
+    var hora_comida_fin = $('#hora_comida_fin');
+
+    // Resetear clases
+    $('.form-control').removeClass('is-invalid');
+
+    // Bandera para detectar errores
+    var hayErrores = false;
+
+    // Validar horario de entrada y salida
+    if (hora_entrada.val() === hora_salida.val() || hora_salida.val() < hora_entrada.val()) {
+        hora_entrada.addClass('is-invalid');
+        hora_salida.addClass('is-invalid');
+        hayErrores = true;
+    }
+
+    // Validar horarios de comida
+    if (hora_comida_inicio.val() < hora_entrada.val() || 
+        hora_comida_fin.val() > hora_salida.val() || 
+        hora_comida_inicio.val() >= hora_comida_fin.val()) {
+        hora_comida_inicio.addClass('is-invalid');
+        hora_comida_fin.addClass('is-invalid');
+        hayErrores = true;
+    }
+
+    // Validar horario de sábado
+    if (hora_entrada_sabado.val() >= hora_salida_sabado.val()) {
+        hora_entrada_sabado.addClass('is-invalid');
+        hora_salida_sabado.addClass('is-invalid');
+        hayErrores = true;
+    }
+
+    // Validar rango de citas
+    if (rango_citas.val() <= 0) {
+        rango_citas.addClass('is-invalid');
+        hayErrores = true;
+    }
+
+    // Retornar si hay errores
+    if (hayErrores) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Error en horarios',
+            html: 'Revisa los horarios resaltados y corrige los errores.',
+            confirmButtonText: 'Entendido'
+        });
+        return false;
+    }
+
+    // Si todo es válido
+    return true;
+}
+
+
 
 function buscar_cp() {
     var codigo = $("#codigo_postal").val();

@@ -257,13 +257,28 @@ function cargar_horarios_disponibles() {
         data: { 'fecha_hora': fecha_cita, 'id_terapeuta': id_terapeuta, 'folio_gestion': folio_gestion, 'hora_gestion': hora_gestion },
     }).done(function (resultado) {
 
-        const { horarios, error } = resultado;
-        if (error) {
-            console.log(error);
-            return;
-        }
+        const { horarios, error, alert_error } = resultado;
         const select = $("#hora_cita_form");
         select.empty();
+
+        //! posibles errores
+        if (alert_error) {
+            Swal.fire({
+                icon: "error",
+                title: "Error en la configuración",
+                html: alert_error,
+                confirmButtonText: "Entendido"
+            }).then(function (){
+                window.location = 'configuraciones.php';
+            });
+            return;
+        }
+
+        if (error) {
+            select.append(`<option value="" disabled selected>${error}</option>`);
+            return;
+        }
+
         select.append('<option value="" disabled selected>Selecciona Hora de Cita</option>'); // Opción por defecto
 
         //* Insertar los horarios en el select
@@ -771,7 +786,7 @@ $(document).on("click", function (e) {
 });
 
 function cargar_info_producto(idProducto) {
-//* esta funcion carga la info de los productos y dehabilita los campos para editarlos en la compra
+    //* esta funcion carga la info de los productos y dehabilita los campos para editarlos en la compra
     $.ajax({
         cache: false,
         url: 'componentes/tickets/productos_servicios/productos.php',
@@ -806,7 +821,7 @@ function cargar_info_producto(idProducto) {
     });
 }
 
-    //! funciones de calculos para los tickets
+//! funciones de calculos para los tickets
 function calcular_precio_bruto() {
     //* esta funcion, calcula de precio neto a precio bruto
     const iva = Number($("#iva").val());
@@ -849,7 +864,7 @@ function app_iva() {
     }
 
 }
-function app_total(){
+function app_total() {
     const inputCantidad = $("#cantidad");
     const inputPrecioBruto = $("#precio_bruto");
     const inputTotal = $("#total");
