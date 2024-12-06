@@ -62,9 +62,9 @@ function traer_producto_servicio_por_id($idProducto, $idEmisor, $conexion)
                             precio,
                             iva
                         FROM productos_servicios 
-                        WHERE id_emisor = ? AND estatus = 1 AND ((tipo = 2 AND stock < 0) OR (tipo != 2));";
+                        WHERE id_producto = ? AND id_emisor = ? AND estatus = 1 AND ((tipo = 2 AND stock < 0) OR (tipo != 2));";
     $stmt = mysqli_prepare($conexion, $sqlCliente);
-    mysqli_stmt_bind_param($stmt, "i", $idEmisor);
+    mysqli_stmt_bind_param($stmt, "ii", $idProducto, $idEmisor);
     mysqli_stmt_execute($stmt);
     $result = mysqli_stmt_get_result($stmt);
 
@@ -78,6 +78,6 @@ function traer_producto_servicio_por_id($idProducto, $idEmisor, $conexion)
 
     return json_encode([
         "success" => !empty($productos),
-        "productos" => $productos
+        "producto" => $productos
     ]);
 }

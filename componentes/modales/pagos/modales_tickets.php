@@ -54,16 +54,11 @@
                                 </div>
                                 <div class="search-container">
                                     <input type="hidden" id="id_producto">
-                                    <input type="text" id="search" placeholder="Buscar..." oninput="filtrar_lista()"/>
+                                    <input type="text" id="search" placeholder="Buscar productos/servicios..." oninput="filtrar_lista()" />
                                     <ul id="suggestions" class="suggestions hidden">
 
                                     </ul>
                                 </div>
-                                <!-- <select class="form-control text-sm" id="articulos_servicios">
-                                    <option value="0">Selecciona concepto...</option>
-                                    <option value="4">[43231500] IMPLEMENTACION PERSONALIZADA</option>
-                                    <option value="2">[43231500] LICENCIA ANUAL SIAT PRO</option>
-                                </select> -->
                             </div>
                         </div>
                     </div>
@@ -73,10 +68,13 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"><i class="fas fa-hashtag"></i></span>
                                 </div>
-                                <input type="number" class="form-control text-sm" id="cantidad" placeholder="Cantidad" onfocus="resetear('cantidad')">
-                                <input type="hidden" id="e_partida" value="0">
+                                <input type="number" class="form-control text-sm" id="cantidad" placeholder="Cantidad"
+                                value="1"
+                                oninput="app_total()"
+                                onfocus="resetear('cantidad')">
+                                <!-- <input type="hidden" id="e_partida" value="0">
                                 <input type="hidden" id="clave_sat_concepto" value="43231500">
-                                <input type="hidden" id="clave_sat_medida" value="E48">
+                                <input type="hidden" id="clave_sat_medida" value="E48"> -->
                             </div>
                         </div>
                         <div class="col-2">
@@ -84,7 +82,10 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
                                 </div>
-                                <input type="number" class="form-control text-sm" id="precio" placeholder="Precio" onfocus="resetear('precio')">
+                                <input type="number" class="form-control text-sm" id="precio_neto" placeholder="Precio Neto" 
+                                disabled
+                                oninput="calcular_precio_bruto()"
+                                onfocus="resetear('precio_neto')">
                             </div>
                         </div>
                         <div class="col-2">
@@ -92,15 +93,29 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"><i class="fas fa-percent"></i></span>
                                 </div>
-                                <input type="number" class="form-control text-sm" id="iva" placeholder="IVA" onfocus="resetear('iva')">
+                                <input type="number" class="form-control text-sm" id="iva" placeholder="IVA" 
+                                disabled
+                                
+                                onfocus="resetear('iva')">
                             </div>
                         </div>
                         <div class="col-2">
                             <div class="input-group mb-3">
                                 <div class="input-group-prepend">
-                                    <span class="input-group-text"><i class="fas fa-percent"></i></span>
+                                    <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
                                 </div>
-                                <input type="number" class="form-control text-sm" id="precio_bruto" placeholder="Retención" onfocus="resetear('precio_bruto')">
+                                <input type="number" class="form-control text-sm" id="precio_bruto" placeholder="Precio Bruto"  
+                                disabled
+                                oninput="calcular_precio_neto()"
+                                onfocus="resetear('precio_bruto')">
+                            </div>
+                        </div>
+                        <div class="col-2">
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
+                                </div>
+                                <input type="number" class="form-control text-sm" id="total" placeholder="Total" disabled onfocus="resetear('total')">
                             </div>
                         </div>
                         <div class="4">

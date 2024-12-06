@@ -90,7 +90,7 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"><i class="fas fa-stethoscope"></i></span>
                                 </div>
-                                <select class="form-control" id="tipo_cita_form" required disabled onchange="resetear('tipo_cita_form')">
+                                <select class="form-control" id="tipo_cita_form" required onchange="resetear('tipo_cita_form')">
                                     <option value="" disabled selected>Tipo de Cita</option>
                                     <option value="1">Subsecuente</option>
                                     <option value="2">Primera vez</option>

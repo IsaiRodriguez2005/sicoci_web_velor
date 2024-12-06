@@ -257,7 +257,11 @@ function cargar_horarios_disponibles() {
         data: { 'fecha_hora': fecha_cita, 'id_terapeuta': id_terapeuta, 'folio_gestion': folio_gestion, 'hora_gestion': hora_gestion },
     }).done(function (resultado) {
 
-        const { horarios } = resultado;
+        const { horarios, error } = resultado;
+        if (error) {
+            console.log(error);
+            return;
+        }
         const select = $("#hora_cita_form");
         select.empty();
         select.append('<option value="" disabled selected>Selecciona Hora de Cita</option>'); // Opción por defecto
@@ -593,8 +597,8 @@ async function necesita_factura() {
         text: "Esta acción no se puede deshacer",
         icon: 'warning',
         showCancelButton: true,
-        confirmButtonText: 'Con Factura',
-        cancelButtonText: 'Solo ticket',
+        confirmButtonText: 'Ticket CON Factura',
+        cancelButtonText: 'Ticket SIN Factua',
         reverseButtons: true,
     });
 
@@ -767,22 +771,93 @@ $(document).on("click", function (e) {
 });
 
 function cargar_info_producto(idProducto) {
-
-    const cantidadInput = $("#cantidad");
-    const precioInput = $("#precio");
-    const ivaInput = $("#iva");
-    const precioBrutoInput = $("#precio_bruto");
-
+//* esta funcion carga la info de los productos y dehabilita los campos para editarlos en la compra
     $.ajax({
         cache: false,
         url: 'componentes/tickets/productos_servicios/productos.php',
         type: 'POST',
-        dataType: 'html',
+        dataType: 'json',
         data: {
             'funcion': 'cargarProductoPorId',
             'id_producto': idProducto
         },
     }).done(function (resultado) {
+        const { producto, success } = resultado;
 
+        if (success) {
+            const inputPrecioNeto = $("#precio_neto");
+            const inputIVA = $("#iva");
+            const inputPrecioBruto = $("#precio_bruto");
+
+            inputPrecioNeto.prop("disabled", false);
+            inputIVA.prop("disabled", false);
+            inputPrecioBruto.prop("disabled", false);
+
+            const {
+                iva,
+                precio
+            } = producto[0];
+
+            inputPrecioNeto.val(precio);
+            inputIVA.val(iva);
+            calcular_precio_bruto();
+            app_total();
+        }
     });
+}
+
+    //! funciones de calculos para los tickets
+function calcular_precio_bruto() {
+    //* esta funcion, calcula de precio neto a precio bruto
+    const iva = Number($("#iva").val());
+    const precioNeto = Number($("#precio_neto").val());
+    const inputPrecio = $("#precio_bruto");
+    if (precioNeto && precioNeto != 0) {
+        const precioBruto = ((100 + iva) * precioNeto) / 100;
+        inputPrecio.val(precioBruto);
+    } else {
+        inputPrecio.val('');
+    }
+
+}
+function calcular_precio_neto() {
+    //* esat funcion, calcula de precio bruto a precio neto 
+    const iva = Number($("#iva").val());
+    const precioBruto = Number($("#precio_bruto").val());
+    const inputPrecio = $("#precio_neto");
+
+    if (precioBruto && precioBruto != 0) {
+        const precioNeto = (100 * precioBruto) / (100 + iva);
+        inputPrecio.val(precioNeto);
+    } else {
+        inputPrecio.val('');
+    }
+}
+function app_iva() {
+    //* esta funcion, se basa en dependiendo de lo que haya seleccionado o rellenado primero el usuario
+    //* ya sea por pn o pb.
+
+    const precioBruto = Number($("#precio_bruto").val());
+    const precioNeto = Number($("#precio_neto").val());
+
+    if (precioNeto && precioBruto) {
+        calcular_precio_bruto();
+    } else if (precioBruto) {
+        calcular_precio_neto();
+    } else if (precioNeto) {
+        calcular_precio_bruto();
+    }
+
+}
+function app_total(){
+    const inputCantidad = $("#cantidad");
+    const inputPrecioBruto = $("#precio_bruto");
+    const inputTotal = $("#total");
+
+    const cantidad = inputCantidad.val();
+    const precioBruto = inputPrecioBruto.val();
+
+    const total = cantidad * precioBruto;
+
+    inputTotal.val(total);
 }
