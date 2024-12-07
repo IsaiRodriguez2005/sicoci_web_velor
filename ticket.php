@@ -61,10 +61,10 @@ if (!isset($_SESSION['nombre_usuario'])) {
                         <!-- Breadcrumb y título a la izquierda -->
                         <div class="col-8 align-self-center mt-3">
                             <ol class="breadcrumb">
-                                <li class="breadcrumb-item"><b>Tickes</b></li>
+                                <li class="breadcrumb-item"><b>Ticke</b></li>
                                 <!-- <li class="breadcrumb-item"><a href="index.php/pventa">Punto de venta</a></li> -->
-                                <li class="breadcrumb-item">Serie: H</li>
-                                <li class="breadcrumb-item">15864</li>
+                                <li class="breadcrumb-item" id="text_serie">Serie: H</li>
+                                <li class="breadcrumb-item" id="text_folio_ticket">15864</li>
                             </ol>
                         </div>
 
@@ -613,7 +613,7 @@ if (!isset($_SESSION['nombre_usuario'])) {
         <!-- AdminLTE App -->
         <script src="dist/js/adminlte.js"></script>
         <!-- Funciones JS Personalizadas -->
-        <script src="js/peticiones_servicios.js"></script>
+        <script src="js/peticiones_ticket.js"></script>
         <script src="js/peticiones_generales.js"></script>
         <!-- bs-custom-file-input -->
         <script src="plugins/bs-custom-file-input/bs-custom-file-input.min.js"></script>

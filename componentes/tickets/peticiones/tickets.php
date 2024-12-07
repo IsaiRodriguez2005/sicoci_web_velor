@@ -12,6 +12,13 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
         ";
 } else {
 
+    if (isset($_POST['funcion'])) {
+        if ($_POST['funcion'] == 'getTextosTickets') {
+            $idEmisor = $_SESSION['id_emisor'];
+            obtenerTextosTicket($_POST, $idEmisor, $conexion);
+        }
+    }
+
     if (isset($_GET['funcion'])) {
         //* esta validacion, detecta si esta la accion son las funciones 
         if ($_GET['funcion'] == 'getURLticket') {
@@ -45,7 +52,20 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
         }
     }
 }
+function obtenerTextosTicket($post, $idEmisor, $conexion)
+{
+    $serieTicket = $post['serieTicket'] ?? null;
+    $folioCita = $post['folioCita'] ?? null;
+    $idCliente = $post['idCliente'] ?? null;
+    $idDocumento = $post['idDocumento'] ?? null;
+    $folioTicket = $post['folioTicket'] ?? null;
 
+    $query = "SELECT
+
+                    FROM emisores_tickets et
+                        INNER JOIN emisores_series es ON es.id_partida = et.serie_ticket AND es.id_emisor = et.id_emisor
+                        In";
+}
 function construct_URL_ticket($ticketAperturado)
 {
     $folioTicket = $ticketAperturado['folio_ticket'];
@@ -199,7 +219,6 @@ function obtenerDatosTicketAperturado($ultimoFolioTicket, $idDocumento, $conexio
     mysqli_stmt_close($stmt);
     return $datos ?: [];
 }
-
 function comprobarExistenciaTicketCita($conexion, $idEmisor, $idDocumento, $idCita)
 {
     $query = "SELECT * FROM emisores_tickets WHERE id_cita = ? AND id_emisor = ? AND id_documento = ? AND estatus != 3;";
@@ -215,7 +234,7 @@ function comprobarExistenciaTicketCita($conexion, $idEmisor, $idDocumento, $idCi
 
     mysqli_stmt_bind_param(
         $stmt,
-        "iii", 
+        "iii",
         $idCita,
         $idEmisor,
         $idDocumento
