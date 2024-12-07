@@ -120,7 +120,7 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
                         </button>";
                 $btnCobrar = "
                         &nbsp;
-                        <button type='button' id='btn_cobrar_" . $citas['id_folio'] . "' class='btn btn-success btn-sm cobrar-btn' title='Cobrar cita' onclick='cobrar_cita(" . $citas['id_folio'] . ")' >
+                        <button type='button' id='btn_cobrar_" . $citas['id_folio'] . "' class='btn btn-success btn-sm cobrar-btn' title='Cobrar cita' onclick='cobrar_cita(" . $citas['id_folio'] . "," . $citas['id_cliente'] . " )' >
                             <i class='fas fa-dollar-sign'></i>
                         </button>
                         ";

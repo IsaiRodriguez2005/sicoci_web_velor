@@ -268,7 +268,7 @@ function cargar_horarios_disponibles() {
                 title: "Error en la configuración",
                 html: alert_error,
                 confirmButtonText: "Entendido"
-            }).then(function (){
+            }).then(function () {
                 window.location = 'configuraciones.php';
             });
             return;
@@ -581,7 +581,7 @@ function ver_pdf(id_folio, tipo_cita) {
 
 //TODO : Funciones de Funcion de [COBRO DE CITAS]
 
-async function cobrar_cita(folio_cita) {
+async function cobrar_cita(folio_cita, idCliene) {
     //* en esta funcion se hace la peticion dependiendo de lo que necesite el cliente.
     const necesitaFactura = await necesita_factura();
 
@@ -594,15 +594,14 @@ async function cobrar_cita(folio_cita) {
 
         if (existe) {
             if (seriesTickets.length == 1) {
-                seleccionar_serie(seriesTickets[0].id)
-            } else {
                 $("#modal_opciones_series_tickets").modal("show");
-                rellenar_tbody_seies_tickets(seriesTickets);
+                rellenar_tbody_seies_tickets(seriesTickets, folio_cita, idCliene);
+            } else {
+                seleccionar_serie(seriesTickets[0].id)
             }
         } else {
             console.error('No existen series de tickets')
         }
-
     }
 }
 async function necesita_factura() {
@@ -657,7 +656,7 @@ async function comprobar_existencia_serie_ticket() {
     }
 
 }
-function rellenar_tbody_seies_tickets(series) {
+function rellenar_tbody_seies_tickets(series, folio_cita, idCliene) {
 
     const tbody = $("#mostrar_series_tickets");
 
@@ -668,7 +667,11 @@ function rellenar_tbody_seies_tickets(series) {
         row.innerHTML = `
             <td class="text-center">
                         <div class="btn-group">
-                            <button type="button" class="btn btn-primary btn-sm" title="Seleccionar Serie" onclick="seleccionar_serie('${ticket.id}')">
+                            <button type="button" class="btn btn-primary btn-sm" title="Seleccionar Serie" onclick="seleccionar_serie(
+                                    ${ticket.id}, 
+                                    ${folio_cita}, 
+                                    ${idCliene}
+                                )">
                                 <i class="fas fa-check"></i>
                             </button>
                         </div>
@@ -710,8 +713,10 @@ function inizializar_tabla(idTabla) {
 
 //TODO: funciones de series tickets
 
-async function seleccionar_serie(idSerie) {
+async function seleccionar_serie(idSerie, folioCita, idCliente) {
 
+    get_url_ticket(idSerie, folioCita, idCliente);
+    return;
     $("#idSerieTicket").val(idSerie);
     const data_productos = await cargar_productos_servicios();
 
@@ -728,6 +733,68 @@ async function seleccionar_serie(idSerie) {
 
     $("#modal_orden_compra_ticket").modal("show");
 }
+
+function get_url_ticket(serieTicket, folioCita, idCliente) {
+    $.ajax({
+        url: "componentes/tickets/peticiones/tickets.php",
+        type: "GET",
+        data: {
+            'funcion': 'getURLticket',
+            'serieTicket': serieTicket,
+            'folioCita': folioCita,
+            'idCliente': idCliente
+        },
+        dataType: "json",
+        success: function (respuesta) {
+            const { success, url } = respuesta;
+
+            if (!success) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    text: response.message || "Ocurrió un error al procesar la solicitud"
+                });
+                return;
+            } else {
+                Swal.fire({
+                    title: 'Cargando...',
+                    html: 'Espere un momento mientras procesamos su solicitud.',
+                    allowOutsideClick: false,
+                    showConfirmButton: false,
+                    willOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+
+                //* Redirigir después de un breve tiempo
+                setTimeout(() => {
+                    window.location.href = url;
+                }, 1000);
+            }
+        },
+        error: function (error) {
+            console.error("Error en la petición:", error);
+            Swal.fire({
+                icon: "error",
+                title: "Error de conexión",
+                text: "No se pudo realizar la solicitud. Intenta nuevamente."
+            });
+        }
+    });
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
 
 async function cargar_productos_servicios() {
     const resProductos = await $.ajax({
