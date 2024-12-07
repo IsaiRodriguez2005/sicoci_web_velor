@@ -76,6 +76,15 @@ function aperturarTicket($serieTicket, $folioCita, $idCliente, $idEmisor, $conex
     $idDocumento = $datosTicket['id_documento'];
     $folioTicket = $datosTicket['folio'];
 
+    //* Validar si ya existe un ticket para la cita
+    $existeTicket = comprobarExistenciaTicketCita($conexion, $idEmisor, $idDocumento, $folioCita);
+    if (isset($existeTicket['error'])) {
+        return ['error' => $existeTicket['error']];
+    }
+    if ($existeTicket['exists']) {
+        return $existeTicket['ticket'];
+    }
+
     //* Obtener el último folio disponible
     $ultimoFolioTicket = obtenerUltimoId($conexion, $idEmisor, $folioTicket, $idDocumento, $serieTicket);
 
@@ -190,6 +199,43 @@ function obtenerDatosTicketAperturado($ultimoFolioTicket, $idDocumento, $conexio
     mysqli_stmt_close($stmt);
     return $datos ?: [];
 }
-function comprobarExisteciaTicketCita(){
-    
+
+function comprobarExistenciaTicketCita($conexion, $idEmisor, $idDocumento, $idCita)
+{
+    $query = "SELECT * FROM emisores_tickets WHERE id_cita = ? AND id_emisor = ? AND id_documento = ? AND estatus != 3;";
+    $stmt = mysqli_prepare($conexion, $query);
+
+    if (!$stmt) {
+        return [
+            'exists' => false,
+            'error' => 'Error al preparar la consulta: ' . mysqli_error($conexion),
+            'ticket' => null
+        ];
+    }
+
+    mysqli_stmt_bind_param(
+        $stmt,
+        "iii", 
+        $idCita,
+        $idEmisor,
+        $idDocumento
+    );
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
+
+    if (!$result) {
+        return [
+            'exists' => false,
+            'error' => 'Error al obtener los resultados: ' . mysqli_error($conexion),
+            'ticket' => null
+        ];
+    }
+
+    $datos = mysqli_fetch_assoc($result);
+
+    mysqli_stmt_close($stmt);
+    return [
+        'exists' => !empty($datos),
+        'ticket' => $datos ?: null
+    ];
 }

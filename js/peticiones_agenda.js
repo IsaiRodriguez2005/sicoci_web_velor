@@ -594,10 +594,10 @@ async function cobrar_cita(folio_cita, idCliene) {
 
         if (existe) {
             if (seriesTickets.length == 1) {
+                seleccionar_serie(seriesTickets[0].id, folio_cita, idCliene)
+            } else {
                 $("#modal_opciones_series_tickets").modal("show");
                 rellenar_tbody_seies_tickets(seriesTickets, folio_cita, idCliene);
-            } else {
-                seleccionar_serie(seriesTickets[0].id)
             }
         } else {
             console.error('No existen series de tickets')
@@ -715,8 +715,75 @@ function inizializar_tabla(idTabla) {
 
 async function seleccionar_serie(idSerie, folioCita, idCliente) {
 
-    get_url_ticket(idSerie, folioCita, idCliente);
-    return;
+    const url = await get_url_ticket(idSerie, folioCita, idCliente);
+
+    if(!url){
+        throw new Error("Error al obtener la url");
+    }
+    
+    Swal.fire({
+        title: 'Cargando...',
+        html: 'Espere un momento mientras procesamos su solicitud.',
+        allowOutsideClick: false,
+        showConfirmButton: false,
+        willOpen: () => {
+            Swal.showLoading();
+        }
+    });
+
+    //* Redirigir después de un breve tiempo
+    setTimeout(() => {
+        window.location.href = url;
+    }, 1000);
+}
+
+async function get_url_ticket(serieTicket, folioCita, idCliente) {
+    try {
+        const respuesta = await $.ajax({
+            url: "componentes/tickets/peticiones/tickets.php",
+            type: "GET",
+            data: {
+                'funcion': 'getURLticket',
+                'serieTicket': serieTicket,
+                'folioCita': folioCita,
+                'idCliente': idCliente
+            },
+            dataType: "json",
+        });
+
+        const { success, url } = respuesta;
+
+        if (!success) {
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: response.message || "Ocurrió un error al procesar la solicitud"
+            });
+            throw new Error("Error en la respuesta: " + (respuesta.message || "Desconocido"));
+        }
+
+        return url;
+    } catch (error) {
+        console.error("Error en la petición:", error);
+
+        Swal.fire({
+            icon: "error",
+            title: "Error de conexión",
+            text: "No se pudo realizar la solicitud. Intenta nuevamente."
+        });
+
+        throw error;
+    }
+
+}
+
+
+
+
+
+
+
+async function datosBorraosCmios() {
     $("#idSerieTicket").val(idSerie);
     const data_productos = await cargar_productos_servicios();
 
@@ -733,67 +800,6 @@ async function seleccionar_serie(idSerie, folioCita, idCliente) {
 
     $("#modal_orden_compra_ticket").modal("show");
 }
-
-function get_url_ticket(serieTicket, folioCita, idCliente) {
-    $.ajax({
-        url: "componentes/tickets/peticiones/tickets.php",
-        type: "GET",
-        data: {
-            'funcion': 'getURLticket',
-            'serieTicket': serieTicket,
-            'folioCita': folioCita,
-            'idCliente': idCliente
-        },
-        dataType: "json",
-        success: function (respuesta) {
-            const { success, url } = respuesta;
-
-            if (!success) {
-                Swal.fire({
-                    icon: "error",
-                    title: "Error",
-                    text: response.message || "Ocurrió un error al procesar la solicitud"
-                });
-                return;
-            } else {
-                Swal.fire({
-                    title: 'Cargando...',
-                    html: 'Espere un momento mientras procesamos su solicitud.',
-                    allowOutsideClick: false,
-                    showConfirmButton: false,
-                    willOpen: () => {
-                        Swal.showLoading();
-                    }
-                });
-
-                //* Redirigir después de un breve tiempo
-                setTimeout(() => {
-                    window.location.href = url;
-                }, 1000);
-            }
-        },
-        error: function (error) {
-            console.error("Error en la petición:", error);
-            Swal.fire({
-                icon: "error",
-                title: "Error de conexión",
-                text: "No se pudo realizar la solicitud. Intenta nuevamente."
-            });
-        }
-    });
-
-}
-
-
-
-
-
-
-
-
-
-
-
 
 
 async function cargar_productos_servicios() {
