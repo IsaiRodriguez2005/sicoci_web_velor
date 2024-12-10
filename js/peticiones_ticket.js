@@ -1,19 +1,19 @@
+//! [INICIA] Ejecutar la función automáticamente al cargar la página
+document.addEventListener('DOMContentLoaded', procesarDatosTicket);
+
 async function procesarDatosTicket() {
     //* Obtener los parámetros de la URL
     const urlParams = new URLSearchParams(window.location.search);
 
     const folioTicket = urlParams.get('folio_ticket');
     const idDocumento = urlParams.get('id_documento');
-    const serieTicket = urlParams.get('serie_ticket');
-    const idCita = urlParams.get('id_cita');
-    const idCliente = urlParams.get('id_cliente');
 
-    if (!folioTicket || !serieTicket || !idCita || !idCliente || !idDocumento) {
+    if (!folioTicket || !idDocumento) {
         console.error('Faltan parámetros en la URL.');
         return;
     }
 
-    cargarDatosTicket(folioTicket, serieTicket, idCita, idCliente, idDocumento);
+    cargarDatosTicket(folioTicket, idDocumento);
 
     const data_productos = await cargar_productos_servicios();
 
@@ -29,9 +29,9 @@ async function procesarDatosTicket() {
     }
 }
 
-async function cargarDatosTicket(folio, serieTicket, idCita, idCliente, idDocumento) {
+async function cargarDatosTicket(folio,idDocumento) {
 
-    const datosTicket = await obtenerDatosTicket(folio, serieTicket, idCita, idDocumento);
+    const datosTicket = await obtenerDatosTicket(folio, idDocumento);
     const {
         clave_serie,
         folio_ticket,
@@ -60,15 +60,13 @@ async function cargarDatosTicket(folio, serieTicket, idCita, idCliente, idDocume
 
 }
 
-async function obtenerDatosTicket(folioTicket, serieTicket, idCita, idDocumento) {
+async function obtenerDatosTicket(folioTicket, idDocumento) {
     try {
         const respuesta = await $.ajax({
             url: "componentes/tickets/peticiones/tickets.php",
             type: "POST",
             data: {
                 'funcion': 'getTextosTickets',
-                'serieTicket': serieTicket,
-                'folioCita': idCita,
                 'idDocumento': idDocumento,
                 'folioTicket': folioTicket,
             },
@@ -127,9 +125,10 @@ async function cargar_productos_servicios() {
 
     return resProductos;
 }
+//! [TERMINA] Ejecutar la función automáticamente al cargar la página
+
 
 let currentFocus = -1; // Índice del elemento actualmente enfocado
-
 // Filtrar lista de sugerencias al escribir en el campo de entrada
 function filtrar_lista() {
     const input = $("#search");
@@ -315,5 +314,4 @@ async function agregarProducto() {
     }
 }
 
-//! Ejecutar la función automáticamente al cargar la página
-document.addEventListener('DOMContentLoaded', procesarDatosTicket);
+
