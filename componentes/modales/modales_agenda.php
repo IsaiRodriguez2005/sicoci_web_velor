@@ -1232,6 +1232,3 @@
     </div>
 </div>
 <!-- Modal nueva enfermedad-->
-
-
-<!-- Lorem ipsum dolor, sit amet consectetur adipisicing elit. Fugit accusamus doloribus nisi autem dolorum fugiat voluptatem non magnam eaque laudantium animi natus architecto obcaecati, nesciunt a? Nesciunt suscipit quis id. -->

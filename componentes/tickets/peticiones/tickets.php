@@ -15,7 +15,36 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
     if (isset($_POST['funcion'])) {
         if ($_POST['funcion'] == 'getTextosTickets') {
             $idEmisor = $_SESSION['id_emisor'];
-            obtenerTextosTicket($_POST, $idEmisor, $conexion);
+            $datos = obtenerTextosTicket($_POST, $idEmisor, $conexion);
+            if (isset($datos['error'])) {
+                echo json_encode([
+                    'success' => false,
+                    'datosTicket' => $datos['error']
+                ]);
+                exit;
+            }
+            echo json_encode([
+                'success' => true,
+                'datosTicket' => $datos
+            ]);
+            exit;
+        }
+        if ($_POST['funcion'] == 'agregarProductoTicket') {
+            $idEmisor = $_SESSION['id_emisor'];
+            $respuesta = agregarPorductoATicket($_POST, $idEmisor, $conexion);
+
+            if (isset($respuesta['error'])) {
+                echo json_encode([
+                    'success' => false,
+                    'datosTicket' => $respuesta['error']
+                ]);
+                exit;
+            }
+            echo json_encode([
+                'success' => true,
+                'producto' => $respuesta
+            ]);
+            exit;
         }
     }
 
@@ -54,17 +83,39 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
 }
 function obtenerTextosTicket($post, $idEmisor, $conexion)
 {
-    $serieTicket = $post['serieTicket'] ?? null;
-    $folioCita = $post['folioCita'] ?? null;
-    $idCliente = $post['idCliente'] ?? null;
     $idDocumento = $post['idDocumento'] ?? null;
     $folioTicket = $post['folioTicket'] ?? null;
 
     $query = "SELECT
-
+                    es.serie AS clave_serie,
+                    ec.nombre_cliente,
+                    et.folio_ticket,
+                    et.total,
+                    et.estatus
                     FROM emisores_tickets et
-                        INNER JOIN emisores_series es ON es.id_partida = et.serie_ticket AND es.id_emisor = et.id_emisor
-                        In";
+                        INNER JOIN emisores_series es ON es.id_partida = et.id_documento AND es.id_emisor = et.id_emisor
+                        INNER JOIN emisores_agenda ea ON ea.id_folio = et.id_cita AND ea.id_emisor = et.id_emisor 
+                        INNER JOIN emisores_clientes ec ON ec.id_cliente = et.id_cliente AND ec.id_emisor = et.id_emisor
+                        WHERE et.id_emisor = ? AND et.folio_ticket = ? AND et.id_documento = ?;";
+    $stmt = mysqli_prepare($conexion, $query);
+    mysqli_stmt_bind_param(
+        $stmt,
+        "iii",
+        $idEmisor,
+        $folioTicket,
+        $idDocumento
+    );
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
+
+    if (!$result) {
+        return ['error' => 'Error al obtener los resultados: ' . mysqli_error($conexion)];
+    }
+
+    $datos = mysqli_fetch_assoc($result);
+
+    mysqli_stmt_close($stmt);
+    return $datos ?: [];
 }
 function construct_URL_ticket($ticketAperturado)
 {
@@ -92,12 +143,11 @@ function aperturarTicket($serieTicket, $folioCita, $idCliente, $idEmisor, $conex
     if (isset($datosTicket['error'])) {
         return ['error' => $datosTicket['error']];
     }
-
-    $idDocumento = $datosTicket['id_documento'];
     $folioTicket = $datosTicket['folio'];
+    $serie = $datosTicket['serie'];
 
     //* Validar si ya existe un ticket para la cita
-    $existeTicket = comprobarExistenciaTicketCita($conexion, $idEmisor, $idDocumento, $folioCita);
+    $existeTicket = comprobarExistenciaTicketCita($conexion, $idEmisor, $serieTicket, $folioCita);
     if (isset($existeTicket['error'])) {
         return ['error' => $existeTicket['error']];
     }
@@ -106,7 +156,7 @@ function aperturarTicket($serieTicket, $folioCita, $idCliente, $idEmisor, $conex
     }
 
     //* Obtener el último folio disponible
-    $ultimoFolioTicket = obtenerUltimoId($conexion, $idEmisor, $folioTicket, $idDocumento, $serieTicket);
+    $ultimoFolioTicket = obtenerUltimoId($conexion, $idEmisor, $folioTicket, $serieTicket, $serieTicket);
 
     if (isset($ultimoFolioTicket['error'])) {
         return ['error' => $ultimoFolioTicket['error']];
@@ -131,11 +181,11 @@ function aperturarTicket($serieTicket, $folioCita, $idCliente, $idEmisor, $conex
 
     mysqli_stmt_bind_param(
         $stmt,
-        "iiiiii",
+        "iiisii",
         $idEmisor,
-        $idDocumento,
-        $ultimoFolioTicket,
         $serieTicket,
+        $ultimoFolioTicket,
+        $serie,
         $folioCita,
         $idCliente
     );
@@ -146,9 +196,9 @@ function aperturarTicket($serieTicket, $folioCita, $idCliente, $idEmisor, $conex
     }
 
     //* Obtener la tupla recién creada
-    return obtenerDatosTicketAperturado($ultimoFolioTicket, $idDocumento, $conexion, $idEmisor);
+    return obtenerDatosTicketAperturado($ultimoFolioTicket, $serieTicket, $conexion, $idEmisor);
 }
-function obtenerUltimoId($conexion, $idEmisor, $folioTicket, $idDocumento, $serieTicket)
+function obtenerUltimoId($conexion, $idEmisor, $folioTicket, $idSerieTicket, $serieTicket)
 {
     $query = "SELECT COALESCE(MAX(folio_ticket), ?) AS no_registro 
                     FROM emisores_tickets 
@@ -158,7 +208,7 @@ function obtenerUltimoId($conexion, $idEmisor, $folioTicket, $idDocumento, $seri
     if (!$stmt) {
         return ['error' => 'Error al preparar la consulta: ' . mysqli_error($conexion)];
     }
-    mysqli_stmt_bind_param($stmt, "iiii", $folioTicket, $idEmisor, $idDocumento, $serieTicket);
+    mysqli_stmt_bind_param($stmt, "iiii", $folioTicket, $idEmisor, $idSerieTicket, $serieTicket);
     mysqli_stmt_execute($stmt);
     $result = mysqli_stmt_get_result($stmt);
 
@@ -196,7 +246,7 @@ function obtenerDatosSerieTicket($serieTicket, $conexion, $idEmisor)
     mysqli_stmt_close($stmt);
     return $datos ?: [];
 }
-function obtenerDatosTicketAperturado($ultimoFolioTicket, $idDocumento, $conexion, $idEmisor)
+function obtenerDatosTicketAperturado($ultimoFolioTicket, $idSerieTicket, $conexion, $idEmisor)
 {
     $query = "SELECT * FROM emisores_tickets WHERE folio_ticket = ? AND id_emisor = ? AND id_documento=?;";
     $stmt = mysqli_prepare($conexion, $query);
@@ -205,7 +255,7 @@ function obtenerDatosTicketAperturado($ultimoFolioTicket, $idDocumento, $conexio
         "iii",
         $ultimoFolioTicket,
         $idEmisor,
-        $idDocumento
+        $idSerieTicket
     );
     mysqli_stmt_execute($stmt);
     $result = mysqli_stmt_get_result($stmt);
@@ -219,9 +269,67 @@ function obtenerDatosTicketAperturado($ultimoFolioTicket, $idDocumento, $conexio
     mysqli_stmt_close($stmt);
     return $datos ?: [];
 }
-function comprobarExistenciaTicketCita($conexion, $idEmisor, $idDocumento, $idCita)
+function comprobarExistenciaTicketCita($conexion, $idEmisor, $idSerieTicket, $idCita)
 {
     $query = "SELECT * FROM emisores_tickets WHERE id_cita = ? AND id_emisor = ? AND id_documento = ? AND estatus != 3;";
+    $stmt = mysqli_prepare($conexion, $query);
+
+    if (!$stmt) {
+        return [
+            'exists' => false,
+            'error' => 'Error al preparar la consulta: ' . mysqli_error($conexion),
+            'ticket' => null
+        ];
+    }
+
+    mysqli_stmt_bind_param(
+        $stmt,
+        "iii",
+        $idCita,
+        $idEmisor,
+        $idSerieTicket
+    );
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
+
+    if (!$result) {
+        return [
+            'exists' => false,
+            'error' => 'Error al obtener los resultados: ' . mysqli_error($conexion),
+            'ticket' => null
+        ];
+    }
+
+    $datos = mysqli_fetch_assoc($result);
+
+    mysqli_stmt_close($stmt);
+    return [
+        'exists' => !empty($datos),
+        'ticket' => $datos ?: null
+    ];
+}
+function agregarPorductoATicket($post, $idEmisor, $conexion)
+{
+
+    $idProducto = $post['productoId'];
+    $cantidad = $post['cantidad'];
+    $folioTicket = $post['folioTicket'];
+    $idDocumento = $post['idDocumento'];
+    return;
+
+    $query = "INSERT INTO emisores_tickets_detalles (
+                                                        `id_partida`, 
+                                                        `id_emisor`, 
+                                                        `id_documento`, 
+                                                        `folio_ticket`, 
+                                                        `id_producto`, 
+                                                        `cantidad`, 
+                                                        `descripcion`, 
+                                                        `precio_unitario`, 
+                                                        `importe`, 
+                                                        `iva_porcentaje`, 
+                                                        `iva_monto`
+                                                        ) VALUES (?,?,?,?,?,?,?,?,?,?,?);";
     $stmt = mysqli_prepare($conexion, $query);
 
     if (!$stmt) {

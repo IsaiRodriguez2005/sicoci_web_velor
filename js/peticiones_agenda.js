@@ -661,7 +661,6 @@ function rellenar_tbody_seies_tickets(series, folio_cita, idCliene) {
     const tbody = $("#mostrar_series_tickets");
 
     tbody.html('');
-
     series.forEach(ticket => {
         const row = document.createElement('tr');
         row.innerHTML = `
@@ -686,16 +685,13 @@ function rellenar_tbody_seies_tickets(series, folio_cita, idCliene) {
                         </span>
                     </td>
         `;
-
         tbody.append(row);
-
-        inizializar_tabla('tabla_series_tickets');
     });
+    
+    inizializar_tabla('tabla_series_tickets');
 }
 function inizializar_tabla(idTabla) {
-    if ($.fn.DataTable.isDataTable()) {
-        $('#' + idTabla).DataTable().destroy('#' + idTabla);
-    }
+    $('#' + idTabla).DataTable().destroy();
     $('#' + idTabla).DataTable({
         paging: true,
         lengthChange: false,
@@ -775,123 +771,6 @@ async function get_url_ticket(serieTicket, folioCita, idCliente) {
         throw error;
     }
 
-}
-
-
-
-
-
-
-
-async function datosBorraosCmios() {
-    $("#idSerieTicket").val(idSerie);
-    const data_productos = await cargar_productos_servicios();
-
-    const { productos, success } = data_productos;
-
-    if (success) {
-        const ul = $("#suggestions");
-        ul.empty();
-        productos.forEach(producto => {
-            const li = `<li data-value="${producto.id_producto}">${producto.nombre}</li>`;
-            ul.append(li);
-        });
-    }
-
-    $("#modal_orden_compra_ticket").modal("show");
-}
-
-
-async function cargar_productos_servicios() {
-    const resProductos = await $.ajax({
-        cache: false,
-        url: 'componentes/tickets/productos_servicios/productos.php',
-        type: 'POST',
-        dataType: 'json',
-        data: {
-            'funcion': 'cargarProdutos',
-        },
-    });
-
-    return resProductos;
-}
-
-function filtrar_lista() {
-    const input = $("#search");
-    const filter = input.val().toLowerCase();
-    const ul = $("#suggestions")
-    const li = ul.find('li');
-    let hasVisibleItems = false;
-
-    li.each(function () {
-        const textValue = $(this).text().toLowerCase(); // Obtén el texto del <li>
-        if (textValue.indexOf(filter) > -1) {
-            $(this).show(); // Muestra el <li> si coincide con el filtro
-            hasVisibleItems = true;
-        } else {
-            $(this).hide(); // Oculta el <li> si no coincide
-        }
-    });
-
-    // Oculta la lista completa si no hay elementos visibles
-    ul.toggleClass('hidden', !hasVisibleItems);
-}
-
-// Maneja el evento de clic en un elemento <li> para seleccionar una sugerencia
-$("#suggestions").on("click", "li", function () {
-    const input = $("#search");
-    const hiddenInput = $("#id_producto");
-    const selectedValue = $(this).data("value"); // Obtiene el valor del atributo 'data-value' del <li>
-    const selectedText = $(this).text(); // Obtiene el valor del atributo 'data-value' del <li>
-
-    input.val(selectedText);
-    hiddenInput.val(selectedValue);
-    cargar_info_producto(selectedValue);
-
-    $("#suggestions").addClass("hidden"); // Oculta la lista de sugerencias
-});
-
-// Opcional: Ocultar la lista de sugerencias si se hace clic fuera del contenedor
-$(document).on("click", function (e) {
-    if (!$(e.target).closest(".search-container").length) {
-        $("#suggestions").addClass("hidden");
-    }
-});
-
-function cargar_info_producto(idProducto) {
-    //* esta funcion carga la info de los productos y dehabilita los campos para editarlos en la compra
-    $.ajax({
-        cache: false,
-        url: 'componentes/tickets/productos_servicios/productos.php',
-        type: 'POST',
-        dataType: 'json',
-        data: {
-            'funcion': 'cargarProductoPorId',
-            'id_producto': idProducto
-        },
-    }).done(function (resultado) {
-        const { producto, success } = resultado;
-
-        if (success) {
-            const inputPrecioNeto = $("#precio_neto");
-            const inputIVA = $("#iva");
-            const inputPrecioBruto = $("#precio_bruto");
-
-            inputPrecioNeto.prop("disabled", false);
-            inputIVA.prop("disabled", false);
-            inputPrecioBruto.prop("disabled", false);
-
-            const {
-                iva,
-                precio
-            } = producto[0];
-
-            inputPrecioNeto.val(precio);
-            inputIVA.val(iva);
-            calcular_precio_bruto();
-            app_total();
-        }
-    });
 }
 
 //! funciones de calculos para los tickets

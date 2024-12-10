@@ -61,22 +61,22 @@ if (!isset($_SESSION['nombre_usuario'])) {
                         <!-- Breadcrumb y título a la izquierda -->
                         <div class="col-8 align-self-center mt-3">
                             <ol class="breadcrumb">
-                                <li class="breadcrumb-item"><b>Ticke</b></li>
+                                <li class="breadcrumb-item"><b>Ticket</b></li>
                                 <!-- <li class="breadcrumb-item"><a href="index.php/pventa">Punto de venta</a></li> -->
-                                <li class="breadcrumb-item" id="text_serie">Serie: H</li>
-                                <li class="breadcrumb-item" id="text_folio_ticket">15864</li>
+                                <li class="breadcrumb-item" id="text_serie"></li>
+                                <li class="breadcrumb-item" id="text_folio_ticket"></li>
                             </ol>
                         </div>
 
                         <!-- Botones a la derecha -->
                         <div class="col-4 align-self-center text-right pr-3">
                             <!-- Borrar pedido -->
-                            <a href="#borrarcancelar"
+                            <!-- <a href="#borrarcancelar"
                                 class="btn btn-success ml-1 mt-2"
                                 data-toggle="modal"
                                 title="Borrar ticket">
                                 <i class="fas fa-trash-alt"></i>
-                            </a>
+                            </a> -->
                         </div>
                     </div>
 
@@ -86,7 +86,7 @@ if (!isset($_SESSION['nombre_usuario'])) {
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h4 class="modal-title text-center">Cambiar cliente</h4>
-                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
                                 </div>
                                 <form method="post" action="index.php/pventa/cambiaCliente/15864">
                                     <div class="modal-body">
@@ -151,23 +151,49 @@ if (!isset($_SESSION['nombre_usuario'])) {
                                     </h4>
                                     <br>
                                     <hr>
-                                    <form method="post" action="index.php/pventa/addProducto/15864" class="row align-items-end" id="addProductoNombre">
+                                    <!-- Fila para los inputs -->
+                                    <div class="row">
                                         <!-- Selector de producto -->
-                                        <div class="form-group col-md-9 mb-0">
-                                            <label class="form-label font-weight-bold">Producto</label>
-                                            <select class="form-control custom-select" id="sproductos" name="productoid">
-                                                <option value="" selected disabled>Buscar productos</option>
-                                                <!-- Opciones dinámicas aquí -->
-                                            </select>
+                                        <div class="form-group col-md-9 mb-2 text-center">
+                                            <label class="form-label font-weight-bold d-block">Producto</label>
+                                            <div class="search-container">
+                                                <input type="hidden" id="id_producto">
+                                                <input type="text" id="search" placeholder="Buscar..." oninput="filtrar_lista()" class="form-control" />
+                                                <ul id="suggestions" class="suggestions hidden">
+                                                    <!-- Sugerencias dinámicas -->
+                                                </ul>
+                                            </div>
                                         </div>
                                         <!-- Input de cantidad -->
-                                        <div class="form-group col-md-3 text-center mb-0">
-                                            <label class="form-label font-weight-bold">Cantidad</label>
-                                            <input type="text" name="cantidad" class="form-control text-center" value="1" style="font-size: 1.5rem;" id="cantidad2">
+                                        <div class="form-group col-md-3 mb-3 text-center">
+                                            <label class="form-label font-weight-bold d-block">Cantidad</label>
+                                            <input type="text" name="cantidad" class="form-control text-center" value="1"
+                                                style="font-size: 1.5rem;" id="cantidad_producto"
+                                                onkeyup="detectarEnter(event, this);">
+
+                                            <script>
+                                                function detectarEnter(event, input) {
+                                                    if (event.key === 'Enter') {
+                                                        // Asegurarte de que estás usando el input correcto
+                                                        if (input.id === 'cantidad_producto') {
+                                                            agregarProducto();
+                                                        }
+                                                    }
+                                                }
+                                            </script>
                                         </div>
-                                    </form>
+
+                                    </div>
                                 </div>
                             </div>
+                            <style>
+                                .suggestions li.active {
+                                    background-color: #007bff;
+                                    color: #fff;
+                                }
+                            </style>
+
+
                         </div>
 
                         <div class="col-md-8">
@@ -175,8 +201,8 @@ if (!isset($_SESSION['nombre_usuario'])) {
                                 <div class="position-relative pt-0 pb-3">
                                     <!-- Bandera -->
                                     <div class="position-absolute bg-success text-white px-4 py-2 shadow-sm"
-                                        style="top: 10px; left: 5px; clip-path: polygon(0 0, 100% 0, 80% 100%, 0% 100%); border-radius: 0 5px 5px 0;">
-                                        <span class="font-weight-bold">Estado:</span> Captura
+                                        style="top: 10px; left: 5px; clip-path: polygon(0 0, 100% 0, 80% 100%, 0% 100%); border-radius: 0 5px 5px 0;" id="texto_estado">
+
                                     </div>
                                     <br>
                                 </div>
@@ -214,7 +240,7 @@ if (!isset($_SESSION['nombre_usuario'])) {
                                                         <th class="text-center"></th>
                                                         <th class="text-center"></th>
                                                         <th class="text-center"></th>
-                                                        <th class="text-center"><b></b>$65.70</th>
+                                                        <th class="text-center" id="text_total_tabla"><b></b></th>
                                                     </tr>
                                                 </tfoot>
                                             </table>
@@ -245,13 +271,13 @@ if (!isset($_SESSION['nombre_usuario'])) {
                                     <table class="table browser no-border mb-0" id="venta">
                                         <tbody>
                                             <tr>
-                                                <td colspan="2" class="text-center">
-                                                    <b>CLIENTE: </b>Ab Abasolo
+                                                <td colspan="2" class="text-center" id="text_cliente">
+
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td><b>FOLIO</b></td>
-                                                <td class="text-right"><a href="index.php/pedidos/pedido/15864">#15864</a></td>
+                                                <td class="text-right"><a href="index.php/pedidos/pedido/15864" id="text_folio_href"></a></td>
                                             </tr>
                                             <tr>
                                                 <td><b>ARTICULOS</b></td>
@@ -271,7 +297,7 @@ if (!isset($_SESSION['nombre_usuario'])) {
                                             </tr>
                                             <tr>
                                                 <td><b>TOTAL</b></td>
-                                                <td class="text-right">$65.70</td>
+                                                <td class="text-right" id="text_total"></td>
                                             </tr>
                                             <tr>
                                                 <td><b>DESCUENTO</b></td>
@@ -279,7 +305,7 @@ if (!isset($_SESSION['nombre_usuario'])) {
                                             </tr>
                                             <tr>
                                                 <td style="font-size:35px"><b>COBRAR:</b></td>
-                                                <td class="text-right" style="font-size:40px">$65.70</td>
+                                                <td class="text-right" style="font-size:40px" id="text_cobrar"></td>
                                             </tr>
                                         </tbody>
                                     </table>
