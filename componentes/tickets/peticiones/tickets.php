@@ -36,7 +36,14 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
             if (isset($respuesta['error'])) {
                 echo json_encode([
                     'success' => false,
-                    'datosTicket' => $respuesta['error']
+                    'mensaje' => $respuesta['error']
+                ]);
+                exit;
+            }
+            if (isset($respuesta['existe'])) {
+                echo json_encode([
+                    'success' => false,
+                    'mensaje' => 'El producto ya existe en el ticket'
                 ]);
                 exit;
             }
@@ -118,6 +125,290 @@ function obtenerTextosTicket($post, $idEmisor, $conexion)
     return $datos ?: [];
 }
 
+
+
+
+//! Funciones para agregar productos
+function agregarPorductoATicket($post, $idEmisor, $conexion)
+{
+    $folioTicket = $post['folioTicket'] ?? null;
+    $idDocumento = $post['idDocumento'] ?? null;
+    $idProducto = $post['productoId'] ?? null;
+    $cantidad = $post['cantidad'] ?? null;
+    $descripcion = $post['descripcion'] ?? null;
+    
+    $ultimo = obtenerUltimoIdTicketsDetalles($idEmisor, $conexion, $idDocumento, $folioTicket);
+
+    if (!$folioTicket || !$idDocumento || !$idProducto || !$cantidad) {
+        return [
+            'exists' => false,
+            'error' => 'Faltan datos requeridos para procesar la solicitud.'
+        ];
+    }
+
+    $existeProducto = comprobarExistenciProductoEnTicket($idProducto, $idDocumento, $folioTicket, $idEmisor, $conexion);
+    if (isset($existeProducto['error'])) {
+        return ['error' => $existeProducto['error']];
+    }
+    if ($existeProducto['exists']) {
+        return [
+            'error' => $existeProducto['mensaje']
+        ];
+    }
+    //* obtener datos necesarios de la tabla de productos
+    $datosProd = obtenerDatosPorducto($idProducto, $idEmisor, $conexion);
+    if (!$datosProd) {
+        return [
+            'exists' => false,
+            'error' => 'No se encontraron datos del producto con ID: ' . $idProducto
+        ];
+    }
+    $precio = $datosProd['precio'];
+
+    $ivaPorcentaje = $datosProd['iva'];
+    $ivaMonto = calcularMontoIVA($ivaPorcentaje, $precio);
+    $precioUnitario = $precio + $ivaMonto;
+    $importe = $precioUnitario * $cantidad;
+
+
+
+    $query = "INSERT INTO emisores_tickets_detalles (
+                                                        `id_partida`, 
+                                                        `id_emisor`, 
+                                                        `id_documento`, 
+                                                        `folio_ticket`, 
+                                                        `id_producto`, 
+                                                        `cantidad`, 
+                                                        `descripcion`, 
+                                                        `precio_unitario`, 
+                                                        `importe`, 
+                                                        `iva_porcentaje`, 
+                                                        `iva_monto`
+                                                        ) VALUES (?,?,?,?,?,?,?,?,?,?,?);";
+    $stmt = mysqli_prepare($conexion, $query);
+
+    if (!$stmt) {
+        return [
+            'exists' => false,
+            'error' => 'Error al preparar la consulta: ' . mysqli_error($conexion),
+            'ticket' => null
+        ];
+    }
+
+    mysqli_stmt_bind_param(
+        $stmt,
+        "iiiiidsdddd",
+        $ultimo,
+        $idEmisor,
+        $idDocumento,
+        $folioTicket,
+        $idProducto,
+        $cantidad,
+        $descripcion,
+        $precioUnitario,
+        $importe,
+        $ivaPorcentaje,
+        $ivaMonto
+    );
+    //* Ejecutar la consulta de inserción
+    if (!mysqli_stmt_execute($stmt)) {
+        return [
+            'error' => 'Error al insertar el ticket: ' . mysqli_error($conexion),
+        ];
+    }
+
+    return obtenerProductoDeLaCompra($ultimo, $idDocumento, $folioTicket, $idEmisor, $conexion);
+}
+function obtenerUltimoIdTicketsDetalles($idEmisor, $conexion, $idDocumento, $folioTicket)
+{
+    $query = "SELECT COALESCE(MAX(id_partida), 0) AS no_registro 
+                    FROM emisores_tickets_detalles 
+                    WHERE id_emisor = ? AND id_documento = ? AND folio_ticket = ?;";
+    $stmt = mysqli_prepare($conexion, $query);
+
+    if (!$stmt) {
+        return ['error' => 'Error al preparar la consulta: ' . mysqli_error($conexion)];
+    }
+    mysqli_stmt_bind_param($stmt, "iii", $idEmisor, $idDocumento, $folioTicket);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
+
+    if (!$result) {
+        return ['error' => 'Error al obtener los resultados: ' . mysqli_error($conexion)];
+    }
+    $max = mysqli_fetch_assoc($result);
+    $ultimo = $max['no_registro'] + 1;
+
+    // Cerrar el statement
+    mysqli_stmt_close($stmt);
+
+    return $ultimo;
+}
+function obtenerDatosPorducto($idProducto, $idEmisor, $conexion)
+{
+    $query = "SELECT precio, iva FROM productos_servicios WHERE id_producto = ? AND id_emisor = ?;";
+    $stmt = mysqli_prepare($conexion, $query);
+    mysqli_stmt_bind_param(
+        $stmt,
+        "ii",
+        $idProducto,
+        $idEmisor
+    );
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
+
+    if (!$result) {
+        return ['error' => 'Error al obtener los resultados: ' . mysqli_error($conexion)];
+    }
+
+    $datos = mysqli_fetch_assoc($result);
+
+    mysqli_stmt_close($stmt);
+    return $datos ?: [];
+}
+
+function calcularMontoIVA($iva, $precio)
+{
+    return ($iva * $precio) / 100;
+}
+function comprobarExistenciProductoEnTicket($idProducto, $idDocumento, $folioTicket, $idEmisor, $conexion)
+{
+    $query = "SELECT id_producto FROM emisores_tickets_detalles WHERE id_emisor = ? AND id_documento = ? AND folio_ticket = ? AND id_producto = ?;";
+    $stmt = mysqli_prepare($conexion, $query);
+    if (!$stmt) {
+        return [
+            'exists' => false,
+            'error' => 'Error al preparar la consulta: ' . mysqli_error($conexion),
+            'ticket' => null
+        ];
+    }
+    mysqli_stmt_bind_param(
+        $stmt,
+        "iiii",
+        $idEmisor,
+        $idDocumento,
+        $folioTicket,
+        $idProducto
+    );
+    mysqli_stmt_execute($stmt);
+
+    $result = mysqli_stmt_get_result($stmt);
+
+    if (!$result) {
+        return [
+            'exists' => false,
+            'error' => 'Error al obtener los resultados: ' . mysqli_error($conexion),
+        ];
+    }
+
+    $datos = mysqli_fetch_assoc($result);
+
+    mysqli_stmt_close($stmt);
+    return [
+        'exists' => !empty($datos),
+        'mensaje' => 'El producto ya existe en el ticket'
+    ];
+}
+function obtenerProductoDeLaCompra($idPartida, $idDocumento, $folioTicket, $idEmisor, $conexion)
+{
+    $query = "SELECT * FROM emisores_tickets_detalles WHERE id_partida = ? AND id_emisor = ? AND id_documento = ? AND folio_ticket = ?;";
+    $stmt = mysqli_prepare($conexion, $query);
+    mysqli_stmt_bind_param(
+        $stmt,
+        "iiii",
+        $idPartida,
+        $idEmisor,
+        $idDocumento,
+        $folioTicket
+    );
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
+
+    if (!$result) {
+        return ['error' => 'Error al obtener los resultados: ' . mysqli_error($conexion)];
+    }
+
+    $datos = mysqli_fetch_assoc($result);
+
+    mysqli_stmt_close($stmt);
+    return $datos ?: [];
+}
+
+//! peticiones desde AGENDA
+function construct_URL_ticket($ticketAperturado)
+{
+    $folioTicket = $ticketAperturado['folio_ticket'];
+    $idDocumento = $ticketAperturado['id_documento'];
+
+    //* Construir la URL con parámetros de consulta
+    $url = 'ticket.php?' . http_build_query([
+        'folio_ticket' => $folioTicket,
+        'id_documento' => $idDocumento
+    ]);
+    return $url;
+}
+function aperturarTicket($serieTicket, $folioCita, $idCliente, $idEmisor, $conexion)
+{
+    //* Obtener datos de la serie del ticket
+    $datosTicket = obtenerDatosSerieTicket($serieTicket, $conexion, $idEmisor);
+    if (isset($datosTicket['error'])) {
+        return ['error' => $datosTicket['error']];
+    }
+    $folioTicket = $datosTicket['folio'];
+    $serie = $datosTicket['serie'];
+
+    //* Validar si ya existe un ticket para la cita
+    $existeTicket = comprobarExistenciaTicketCita($conexion, $idEmisor, $serieTicket, $folioCita);
+    if (isset($existeTicket['error'])) {
+        return ['error' => $existeTicket['error']];
+    }
+    if ($existeTicket['exists']) {
+        return $existeTicket['ticket'];
+    }
+
+    //* Obtener el último folio disponible
+    $ultimoFolioTicket = obtenerUltimoId($conexion, $idEmisor, $folioTicket, $serieTicket, $serieTicket);
+
+    if (isset($ultimoFolioTicket['error'])) {
+        return ['error' => $ultimoFolioTicket['error']];
+    }
+
+    $query = "INSERT INTO emisores_tickets (
+        id_emisor, 
+        id_documento, 
+        folio_ticket, 
+        serie_ticket, 
+        id_cita, 
+        id_cliente, 
+        total, 
+        estatus, 
+        estatus_factura
+    ) VALUES (?, ?, ?, ?, ?, ?, 0.00, 1, 1)";
+
+    $stmt = mysqli_prepare($conexion, $query);
+    if (!$stmt) {
+        return ['error' => 'Error al preparar la consulta: ' . mysqli_error($conexion)];
+    }
+
+    mysqli_stmt_bind_param(
+        $stmt,
+        "iiisii",
+        $idEmisor,
+        $serieTicket,
+        $ultimoFolioTicket,
+        $serie,
+        $folioCita,
+        $idCliente
+    );
+
+    //* Ejecutar la consulta de inserción
+    if (!mysqli_stmt_execute($stmt)) {
+        return ['error' => 'Error al insertar el ticket: ' . mysqli_error($conexion)];
+    }
+
+    //* Obtener la tupla recién creada
+    return obtenerDatosTicketAperturado($ultimoFolioTicket, $serieTicket, $conexion, $idEmisor);
+}
 function obtenerUltimoId($conexion, $idEmisor, $folioTicket, $idSerieTicket, $serieTicket)
 {
     $query = "SELECT COALESCE(MAX(folio_ticket), ?) AS no_registro 
@@ -227,200 +518,4 @@ function comprobarExistenciaTicketCita($conexion, $idEmisor, $idSerieTicket, $id
         'exists' => !empty($datos),
         'ticket' => $datos ?: null
     ];
-}
-
-
-//! Funciones para agregar productos
-function agregarPorductoATicket($post, $idEmisor, $conexion)
-{
-    $folioTicket = $post['folioTicket'];
-    $idDocumento = $post['idDocumento'];
-    $idProducto = $post['productoId'];
-    $cantidad = $post['cantidad'];
-    $descripcion = $post['descripcion'] ?? null;
-
-    //* obtener datos necesarios de la tabla de productos
-    $datosProd = obtenerDatosPorducto($idProducto, $idEmisor, $conexion);
-    $precio = $datosProd['precio'];
-
-    $ivaPorcentaje = $datosProd['iva'];
-    $ivaMonto = calcularMontoIVA($ivaPorcentaje, $precio);
-    $precioUnitario = $precio + $ivaMonto;
-    $importe = $precioUnitario * $cantidad;
-
-    $ultimo = obtenerUltimoIdTicketsDetalles($idEmisor, $conexion, $idDocumento, $folioTicket);
-    return;
-
-    $query = "INSERT INTO emisores_tickets_detalles (
-                                                        `id_partida`, 
-                                                        `id_emisor`, 
-                                                        `id_documento`, 
-                                                        `folio_ticket`, 
-                                                        `id_producto`, 
-                                                        `cantidad`, 
-                                                        `descripcion`, 
-                                                        `precio_unitario`, 
-                                                        `importe`, 
-                                                        `iva_porcentaje`, 
-                                                        `iva_monto`
-                                                        ) VALUES (?,?,?,?,?,?,?,?,?,?,?);";
-    $stmt = mysqli_prepare($conexion, $query);
-
-    if (!$stmt) {
-        return [
-            'exists' => false,
-            'error' => 'Error al preparar la consulta: ' . mysqli_error($conexion),
-            'ticket' => null
-        ];
-    }
-
-    mysqli_stmt_bind_param(
-        $stmt,
-        "iiiiifsffff",
-        $ultimo,
-        $idEmisor,
-        $idDocumento,
-        $folioTicket,
-        $idProducto,
-        $cantidad,
-        $descripcion,
-        $precioUnitafrio,
-        $importe,
-        $ivaPorcentaje,
-        $ivaMonto
-    );
-    //* Ejecutar la consulta de inserción
-    if (!mysqli_stmt_execute($stmt)) {
-        return ['error' => 'Error al insertar el ticket: ' . mysqli_error($conexion)];
-    }
-
-    return true;
-}
-function obtenerUltimoIdTicketsDetalles($idEmisor, $conexion, $idDocumento, $folioTicket)
-{
-    $query = "SELECT COALESCE(MAX(id_partida), 0) AS no_registro 
-                    FROM emisores_tickets_detalles 
-                    WHERE id_emisor = ? AND id_documento = ? AND folio_ticket = ?;";
-    $stmt = mysqli_prepare($conexion, $query);
-
-    if (!$stmt) {
-        return ['error' => 'Error al preparar la consulta: ' . mysqli_error($conexion)];
-    }
-    mysqli_stmt_bind_param($stmt, "iii", $idEmisor, $idDocumento, $folioTicket);
-    mysqli_stmt_execute($stmt);
-    $result = mysqli_stmt_get_result($stmt);
-
-    if (!$result) {
-        return ['error' => 'Error al obtener los resultados: ' . mysqli_error($conexion)];
-    }
-    $max = mysqli_fetch_assoc($result);
-    $ultimo = $max['no_registro'] + 1;
-
-    // Cerrar el statement
-    mysqli_stmt_close($stmt);
-
-    return $ultimo;
-}
-function obtenerDatosPorducto($idProducto, $idEmisor, $conexion)
-{
-    $query = "SELECT precio, iva FROM productos_servicios WHERE id_producto = ? AND id_emisor = ?;";
-    $stmt = mysqli_prepare($conexion, $query);
-    mysqli_stmt_bind_param(
-        $stmt,
-        "ii",
-        $idProducto,
-        $idEmisor
-    );
-    mysqli_stmt_execute($stmt);
-    $result = mysqli_stmt_get_result($stmt);
-
-    if (!$result) {
-        return ['error' => 'Error al obtener los resultados: ' . mysqli_error($conexion)];
-    }
-
-    $datos = mysqli_fetch_assoc($result);
-
-    mysqli_stmt_close($stmt);
-    return $datos ?: [];
-}
-
-function calcularMontoIVA($iva, $precio)
-{
-    return ($iva * $precio) / 100;
-}
-
-//! peticiones desde AGENDA
-function construct_URL_ticket($ticketAperturado)
-{
-    $folioTicket = $ticketAperturado['folio_ticket'];
-    $idDocumento = $ticketAperturado['id_documento'];
-
-    //* Construir la URL con parámetros de consulta
-    $url = 'ticket.php?' . http_build_query([
-        'folio_ticket' => $folioTicket,
-        'id_documento' => $idDocumento
-    ]);
-    return $url;
-}
-function aperturarTicket($serieTicket, $folioCita, $idCliente, $idEmisor, $conexion)
-{
-    //* Obtener datos de la serie del ticket
-    $datosTicket = obtenerDatosSerieTicket($serieTicket, $conexion, $idEmisor);
-    if (isset($datosTicket['error'])) {
-        return ['error' => $datosTicket['error']];
-    }
-    $folioTicket = $datosTicket['folio'];
-    $serie = $datosTicket['serie'];
-
-    //* Validar si ya existe un ticket para la cita
-    $existeTicket = comprobarExistenciaTicketCita($conexion, $idEmisor, $serieTicket, $folioCita);
-    if (isset($existeTicket['error'])) {
-        return ['error' => $existeTicket['error']];
-    }
-    if ($existeTicket['exists']) {
-        return $existeTicket['ticket'];
-    }
-
-    //* Obtener el último folio disponible
-    $ultimoFolioTicket = obtenerUltimoId($conexion, $idEmisor, $folioTicket, $serieTicket, $serieTicket);
-
-    if (isset($ultimoFolioTicket['error'])) {
-        return ['error' => $ultimoFolioTicket['error']];
-    }
-
-    $query = "INSERT INTO emisores_tickets (
-        id_emisor, 
-        id_documento, 
-        folio_ticket, 
-        serie_ticket, 
-        id_cita, 
-        id_cliente, 
-        total, 
-        estatus, 
-        estatus_factura
-    ) VALUES (?, ?, ?, ?, ?, ?, 0.00, 1, 1)";
-
-    $stmt = mysqli_prepare($conexion, $query);
-    if (!$stmt) {
-        return ['error' => 'Error al preparar la consulta: ' . mysqli_error($conexion)];
-    }
-
-    mysqli_stmt_bind_param(
-        $stmt,
-        "iiisii",
-        $idEmisor,
-        $serieTicket,
-        $ultimoFolioTicket,
-        $serie,
-        $folioCita,
-        $idCliente
-    );
-
-    //* Ejecutar la consulta de inserción
-    if (!mysqli_stmt_execute($stmt)) {
-        return ['error' => 'Error al insertar el ticket: ' . mysqli_error($conexion)];
-    }
-
-    //* Obtener la tupla recién creada
-    return obtenerDatosTicketAperturado($ultimoFolioTicket, $serieTicket, $conexion, $idEmisor);
 }

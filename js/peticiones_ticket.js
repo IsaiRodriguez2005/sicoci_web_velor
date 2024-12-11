@@ -1,3 +1,34 @@
+function pantallaCarga(title, text) {
+    return Swal.fire({
+        title: title,
+        text: text,
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        showConfirmButton: false,
+        didOpen: () => {
+            Swal.showLoading();
+        }
+    });
+}
+
+function mensajeSuccess() {
+    return Swal.fire({
+        icon: 'success',
+        title: 'Éxito',
+        text: 'El producto se agregó correctamente al ticket.',
+    });
+}
+
+function mensajeError(mensaje, title = null,) {
+
+    if (title == null) title = 'Error';
+
+    return Swal.fire({
+        icon: 'error',
+        title: title,
+        text: mensaje,
+    });
+}
 //! [INICIA] Ejecutar la función automáticamente al cargar la página
 document.addEventListener('DOMContentLoaded', procesarDatosTicket);
 
@@ -29,7 +60,7 @@ async function procesarDatosTicket() {
     }
 }
 
-async function cargarDatosTicket(folio,idDocumento) {
+async function cargarDatosTicket(folio, idDocumento) {
 
     const datosTicket = await obtenerDatosTicket(folio, idDocumento);
     const {
@@ -251,27 +282,16 @@ function cargar_info_producto(idProducto) {
 
 
 async function agregarProducto() {
-    // Obtén los valores de los inputs
+
+    const urlParams = new URLSearchParams(window.location.search);
     const productoId = $("#id_producto").val();
     const cantidad = $("#cantidad_producto").val();
     const folioTicket = urlParams.get('folio_ticket');
     const idDocumento = urlParams.get('id_documento');
-    console.log([productoId, cantidad]);
 
     try {
-        // Muestra la pantalla de carga
-        Swal.fire({
-            title: 'Cargando...',
-            text: 'Por favor espera mientras se procesa tu solicitud.',
-            allowOutsideClick: false,
-            allowEscapeKey: false,
-            showConfirmButton: false,
-            didOpen: () => {
-                Swal.showLoading();
-            }
-        });
+        pantallaCarga('Cargando...', 'Por favor espera mientras se procesa tu solicitud.');
 
-        // Realiza la petición AJAX
         const respuesta = await $.ajax({
             url: "componentes/tickets/peticiones/tickets.php",
             type: "POST",
@@ -285,33 +305,38 @@ async function agregarProducto() {
             dataType: "json",
         });
 
-        // Oculta la pantalla de carga
+        const { success, producto, mensaje } = respuesta;
+        console.log(producto)
+
         Swal.close();
 
-        // Maneja la respuesta
-        if (respuesta.success) {
-            Swal.fire({
-                icon: 'success',
-                title: 'Éxito',
-                text: 'El producto se agregó correctamente al ticket.',
-            });
-        } else {
-            Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: 'Hubo un problema al agregar el producto. Por favor, inténtalo nuevamente.',
-            });
+        if (!success) {
+            mensajeError('Revisa la tabla de articulos', mensaje);
+            return;
         }
+        mensajeSuccess();
     } catch (error) {
-        // Oculta la pantalla de carga y maneja el error
         Swal.close();
-        Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: 'Ocurrió un error inesperado. Verifica tu conexión o inténtalo nuevamente.',
-        });
+        mensajeError('Ocurrió un error inesperado. Verifica tu conexión o inténtalo nuevamente.')
         console.error(error);
     }
+}
+
+async function cargarTablaProductosTicket() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const folioTicket = urlParams.get('folio_ticket');
+    const idDocumento = urlParams.get('id_documento');
+
+    const respuesta = await $.ajax({
+        url: "componentes/tickets/peticiones/tickets.php",
+        type: "POST",
+        data: {
+            'funcion': 'obtenerProductosTicket',
+            'folioTicket': folioTicket,
+            'idDocumento': idDocumento,
+        },
+        dataType: "json",
+    });
 }
 
 
