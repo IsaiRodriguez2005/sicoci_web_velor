@@ -212,7 +212,7 @@ if (!isset($_SESSION['nombre_usuario'])) {
                                     <hr>
                                     <div class="row">
                                         <div class="col-sm-12">
-                                            <table class="table table-striped table-bordered" id="datatable">
+                                            <table class="table table-striped table-bordered" id="table_productos_ticket">
                                                 <thead>
                                                     <tr>
                                                         <th class="text-center">Borrar</th>
@@ -223,16 +223,7 @@ if (!isset($_SESSION['nombre_usuario'])) {
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <tr id="1" class="gradeX">
-                                                        <td class="p-t-0 p-b-0 text-center">
-                                                            <a class="mdi mdi-close-circle modalBorrar" style="font-size:30px; color:#007bff; cursor: pointer;" producto="879"></a>
-                                                        </td>
-                                                        <td class="text-center">3.00</td>
-                                                        <td> HIGIENICO KOVU 300H 24PAQ/4ROLLOS</td>
-                                                        <td class="text-center">
-                                                            21.90 </td>
-                                                        <td class="text-center">$65.70</td>
-                                                    </tr>
+                                                    
                                                 </tbody>
                                                 <tfoot>
                                                     <tr id="1" class="gradeX">

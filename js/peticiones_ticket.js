@@ -1,3 +1,4 @@
+//TODO: funciones de apollo
 function pantallaCarga(title, text) {
     return Swal.fire({
         title: title,
@@ -10,7 +11,6 @@ function pantallaCarga(title, text) {
         }
     });
 }
-
 function mensajeSuccess() {
     return Swal.fire({
         icon: 'success',
@@ -18,7 +18,6 @@ function mensajeSuccess() {
         text: 'El producto se agregó correctamente al ticket.',
     });
 }
-
 function mensajeError(mensaje, title = null,) {
 
     if (title == null) title = 'Error';
@@ -29,7 +28,8 @@ function mensajeError(mensaje, title = null,) {
         text: mensaje,
     });
 }
-//! [INICIA] Ejecutar la función automáticamente al cargar la página
+
+//todo: [INICIA] Ejecutar la función automáticamente al cargar la página
 document.addEventListener('DOMContentLoaded', procesarDatosTicket);
 
 async function procesarDatosTicket() {
@@ -45,6 +45,7 @@ async function procesarDatosTicket() {
     }
 
     cargarDatosTicket(folioTicket, idDocumento);
+    await cargarTablaProductosTicket();
 
     const data_productos = await cargar_productos_servicios();
 
@@ -58,6 +59,7 @@ async function procesarDatosTicket() {
             ul.append(li);
         });
     }
+
 }
 
 async function cargarDatosTicket(folio, idDocumento) {
@@ -130,19 +132,6 @@ async function obtenerDatosTicket(folioTicket, idDocumento) {
     }
 }
 
-function obtenerTxtEstatus(estatus) {
-    switch (estatus) {
-        case 1:
-            return textEstatus = 'APERTURADO';
-        case 2:
-            return textEstatus = 'GENERADO';
-        case 3:
-            return textEstatus = 'CANCELADO';
-        case 4:
-            return textEstatus = 'COBRADO';
-    }
-}
-
 async function cargar_productos_servicios() {
     const resProductos = await $.ajax({
         cache: false,
@@ -156,11 +145,24 @@ async function cargar_productos_servicios() {
 
     return resProductos;
 }
-//! [TERMINA] Ejecutar la función automáticamente al cargar la página
 
+function obtenerTxtEstatus(estatus) {
+    switch (estatus) {
+        case 1:
+            return textEstatus = 'APERTURADO';
+        case 2:
+            return textEstatus = 'GENERADO';
+        case 3:
+            return textEstatus = 'CANCELADO';
+        case 4:
+            return textEstatus = 'COBRADO';
+    }
+}
+
+//TODO: funciones del buscador de [productos]
 
 let currentFocus = -1; // Índice del elemento actualmente enfocado
-// Filtrar lista de sugerencias al escribir en el campo de entrada
+
 function filtrar_lista() {
     const input = $("#search");
     const filter = input.val().toLowerCase();
@@ -221,7 +223,6 @@ function highlightSuggestion(li) {
     }
 }
 
-// Maneja el evento de clic en un elemento <li> para seleccionar una sugerencia
 $("#suggestions").on("click", "li", function () {
     const input = $("#search");
     const hiddenInput = $("#id_producto");
@@ -242,44 +243,45 @@ $(document).on("click", function (e) {
     }
 });
 
+/*
+// function cargar_info_producto(idProducto) {
+//    esta funcion carga la info de los productos y dehabilita los campos para editarlos en la compra
+//     $.ajax({
+//         cache: false,
+//         url: 'componentes/tickets/productos_servicios/productos.php',
+//         type: 'POST',
+//         dataType: 'json',
+//         data: {
+//             'funcion': 'cargarProductoPorId',
+//             'id_producto': idProducto
+//         },
+//     }).done(function (resultado) {
+//         const { producto, success } = resultado;
 
+//         if (success) {
+//             const inputPrecioNeto = $("#precio_neto");
+//             const inputIVA = $("#iva");
+//             const inputPrecioBruto = $("#precio_bruto");
 
-function cargar_info_producto(idProducto) {
-    //* esta funcion carga la info de los productos y dehabilita los campos para editarlos en la compra
-    $.ajax({
-        cache: false,
-        url: 'componentes/tickets/productos_servicios/productos.php',
-        type: 'POST',
-        dataType: 'json',
-        data: {
-            'funcion': 'cargarProductoPorId',
-            'id_producto': idProducto
-        },
-    }).done(function (resultado) {
-        const { producto, success } = resultado;
+//             inputPrecioNeto.prop("disabled", false);
+//             inputIVA.prop("disabled", false);
+//             inputPrecioBruto.prop("disabled", false);
 
-        if (success) {
-            const inputPrecioNeto = $("#precio_neto");
-            const inputIVA = $("#iva");
-            const inputPrecioBruto = $("#precio_bruto");
+//             const {
+//                 iva,
+//                 precio
+//             } = producto[0];
 
-            inputPrecioNeto.prop("disabled", false);
-            inputIVA.prop("disabled", false);
-            inputPrecioBruto.prop("disabled", false);
+//             inputPrecioNeto.val(precio);
+//             inputIVA.val(iva);
+//             calcular_precio_bruto();
+//             app_total();
+//         }
+//     });
+// }
+*/
 
-            const {
-                iva,
-                precio
-            } = producto[0];
-
-            inputPrecioNeto.val(precio);
-            inputIVA.val(iva);
-            calcular_precio_bruto();
-            app_total();
-        }
-    });
-}
-
+//TODO: funciones para agregar productos
 
 async function agregarProducto() {
 
@@ -306,14 +308,13 @@ async function agregarProducto() {
         });
 
         const { success, producto, mensaje } = respuesta;
-        console.log(producto)
-
         Swal.close();
 
         if (!success) {
             mensajeError('Revisa la tabla de articulos', mensaje);
             return;
         }
+        agregarTuplaTablaTicket(producto);
         mensajeSuccess();
     } catch (error) {
         Swal.close();
@@ -323,20 +324,88 @@ async function agregarProducto() {
 }
 
 async function cargarTablaProductosTicket() {
+    const productos = await obtenerProdutosTicket();
+    const tbody = $('#table_productos_ticket tbody');
+    tbody.empty();
+    productos.forEach(producto => {
+        agregarTuplaTablaTicket(producto, tbody);
+    });
+
+    inizializar_tabla('table_productos_ticket');
+}
+
+async function obtenerProdutosTicket() {
     const urlParams = new URLSearchParams(window.location.search);
     const folioTicket = urlParams.get('folio_ticket');
     const idDocumento = urlParams.get('id_documento');
 
-    const respuesta = await $.ajax({
-        url: "componentes/tickets/peticiones/tickets.php",
-        type: "POST",
-        data: {
-            'funcion': 'obtenerProductosTicket',
-            'folioTicket': folioTicket,
-            'idDocumento': idDocumento,
-        },
-        dataType: "json",
-    });
+    try {
+        const respuesta = await $.ajax({
+            url: "componentes/tickets/peticiones/tickets.php",
+            type: "POST",
+            data: {
+                'funcion': 'getProductosTicket',
+                'folioTicket': folioTicket,
+                'idDocumento': idDocumento,
+            },
+            dataType: "json",
+        });
+
+        const { success, productTicket, mensaje } = respuesta;
+        if (!success) {
+            mensajeError(mensaje);
+            return;
+        }
+        return productTicket;
+    } catch (error) {
+        Swal.close();
+        mensajeError('Ocurrió un error inesperado. Verifica tu conexión o inténtalo nuevamente.')
+        console.error(error);
+    }
 }
 
+function agregarTuplaTablaTicket(producto, tbody = null) {
+
+    if (!tbody) {
+        tbody = $('#table_productos_ticket tbody');
+    }
+
+    const { id_producto, cantidad, nombreProducto, precio, importe } = producto;
+
+    const cantidadFormat = parseFloat(cantidad).toFixed(2);
+    const precioFormat = parseFloat(precio).toFixed(2);
+    const importeFormat = parseFloat(importe).toFixed(2);
+
+    const fila = `
+                    <tr id="${id_producto}" class="gradeX">
+                        <td class="p-t-0 p-b-0 text-center">
+                            <button class="btn btn-danger btn-sm modalBorrar" style="cursor: pointer;" producto="${id_producto}">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </td>
+                        <td class="text-center">${cantidadFormat}</td>
+                        <td class="text-center">${nombreProducto}</td>
+                        <td class="text-center">$${precioFormat}</td>
+                        <td class="text-center">$${importeFormat}</td>
+                    </tr>
+                `;
+    tbody.append(fila);
+}
+
+function inizializar_tabla(idTabla) {
+    $('#' + idTabla).DataTable().destroy();
+    $('#' + idTabla).DataTable({
+        paging: true,
+        lengthChange: false,
+        searching: true,
+        ordering: true,
+        info: true,
+        autoWidth: true,
+        responsive: true,
+        deferRender: true,
+        language: {
+            url: "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
+        }
+    });
+}
 

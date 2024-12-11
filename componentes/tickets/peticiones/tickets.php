@@ -13,6 +13,22 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
 } else {
 
     if (isset($_POST['funcion'])) {
+        if ($_POST['funcion'] == 'getProductosTicket') {
+            $idEmisor = $_SESSION['id_emisor'];
+            $datos = obtenerProductosTicket($_POST, $idEmisor, $conexion);
+            if (isset($datos['error'])) {
+                echo json_encode([
+                    'success' => false,
+                    'mensaje' => $datos['error']
+                ]);
+                exit;
+            }
+            echo json_encode([
+                'success' => true,
+                'productTicket' => $datos
+            ]);
+            exit;
+        }
         if ($_POST['funcion'] == 'getTextosTickets') {
             $idEmisor = $_SESSION['id_emisor'];
             $datos = obtenerTextosTicket($_POST, $idEmisor, $conexion);
@@ -88,6 +104,8 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
         }
     }
 }
+
+//! Funciones para obtener datos
 function obtenerTextosTicket($post, $idEmisor, $conexion)
 {
     $idDocumento = $post['idDocumento'] ?? null;
@@ -124,9 +142,48 @@ function obtenerTextosTicket($post, $idEmisor, $conexion)
     mysqli_stmt_close($stmt);
     return $datos ?: [];
 }
+function obtenerProductosTicket($post, $idEmisor, $conexion)
+{
+    $idDocumento = $post['idDocumento'] ?? null;
+    $folioTicket = $post['folioTicket'] ?? null;
 
+    $query = "SELECT
+                    ed.id_producto,
+                    ed.cantidad,
+                    ps.nombre as nombreProducto,
+                    (ed.precio_unitario * (100 + ed.iva_porcentaje) / 100) as precio,
+                    ed.importe
+                    FROM emisores_tickets_detalles ed
+                        INNER JOIN emisores_tickets et 
+                            ON ed.id_emisor = et.id_emisor 
+                            AND ed.id_documento = et.id_documento 
+                            AND ed.folio_ticket = et.folio_ticket
+                        INNER JOIN productos_servicios ps ON ps.id_emisor = ed.id_emisor AND ps.id_producto = ed.id_producto
+                        WHERE ed.id_emisor = ? AND ed.folio_ticket = ? AND ed.id_documento = ?
+                        GROUP BY ed.cantidad, ps.nombre, ed.precio_unitario, ed.importe;";
+    $stmt = mysqli_prepare($conexion, $query);
+    mysqli_stmt_bind_param(
+        $stmt,
+        "iii",
+        $idEmisor,
+        $folioTicket,
+        $idDocumento
+    );
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
 
+    if (!$result) {
+        return ['error' => 'Error al obtener los resultados: ' . mysqli_error($conexion)];
+    }
 
+    $datos = [];
+    while ($fila = mysqli_fetch_assoc($result)) {
+        $datos[] = $fila; // Agrega cada fila al arreglo
+    }
+
+    mysqli_stmt_close($stmt);
+    return $datos ?: [];
+}
 
 //! Funciones para agregar productos
 function agregarPorductoATicket($post, $idEmisor, $conexion)
@@ -136,7 +193,7 @@ function agregarPorductoATicket($post, $idEmisor, $conexion)
     $idProducto = $post['productoId'] ?? null;
     $cantidad = $post['cantidad'] ?? null;
     $descripcion = $post['descripcion'] ?? null;
-    
+
     $ultimo = obtenerUltimoIdTicketsDetalles($idEmisor, $conexion, $idDocumento, $folioTicket);
 
     if (!$folioTicket || !$idDocumento || !$idProducto || !$cantidad) {
@@ -205,7 +262,7 @@ function agregarPorductoATicket($post, $idEmisor, $conexion)
         $idProducto,
         $cantidad,
         $descripcion,
-        $precioUnitario,
+        $precio,
         $importe,
         $ivaPorcentaje,
         $ivaMonto
@@ -311,7 +368,14 @@ function comprobarExistenciProductoEnTicket($idProducto, $idDocumento, $folioTic
 }
 function obtenerProductoDeLaCompra($idPartida, $idDocumento, $folioTicket, $idEmisor, $conexion)
 {
-    $query = "SELECT * FROM emisores_tickets_detalles WHERE id_partida = ? AND id_emisor = ? AND id_documento = ? AND folio_ticket = ?;";
+    $query = "SELECT    ed.id_producto,
+                        ed.cantidad,
+                        ps.nombre as nombreProducto,
+                        (ed.precio_unitario * (100 + ed.iva_porcentaje) / 100) as precio,
+                        ed.importe
+                        FROM emisores_tickets_detalles ed 
+                            INNER JOIN productos_servicios ps ON ps.id_emisor = ed.id_emisor AND ps.id_producto = ed.id_producto
+                            WHERE ed.id_partida = ? AND ed.id_emisor = ? AND ed.id_documento = ? AND ed.folio_ticket = ?;";
     $stmt = mysqli_prepare($conexion, $query);
     mysqli_stmt_bind_param(
         $stmt,
