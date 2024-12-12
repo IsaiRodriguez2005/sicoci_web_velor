@@ -223,18 +223,36 @@ function highlightSuggestion(li) {
     }
 }
 
-$("#suggestions").on("click", "li", function () {
-    const input = $("#search");
-    const hiddenInput = $("#id_producto");
-    const selectedValue = $(this).data("value"); // Obtiene el valor del atributo 'data-value' del <li>
-    const selectedText = $(this).text(); // Obtiene el texto del <li>
+$("#suggestions").on("click keydown", "li", function (e) {
+    if (e.type === "click" || (e.type === "keydown" && e.key === "Enter")) {
+        // Aquí manejamos tanto el clic como la tecla Enter
 
-    input.val(selectedText);
-    hiddenInput.val(selectedValue);
-    // cargar_info_producto(selectedValue);
+        const input = $("#search");
+        const inputCantidad = $("#cantidad_producto");
 
-    $("#suggestions").addClass("hidden"); // Oculta la lista de sugerencias
+        const hiddenInput = $("#id_producto");
+        const selectedValue = $(this).data("value"); // Obtiene el valor del atributo 'data-value' del <li>
+        const selectedText = $(this).text(); // Obtiene el texto del <li>
+
+        // Establecer valores en los inputs correspondientes
+        input.val(selectedText);
+        hiddenInput.val(selectedValue);
+
+        // Ocultar sugerencias
+        $("#suggestions").addClass("hidden");
+
+        inputCantidad.select();
+    }
 });
+
+// Manejar "Enter" en el input de cantidad
+$("#cantidad_producto").on("keydown", function (e) {
+    if (e.key === "Enter") {
+        e.preventDefault(); // Prevenir comportamiento predeterminado
+        agregarProducto(); // Llamar a la función agregarProducto
+    }
+});
+
 
 // Opcional: Ocultar la lista de sugerencias si se hace clic fuera del contenedor
 $(document).on("click", function (e) {

@@ -168,19 +168,7 @@ if (!isset($_SESSION['nombre_usuario'])) {
                                         <div class="form-group col-md-3 mb-3 text-center">
                                             <label class="form-label font-weight-bold d-block">Cantidad</label>
                                             <input type="text" name="cantidad" class="form-control text-center" value="1"
-                                                style="font-size: 1.5rem;" id="cantidad_producto"
-                                                onkeyup="detectarEnter(event, this);">
-
-                                            <script>
-                                                function detectarEnter(event, input) {
-                                                    if (event.key === 'Enter') {
-                                                        // Asegurarte de que estás usando el input correcto
-                                                        if (input.id === 'cantidad_producto') {
-                                                            agregarProducto();
-                                                        }
-                                                    }
-                                                }
-                                            </script>
+                                                style="font-size: 1.5rem;" id="cantidad_producto">
                                         </div>
 
                                     </div>
@@ -223,7 +211,7 @@ if (!isset($_SESSION['nombre_usuario'])) {
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    
+
                                                 </tbody>
                                                 <tfoot>
                                                     <tr id="1" class="gradeX">
