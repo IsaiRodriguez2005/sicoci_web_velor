@@ -45,6 +45,42 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
             ]);
             exit;
         }
+        if ($_POST['funcion'] == 'yaExisteTicketDeLaCita') {
+            
+            if (!isset($_POST['folio_cita'], $_POST['id_cliente'])) {
+                echo json_encode([
+                    'success' => false,
+                    'mensaje' => 'Faltan datos obligatorios en la solicitud.'
+                ]);
+                exit;
+            }
+            $idEmisor = $_SESSION['id_emisor'];
+            $respuesta = comprobarExistenciaDeTicketDeCita($_POST, $idEmisor, $conexion);
+            if (isset($respuesta['exists'])) {
+                echo json_encode([
+                    'success' => false,
+                    'mensaje' => $respuesta['error']
+                ]);
+                exit;
+            }
+
+            if (!$respuesta['tiene']) {
+                echo json_encode([
+                    'success' => true,
+                    'tiene' => $respuesta['tiene'],
+                ]);
+                exit;
+            }
+
+            $url = construct_URL_ticket($respuesta['ticket']);
+
+            echo json_encode([
+                'success' => true,
+                'tiene' => $respuesta['tiene'],
+                'urlTicket' => $url
+            ]);
+            exit;
+        }
         if ($_POST['funcion'] == 'agregarProductoTicket') {
             $idEmisor = $_SESSION['id_emisor'];
             $respuesta = agregarPorductoATicket($_POST, $idEmisor, $conexion);
@@ -104,7 +140,58 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
         }
     }
 }
+//! comprobaciones de tickets
+function comprobarExistenciaDeTicketDeCita($post, $idEmisor, $conexion)
+{
+    $idCita = $post['folio_cita'];
+    $idCliente = $post['id_cliente'];
 
+    $query = "SELECT * FROM emisores_tickets WHERE id_cita = ? AND id_emisor = ? AND id_cliente = ? AND estatus != 3;";
+    $stmt = mysqli_prepare($conexion, $query);
+
+    if (!$stmt) {
+        return [
+            'exists' => false,
+            'error' => 'Error al preparar la consulta: ' . mysqli_error($conexion),
+            'ticket' => null
+        ];
+    }
+
+    mysqli_stmt_bind_param(
+        $stmt,
+        "iii",
+        $idCita,
+        $idEmisor,
+        $idCliente
+    );
+
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
+
+    if (!$result) {
+        return [
+            'exists' => true,
+            'error' => 'Error al ejecutar la consulta: ' . mysqli_error($conexion),
+            'ticket' => null
+        ];
+    }
+
+    $datos = mysqli_fetch_assoc($result);
+
+    mysqli_stmt_close($stmt);
+
+    if (!$datos) {
+        return [
+            'tiene' => false,
+            'ticket' => null
+        ];
+    }
+
+    return [
+        'tiene' => true,
+        'ticket' => $datos
+    ];
+}
 //! Funciones para obtener datos
 function obtenerTextosTicket($post, $idEmisor, $conexion)
 {

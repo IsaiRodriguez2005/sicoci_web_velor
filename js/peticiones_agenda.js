@@ -583,6 +583,15 @@ function ver_pdf(id_folio, tipo_cita) {
 
 async function cobrar_cita(folio_cita, idCliene) {
     //* en esta funcion se hace la peticion dependiendo de lo que necesite el cliente.
+
+    //? si la cita ya tiene un ticket, lo redirccionara
+    const tieneTicket = await comprobar_existencia_ticket_cita(folio_cita, idCliene);
+    const { tiene, urlTicket } = tieneTicket;
+    if (tiene) {
+        redieccionarURL(urlTicket);
+        return;
+    }
+
     const necesitaFactura = await necesita_factura();
 
     if (necesitaFactura) {
@@ -593,15 +602,17 @@ async function cobrar_cita(folio_cita, idCliene) {
         const { existe, seriesTickets } = resultado;
 
         if (existe) {
+
             if (seriesTickets.length == 1) {
                 seleccionar_serie(seriesTickets[0].id, folio_cita, idCliene)
-            } else {
-                $("#modal_opciones_series_tickets").modal("show");
-                rellenar_tbody_seies_tickets(seriesTickets, folio_cita, idCliene);
             }
-        } else {
-            console.error('No existen series de tickets')
+
+            $("#modal_opciones_series_tickets").modal("show");
+            rellenar_tbody_seies_tickets(seriesTickets, folio_cita, idCliene);
+
         }
+
+        console.error('No existen series de tickets')
     }
 }
 async function necesita_factura() {
@@ -687,7 +698,7 @@ function rellenar_tbody_seies_tickets(series, folio_cita, idCliene) {
         `;
         tbody.append(row);
     });
-    
+
     inizializar_tabla('tabla_series_tickets');
 }
 function inizializar_tabla(idTabla) {
@@ -709,28 +720,47 @@ function inizializar_tabla(idTabla) {
 
 //TODO: funciones de series tickets
 
+async function comprobar_existencia_ticket_cita(folio_cita, idCliente) {
+    try {
+        const respuesta = await $.ajax({
+            cache: false,
+            url: 'componentes/tickets/peticiones/tickets.php',
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                'funcion': 'yaExisteTicketDeLaCita',
+                'folio_cita': folio_cita,
+                'id_cliente': idCliente,
+            },
+        });
+        const { success, tiene, urlTicket } = respuesta;
+        if (success) {
+            return {
+                tiene: tiene,
+                urlTicket: urlTicket
+            };
+        } else {
+            return {
+                existe: tiene
+            };
+        }
+    } catch (error) {
+        console.error('error al comprobar la existencia del ticket:', error);
+        return {
+            error: 'error de solicitud'
+        };
+    }
+}
+
 async function seleccionar_serie(idSerie, folioCita, idCliente) {
 
     const url = await get_url_ticket(idSerie, folioCita, idCliente);
 
-    if(!url){
+    if (!url) {
         throw new Error("Error al obtener la url");
     }
-    
-    Swal.fire({
-        title: 'Cargando...',
-        html: 'Espere un momento mientras procesamos su solicitud.',
-        allowOutsideClick: false,
-        showConfirmButton: false,
-        willOpen: () => {
-            Swal.showLoading();
-        }
-    });
 
-    //* Redirigir después de un breve tiempo
-    setTimeout(() => {
-        window.location.href = url;
-    }, 1000);
+    redieccionarURL(url);
 }
 
 async function get_url_ticket(serieTicket, folioCita, idCliente) {
@@ -771,6 +801,23 @@ async function get_url_ticket(serieTicket, folioCita, idCliente) {
         throw error;
     }
 
+}
+
+function redieccionarURL(url){
+    Swal.fire({
+        title: 'Cargando...',
+        html: 'Espere un momento mientras procesamos su solicitud.',
+        allowOutsideClick: false,
+        showConfirmButton: false,
+        willOpen: () => {
+            Swal.showLoading();
+        }
+    });
+
+    //* Redirigir después de un breve tiempo
+    setTimeout(() => {
+        window.location.href = url;
+    }, 1000);
 }
 
 //! funciones de calculos para los tickets
