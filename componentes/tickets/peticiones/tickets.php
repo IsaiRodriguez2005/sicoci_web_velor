@@ -46,7 +46,7 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
             exit;
         }
         if ($_POST['funcion'] == 'yaExisteTicketDeLaCita') {
-            
+
             if (!isset($_POST['folio_cita'], $_POST['id_cliente'])) {
                 echo json_encode([
                     'success' => false,
@@ -105,6 +105,24 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
             ]);
             exit;
         }
+        if ($_POST['funcion'] == 'eliminarProductoTicket') {
+            $idEmisor = $_SESSION['id_emisor'];
+            $respuesta = eliminarPorductoDelTicket($_POST, $idEmisor, $conexion);
+
+            if (isset($respuesta['error'])) {
+                echo json_encode([
+                    'success' => false,
+                    'mensaje' => $respuesta['error']
+                ]);
+                exit;
+            }
+            
+            echo json_encode([
+                'success' => true,
+                'borrado' => $respuesta
+            ]);
+            exit;
+        }
     }
 
     if (isset($_GET['funcion'])) {
@@ -139,6 +157,59 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
             exit();
         }
     }
+}
+//! funciones para eliminar productos y cancelaciones de tickets
+function eliminarPorductoDelTicket($post, $idEmisor, $conexion)
+{
+    $folioTicket = $post['folioTicket'] ?? null;
+    $idDocumento = $post['idDocumento'] ?? null;
+    $idProducto = $post['productoId'] ?? null;
+
+    if (!$folioTicket || !$idDocumento || !$idProducto ) {
+        return [
+            'exists' => false,
+            'error' => 'Faltan datos requeridos para procesar la solicitud.'
+        ];
+    }
+
+    $existeProducto = comprobarExistenciProductoEnTicket($idProducto, $idDocumento, $folioTicket, $idEmisor, $conexion);
+
+    if (isset($existeProducto['error'])) {
+        return ['error' => $existeProducto['error']];
+    }
+    if (!$existeProducto['exists']) {
+        return [
+            'error' => 'El producto no existe en la compra, o el id no coincide con un poducto existente.'
+        ];
+    }
+
+    $query = "DELETE FROM emisores_tickets_detalles WHERE id_emisor = ? AND id_documento = ? AND folio_ticket = ? AND id_producto = ?;";
+    $stmt = mysqli_prepare($conexion, $query);
+
+    if (!$stmt) {
+        return [
+            'exists' => false,
+            'error' => 'Error al preparar la consulta: ' . mysqli_error($conexion),
+            'ticket' => null
+        ];
+    }
+
+    mysqli_stmt_bind_param(
+        $stmt,
+        "iiii",
+        $idEmisor,
+        $idDocumento,
+        $folioTicket,
+        $idProducto,
+    );
+    //* Ejecutar la consulta de inserción
+    if (!mysqli_stmt_execute($stmt)) {
+        return [
+            'error' => 'Error al insertar el ticket: ' . mysqli_error($conexion),
+        ];
+    }
+
+    return true;
 }
 //! comprobaciones de tickets
 function comprobarExistenciaDeTicketDeCita($post, $idEmisor, $conexion)
@@ -235,6 +306,7 @@ function obtenerProductosTicket($post, $idEmisor, $conexion)
     $folioTicket = $post['folioTicket'] ?? null;
 
     $query = "SELECT
+                    ed.id_partida,
                     ed.id_producto,
                     ed.cantidad,
                     ps.nombre as nombreProducto,

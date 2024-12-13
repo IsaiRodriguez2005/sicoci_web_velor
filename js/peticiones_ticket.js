@@ -332,8 +332,14 @@ async function agregarProducto() {
             mensajeError('Revisa la tabla de articulos', mensaje);
             return;
         }
+
+        limpiarTablaVacia();
         agregarTuplaTablaTicket(producto);
+        await limpiarInputsProductos();
+        await cargarDatosTicket(folioTicket, idDocumento);
+
         mensajeSuccess();
+
     } catch (error) {
         Swal.close();
         mensajeError('Ocurrió un error inesperado. Verifica tu conexión o inténtalo nuevamente.')
@@ -344,7 +350,9 @@ async function agregarProducto() {
 async function cargarTablaProductosTicket() {
     const productos = await obtenerProdutosTicket();
     const tbody = $('#table_productos_ticket tbody');
+
     tbody.empty();
+
     productos.forEach(producto => {
         agregarTuplaTablaTicket(producto, tbody);
     });
@@ -395,9 +403,12 @@ function agregarTuplaTablaTicket(producto, tbody = null) {
     const importeFormat = parseFloat(importe).toFixed(2);
 
     const fila = `
-                    <tr id="${id_producto}" class="gradeX">
+                    <tr id="pro_tick_${id_producto}" class="gradeX">
                         <td class="p-t-0 p-b-0 text-center">
-                            <button class="btn btn-danger btn-sm modalBorrar" style="cursor: pointer;" producto="${id_producto}">
+                            <button class="btn btn-danger btn-sm modalBorrar" 
+                                            style="cursor: pointer;" 
+                                            producto="${id_producto}" 
+                                            onclick="eliminar_producto(${id_producto})">
                                 <i class="fas fa-trash-alt"></i>
                             </button>
                         </td>
@@ -427,3 +438,75 @@ function inizializar_tabla(idTabla) {
     });
 }
 
+function limpiarTablaVacia() {
+    const filaVacia = $(".dataTables_empty");
+    if (filaVacia.length) {
+        filaVacia.remove();
+    }
+}
+
+function limpiarInputsProductos() {
+    return new Promise((resolve) => {
+        const input = $("#search");
+        $("#id_producto").val("");
+        $("#search").val("");
+        $("#cantidad_producto").val("1");
+
+        input.select();
+        resolve();
+    });
+}
+
+//TODO: eliminar productos y cancelaciones
+
+async function eliminar_producto(idProducto) {
+    const urlParams = new URLSearchParams(window.location.search);
+    const folioTicket = urlParams.get('folio_ticket');
+    const idDocumento = urlParams.get('id_documento');
+
+    try {
+        pantallaCarga('Cargando...', 'Por favor espera mientras se elimina el producto.');
+
+        const respuesta = await $.ajax({
+            url: "componentes/tickets/peticiones/tickets.php",
+            type: "POST",
+            data: {
+                'funcion': 'eliminarProductoTicket',
+                'productoId': idProducto,
+                'folioTicket': folioTicket,
+                'idDocumento': idDocumento,
+            },
+            dataType: "json",
+        });
+
+        const { success, borrado } = respuesta;
+
+        Swal.close();
+
+        if (!success && !borrado) {
+            mensajeError('Revisa la tabla de articulos', mensaje);
+            return;
+        }
+        eliminar_tupla_tabla_ticket(idProducto)
+        await cargarDatosTicket(folioTicket, idDocumento);
+        mensajeSuccess();
+    } catch (error) {
+        Swal.close();
+        mensajeError('Ocurrió un error inesperado. Verifica tu conexión o inténtalo nuevamente.')
+        console.error(error);
+    }
+}
+
+function eliminar_tupla_tabla_ticket(id_producto) {
+
+    const table = $("#table_productos_ticket").DataTable();
+    const filaId = `#pro_tick_${id_producto}`;
+
+    if (!$(filaId).length) {
+        throw new Error("No se encontró la fila en la tabla");
+    }
+
+    table.row($(filaId)).remove().draw();
+
+    console.log(`Fila con ID ${filaId} eliminada.`);
+}
