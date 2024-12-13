@@ -70,6 +70,7 @@ async function cargarDatosTicket(folio, idDocumento) {
         folio_ticket,
         nombre_cliente,
         total,
+        total_articulos,
         estatus
     } = datosTicket;
 
@@ -84,6 +85,7 @@ async function cargarDatosTicket(folio, idDocumento) {
     $("#text_cliente").html('<b>CLIENTE: </b>' + nombre_cliente);
 
     //* datos totales
+    $("#total_articulos").text(`${Number(total_articulos)}`);
     $("#text_total").text(`$${total}`);
     $("#text_cobrar").text(`$${total}`);
     $("#text_total_tabla").text(`$${total}`);

@@ -261,9 +261,9 @@ if (!isset($_SESSION['nombre_usuario'])) {
                                             </tr>
                                             <tr>
                                                 <td><b>ARTICULOS</b></td>
-                                                <td class="text-right">1</td>
+                                                <td class="text-right" id="total_articulos">0</td>
                                             </tr>
-                                            <tr>
+                                            <!-- <tr>
                                                 <td><b>SUBTOTAL</b></td>
                                                 <td class="text-right">$56.64</td>
                                             </tr>
@@ -274,7 +274,7 @@ if (!isset($_SESSION['nombre_usuario'])) {
                                             <tr>
                                                 <td><b>IEPS</b></td>
                                                 <td class="text-right">$0.00</td>
-                                            </tr>
+                                            </tr> -->
                                             <tr>
                                                 <td><b>TOTAL</b></td>
                                                 <td class="text-right" id="text_total"></td>

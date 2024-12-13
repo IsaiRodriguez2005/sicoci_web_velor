@@ -116,7 +116,7 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
                 ]);
                 exit;
             }
-            
+
             echo json_encode([
                 'success' => true,
                 'borrado' => $respuesta
@@ -165,7 +165,7 @@ function eliminarPorductoDelTicket($post, $idEmisor, $conexion)
     $idDocumento = $post['idDocumento'] ?? null;
     $idProducto = $post['productoId'] ?? null;
 
-    if (!$folioTicket || !$idDocumento || !$idProducto ) {
+    if (!$folioTicket || !$idDocumento || !$idProducto) {
         return [
             'exists' => false,
             'error' => 'Faltan datos requeridos para procesar la solicitud.'
@@ -274,7 +274,12 @@ function obtenerTextosTicket($post, $idEmisor, $conexion)
                     ec.nombre_cliente,
                     et.folio_ticket,
                     et.total,
-                    et.estatus
+                    et.estatus,
+                    COALESCE((
+                        SELECT SUM(cantidad) 
+                        FROM emisores_tickets_detalles 
+                        WHERE id_emisor = ? AND folio_ticket = ? AND id_documento = ?
+                    ), 0) AS total_articulos 
                     FROM emisores_tickets et
                         INNER JOIN emisores_series es ON es.id_partida = et.id_documento AND es.id_emisor = et.id_emisor
                         INNER JOIN emisores_agenda ea ON ea.id_folio = et.id_cita AND ea.id_emisor = et.id_emisor 
@@ -283,7 +288,10 @@ function obtenerTextosTicket($post, $idEmisor, $conexion)
     $stmt = mysqli_prepare($conexion, $query);
     mysqli_stmt_bind_param(
         $stmt,
-        "iii",
+        "iiiiii",
+        $idEmisor,
+        $folioTicket,
+        $idDocumento,
         $idEmisor,
         $folioTicket,
         $idDocumento
