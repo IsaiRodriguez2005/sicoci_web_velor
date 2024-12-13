@@ -43,6 +43,7 @@ if (!isset($_SESSION['nombre_usuario'])) {
         <script src="js/sweetalert2@11.js"></script>
 
         <link rel="stylesheet" href="./css/estilos_search.css">
+        <link rel="stylesheet" href="./css/estilos_table.css">
     </head>
 
     <body class="hold-transition sidebar-mini layout-fixed">
@@ -199,27 +200,27 @@ if (!isset($_SESSION['nombre_usuario'])) {
                                     <br>
                                     <hr>
                                     <div class="row">
-                                        <div class="col-sm-12">
-                                            <table class="table table-striped table-bordered" id="table_productos_ticket">
+                                        <div class="ticket-container">
+                                            <table id="table_productos_ticket" class="ticket-table">
                                                 <thead>
                                                     <tr>
-                                                        <th class="text-center">Borrar</th>
-                                                        <th class="text-center">Cant.</th>
-                                                        <th class="text-center">Producto</th>
-                                                        <th class="text-center">Precio</th>
-                                                        <th class="text-center">Total</th>
+                                                        <th>Borrar</th>
+                                                        <th>Cantidad</th>
+                                                        <th>Producto</th>
+                                                        <th>Precio</th>
+                                                        <th>Total</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-
+                                                    <!-- Las filas se agregarán dinámicamente -->
                                                 </tbody>
                                                 <tfoot>
                                                     <tr id="1" class="gradeX">
                                                         <th class="p-t-0 p-b-0 text-center"></th>
                                                         <th class="text-center"></th>
                                                         <th class="text-center"></th>
-                                                        <th class="text-center"></th>
-                                                        <th class="text-center" id="text_total_tabla"><b></b></th>
+                                                        <th class="text-center">Total</th>
+                                                        <th class="text-center" id="text_total_tabla"><b>$0.00</b></th>
                                                     </tr>
                                                 </tfoot>
                                             </table>

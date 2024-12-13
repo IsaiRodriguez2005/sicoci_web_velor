@@ -357,7 +357,7 @@ async function cargarTablaProductosTicket() {
         agregarTuplaTablaTicket(producto, tbody);
     });
 
-    inizializar_tabla('table_productos_ticket');
+    
 }
 
 async function obtenerProdutosTicket() {
@@ -499,14 +499,8 @@ async function eliminar_producto(idProducto) {
 
 function eliminar_tupla_tabla_ticket(id_producto) {
 
-    const table = $("#table_productos_ticket").DataTable();
-    const filaId = `#pro_tick_${id_producto}`;
-
-    if (!$(filaId).length) {
-        throw new Error("No se encontró la fila en la tabla");
+    const fila = document.querySelector(`#pro_tick_${id_producto}`);
+    if (fila) {
+        fila.remove();
     }
-
-    table.row($(filaId)).remove().draw();
-
-    console.log(`Fila con ID ${filaId} eliminada.`);
 }
