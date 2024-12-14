@@ -146,7 +146,7 @@ if (!isset($_SESSION['nombre_usuario'])) {
                         </div> -->
                         <div class="col-12" id="bnombre">
                             <div class="card">
-                                <div class="card-body p-3">
+                                <div class="card-body p-3" id="cont_agregar_productos">
                                     <h4 class="card-title mb-3 d-flex justify-content-between align-items-center">
                                         Agregar producto
                                     </h4>
@@ -234,7 +234,7 @@ if (!isset($_SESSION['nombre_usuario'])) {
                                 <div class="card-body">
                                     <div class="d-flex justify-content-between align-items-center mb-0">
                                         <h4 class="card-title mb-0">Datos de la venta</h4>
-                                        <span data-toggle="tooltip" title="Cambiar nombre">
+                                        <span data-toggle="tooltip" title="Agregar Convenio" id="btn_convenio">
                                             <a class="btn btn-secondary btn-circle" data-toggle="modal" data-target="#cambiarCliente">
                                                 <i class="fas fa-user-edit"></i>
                                             </a>
@@ -284,12 +284,12 @@ if (!isset($_SESSION['nombre_usuario'])) {
                                                 <td class="text-right">$0.00</td>
                                             </tr>
                                             <tr>
-                                                <td style="font-size:35px"><b>COBRAR:</b></td>
+                                                <td style="font-size:35px"><b id="text_total_cobrar">COBRAR:</b></td>
                                                 <td class="text-right" style="font-size:40px" id="text_cobrar"></td>
                                             </tr>
                                         </tbody>
                                     </table>
-                                    <div class="row button-group">
+                                    <div class="row button-group" id="botones_acciones">
                                         <div class="col-lg-4 col-md-4">
                                             <a href="#borrarcancelar" data-toggle="modal" class="btn btn-danger btn-block">Cancel (F9)</a>
                                         </div>
@@ -361,23 +361,21 @@ if (!isset($_SESSION['nombre_usuario'])) {
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h4 class="modal-title text-center">Borrar pedido</h4>
+                                    <h4 class="modal-title text-center">Borrar ticket</h4>
                                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                                 </div>
-                                <form method="post" action="index.php/pedidos/borrar/15864">
-                                    <div class="modal-body">
-                                        <input id="producto" type="hidden" name="producto">
+                                <div class="modal-body">
+                                    <input id="producto" type="hidden" name="producto">
 
-                                        <div class="form-group">
-                                            <label for="password" class="form-label">Clave de supervisor:</label>
-                                            <input id="password" type="password" class="form-control" name="password" required="">
-                                        </div>
+                                    <div class="form-group">
+                                        <label for="contrasenia_cancelacion" class="form-label">Clave de personal:</label>
+                                        <input id="contrasenia_cancelacion" type="password" class="form-control" name="contrasenia_cancelacion" required="">
                                     </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">Cerrar</button>
-                                        <button type="submit" class="btn btn-info waves-effect waves-light" name="submit">Borrar</button>
-                                    </div>
-                                </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">Cerrar</button>
+                                    <button type="button" class="btn btn-info waves-effect waves-light" onclick="cancelar_ticket()">Borrar</button>
+                                </div>
                             </div>
                         </div>
                     </div>

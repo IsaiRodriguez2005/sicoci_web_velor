@@ -29,11 +29,14 @@ function mensajeError(mensaje, title = null,) {
     });
 }
 
-//todo: [INICIA] Ejecutar la función automáticamente al cargar la página
+//todo: Ejecutar la función automáticamente al cargar la página
 document.addEventListener('DOMContentLoaded', procesarDatosTicket);
 
 async function procesarDatosTicket() {
     //* Obtener los parámetros de la URL
+
+    pantallaCarga("Cargando datos...");
+
     const urlParams = new URLSearchParams(window.location.search);
 
     const folioTicket = urlParams.get('folio_ticket');
@@ -60,39 +63,39 @@ async function procesarDatosTicket() {
         });
     }
 
+    Swal.close();
+
 }
 
 async function cargarDatosTicket(folio, idDocumento) {
 
     const datosTicket = await obtenerDatosTicket(folio, idDocumento);
-    const {
-        clave_serie,
-        folio_ticket,
-        nombre_cliente,
-        total,
-        total_articulos,
-        estatus
-    } = datosTicket;
+    // 
+    const { estatus } = datosTicket;
 
-    let textEstatus = obtenerTxtEstatus(estatus);
-
-
-    //* folios
-    $("#text_serie").html(`Serie: ${clave_serie}`);
-    $("#text_folio_ticket").html(folio_ticket);
-    $("#text_folio_href").html(`#${clave_serie}${folio_ticket}`);
-    //* datos del cliente
-    $("#text_cliente").html('<b>CLIENTE: </b>' + nombre_cliente);
-
-    //* datos totales
-    $("#total_articulos").text(`${Number(total_articulos)}`);
-    $("#text_total").text(`$${total}`);
-    $("#text_cobrar").text(`$${total}`);
-    $("#text_total_tabla").text(`$${total}`);
-
-    //* datos estados     
-    $("#texto_estado").html(`<span class="font-weight-bold">Estado:</span> ${textEstatus}`);
-
+    //? diferentes acciones dependiendo el estatus: 
+    switch (estatus) {
+        case 1:
+            ticketAperturado(datosTicket);
+            break;
+        case 2:
+            textEstatus = 'GENERADO';
+            bgColorClass = 'bg-warning';
+            break;
+        case 3:
+            ticketCancelado(datosTicket);
+            break;
+        case 4:
+            textEstatus = 'COBRADO';
+            bgColorClass = 'bg-success';
+            break;
+        default:
+            textEstatus = 'DESCONOCIDO';
+            bgColorClass = 'bg-secondary';
+    }
+    /* 
+    
+            */
 }
 
 async function obtenerDatosTicket(folioTicket, idDocumento) {
@@ -148,17 +151,117 @@ async function cargar_productos_servicios() {
     return resProductos;
 }
 
+//TODO: formatos de ticket dependiendo del estado del mismo
+
+function ticketAperturado(datos) {
+
+    const {
+        clave_serie,
+        folio_ticket,
+        nombre_cliente,
+        total,
+        total_articulos,
+        estatus
+    } = datos;
+
+    let { textEstatus, bgColorClass } = obtenerTxtEstatus(estatus);
+
+
+    //* folios
+    $("#text_serie").html(`Serie: ${clave_serie}`);
+    $("#text_folio_ticket").html(folio_ticket);
+    $("#text_folio_href").html(`#${clave_serie}${folio_ticket}`);
+    //* datos del cliente
+    $("#text_cliente").html('<b>CLIENTE: </b>' + nombre_cliente);
+
+    //* datos totales
+    $("#total_articulos").text(`${Number(total_articulos)}`);
+    $("#text_total").text(`$${total}`);
+    $("#text_cobrar").text(`$${total}`);
+    $("#text_total_tabla").text(`$${total}`);
+
+    //* datos estados     
+    $("#texto_estado")
+        .removeClass("bg-primary bg-warning bg-danger bg-success bg-secondary")
+        .addClass(bgColorClass)
+        .html(`<span class="font-weight-bold">Estado:</span> ${textEstatus}`);
+
+}
+function ticketCancelado(datos){
+    
+    //? deshabilitamos campos
+    const inputSearch = $("#search");
+    const inputCantidad = $("#cantidad_producto");
+    const botonesAcciones = $("#botones_acciones");
+    const btnCnvenio = $("#btn_convenio");
+    const contAgregarProductos = $("#cont_agregar_productos");
+
+    inputSearch.prop('disabled', true);
+    inputCantidad.prop('disabled', true);
+    botonesAcciones.addClass('hidden');
+    btnCnvenio.addClass('hidden');
+    contAgregarProductos.addClass('hidden');
+
+    const {
+        clave_serie,
+        folio_ticket,
+        nombre_cliente,
+        total,
+        total_articulos,
+        estatus
+    } = datos;
+
+    let { textEstatus, bgColorClass } = obtenerTxtEstatus(estatus);
+
+
+    //* folios
+    $("#text_serie").html(`Serie: ${clave_serie}`);
+    $("#text_folio_ticket").html(folio_ticket);
+    $("#text_folio_href").html(`#${clave_serie}${folio_ticket}`);
+    //* datos del cliente
+    $("#text_cliente").html('<b>CLIENTE: </b>' + nombre_cliente);
+
+    //* datos totales
+    $("#total_articulos").text(`${Number(total_articulos)}`);
+    $("#text_total").text(`$${total}`);
+    $("#text_total_cobrar").text(`Total:`);
+    $("#text_cobrar").text(`$${total}`);
+    $("#text_total_tabla").text(`$${total}`);
+
+    //* datos estados     
+    $("#texto_estado")
+        .removeClass("bg-primary bg-warning bg-danger bg-success bg-secondary")
+        .addClass(bgColorClass)
+        .html(`<span class="font-weight-bold">Estado:</span> ${textEstatus}`);
+}
+
 function obtenerTxtEstatus(estatus) {
     switch (estatus) {
         case 1:
-            return textEstatus = 'APERTURADO';
+            textEstatus = 'APERTURADO';
+            bgColorClass = 'bg-primary';
+            break;
         case 2:
-            return textEstatus = 'GENERADO';
+            textEstatus = 'GENERADO';
+            bgColorClass = 'bg-warning';
+            break;
         case 3:
-            return textEstatus = 'CANCELADO';
+            textEstatus = 'CANCELADO';
+            bgColorClass = 'bg-danger';
+            break;
         case 4:
-            return textEstatus = 'COBRADO';
+            textEstatus = 'COBRADO';
+            bgColorClass = 'bg-success';
+            break;
+        default:
+            textEstatus = 'DESCONOCIDO';
+            bgColorClass = 'bg-secondary';
     }
+
+    return {
+        textEstatus,
+        bgColorClass
+    };
 }
 
 //TODO: funciones del buscador de [productos]
@@ -359,7 +462,7 @@ async function cargarTablaProductosTicket() {
         agregarTuplaTablaTicket(producto, tbody);
     });
 
-    
+
 }
 
 async function obtenerProdutosTicket() {
@@ -505,4 +608,46 @@ function eliminar_tupla_tabla_ticket(id_producto) {
     if (fila) {
         fila.remove();
     }
+}
+
+async function cancelar_ticket() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const folioTicket = urlParams.get('folio_ticket');
+    const idDocumento = urlParams.get('id_documento');
+    const claveTrab = $("#contrasenia_cancelacion").val();
+
+    try {
+        pantallaCarga('Cargando...', 'Por favor espera mientras se elimina el producto.');
+
+        const respuesta = await $.ajax({
+            url: "componentes/tickets/peticiones/tickets.php",
+            type: "POST",
+            data: {
+                'funcion': 'cancelarTicket',
+                'folioTicket': folioTicket,
+                'idDocumento': idDocumento,
+                'claveTrab': claveTrab,
+            },
+            dataType: "json",
+        });
+
+        const { success, cancelado } = respuesta;
+
+        Swal.close();
+
+        if (!success && !cancelado) {
+            mensajeError('Error al cancelar el ticket:', mensaje);
+            return;
+        }
+
+        await cargarDatosTicket(folioTicket, idDocumento);
+
+        mensajeSuccess();
+
+    } catch (error) {
+        Swal.close();
+        mensajeError('Ocurrió un error inesperado. Verifica tu conexión o inténtalo nuevamente.')
+        console.error(error);
+    }
+
 }

@@ -13,6 +13,7 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
 } else {
 
     if (isset($_POST['funcion'])) {
+        //todo: Datos de los tickets
         if ($_POST['funcion'] == 'getProductosTicket') {
             $idEmisor = $_SESSION['id_emisor'];
             $datos = obtenerProductosTicket($_POST, $idEmisor, $conexion);
@@ -45,6 +46,8 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
             ]);
             exit;
         }
+
+        //todo: comprobaciones de tickets
         if ($_POST['funcion'] == 'yaExisteTicketDeLaCita') {
 
             if (!isset($_POST['folio_cita'], $_POST['id_cliente'])) {
@@ -81,6 +84,8 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
             ]);
             exit;
         }
+
+        //todo: agregar y eliminar productos del ticket
         if ($_POST['funcion'] == 'agregarProductoTicket') {
             $idEmisor = $_SESSION['id_emisor'];
             $respuesta = agregarPorductoATicket($_POST, $idEmisor, $conexion);
@@ -123,6 +128,26 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
             ]);
             exit;
         }
+
+        //todo: cancelaciones de ticket
+        if ($_POST['funcion'] == 'cancelarTicket') {
+            $idEmisor = $_SESSION['id_emisor'];
+            $respuesta = cancelarTicket($_POST, $idEmisor, $conexion);
+
+            if (isset($respuesta['error'])) {
+                echo json_encode([
+                    'success' => false,
+                    'mensaje' => $respuesta['error']
+                ]);
+                exit;
+            }
+
+            echo json_encode([
+                'success' => true,
+                'cancelado' => $respuesta
+            ]);
+            exit;
+        }
     }
 
     if (isset($_GET['funcion'])) {
@@ -159,6 +184,76 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
     }
 }
 //! funciones para eliminar productos y cancelaciones de tickets
+function cancelarTicket($post, $idEmisor, $conexion)
+{
+
+    $folioTicket = $post['folioTicket'] ?? null;
+    $idDocumento = $post['idDocumento'] ?? null;
+    $contrasenia = $post['claveTrab'] ?? null;
+    $estatus = 3;
+
+    if (!$folioTicket || !$idDocumento || !$contrasenia) {
+        return [
+            'exists' => false,
+            'error' => 'Faltan datos requeridos para procesar la solicitud.'
+        ];
+    }
+
+    $existeTicket = comprobarExistenciaDeTicket($post, $idEmisor, $conexion);
+    if (isset($existeTicket['error'])) {
+        return json_encode([
+            'error' => $existeTicket['error']
+        ]);
+    }
+    if (!$existeTicket['exist']) {
+        return json_encode([
+            'error' => $existeTicket['error']
+        ]);
+    }
+
+    $contraseñaValida = comprobarAccionUsuario($contrasenia, $_SESSION, $conexion);
+    if (isset($contraseñaValidat['error'])) {
+        return json_encode([
+            'error' => $contraseñaValida['error']
+        ]);
+    }
+    if (!$contraseñaValida['success']) {
+        return json_encode([
+            'error' => $contraseñaValida['error']
+        ]);
+    }
+
+    $query = "UPDATE emisores_tickets 
+                            SET estatus = ? 
+                            WHERE id_emisor = ? AND id_documento = ? AND folio_ticket = ? AND estatus != 3;";
+    $stmt = mysqli_prepare($conexion, $query);
+
+    if (!$stmt) {
+        return [
+            'exists' => false,
+            'error' => 'Error al preparar la consulta: ' . mysqli_error($conexion),
+            'ticket' => null
+        ];
+    }
+
+    mysqli_stmt_bind_param(
+        $stmt,
+        "iiii",
+        $estatus,
+        $idEmisor,
+        $idDocumento,
+        $folioTicket
+    );
+
+    //* Ejecutar la consulta de inserción
+    if (!mysqli_stmt_execute($stmt)) {
+        return [
+            'error' => 'Error al cancelar el ticket: ' . mysqli_error($conexion),
+        ];
+    }
+
+    return true;
+}
 function eliminarPorductoDelTicket($post, $idEmisor, $conexion)
 {
     $folioTicket = $post['folioTicket'] ?? null;
@@ -211,13 +306,121 @@ function eliminarPorductoDelTicket($post, $idEmisor, $conexion)
 
     return true;
 }
+//! comprobaciones de acciones
+function comprobarAccionUsuario($contrasenia, $session, $conexion)
+{
+    $idUsuario = $session['id_usuario'];
+    $idEmisor = $session['id_emisor'];
+
+    $query = "SELECT `password` FROM usuarios WHERE id_emisor = ? AND id_usuario = ?;";
+    $stmt = mysqli_prepare($conexion, $query);
+
+    if (!$stmt) {
+        return [
+            'success' => false,
+            'error' => 'Error al preparar la consulta: ' . mysqli_error($conexion)
+        ];
+    }
+
+    mysqli_stmt_bind_param($stmt, "ii", $idEmisor, $idUsuario);
+
+    if (!mysqli_stmt_execute($stmt)) {
+        mysqli_stmt_close($stmt);
+        return [
+            'success' => false,
+            'error' => 'Error al ejecutar la consulta: ' . mysqli_error($conexion)
+        ];
+    }
+
+    //? Obtener resultado
+    $result = mysqli_stmt_get_result($stmt);
+    if (!$result) {
+        mysqli_stmt_close($stmt);
+        return [
+            'aceptar' => false,
+            'error' => 'Error al obtener el resultado: ' . mysqli_error($conexion)
+        ];
+    }
+
+    $datos = mysqli_fetch_assoc($result);
+
+    //? Cerrar stmt
+    mysqli_stmt_close($stmt);
+
+    // Verificar la contraseña
+    if (!($contrasenia == $datos['password'])) {
+        return [
+            'success' => false,
+            'error' => 'Usuario o contraseña incorrectos.'
+        ];
+    }
+
+    // Retornar éxito
+    return [
+        'success' => true,
+        'error' => null
+    ];
+}
+
 //! comprobaciones de tickets
+function comprobarExistenciaDeTicket($post, $idEmisor, $conexion)
+{
+    $folioTicket = $post['folioTicket'] ?? null;
+    $idDocumento = $post['idDocumento'] ?? null;
+
+    if (!$folioTicket || !$idDocumento) {
+        return [
+            'exist' => false,
+            'error' => 'Faltan datos requeridos para procesar la solicitud.'
+        ];
+    }
+
+    $query = "SELECT folio_ticket FROM emisores_tickets WHERE id_emisor = ? AND id_documento = ? AND folio_ticket = ? AND estatus != 3;";
+    $stmt = mysqli_prepare($conexion, $query);
+
+    if (!$stmt) {
+        return [
+            'exist' => false,
+            'error' => 'Error al preparar la consulta: ' . mysqli_error($conexion)
+        ];
+    }
+
+    mysqli_stmt_bind_param($stmt, "iii", $idEmisor, $idDocumento, $folioTicket);
+
+    if (!mysqli_stmt_execute($stmt)) {
+        mysqli_stmt_close($stmt);
+        return [
+            'exist' => false,
+            'error' => 'Error al ejecutar la consulta: ' . mysqli_error($conexion)
+        ];
+    }
+
+    //? Obtener resultado
+    $result = mysqli_stmt_get_result($stmt);
+    if (!$result) {
+        mysqli_stmt_close($stmt);
+        return [
+            'exist' => false,
+            'error' => 'Error al obtener el resultado: ' . mysqli_error($conexion)
+        ];
+    }
+
+    $datos = mysqli_fetch_assoc($result);
+
+    //? Cerrar stmt
+    mysqli_stmt_close($stmt);
+
+    return [
+        'exist' => !empty($datos),
+        'error' => null
+    ];
+}
 function comprobarExistenciaDeTicketDeCita($post, $idEmisor, $conexion)
 {
     $idCita = $post['folio_cita'];
     $idCliente = $post['id_cliente'];
 
-    $query = "SELECT * FROM emisores_tickets WHERE id_cita = ? AND id_emisor = ? AND id_cliente = ? AND estatus != 3;";
+    $query = "SELECT * FROM emisores_tickets WHERE id_cita = ? AND id_emisor = ? AND id_cliente = ? AND estatus NOT IN (1,3);";
     $stmt = mysqli_prepare($conexion, $query);
 
     if (!$stmt) {
@@ -578,18 +781,18 @@ function construct_URL_ticket($ticketAperturado)
     ]);
     return $url;
 }
-function aperturarTicket($serieTicket, $folioCita, $idCliente, $idEmisor, $conexion)
+function aperturarTicket($idDocumento, $folioCita, $idCliente, $idEmisor, $conexion)
 {
     //* Obtener datos de la serie del ticket
-    $datosTicket = obtenerDatosSerieTicket($serieTicket, $conexion, $idEmisor);
-    if (isset($datosTicket['error'])) {
-        return ['error' => $datosTicket['error']];
+    $datosSerie = obtenerDatosSerieTicket($idDocumento, $conexion, $idEmisor);
+    if (isset($datosSerie['error'])) {
+        return ['error' => $datosSerie['error']];
     }
-    $folioTicket = $datosTicket['folio'];
-    $serie = $datosTicket['serie'];
+    $folioTicket = $datosSerie['folio'];
+    $serie = $datosSerie['serie'];
 
     //* Validar si ya existe un ticket para la cita
-    $existeTicket = comprobarExistenciaTicketCita($conexion, $idEmisor, $serieTicket, $folioCita);
+    $existeTicket = comprobarExistenciaTicketCita($conexion, $idEmisor, $idDocumento, $folioCita);
     if (isset($existeTicket['error'])) {
         return ['error' => $existeTicket['error']];
     }
@@ -598,7 +801,7 @@ function aperturarTicket($serieTicket, $folioCita, $idCliente, $idEmisor, $conex
     }
 
     //* Obtener el último folio disponible
-    $ultimoFolioTicket = obtenerUltimoId($conexion, $idEmisor, $folioTicket, $serieTicket, $serieTicket);
+    $ultimoFolioTicket = obtenerUltimoId($conexion, $idEmisor, $folioTicket, $idDocumento);
 
     if (isset($ultimoFolioTicket['error'])) {
         return ['error' => $ultimoFolioTicket['error']];
@@ -625,7 +828,7 @@ function aperturarTicket($serieTicket, $folioCita, $idCliente, $idEmisor, $conex
         $stmt,
         "iiisii",
         $idEmisor,
-        $serieTicket,
+        $idDocumento,
         $ultimoFolioTicket,
         $serie,
         $folioCita,
@@ -638,19 +841,19 @@ function aperturarTicket($serieTicket, $folioCita, $idCliente, $idEmisor, $conex
     }
 
     //* Obtener la tupla recién creada
-    return obtenerDatosTicketAperturado($ultimoFolioTicket, $serieTicket, $conexion, $idEmisor);
+    return obtenerDatosTicketAperturado($ultimoFolioTicket, $idDocumento, $conexion, $idEmisor);
 }
-function obtenerUltimoId($conexion, $idEmisor, $folioTicket, $idSerieTicket, $serieTicket)
+function obtenerUltimoId($conexion, $idEmisor, $folioTicket, $idSerieTicket)
 {
     $query = "SELECT COALESCE(MAX(folio_ticket), ?) AS no_registro 
                     FROM emisores_tickets 
-                    WHERE id_emisor = ? AND id_documento = ? AND serie_ticket = ?;";
+                    WHERE id_emisor = ? AND id_documento = ?;";
     $stmt = mysqli_prepare($conexion, $query);
 
     if (!$stmt) {
         return ['error' => 'Error al preparar la consulta: ' . mysqli_error($conexion)];
     }
-    mysqli_stmt_bind_param($stmt, "iiii", $folioTicket, $idEmisor, $idSerieTicket, $serieTicket);
+    mysqli_stmt_bind_param($stmt, "iii", $folioTicket, $idEmisor, $idSerieTicket);
     mysqli_stmt_execute($stmt);
     $result = mysqli_stmt_get_result($stmt);
 
