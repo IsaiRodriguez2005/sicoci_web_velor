@@ -356,17 +356,15 @@ if (!isset($_SESSION['nombre_usuario'])) {
                         </div>
                     </div>
                     <!-- /.modal -->
-                    <!-- Modal delete producto-->
+                    <!-- Modal cancelar ticket-->
                     <div id="borrarcancelar" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h4 class="modal-title text-center">Borrar ticket</h4>
+                                    <h4 class="modal-title text-center">Cancelar ticket</h4>
                                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                                 </div>
                                 <div class="modal-body">
-                                    <input id="producto" type="hidden" name="producto">
-
                                     <div class="form-group">
                                         <label for="contrasenia_cancelacion" class="form-label">Clave de personal:</label>
                                         <input id="contrasenia_cancelacion" type="password" class="form-control" name="contrasenia_cancelacion" required="">
@@ -374,7 +372,7 @@ if (!isset($_SESSION['nombre_usuario'])) {
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">Cerrar</button>
-                                    <button type="button" class="btn btn-info waves-effect waves-light" onclick="cancelar_ticket()">Borrar</button>
+                                    <button type="button" class="btn btn-info waves-effect waves-light" onclick="cancelar_ticket()">Cancelar ticket</button>
                                 </div>
                             </div>
                         </div>

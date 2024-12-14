@@ -11,11 +11,11 @@ function pantallaCarga(title, text) {
         }
     });
 }
-function mensajeSuccess() {
+function mensajeSuccess(mensaje) {
     return Swal.fire({
         icon: 'success',
         title: 'Éxito',
-        text: 'El producto se agregó correctamente al ticket.',
+        text: mensaje,
     });
 }
 function mensajeError(mensaje, title = null,) {
@@ -70,7 +70,7 @@ async function procesarDatosTicket() {
 async function cargarDatosTicket(folio, idDocumento) {
 
     const datosTicket = await obtenerDatosTicket(folio, idDocumento);
-    // 
+
     const { estatus } = datosTicket;
 
     //? diferentes acciones dependiendo el estatus: 
@@ -443,7 +443,7 @@ async function agregarProducto() {
         await limpiarInputsProductos();
         await cargarDatosTicket(folioTicket, idDocumento);
 
-        mensajeSuccess();
+        mensajeSuccess('El producto se agregó correctamente al ticket.');
 
     } catch (error) {
         Swal.close();
@@ -594,7 +594,7 @@ async function eliminar_producto(idProducto) {
         }
         eliminar_tupla_tabla_ticket(idProducto)
         await cargarDatosTicket(folioTicket, idDocumento);
-        mensajeSuccess();
+        mensajeSuccess('Producto eliminado del ticket corretamente.');
     } catch (error) {
         Swal.close();
         mensajeError('Ocurrió un error inesperado. Verifica tu conexión o inténtalo nuevamente.')
@@ -611,6 +611,10 @@ function eliminar_tupla_tabla_ticket(id_producto) {
 }
 
 async function cancelar_ticket() {
+
+    let modalCancelar = $('#borrarcancelar');
+    modalCancelar.modal('hide');
+
     const urlParams = new URLSearchParams(window.location.search);
     const folioTicket = urlParams.get('folio_ticket');
     const idDocumento = urlParams.get('id_documento');
@@ -630,19 +634,19 @@ async function cancelar_ticket() {
             },
             dataType: "json",
         });
-
-        const { success, cancelado } = respuesta;
-
+        
+        const { success, cancelado, mensaje } = respuesta;
+        
         Swal.close();
 
         if (!success && !cancelado) {
             mensajeError('Error al cancelar el ticket:', mensaje);
             return;
         }
+        
+        mensajeSuccess('Ticket cancelado correctamente');
 
         await cargarDatosTicket(folioTicket, idDocumento);
-
-        mensajeSuccess();
 
     } catch (error) {
         Swal.close();
@@ -650,4 +654,17 @@ async function cancelar_ticket() {
         console.error(error);
     }
 
+}
+
+//TODO: acciones con las teclas [F]
+
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'F9') {
+        event.preventDefault(); 
+        activarModalCancelarTicket();
+    }
+});
+
+function activarModalCancelarTicket(){
+    $('#borrarcancelar').modal('show');
 }

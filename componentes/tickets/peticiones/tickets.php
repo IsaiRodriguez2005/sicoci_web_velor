@@ -133,7 +133,6 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
         if ($_POST['funcion'] == 'cancelarTicket') {
             $idEmisor = $_SESSION['id_emisor'];
             $respuesta = cancelarTicket($_POST, $idEmisor, $conexion);
-
             if (isset($respuesta['error'])) {
                 echo json_encode([
                     'success' => false,
@@ -201,26 +200,26 @@ function cancelarTicket($post, $idEmisor, $conexion)
 
     $existeTicket = comprobarExistenciaDeTicket($post, $idEmisor, $conexion);
     if (isset($existeTicket['error'])) {
-        return json_encode([
+        return [
             'error' => $existeTicket['error']
-        ]);
+        ];
     }
     if (!$existeTicket['exist']) {
-        return json_encode([
+        return [
             'error' => $existeTicket['error']
-        ]);
+        ];
     }
 
     $contraseñaValida = comprobarAccionUsuario($contrasenia, $_SESSION, $conexion);
     if (isset($contraseñaValidat['error'])) {
-        return json_encode([
+        return [
             'error' => $contraseñaValida['error']
-        ]);
+        ];
     }
     if (!$contraseñaValida['success']) {
-        return json_encode([
-            'error' => $contraseñaValida['error']
-        ]);
+        return [
+            'error' => 'Credenciales incorrectos'
+        ];
     }
 
     $query = "UPDATE emisores_tickets 
@@ -231,8 +230,7 @@ function cancelarTicket($post, $idEmisor, $conexion)
     if (!$stmt) {
         return [
             'exists' => false,
-            'error' => 'Error al preparar la consulta: ' . mysqli_error($conexion),
-            'ticket' => null
+            'error' => 'Error al preparar la consulta: ' . mysqli_error($conexion)
         ];
     }
 
