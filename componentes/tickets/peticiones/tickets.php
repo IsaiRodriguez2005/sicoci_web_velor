@@ -420,7 +420,7 @@ function comprobarExistenciaDeTicketDeCita($post, $idEmisor, $conexion)
     $idCita = $post['folio_cita'];
     $idCliente = $post['id_cliente'];
 
-    $query = "SELECT * FROM emisores_tickets WHERE id_cita = ? AND id_emisor = ? AND id_cliente = ? AND estatus NOT IN (1,3);";
+    $query = "SELECT * FROM emisores_tickets WHERE id_cita = ? AND id_emisor = ? AND id_cliente = ? AND estatus NOT IN (3);";
     $stmt = mysqli_prepare($conexion, $query);
 
     if (!$stmt) {
