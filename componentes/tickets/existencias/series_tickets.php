@@ -19,9 +19,48 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
             $idDocumento = $_POST['id_documento'];
             echo existenciaSeriesTickets($idEmisor, $idDocumento, $conexion);
         }
+        if ($_POST['funcion'] == 'cargarSeriesSelect') {
+            $idEmisor = $_SESSION['id_emisor'];
+            $datos = cargarSeriesSelect($idEmisor, $conexion);
+            echo json_encode($datos);
+        }
     }
 }
+function cargarSeriesSelect($idEmisor, $conexion)
+{
+    $idDocumento = 7;
 
+    $query = "SELECT
+                    id_partida,
+                    serie
+                FROM emisores_series 
+                WHERE id_emisor = ? AND id_documento = ?;";
+    $stmt = mysqli_prepare($conexion, $query);
+    mysqli_stmt_bind_param(
+        $stmt,
+        "ii",
+        $idEmisor,
+        $idDocumento
+    );
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
+
+    if (!$result) {
+        return ['error' => 'Error al obtener los resultados: ' . mysqli_error($conexion)];
+    }
+
+    $series = [];
+    while ($row = mysqli_fetch_assoc($result)) {
+        $series[] = $row;
+    }
+
+    mysqli_stmt_close($stmt);
+
+    return [
+        'success' => !empty($series),
+        'series' => $series
+    ];
+}
 function existenciaSeriesTickets($idEmisor, $idDocumento, $conexion)
 {
     $sqlCliente = "SELECT 

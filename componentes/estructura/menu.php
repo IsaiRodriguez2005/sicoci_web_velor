@@ -131,7 +131,7 @@
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="tickets.php" class="nav-link">
+                                    <a href="list_tickets.php" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Tickets</p>
                                     </a>
