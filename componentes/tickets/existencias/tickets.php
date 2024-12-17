@@ -68,14 +68,16 @@ function traerTicketsTabla($idEmisor, $conexion)
     $diaMañanaForma = $diaMañana->format('Y-m-d H:i:s');
 
     $query = "SELECT DISTINCT
+                    es.serie AS clave_serie,
                     t.folio_ticket,
                     t.id_documento, 
                     t.total,
                     t.fecha_emision,
                     t.estatus,
-                    c.nombre_cliente 
+                    COALESCE(c.nombre_cliente, 'Sin Cliente') AS nombre_cliente
                 FROM emisores_tickets t 
-                INNER JOIN emisores_clientes c ON c.id_emisor = t.id_emisor AND c.id_cliente = t.id_cliente
+                INNER JOIN emisores_series es ON es.id_partida = t.id_documento AND es.id_emisor = t.id_emisor
+                LEFT JOIN emisores_clientes c ON c.id_emisor = t.id_emisor AND c.id_cliente = t.id_cliente
                 WHERE t.id_emisor = ? AND t.fecha_emision BETWEEN ? AND ?;";
 
     $stmt = mysqli_prepare($conexion, $query);
@@ -102,7 +104,6 @@ function traerTicketsTabla($idEmisor, $conexion)
     if (!$result) {
         return [
             'success' => false,
-            'error' => 'Error al obtener los resultados: ' . mysqli_error($conexion),
             'tickets' => null
         ];
     }

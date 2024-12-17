@@ -147,6 +147,34 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
             ]);
             exit;
         }
+
+        //todo: aperturar ticket
+        if ($_POST['funcion'] == 'getURLticketSinCita') {
+            
+            if (!isset($_SESSION['id_emisor'], $_POST['serieTicket'])) {
+                echo json_encode([
+                    'success' => false,
+                    'error' => 'Parámetros insuficientes.'
+                ]);
+                exit();
+            }
+            $idEmisor = $_SESSION['id_emisor'];
+
+            $ticketAper = aperturarTicketSinCita($_POST, $idEmisor, $conexion);
+            if (isset($ticketAper['error'])) {
+                echo json_encode([
+                    'success' => false,
+                    'error' => $ticketAper['error']
+                ]);
+                exit();
+            }
+            $url = construct_URL_ticket($ticketAper);
+            echo json_encode([
+                'success' => true,
+                'url' => $url
+            ]);
+            exit();
+        }
     }
 
     if (isset($_GET['funcion'])) {
@@ -162,8 +190,8 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
             }
             $idEmisor = $_SESSION['id_emisor'];
             $serieTicket = $_GET['serieTicket'];
-            $folioCita = $_GET['folioCita'];
-            $idCliente = $_GET['idCliente'];
+            $folioCita = $_GET['folioCita'] ?? null;
+            $idCliente = $_GET['idCliente'] ?? null;
 
             $ticketAper = aperturarTicket($serieTicket, $folioCita, $idCliente, $idEmisor, $conexion);
             if (isset($ticketAper['error'])) {
@@ -181,6 +209,64 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
             exit();
         }
     }
+}
+//! funciones de lsta de tickets
+function aperturarTicketSinCita($post, $idEmisor, $conexion)
+{
+    $idDocumento = $post['serieTicket'];
+    $folioCita = null;
+    $idCliente = null;
+
+    //* Obtener datos de la serie del ticket
+    $datosSerie = obtenerDatosSerieTicket($idDocumento, $conexion, $idEmisor);
+    if (isset($datosSerie['error'])) {
+        return ['error' => $datosSerie['error']];
+    }
+    $folioTicket = $datosSerie['folio'];
+    $serie = $datosSerie['serie'];
+
+    //* Obtener el último folio disponible
+    $ultimoFolioTicket = obtenerUltimoId($conexion, $idEmisor, $folioTicket, $idDocumento);
+
+    if (isset($ultimoFolioTicket['error'])) {
+        return ['error' => $ultimoFolioTicket['error']];
+    }
+
+    $query = "INSERT INTO emisores_tickets (
+            id_emisor, 
+            id_documento, 
+            folio_ticket, 
+            serie_ticket, 
+            id_cita, 
+            id_cliente, 
+            total, 
+            estatus, 
+            estatus_factura
+        ) VALUES (?, ?, ?, ?, ?, ?, 0.00, 1, 1)";
+
+    $stmt = mysqli_prepare($conexion, $query);
+    if (!$stmt) {
+        return ['error' => 'Error al preparar la consulta: ' . mysqli_error($conexion)];
+    }
+
+    mysqli_stmt_bind_param(
+        $stmt,
+        "iiisii",
+        $idEmisor,
+        $idDocumento,
+        $ultimoFolioTicket,
+        $serie,
+        $folioCita,
+        $idCliente
+    );
+
+    //* Ejecutar la consulta de inserción
+    if (!mysqli_stmt_execute($stmt)) {
+        return ['error' => 'Error al insertar el ticket: ' . mysqli_error($conexion)];
+    }
+
+    //* Obtener la tupla recién creada
+    return obtenerDatosTicketAperturado($ultimoFolioTicket, $idDocumento, $conexion, $idEmisor);
 }
 //! funciones para eliminar productos y cancelaciones de tickets
 function cancelarTicket($post, $idEmisor, $conexion)
@@ -472,7 +558,7 @@ function obtenerTextosTicket($post, $idEmisor, $conexion)
 
     $query = "SELECT
                     es.serie AS clave_serie,
-                    ec.nombre_cliente,
+                    COALESCE(ec.nombre_cliente, 'Sin Cliente') AS nombre_cliente,
                     et.folio_ticket,
                     et.total,
                     et.estatus,
@@ -483,8 +569,8 @@ function obtenerTextosTicket($post, $idEmisor, $conexion)
                     ), 0) AS total_articulos 
                     FROM emisores_tickets et
                         INNER JOIN emisores_series es ON es.id_partida = et.id_documento AND es.id_emisor = et.id_emisor
-                        INNER JOIN emisores_agenda ea ON ea.id_folio = et.id_cita AND ea.id_emisor = et.id_emisor 
-                        INNER JOIN emisores_clientes ec ON ec.id_cliente = et.id_cliente AND ec.id_emisor = et.id_emisor
+                        LEFT JOIN emisores_agenda ea ON ea.id_folio = et.id_cita AND ea.id_emisor = et.id_emisor 
+                        LEFT JOIN emisores_clientes ec ON ec.id_cliente = et.id_cliente AND ec.id_emisor = et.id_emisor
                         WHERE et.id_emisor = ? AND et.folio_ticket = ? AND et.id_documento = ?;";
     $stmt = mysqli_prepare($conexion, $query);
     mysqli_stmt_bind_param(

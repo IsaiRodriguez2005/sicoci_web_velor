@@ -84,12 +84,12 @@ if (!isset($_SESSION['nombre_usuario'])) {
                                         <div class="d-flex align-items-center">
                                             <!-- Input para buscar por folio -->
                                             <div class="input-group mr-2">
-                                                <input type="text" class="form-control" id="folio_input" placeholder="Buscar por Folio">
+                                                <input type="text" class="form-control" id="folio_input" placeholder="Buscar por Folio" onfocus="resetear('folio_input')">
                                             </div>
 
                                             <!-- Select para buscar por serie -->
                                             <div class="input-group mr-2">
-                                                <select class="form-control" id="series_select">
+                                                <select class="form-control" id="series_select" onfocus="resetear('series_select')">
                                                     <option value="" selected disabled>Selecciona una serie</option>
                                                     <!-- Agrega más opciones según tus series disponibles -->
                                                 </select>
@@ -101,7 +101,7 @@ if (!isset($_SESSION['nombre_usuario'])) {
 
                                         <!-- Botón para nueva venta -->
                                         <div>
-                                            <button class="btn btn-success" id="btnNuevaVenta" onclick="nuevaVenta()">Nueva Venta</button>
+                                            <button class="btn btn-success" id="btnNuevaVenta" onclick="nueva_venta()">Nueva Venta</button>
                                         </div>
                                     </div>
                                 </div>
@@ -125,8 +125,14 @@ if (!isset($_SESSION['nombre_usuario'])) {
                     </div>
                 </section>
             </div>
-
             <!-- /.content-wrapper -->
+
+            <!-- Modales -->
+            <?php
+            include("componentes/modales/pagos/modales_tickets.php");
+            ?>
+
+            <!-- Componentes -->
             <?php
             include("componentes/estructura/pie.php");
             ?>
