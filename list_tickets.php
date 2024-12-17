@@ -106,14 +106,14 @@ if (!isset($_SESSION['nombre_usuario'])) {
                                     </div>
                                 </div>
 
-                                <table class="table table-striped table-bordered">
+                                <table class="table table-striped table-bordered" id="table_tickets_list">
                                     <thead class="thead-light">
                                         <tr>
-                                            <th>Folio</th>
-                                            <th>Fecha</th>
-                                            <th>Cliente</th>
-                                            <th>Estado</th>
-                                            <th>Total</th>
+                                            <th class="text-center text-sm sorting">Folio</th>
+                                            <th class="text-center text-sm sorting">Fecha</th>
+                                            <th class="text-center text-sm sorting">Cliente</th>
+                                            <th class="text-center text-sm sorting">Estado</th>
+                                            <th class="text-center text-sm sorting">Total</th>
                                         </tr>
                                     </thead>
                                     <tbody>

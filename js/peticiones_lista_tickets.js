@@ -16,32 +16,36 @@ function redieccionarURL(url) {
     }, 1000);
 }
 function obtenerTxtEstatus(estatus) {
+    let textEstatus, bgColorClass;
+
     switch (estatus) {
         case 1:
             textEstatus = 'APERTURADO';
-            bgColorClass = 'bg-primary';
+            bgColorClass = 'badge badge-primary';
             break;
         case 2:
             textEstatus = 'GENERADO';
-            bgColorClass = 'bg-warning';
+            bgColorClass = 'badge badge-warning';
             break;
         case 3:
             textEstatus = 'CANCELADO';
-            bgColorClass = 'bg-danger';
+            bgColorClass = 'badge badge-danger';
             break;
         case 4:
             textEstatus = 'COBRADO';
-            bgColorClass = 'bg-success';
+            bgColorClass = 'badge badge-success';
             break;
         default:
             textEstatus = 'DESCONOCIDO';
-            bgColorClass = 'bg-secondary';
+            bgColorClass = 'badge badge-secondary';
     }
 
-    return {
-        textEstatus,
-        bgColorClass
-    };
+    // Devolver HTML completo para mostrar en la tabla
+    return `
+        <td class="text-center text-sm" style="white-space: nowrap; overflow-x: auto;">
+            <span class="${bgColorClass}" style="width: 100%; color: white;">${textEstatus}</span>
+        </td>
+    `;
 }
 function pantallaCarga(title, text) {
     return Swal.fire({
@@ -84,10 +88,10 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 //todo: [Nuevo ticket]
-async function nueva_venta(){
+async function nueva_venta() {
     const modal = $("#modal_opciones_series_tickets");
     const { success, folios } = await cargar_existecias_series();
-    
+
     if (success) {
 
         if (folios.length == 1) {
@@ -202,8 +206,8 @@ async function cargar_tickets_tabla() {
     const tbody = document.querySelector('table tbody');
     let filas = '';
 
-    if(!tickets){
-        
+    if (!tickets) {
+
         filas += `
             <tr>
                 <td colspan="100%" class="text-center">No hay tickets</td>
@@ -215,24 +219,25 @@ async function cargar_tickets_tabla() {
         return;
     }
 
-    
+
 
     tickets.forEach(ticket => {
         let { fecha_emision, estatus, folio_ticket, id_documento, total, urlTicket, nombre_cliente, clave_serie } = ticket;
-        txtEst = obtenerTxtEstatus(estatus);
-        
+
         filas += `
-            <tr>
-                <td><a href='${urlTicket}' class='text-primary'>${clave_serie}${folio_ticket}</a></td>
-                <td>${fecha_emision}</td>
-                <td>${nombre_cliente}</td>
-                <td class='${txtEst.bgColorClass} text-white text-center'>${txtEst.textEstatus}</td>
-                <td>$${parseFloat(total).toFixed(2)}</td>
+            <tr class='odd'>
+                <td class="text-center text-sm" style="white-space: nowrap; overflow-x: auto;"><a href='${urlTicket}' class='text-primary'>${clave_serie}${folio_ticket}</a></td>
+                <td class="text-center text-sm" style="white-space: nowrap; overflow-x: auto;">${fecha_emision}</td>
+                <td class="text-center text-sm" style="white-space: nowrap; overflow-x: auto;">${nombre_cliente}</td>
+                ${obtenerTxtEstatus(estatus)}
+                <td class="text-center text-sm" style="white-space: nowrap; overflow-x: auto;">$${parseFloat(total).toFixed(2)}</td>
             </tr>
         `;
     });
-
     tbody.innerHTML = filas;
+
+    inizializar_tabla('table_tickets_list');
+    
 }
 async function cargar_tickets_hoy() {
     try {
@@ -262,14 +267,16 @@ async function cargar_tickets_hoy() {
 }
 async function buscar_ticket() {
 
-    const valueInputFolio = $("#folio_input").val();
-    const valueSelectSerie = $("#series_select").val();
+    const inputFolio = $("#folio_input");
+    const selectSerie = $("#series_select");
+    const valueInputFolio = inputFolio.val();
+    const valueSelectSerie = selectSerie.val();
 
-    if (!valueInputFolio && !valueSelectSerie){
-        if(!valueInputFolio){
+    if (!valueInputFolio && !valueSelectSerie) {
+        if (!valueInputFolio) {
             $("#folio_input").addClass('is-invalid');
         }
-        if(!valueSelectSerie){
+        if (!valueSelectSerie) {
             $("#series_select").addClass('is-invalid');
         }
         mensajeError('Introduce los datos necesarios...', 'Datos insuficientes')
@@ -293,9 +300,11 @@ async function buscar_ticket() {
             mensajeError(error);
             return;
         }
+        // limpiamos inputs  
+        inputFolio.val('');
+        selectSerie.val('');
 
         pantallaCarga(mensaje);
-
         redieccionarURL(urlTicket);
 
     } catch (e) {
@@ -348,7 +357,7 @@ async function cargar_series() {
     }
 
 }
-async function cargar_existecias_series(){
+async function cargar_existecias_series() {
     try {
 
         const respuesta = await $.ajax({

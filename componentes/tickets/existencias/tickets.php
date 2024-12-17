@@ -72,13 +72,14 @@ function traerTicketsTabla($idEmisor, $conexion)
                     t.folio_ticket,
                     t.id_documento, 
                     t.total,
-                    t.fecha_emision,
+                    DATE_FORMAT(t.fecha_emision, '%d/%m/%Y') AS fecha_emision,
                     t.estatus,
-                    COALESCE(c.nombre_cliente, 'Sin Cliente') AS nombre_cliente
+                    COALESCE(c.nombre_cliente, 'PÚBLICO EN GENERAL') AS nombre_cliente
                 FROM emisores_tickets t 
                 INNER JOIN emisores_series es ON es.id_partida = t.id_documento AND es.id_emisor = t.id_emisor
                 LEFT JOIN emisores_clientes c ON c.id_emisor = t.id_emisor AND c.id_cliente = t.id_cliente
-                WHERE t.id_emisor = ? AND t.fecha_emision BETWEEN ? AND ?;";
+                WHERE t.id_emisor = ? AND t.fecha_emision BETWEEN ? AND ?
+                GROUP BY t.fecha_emision;";
 
     $stmt = mysqli_prepare($conexion, $query);
     if (!$stmt) {

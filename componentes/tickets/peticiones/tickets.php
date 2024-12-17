@@ -558,7 +558,7 @@ function obtenerTextosTicket($post, $idEmisor, $conexion)
 
     $query = "SELECT
                     es.serie AS clave_serie,
-                    COALESCE(ec.nombre_cliente, 'Sin Cliente') AS nombre_cliente,
+                    COALESCE(ec.nombre_cliente, 'PÚBLICO EN GENERAL') AS nombre_cliente,
                     et.folio_ticket,
                     et.total,
                     et.estatus,
