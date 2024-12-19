@@ -187,8 +187,8 @@ function ticketAperturado(datos) {
         .html(`<span class="font-weight-bold">Estado:</span> ${textEstatus}`);
 
 }
-function ticketCancelado(datos){
-    
+function ticketCancelado(datos) {
+
     //? deshabilitamos campos
     const inputSearch = $("#search");
     const inputCantidad = $("#cantidad_producto");
@@ -404,8 +404,164 @@ $(document).on("click", function (e) {
 // }
 */
 
-//TODO: funciones para agregar productos
+//TODO: funciones para agregar convenios
 
+function info_convenio(select) {
+    const option = select.options[select.selectedIndex];
+    const tipo = option.getAttribute("data-tipo");
+    const descuento = option.getAttribute("data-descuento");
+
+    $("#tipoConvenio").val(tipo);
+    $("#descuentoConvenio").val(descuento);
+}
+
+async function btn_agregar_convenio(idProducto) {
+    $("#listConvenios").val('');
+    $("#tipoConvenio").val('');
+    $("#descuentoConvenio").val('');
+    await cargar_select_convenios();
+    $("#id_producto_convenio").val(idProducto);
+}
+
+async function cargar_select_convenios() {
+    const convenios = await traer_convenios();
+    const selectConvenios = $("#listConvenios");
+
+    let options = `<option value="" selected disabled>Selecciona un convenio</option>`;
+    convenios.forEach(conv => {
+        let { cost_consul, id_convenio, nombre, pct_consul, tipo } = conv;
+        let props;
+
+        if (Number(tipo) == 1) {
+            props = `data-tipo="Monto fijo" data-descuento="$${cost_consul}"`;
+        } else {
+            props = `data-tipo="Porcentaje" data-descuento="%${pct_consul}"`;
+        }
+
+        options += `<option ${props} value="${id_convenio}">${nombre}</option>`;
+    });
+
+    selectConvenios.html(options);
+}
+
+async function traer_convenios() {
+    try {
+
+        const respuesta = await $.ajax({
+            cache: false,
+            url: 'componentes/tickets/peticiones/convenios.php',
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                'funcion': 'traerConvenios',
+            },
+        });
+
+        const { success, data, mensaje } = respuesta;
+
+        if (!success) {
+            throw new Error(mensaje);
+        }
+
+        return data;
+
+    } catch (error) {
+        console.error(error);
+    }
+
+}
+
+async function agregar_convenio() {
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const folioTicket = urlParams.get('folio_ticket');
+    const idDocumento = urlParams.get('id_documento');
+    const idConvenio = $("#listConvenios").val();
+    const idProducto = $("#id_producto_convenio").val();
+
+    try {
+        pantallaCarga('Cargando...', 'Por favor espera mientras se procesa tu solicitud.');
+
+        const respuesta = await $.ajax({
+            url: "componentes/tickets/peticiones/convenios.php",
+            type: "POST",
+            data: {
+                'funcion': 'agregarConvenioTicket',
+                'idProducto': idProducto,
+                'idConvenio': idConvenio,
+                'folioTicket': folioTicket,
+                'idDocumento': idDocumento,
+            },
+            dataType: "json",
+        });
+
+        const { success, mensaje } = respuesta;
+
+        Swal.close();
+
+        if (!success) {
+            mensajeError('Revisa la tabla de articulos', mensaje);
+            return;
+        }
+
+        // cargamos los datos
+        await cargarDatosTicket(folioTicket, idDocumento);
+        await cargarTablaProductosTicket();
+
+        mensajeSuccess(mensaje);
+
+        // oculatamos modal
+        $("#agregarConvenio").modal('hide');
+
+    } catch (error) {
+        Swal.close();
+        mensajeError('Ocurrió un error inesperado. Verifica tu conexión o inténtalo nuevamente.')
+        console.error(error);
+    }
+}
+
+async function borrar_convenio(idProducto){
+    const urlParams = new URLSearchParams(window.location.search);
+    const folioTicket = urlParams.get('folio_ticket');
+    const idDocumento = urlParams.get('id_documento');
+
+    try {
+        pantallaCarga('Cargando...', 'Por favor espera mientras se procesa tu solicitud.');
+
+        const respuesta = await $.ajax({
+            url: "componentes/tickets/peticiones/convenios.php",
+            type: "POST",
+            data: {
+                'funcion': 'eliminarConvenioTicket',
+                'idProducto': idProducto,
+                'folioTicket': folioTicket,
+                'idDocumento': idDocumento,
+            },
+            dataType: "json",
+        });
+
+        const { success, mensaje } = respuesta;
+
+        Swal.close();
+
+        if (!success) {
+            mensajeError('Revisa la tabla de articulos', mensaje);
+            return;
+        }
+
+        await cargarDatosTicket(folioTicket, idDocumento);
+        await cargarTablaProductosTicket();
+
+        mensajeSuccess(mensaje);
+
+    } catch (error) {
+        Swal.close();
+        mensajeError('Ocurrió un error inesperado. Verifica tu conexión o inténtalo nuevamente.')
+        console.error(error);
+    }
+}
+
+//TODO: funciones para agregar productos
 async function agregarProducto() {
 
     const urlParams = new URLSearchParams(window.location.search);
@@ -454,6 +610,7 @@ async function agregarProducto() {
 
 async function cargarTablaProductosTicket() {
     const productos = await obtenerProdutosTicket();
+    console.log(productos);
     const tbody = $('#table_productos_ticket tbody');
 
     tbody.empty();
@@ -501,25 +658,52 @@ function agregarTuplaTablaTicket(producto, tbody = null) {
         tbody = $('#table_productos_ticket tbody');
     }
 
-    const { id_producto, cantidad, nombreProducto, precio, importe } = producto;
+    let { id_producto, cantidad, nombreProducto, precio, importe, descuento } = producto;
 
-    const cantidadFormat = parseFloat(cantidad).toFixed(2);
-    const precioFormat = parseFloat(precio).toFixed(2);
-    const importeFormat = parseFloat(importe).toFixed(2);
+    let cantidadFormat = parseFloat(cantidad).toFixed(2);
+    let precioFormat = parseFloat(precio).toFixed(2);
+    let nuevoImporte = parseFloat(importe) - parseFloat(descuento);
+    let importeFormat = parseFloat(nuevoImporte).toFixed(2);
+    let descuentoFormat = parseFloat(descuento).toFixed(2);
 
-    const fila = `
+    let btnConvenio = `
+            <button class="btn btn-warning btn-sm" 
+                    style="cursor: pointer;" 
+                    producto="${id_producto}" 
+                    title="Agregar convenio"
+                    data-toggle="modal" data-target="#agregarConvenio" 
+                    onclick="btn_agregar_convenio(${id_producto})">
+                <i class="fas fa-user-check"></i>
+            </button>`;
+
+    if (parseFloat(descuento) > 0) {
+        btnConvenio = `
+            <button class="btn btn-secondary btn-sm" 
+                    style="cursor: pointer;" 
+                    producto="${id_producto}" 
+                    title="Borrar convenio" 
+                    onclick="borrar_convenio(${id_producto})">
+                <i class="fas fa-user-times"></i>
+            </button>
+        `;
+    }
+
+    let fila = `
                     <tr id="pro_tick_${id_producto}" class="gradeX">
                         <td class="p-t-0 p-b-0 text-center">
-                            <button class="btn btn-danger btn-sm modalBorrar" 
-                                            style="cursor: pointer;" 
-                                            producto="${id_producto}" 
-                                            onclick="eliminar_producto(${id_producto})">
+                            <button class="btn btn-danger btn-sm" 
+                                    style="cursor: pointer;" 
+                                    title="Borrar producto"
+                                    producto="${id_producto}" 
+                                    onclick="eliminar_producto(${id_producto})">
                                 <i class="fas fa-trash-alt"></i>
                             </button>
+                            ${btnConvenio}
                         </td>
                         <td class="text-center">${cantidadFormat}</td>
                         <td class="text-center">${nombreProducto}</td>
                         <td class="text-center">$${precioFormat}</td>
+                        <td class="text-center">$${descuentoFormat}</td>
                         <td class="text-center">$${importeFormat}</td>
                     </tr>
                 `;
@@ -634,16 +818,16 @@ async function cancelar_ticket() {
             },
             dataType: "json",
         });
-        
+
         const { success, cancelado, mensaje } = respuesta;
-        
+
         Swal.close();
 
         if (!success && !cancelado) {
             mensajeError('Error al cancelar el ticket:', mensaje);
             return;
         }
-        
+
         mensajeSuccess('Ticket cancelado correctamente');
 
         await cargarDatosTicket(folioTicket, idDocumento);
@@ -658,13 +842,13 @@ async function cancelar_ticket() {
 
 //TODO: acciones con las teclas [F]
 
-document.addEventListener('keydown', function(event) {
+document.addEventListener('keydown', function (event) {
     if (event.key === 'F9') {
-        event.preventDefault(); 
+        event.preventDefault();
         activarModalCancelarTicket();
     }
 });
 
-function activarModalCancelarTicket(){
+function activarModalCancelarTicket() {
     $('#borrarcancelar').modal('show');
 }

@@ -82,6 +82,45 @@ if (!isset($_SESSION['nombre_usuario'])) {
                     </div>
 
                     <!-- Modal cambiar cliente-->
+                    <div id="agregarConvenio" class="modal fade top20" role="dialog" aria-labelledby="agregarConvenio" aria-hidden="true" style="display: none;">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title text-center">Agregar Convenio</h4>
+                                    <input type="hidden" id="id_producto_convenio">
+                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="form-group">
+                                        <label for="recipient-name-tarjeta" class="form-label">Convenios:</label>
+                                        <select class="select3 form-control select2-hidden-accessible" 
+                                                style="width: 100%;" 
+                                                name="convenios" 
+                                                id="listConvenios" 
+                                                tabindex="-1" 
+                                                aria-hidden="true"
+                                                oninput="info_convenio(this)">
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="tipoConvenio" class="form-label">Tipo:</label>
+                                        <input type="text" id="tipoConvenio" class="form-control" placeholder="Tipo de convenio" disabled>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="descuentoConvenio" class="form-label">Descuento:</label>
+                                        <input type="text" id="descuentoConvenio" class="form-control" placeholder="Cantidad de descuento" disabled>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">Cerrar</button>
+                                    <!-- <button type="submit" class="btn btn-info waves-effect waves-light" name="submit">Cambiar</button> -->
+                                    <button type="button" class="btn btn-info waves-effect waves-light" onclick="agregar_convenio()">Cambiar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.modal -->
+                    <!-- Modal cambiar cliente-->
                     <div id="cambiarCliente" class="modal fade top20" role="dialog" aria-labelledby="cambiarCliente" aria-hidden="true" style="display: none;">
                         <div class="modal-dialog">
                             <div class="modal-content">
@@ -89,28 +128,35 @@ if (!isset($_SESSION['nombre_usuario'])) {
                                     <h4 class="modal-title text-center">Cambiar cliente</h4>
                                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
                                 </div>
-                                <form method="post" action="index.php/pventa/cambiaCliente/15864">
-                                    <div class="modal-body">
-                                        <div class="form-group">
-                                            <label for="recipient-name-tarjeta" class="form-label">Cliente:</label>
-                                            <select class="select3 form-control select2-hidden-accessible" style="width: 100%;" name="cliente" id="sclientes" tabindex="-1" aria-hidden="true">
-                                                <option value="15864">Ab Abasolo </option>
-                                                <option value="1208"> CARNICERíA LA VAQUILLA</option>
-                                            </select><span class="select2 select2-container select2-container--default" dir="ltr" style="width: 100%;"><span class="selection"><span class="select2-selection select2-selection--single" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="0" aria-labelledby="select2-sclientes-container"><span class="select2-selection__rendered" id="select2-sclientes-container" title="Ab Abasolo ">Ab Abasolo </span><span class="select2-selection__arrow" role="presentation"><b role="presentation"></b></span></span></span><span class="dropdown-wrapper" aria-hidden="true"></span></span>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="recipient-name-tarjeta" class="form-label">Cambia precio:</label>
-                                            <select class="select3 form-control select2-hidden-accessible" style="width: 100%;" name="cambiaprecio" tabindex="-1" aria-hidden="true">
-                                                <option value="1">Si</option>
-                                                <option value="0">No</option>
-                                            </select><span class="select2 select2-container select2-container--default" dir="ltr" style="width: 100%;"><span class="selection"><span class="select2-selection select2-selection--single" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="0" aria-labelledby="select2-cambiaprecio-42-container"><span class="select2-selection__rendered" id="select2-cambiaprecio-42-container" title="Si">Si</span><span class="select2-selection__arrow" role="presentation"><b role="presentation"></b></span></span></span><span class="dropdown-wrapper" aria-hidden="true"></span></span>
-                                        </div>
+                                <div class="modal-body">
+                                    <div class="form-group">
+                                        <label for="recipient-name-tarjeta" class="form-label">Cliente:</label>
+                                        <select class="select3 form-control select2-hidden-accessible" style="width: 100%;" name="cliente" id="sclientes" tabindex="-1" aria-hidden="true">
+                                            <option value="15864">Ab Abasolo </option>
+                                            <option value="1208"> CARNICERíA LA VAQUILLA</option>
+                                        </select>
+                                        <span class="select2 select2-container select2-container--default" dir="ltr" style="width: 100%;">
+                                            <span class="selection">
+                                                <span class="select2-selection select2-selection--single" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="0" aria-labelledby="select2-sclientes-container">
+                                                    <span class="select2-selection__rendered" id="select2-sclientes-container" title="Ab Abasolo ">Ab Abasolo </span>
+                                                    <span class="select2-selection__arrow" role="presentation"><b role="presentation"></b></span>
+                                                </span>
+                                            </span>
+                                            <span class="dropdown-wrapper" aria-hidden="true"></span>
+                                        </span>
                                     </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">Cerrar</button>
-                                        <button type="submit" class="btn btn-info waves-effect waves-light" name="submit">Cambiar</button>
+                                    <div class="form-group">
+                                        <label for="recipient-name-tarjeta" class="form-label">Cambia precio:</label>
+                                        <select class="select3 form-control select2-hidden-accessible" style="width: 100%;" name="cambiaprecio" tabindex="-1" aria-hidden="true">
+                                            <option value="1">Si</option>
+                                            <option value="0">No</option>
+                                        </select><span class="select2 select2-container select2-container--default" dir="ltr" style="width: 100%;"><span class="selection"><span class="select2-selection select2-selection--single" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="0" aria-labelledby="select2-cambiaprecio-42-container"><span class="select2-selection__rendered" id="select2-cambiaprecio-42-container" title="Si">Si</span><span class="select2-selection__arrow" role="presentation"><b role="presentation"></b></span></span></span><span class="dropdown-wrapper" aria-hidden="true"></span></span>
                                     </div>
-                                </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">Cerrar</button>
+                                    <button type="submit" class="btn btn-info waves-effect waves-light" name="submit">Cambiar</button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -208,6 +254,7 @@ if (!isset($_SESSION['nombre_usuario'])) {
                                                         <th>Cantidad</th>
                                                         <th>Producto</th>
                                                         <th>Precio</th>
+                                                        <th>Descuento</th>
                                                         <th>Total</th>
                                                     </tr>
                                                 </thead>
@@ -217,6 +264,7 @@ if (!isset($_SESSION['nombre_usuario'])) {
                                                 <tfoot>
                                                     <tr id="1" class="gradeX">
                                                         <th class="p-t-0 p-b-0 text-center"></th>
+                                                        <th class="text-center"></th>
                                                         <th class="text-center"></th>
                                                         <th class="text-center"></th>
                                                         <th class="text-center">Total</th>

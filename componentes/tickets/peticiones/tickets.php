@@ -210,6 +210,8 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
         }
     }
 }
+
+
 //! funciones de lsta de tickets
 function aperturarTicketSinCita($post, $idEmisor, $conexion)
 {
@@ -606,6 +608,7 @@ function obtenerProductosTicket($post, $idEmisor, $conexion)
                     ed.cantidad,
                     ps.nombre as nombreProducto,
                     (ed.precio_unitario * (100 + ed.iva_porcentaje) / 100) as precio,
+                    ed.descuento,
                     ed.importe
                     FROM emisores_tickets_detalles ed
                         INNER JOIN emisores_tickets et 
@@ -680,7 +683,7 @@ function agregarPorductoATicket($post, $idEmisor, $conexion)
     $ivaMonto = calcularMontoIVA($ivaPorcentaje, $precio);
     $precioUnitario = $precio + $ivaMonto;
     $importe = $precioUnitario * $cantidad;
-
+    $descuento = 0.00;
 
 
     $query = "INSERT INTO emisores_tickets_detalles (
@@ -689,12 +692,12 @@ function agregarPorductoATicket($post, $idEmisor, $conexion)
                                                         `id_documento`, 
                                                         `folio_ticket`, 
                                                         `id_producto`, 
-                                                        `cantidad`, 
-                                                        `descripcion`, 
+                                                        `cantidad`,  
                                                         `precio_unitario`, 
                                                         `importe`, 
                                                         `iva_porcentaje`, 
-                                                        `iva_monto`
+                                                        `iva_monto`,
+                                                        `descuento`
                                                         ) VALUES (?,?,?,?,?,?,?,?,?,?,?);";
     $stmt = mysqli_prepare($conexion, $query);
 
@@ -708,18 +711,18 @@ function agregarPorductoATicket($post, $idEmisor, $conexion)
 
     mysqli_stmt_bind_param(
         $stmt,
-        "iiiiidsdddd",
+        "iiiiidddddd",
         $ultimo,
         $idEmisor,
         $idDocumento,
         $folioTicket,
         $idProducto,
         $cantidad,
-        $descripcion,
         $precio,
         $importe,
         $ivaPorcentaje,
-        $ivaMonto
+        $ivaMonto,
+        $descuento
     );
     //* Ejecutar la consulta de inserción
     if (!mysqli_stmt_execute($stmt)) {
@@ -826,7 +829,8 @@ function obtenerProductoDeLaCompra($idPartida, $idDocumento, $folioTicket, $idEm
                         ed.cantidad,
                         ps.nombre as nombreProducto,
                         (ed.precio_unitario * (100 + ed.iva_porcentaje) / 100) as precio,
-                        ed.importe
+                        ed.importe,
+                        ed.descuento
                         FROM emisores_tickets_detalles ed 
                             INNER JOIN productos_servicios ps ON ps.id_emisor = ed.id_emisor AND ps.id_producto = ed.id_producto
                             WHERE ed.id_partida = ? AND ed.id_emisor = ? AND ed.id_documento = ? AND ed.folio_ticket = ?;";
