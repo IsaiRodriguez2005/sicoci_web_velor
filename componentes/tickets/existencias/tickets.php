@@ -78,8 +78,12 @@ function traerTicketsTabla($idEmisor, $conexion)
                 FROM emisores_tickets t 
                 INNER JOIN emisores_series es ON es.id_partida = t.id_documento AND es.id_emisor = t.id_emisor
                 LEFT JOIN emisores_clientes c ON c.id_emisor = t.id_emisor AND c.id_cliente = t.id_cliente
-                WHERE t.id_emisor = ? AND t.fecha_emision BETWEEN ? AND ?
-                GROUP BY t.fecha_emision;";
+                WHERE t.id_emisor = ? AND (
+                                            t.fecha_emision BETWEEN ? AND ? 
+                                            OR ( t.estatus = 1 AND (t.fecha_emision < ? OR t.fecha_emision > ?) )
+                                        )
+                GROUP BY t.fecha_emision
+                ORDER BY t.fecha_emision DESC;";
 
     $stmt = mysqli_prepare($conexion, $query);
     if (!$stmt) {
@@ -92,8 +96,10 @@ function traerTicketsTabla($idEmisor, $conexion)
 
     mysqli_stmt_bind_param(
         $stmt,
-        "iss",
+        "issss",
         $idEmisor,
+        $diaHoyForma,
+        $diaMañanaForma,
         $diaHoyForma,
         $diaMañanaForma
     );

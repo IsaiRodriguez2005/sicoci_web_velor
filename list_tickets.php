@@ -112,7 +112,7 @@ if (!isset($_SESSION['nombre_usuario'])) {
                                             <th class="text-center text-sm sorting">Folio</th>
                                             <th class="text-center text-sm sorting">Fecha</th>
                                             <th class="text-center text-sm sorting">Cliente</th>
-                                            <th class="text-center text-sm sorting">Estado</th>
+                                            <th class="text-center text-sm sorting" style="width:50px;white-space:nowrap;">Estado</th>
                                             <th class="text-center text-sm sorting">Total</th>
                                         </tr>
                                     </thead>

@@ -142,7 +142,7 @@ function inizializar_tabla(idTabla) {
         paging: true,
         lengthChange: false,
         searching: true,
-        ordering: true,
+        ordering: false,
         info: true,
         autoWidth: true,
         responsive: true,
