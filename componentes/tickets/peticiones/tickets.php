@@ -564,6 +564,7 @@ function obtenerTextosTicket($post, $idEmisor, $conexion)
                     et.folio_ticket,
                     et.total,
                     et.estatus,
+                    COALESCE(et.id_cliente, 0) AS id_cliente,
                     COALESCE((
                         SELECT SUM(cantidad) 
                         FROM emisores_tickets_detalles 

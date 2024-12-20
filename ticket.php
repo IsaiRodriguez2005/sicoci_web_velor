@@ -4,11 +4,11 @@ require("componentes/conexion.php");
 date_default_timezone_set('America/Mexico_City');
 if (!isset($_SESSION['nombre_usuario'])) {
     session_destroy();
-    header('location: index.html');
+    header('location: index.php');
 } else {
 ?>
-    <!DOCTYPE html>
-    <html lang="es">
+<!DOCTYPE html>
+<htmlg="es">
 
     <head>
         <meta charset="utf-8">
@@ -16,7 +16,8 @@ if (!isset($_SESSION['nombre_usuario'])) {
         <title>Intranet Velor Innovation</title>
 
         <!-- Google Font: Source Sans Pro -->
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+        <link rel="stylesheet"
+            href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
         <!-- Font Awesome -->
         <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
         <!-- Ionicons -->
@@ -49,16 +50,16 @@ if (!isset($_SESSION['nombre_usuario'])) {
     <body class="hold-transition sidebar-mini layout-fixed">
         <div class="wrapper">
             <?php
-            include("componentes/estructura/encabezado.php");
-            include("componentes/estructura/menu.php");
-            ?>
+                include("componentes/estructura/encabezado.php");
+                include("componentes/estructura/menu.php");
+                ?>
             <!-- Content Wrapper. Contains page content -->
             <div class="content-wrapper">
                 <div class="container-fluid pr-3 pl-3">
                     <!-- ============================================================== -->
                     <!-- Bread crumb and right sidebar toggle -->
                     <!-- ============================================================== -->
-                    <div class="row page-titles justify-content-between">
+                    <div ss="row page-titles justify-content-between">
                         <!-- Breadcrumb y título a la izquierda -->
                         <div class="col-8 align-self-center mt-3">
                             <ol class="breadcrumb">
@@ -82,80 +83,83 @@ if (!isset($_SESSION['nombre_usuario'])) {
                     </div>
 
                     <!-- Modal cambiar cliente-->
-                    <div id="agregarConvenio" class="modal fade top20" role="dialog" aria-labelledby="agregarConvenio" aria-hidden="true" style="display: none;">
+                    <div id="agregarConvenio" class="modal fade top20" role="dialog" aria-labelledby="agregarConvenio"
+                        aria-hidden="true" style="display: none;">
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h4 class="modal-title text-center">Agregar Convenio</h4>
                                     <input type="hidden" id="id_producto_convenio">
-                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+                                    <button type="button" class="close" data-dismiss="modal"
+                                        aria-hidden="true">x</button>
                                 </div>
                                 <div class="modal-body">
                                     <div class="form-group">
                                         <label for="recipient-name-tarjeta" class="form-label">Convenios:</label>
-                                        <select class="select3 form-control select2-hidden-accessible" 
-                                                style="width: 100%;" 
-                                                name="convenios" 
-                                                id="listConvenios" 
-                                                tabindex="-1" 
-                                                aria-hidden="true"
-                                                oninput="info_convenio(this)">
+                                        <select class="select3 form-control select2-hidden-accessible"
+                                            style="width: 100%;" name="convenios" id="listConvenios" tabindex="-1"
+                                            aria-hidden="true" oninput="info_convenio(this)">
                                         </select>
                                     </div>
                                     <div class="form-group">
                                         <label for="tipoConvenio" class="form-label">Tipo:</label>
-                                        <input type="text" id="tipoConvenio" class="form-control" placeholder="Tipo de convenio" disabled>
+                                        <input type="text" id="tipoConvenio" class="form-control"
+                                            placeholder="Tipo de convenio" disabled>
                                     </div>
                                     <div class="form-group">
                                         <label for="descuentoConvenio" class="form-label">Descuento:</label>
-                                        <input type="text" id="descuentoConvenio" class="form-control" placeholder="Cantidad de descuento" disabled>
+                                        <input type="text" id="descuentoConvenio" class="form-control"
+                                            placeholder="Cantidad de descuento" disabled>
                                     </div>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">Cerrar</button>
+                                    <button type="button" class="btn btn-secondary waves-effect"
+                                        data-dismiss="modal">Cerrar</button>
                                     <!-- <button type="submit" class="btn btn-info waves-effect waves-light" name="submit">Cambiar</button> -->
-                                    <button type="button" class="btn btn-info waves-effect waves-light" onclick="agregar_convenio()">Cambiar</button>
+                                    <button type="button" class="btn btn-info waves-effect waves-light"
+                                        onclick="agregar_convenio()">Cambiar</button>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <!-- /.modal -->
                     <!-- Modal cambiar cliente-->
-                    <div id="cambiarCliente" class="modal fade top20" role="dialog" aria-labelledby="cambiarCliente" aria-hidden="true" style="display: none;">
+                    <div id="cambiarCliente" class="modal fade top20" role="dialog" aria-labelledby="cambiarCliente"
+                        aria-hidden="true" style="display: none;">
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h4 class="modal-title text-center">Cambiar cliente</h4>
-                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+                                    <button type="button" class="close" data-dismiss="modal"
+                                        aria-hidden="true">x</button>
                                 </div>
                                 <div class="modal-body">
                                     <div class="form-group">
                                         <label for="recipient-name-tarjeta" class="form-label">Cliente:</label>
-                                        <select class="select3 form-control select2-hidden-accessible" style="width: 100%;" name="cliente" id="sclientes" tabindex="-1" aria-hidden="true">
-                                            <option value="15864">Ab Abasolo </option>
-                                            <option value="1208"> CARNICERíA LA VAQUILLA</option>
-                                        </select>
-                                        <span class="select2 select2-container select2-container--default" dir="ltr" style="width: 100%;">
-                                            <span class="selection">
-                                                <span class="select2-selection select2-selection--single" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="0" aria-labelledby="select2-sclientes-container">
-                                                    <span class="select2-selection__rendered" id="select2-sclientes-container" title="Ab Abasolo ">Ab Abasolo </span>
-                                                    <span class="select2-selection__arrow" role="presentation"><b role="presentation"></b></span>
-                                                </span>
-                                            </span>
-                                            <span class="dropdown-wrapper" aria-hidden="true"></span>
-                                        </span>
+                                        <input type="hidden" id="id_cliente_modal">
+                                        <div class="form-group position-relative">
+                                            <input type="text" id="search_clientes" class="form-control"
+                                                placeholder="Buscar..." autocomplete="off" />
+                                            <div id="content_clientes"
+                                                class="position-absolute w-100 bg-white border rounded"
+                                                style="max-height: 150px; overflow-y: auto; display: none;">
+                                                <ul id="list_clientes" class="list-group">
+
+                                                </ul>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="form-group">
-                                        <label for="recipient-name-tarjeta" class="form-label">Cambia precio:</label>
-                                        <select class="select3 form-control select2-hidden-accessible" style="width: 100%;" name="cambiaprecio" tabindex="-1" aria-hidden="true">
-                                            <option value="1">Si</option>
-                                            <option value="0">No</option>
-                                        </select><span class="select2 select2-container select2-container--default" dir="ltr" style="width: 100%;"><span class="selection"><span class="select2-selection select2-selection--single" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="0" aria-labelledby="select2-cambiaprecio-42-container"><span class="select2-selection__rendered" id="select2-cambiaprecio-42-container" title="Si">Si</span><span class="select2-selection__arrow" role="presentation"><b role="presentation"></b></span></span></span><span class="dropdown-wrapper" aria-hidden="true"></span></span>
-                                    </div>
+
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">Cerrar</button>
-                                    <button type="submit" class="btn btn-info waves-effect waves-light" name="submit">Cambiar</button>
+                                    <button type="button" 
+                                        class="btn btn-secondary waves-effect"
+                                        data-dismiss="modal"
+                                        onclick="btn_cerrar_cliente()">Cerrar</button>
+                                    <button 
+                                        type="button" 
+                                        class="btn btn-info waves-effect waves-light"
+                                        onclick="cambiar_cliente()">Cambiar</button>
                                 </div>
                             </div>
                         </div>
@@ -168,28 +172,6 @@ if (!isset($_SESSION['nombre_usuario'])) {
                     <!-- Start Page Content -->
                     <!-- ============================================================== -->
                     <div class="row">
-                        <!-- <div class="col-12" id="bcodigo">
-                            <div class="card">
-                                <div class="card-body p-b-0">
-                                    <h4 class="card-title p-b-10">Agregar producto por código
-                                        <a style="color:#fff" class="btn pull-right btn-success btnbuscart" data-toggle="tooltip" title="" data-original-title="Buscar por nombre" target="_blank"><i class="mdi mdi-account-search"></i> [f4]
-                                        </a>
-                                    </h4>
-                                    <hr>
-                                    <form method="post" action="index.php/pventa/addProducto/15864" class="row" id="addProducto">
-                                        <div class="form-group col-sm-4 col-md-3 mb-3 text-center">
-                                            <label class="form-label">Cantidad (f2)</label>
-                                            <input type="text" class="form-control text-center" name="cantidad" style="font-size:27px" value="1" id="cantidad" autocomplete="off">
-                                        </div>
-                                        <div class="form-group col-sm-6 col-md-7 col-lg-4 mb-3 text-center">
-                                            <label class="form-label">Código</label>
-                                            <input type="text" class="form-control text-center" placeholder="Ingresar código" name="codigo" id="codigo" autofocus="on" style="font-size:27px" required="">
-                                        </div>
-                                        <input type="submit" style="position: absolute; left: -9999px; width: 1px; height: 1px;" tabindex="-1">
-                                    </form>
-                                </div>
-                            </div>
-                        </div> -->
                         <div class="col-12" id="bnombre">
                             <div class="card">
                                 <div class="card-body p-3" id="cont_agregar_productos">
@@ -205,7 +187,8 @@ if (!isset($_SESSION['nombre_usuario'])) {
                                             <label class="form-label font-weight-bold d-block">Producto</label>
                                             <div class="search-container">
                                                 <input type="hidden" id="id_producto">
-                                                <input type="text" id="search" placeholder="Buscar..." oninput="filtrar_lista()" class="form-control" />
+                                                <input type="text" id="search" placeholder="Buscar..."
+                                                    oninput="filtrar_lista()" class="form-control" />
                                                 <ul id="suggestions" class="suggestions hidden">
                                                     <!-- Sugerencias dinámicas -->
                                                 </ul>
@@ -214,21 +197,18 @@ if (!isset($_SESSION['nombre_usuario'])) {
                                         <!-- Input de cantidad -->
                                         <div class="form-group col-md-3 mb-3 text-center">
                                             <label class="form-label font-weight-bold d-block">Cantidad</label>
-                                            <input type="text" name="cantidad" class="form-control text-center" value="1"
-                                                style="font-size: 1.5rem;" id="cantidad_producto">
+                                            <input type="text" name="cantidad" class="form-control text-center"
+                                                value="1" style="font-size: 1.5rem;" id="cantidad_producto">
                                         </div>
-
                                     </div>
                                 </div>
                             </div>
                             <style>
-                                .suggestions li.active {
-                                    background-color: #007bff;
-                                    color: #fff;
-                                }
+                            .suggestions li.active {
+                                background-color: #007bff;
+                                color: #fff;
+                            }
                             </style>
-
-
                         </div>
 
                         <div class="col-md-8">
@@ -236,7 +216,8 @@ if (!isset($_SESSION['nombre_usuario'])) {
                                 <div class="position-relative pt-0 pb-3">
                                     <!-- Bandera -->
                                     <div class="position-absolute bg-success text-white px-4 py-2 shadow-sm"
-                                        style="top: 10px; left: 5px; clip-path: polygon(0 0, 100% 0, 80% 100%, 0% 100%); border-radius: 0 5px 5px 0;" id="texto_estado">
+                                        style="top: 10px; left: 5px; clip-path: polygon(0 0, 100% 0, 80% 100%, 0% 100%); border-radius: 0 5px 5px 0;"
+                                        id="texto_estado">
 
                                     </div>
                                     <br>
@@ -282,19 +263,33 @@ if (!isset($_SESSION['nombre_usuario'])) {
                                 <div class="card-body">
                                     <div class="d-flex justify-content-between align-items-center mb-0">
                                         <h4 class="card-title mb-0">Datos de la venta</h4>
-                                        <span data-toggle="tooltip" title="Agregar Convenio" id="btn_convenio">
-                                            <a class="btn btn-secondary btn-circle" data-toggle="modal" data-target="#cambiarCliente">
-                                                <i class="fas fa-user-edit"></i>
-                                            </a>
-                                        </span>
+                                        <div>
+                                            <span data-toggle="tooltip" title="Cambiar cliente" id="btn_cambiar_cliente">
+                                                <a class="btn btn-secondary btn-circle" data-toggle="modal"
+                                                    data-target="#cambiarCliente" onclick="btn_cambiar_cliente()">
+                                                    <i class="fas fa-user-edit"></i>
+                                                </a>
+                                            </span>
+                                            <span 
+                                                class="hidden"
+                                                data-toggle="tooltip" 
+                                                title="Eliminar cliente" 
+                                                id="btn_eliminar_cliente"
+                                                onclick="eliminar_cliente_ticket()">
+                                                <a class="btn btn-danger btn-circle" data-toggle="modal"
+                                                    onclick="btn_cambiar_cliente()">
+                                                    <i class="fas fa-user-times"></i>
+                                                </a>
+                                            </span>
+                                        </div>
                                     </div>
                                     <hr>
                                     <style type="text/css">
-                                        #venta td,
-                                        #venta th {
-                                            padding: 0px;
-                                            font-size: 18px;
-                                        }
+                                    #venta td,
+                                    #venta th {
+                                        padding: 0px;
+                                        font-size: 18px;
+                                    }
                                     </style>
                                     <table class="table browser no-border mb-0" id="venta">
                                         <tbody>
@@ -305,7 +300,8 @@ if (!isset($_SESSION['nombre_usuario'])) {
                                             </tr>
                                             <tr>
                                                 <td><b>FOLIO</b></td>
-                                                <td class="text-right"><a href="index.php/pedidos/pedido/15864" id="text_folio_href"></a></td>
+                                                <td class="text-right"><a href="index.php/pedidos/pedido/15864"
+                                                        id="text_folio_href"></a></td>
                                             </tr>
                                             <tr>
                                                 <td><b>ARTICULOS</b></td>
@@ -339,13 +335,15 @@ if (!isset($_SESSION['nombre_usuario'])) {
                                     </table>
                                     <div class="row button-group" id="botones_acciones">
                                         <div class="col-lg-4 col-md-4">
-                                            <a href="#borrarcancelar" data-toggle="modal" class="btn btn-danger btn-block">Cancel (F9)</a>
+                                            <a href="#borrarcancelar" data-toggle="modal"
+                                                class="btn btn-danger btn-block">Cancel (F9)</a>
                                         </div>
                                         <!-- <div class="col-lg-4 col-md-4">
                                             <a data-toggle="modal" style="color: white;" data-target="#putcredito" class="btn btn-info btn-block">Crédito</a>
                                         </div> -->
                                         <div class="col-lg-4 col-md-4">
-                                            <button type="button" data-toggle="modal" data-target="#cobrar" class="btn btn-success btn-block">Cobrar (F7)</button>
+                                            <button type="button" data-toggle="modal" data-target="#cobrar"
+                                                class="btn btn-success btn-block">Cobrar (F7)</button>
                                         </div>
                                     </div>
                                 </div>
@@ -355,24 +353,29 @@ if (!isset($_SESSION['nombre_usuario'])) {
 
 
                     <!-- Modal delete producto-->
-                    <div id="deleteProducto" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+                    <div id="deleteProducto" class="modal fade" tabindex="-1" role="dialog"
+                        aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h4 class="modal-title text-center">Borrar producto</h4>
-                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                    <button type="button" class="close" data-dismiss="modal"
+                                        aria-hidden="true">×</button>
                                 </div>
                                 <form method="post" action="index.php/pventa/deleteProducto/15864">
                                     <div class="modal-body">
                                         <input id="producto" type="hidden" name="producto">
                                         <div class="form-group">
                                             <label for="password" class="form-label">Clave de supervisor:</label>
-                                            <input id="password" type="password" class="form-control" name="password" required="">
+                                            <input id="password" type="password" class="form-control" name="password"
+                                                required="">
                                         </div>
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">Cerrar</button>
-                                        <button type="submit" class="btn btn-info waves-effect waves-light" name="submit">Borrar</button>
+                                        <button type="button" class="btn btn-secondary waves-effect"
+                                            data-dismiss="modal">Cerrar</button>
+                                        <button type="submit" class="btn btn-info waves-effect waves-light"
+                                            name="submit">Borrar</button>
                                     </div>
                                 </form>
                             </div>
@@ -380,24 +383,30 @@ if (!isset($_SESSION['nombre_usuario'])) {
                     </div>
                     <!-- /.modal -->
                     <!-- Modal delete producto-->
-                    <div id="putcredito" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+                    <div id="putcredito" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+                        aria-hidden="true" style="display: none;">
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h4 class="modal-title text-center">Poner venta a crédito</h4>
-                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                    <button type="button" class="close" data-dismiss="modal"
+                                        aria-hidden="true">×</button>
                                 </div>
                                 <form method="post" action="index.php/pventa/poneracredito/15864">
                                     <div class="modal-body">
                                         <input id="producto" type="hidden" name="producto">
                                         <div class="form-group">
                                             <label for="password" class="form-label">Clave de supervisor:</label>
-                                            <input id="password" type="password" class="form-control" name="password" required="">
+                                            <input id="password" type="password" class="form-control" name="password"
+                                                required="">
                                         </div>
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">Cerrar</button>
-                                        <button type="submit" class="btn btn-info waves-effect waves-light" name="submit">A crédito</button>
+                                        <button type="button" class="btn btn-secondary waves-effect"
+                                            data-dismiss="modal">Cerrar</button>
+                                        <button type="submit" class="btn btn-info waves-effect waves-light"
+                                            name="submit">A
+                                            crédito</button>
                                     </div>
                                 </form>
                             </div>
@@ -405,49 +414,61 @@ if (!isset($_SESSION['nombre_usuario'])) {
                     </div>
                     <!-- /.modal -->
                     <!-- Modal cancelar ticket-->
-                    <div id="borrarcancelar" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+                    <div id="borrarcancelar" class="modal fade" tabindex="-1" role="dialog"
+                        aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h4 class="modal-title text-center">Cancelar ticket</h4>
-                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                    <button type="button" class="close" data-dismiss="modal"
+                                        aria-hidden="true">×</button>
                                 </div>
                                 <div class="modal-body">
                                     <div class="form-group">
-                                        <label for="contrasenia_cancelacion" class="form-label">Clave de personal:</label>
-                                        <input id="contrasenia_cancelacion" type="password" class="form-control" name="contrasenia_cancelacion" required="">
+                                        <label for="contrasenia_cancelacion" class="form-label">Clave de
+                                            personal:</label>
+                                        <input id="contrasenia_cancelacion" type="password" class="form-control"
+                                            name="contrasenia_cancelacion" required="">
                                     </div>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">Cerrar</button>
-                                    <button type="button" class="btn btn-info waves-effect waves-light" onclick="cancelar_ticket()">Cancelar ticket</button>
+                                    <button type="button" class="btn btn-secondary waves-effect"
+                                        data-dismiss="modal">Cerrar</button>
+                                    <button type="button" class="btn btn-info waves-effect waves-light"
+                                        onclick="cancelar_ticket()">Cancelar ticket</button>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <!-- /.modal -->
-                    <div id="generaFactura" class="modal fade" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+                    <div id="generaFactura" class="modal fade" role="dialog" aria-labelledby="myModalLabel"
+                        aria-hidden="true" style="display: none;">
                         <div class="modal-dialog">
                             <div class="modal-content modal-lg">
                                 <div class="modal-header">
                                     <h4 class="modal-title text-center">Confirmar datos de facturación</h4>
-                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                    <button type="button" class="close" data-dismiss="modal"
+                                        aria-hidden="true">×</button>
                                 </div>
                                 <form method="post" name="timbrado" action="index.php/cfdi/timbrar/15864">
                                     <div class="modal-body">
                                         <div class="row">
                                             <div class="form-group col-6">
                                                 <label for="recipient-name1" class="form-label">Cliente:</label>
-                                                <input type="text" class="form-control" id="recipient-name1" name="cliente" value="Ab Abasolo " required="">
+                                                <input type="text" class="form-control" id="recipient-name1"
+                                                    name="cliente" value="Ab Abasolo " required="">
                                             </div>
                                             <div class="form-group col-6">
                                                 <label for="recipient-name2" class="form-label">RFC:</label>
-                                                <input type="text" class="form-control" id="recipient-name2" name="rfc" value="XAXX010101000" required="">
+                                                <input type="text" class="form-control" id="recipient-name2" name="rfc"
+                                                    value="XAXX010101000" required="">
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label for="recipient-name3" class="form-label">Domicilio:</label>
-                                            <input type="text" class="form-control" id="recipient-name3" name="domicilio" value="Conocido  El moralete Colima Colima" required="">
+                                            <input type="text" class="form-control" id="recipient-name3"
+                                                name="domicilio" value="Conocido  El moralete Colima Colima"
+                                                required="">
                                         </div>
                                         <div class="form-group">
                                             <label for="recipient-name4" class="form-label">Método Pago:</label>
@@ -473,42 +494,20 @@ if (!isset($_SESSION['nombre_usuario'])) {
                                         </div>
                                         <div class="form-group">
                                             <label for="recipient-name5" class="form-label">Correo:</label>
-                                            <input type="mail" class="form-control" id="recipient-name5" name="correo" value="">
+                                            <input type="mail" class="form-control" id="recipient-name5" name="correo"
+                                                value="">
                                         </div>
                                         <div class="form-group">
                                             <label for="recipient-name6" class="form-label">OTROS:</label>
-                                            <input type="text" class="form-control" id="recipient-name6" name="otros" value="">
+                                            <input type="text" class="form-control" id="recipient-name6" name="otros"
+                                                value="">
                                         </div>
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">Cerrar</button>
-                                        <button type="submit" class="btn btn-info waves-effect waves-light" name="timbrar">Timbrar</button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- /.modal -->
-
-                    <!-- Modal delete producto-->
-                    <div id="borrarFacturado" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h4 class="modal-title text-center">Eliminar pedido </h4>
-                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                                </div>
-                                <form method="post" action="index.php/pedidos/borrarFacturado/15864">
-                                    <div class="modal-body">
-                                        <input id="producto2" type="hidden" name="producto">
-                                        <div class="form-group">
-                                            <label for="password2" class="form-label">Clave de supervisor:</label>
-                                            <input id="password2" type="password" class="form-control password" name="password" required="">
-                                        </div>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">Cerrar</button>
-                                        <button type="submit" class="btn btn-info waves-effect waves-light" name="submit">Borrar</button>
+                                        <button type="button" class="btn btn-secondary waves-effect"
+                                            data-dismiss="modal">Cerrar</button>
+                                        <button type="submit" class="btn btn-info waves-effect waves-light"
+                                            name="timbrar">Timbrar</button>
                                     </div>
                                 </form>
                             </div>
@@ -517,21 +516,25 @@ if (!isset($_SESSION['nombre_usuario'])) {
                     <!-- /.modal -->
 
                     <!-- Modal nuevo proyecto-->
-                    <div id="cobrar" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+                    <div id="cobrar" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+                        aria-hidden="true" style="display: none;">
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h4 class="modal-title text-center">Cobrar</h4>
-                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                    <button type="button" class="close" data-dismiss="modal"
+                                        aria-hidden="true">×</button>
                                 </div>
-                                <form method="post" action="index.php/pventa/cobrar/15864" onsubmit="return vdoblesubmit();">
+                                <form method="post" action="index.php/pventa/cobrar/15864"
+                                    onsubmit="return vdoblesubmit();">
                                     <div class="modal-body">
                                         <div class="form-group">
                                             <label for="recipient-name-tarjeta" class="form-label">Entregar a:</label>
                                             <input type="text" id="alias" class="form-control" name="alias">
                                         </div>
                                         <div class="form-group">
-                                            <label for="recipient-name-tarjeta" class="form-label">Método de pagos:</label>
+                                            <label for="recipient-name-tarjeta" class="form-label">Método de
+                                                pagos:</label>
                                             <select name="metodo_pago" class="form-control">
                                                 <option value="01">Efectivo</option>
                                                 <option value="02">Cheque nominativo</option>
@@ -542,7 +545,8 @@ if (!isset($_SESSION['nombre_usuario'])) {
                                         </div>
                                         <div class="form-group">
                                             <label for="recipient-name" class="form-label">Pagó:</label>
-                                            <input id="efectivo" type="text" class="form-control" name="efectivo" value="65.70" autofocus="on" autocomplete="off" required="">
+                                            <input id="efectivo" type="text" class="form-control" name="efectivo"
+                                                value="65.70" autofocus="on" autocomplete="off" required="">
                                         </div>
                                         <div class="form-group">
                                             <label for="recipient-name" class="form-label">¿Imprimir ticket?</label>
@@ -559,34 +563,38 @@ if (!isset($_SESSION['nombre_usuario'])) {
                                         </div>
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">Cerrar</button>
-                                        <button type="submit" class="btn btn-info waves-effect waves-light" name="submit">Cobrar</button>
+                                        <button type="button" class="btn btn-secondary waves-effect"
+                                            data-dismiss="modal">Cerrar</button>
+                                        <button type="submit" class="btn btn-info waves-effect waves-light"
+                                            name="submit">Cobrar</button>
                                     </div>
                                 </form>
                                 <script type="text/javascript">
-                                    var statSend = false;
+                                var statSend = false;
 
-                                    function vdoblesubmit() {
-                                        if (!statSend) {
-                                            statSend = true;
-                                            return true;
-                                        } else {
-                                            swal("Cobrando, espere un momento...");
-                                            return false;
-                                        }
+                                function vdoblesubmit() {
+                                    if (!statSend) {
+                                        statSend = true;
+                                        return true;
+                                    } else {
+                                        swal("Cobrando, espere un momento...");
+                                        return false;
                                     }
+                                }
                                 </script>
                             </div>
                         </div>
                     </div>
                     <!-- /.modal -->
                     <!-- Modal cambiar cliente-->
-                    <div id="cambiaSupervisor" class="modal fade top20" role="dialog" aria-labelledby="cambiarCliente" aria-hidden="true" style="display: none;">
+                    <div id="cambiaSupervisor" class="modal fade top20" role="dialog" aria-labelledby="cambiarCliente"
+                        aria-hidden="true" style="display: none;">
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h4 class="modal-title text-center">Colocar precio producto</h4>
-                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                    <button type="button" class="close" data-dismiss="modal"
+                                        aria-hidden="true">×</button>
                                 </div>
                                 <form method="post" action="index.php/pventa/precioSupervisor/15864">
                                     <div class="modal-body">
@@ -600,13 +608,16 @@ if (!isset($_SESSION['nombre_usuario'])) {
 
                                         <div class="form-group">
                                             <label for="password2" class="form-label">Clave de supervisor:</label>
-                                            <input id="password2" type="password" class="form-control password" name="password" required="">
+                                            <input id="password2" type="password" class="form-control password"
+                                                name="password" required="">
                                         </div>
                                     </div>
 
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">Cerrar</button>
-                                        <button type="submit" class="btn btn-info waves-effect waves-light" name="submit">Cambiar</button>
+                                        <button type="button" class="btn btn-secondary waves-effect"
+                                            data-dismiss="modal">Cerrar</button>
+                                        <button type="submit" class="btn btn-info waves-effect waves-light"
+                                            name="submit">Cambiar</button>
                                     </div>
 
                                 </form>
@@ -621,8 +632,8 @@ if (!isset($_SESSION['nombre_usuario'])) {
                 </div>
             </div>
             <?php
-            include("componentes/estructura/pie.php");
-            ?>
+                include("componentes/estructura/pie.php");
+                ?>
 
             <!-- Control Sidebar -->
             <aside class="control-sidebar control-sidebar-dark">
@@ -638,7 +649,7 @@ if (!isset($_SESSION['nombre_usuario'])) {
         <script src="plugins/jquery-ui/jquery-ui.min.js"></script>
         <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
         <script>
-            $.widget.bridge('uibutton', $.ui.button)
+        $.widget.bridge('uibutton', $.ui.button)
         </script>
         <!-- Bootstrap 4 -->
         <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -664,6 +675,8 @@ if (!isset($_SESSION['nombre_usuario'])) {
         <script src="dist/js/adminlte.js"></script>
         <!-- Funciones JS Personalizadas -->
         <script src="js/peticiones_ticket.js"></script>
+        <script src="js/search/clientes.js"></script>
+        <script src="js/search/productos.js"></script>
         <script src="js/peticiones_generales.js"></script>
         <!-- bs-custom-file-input -->
         <script src="plugins/bs-custom-file-input/bs-custom-file-input.min.js"></script>
@@ -685,6 +698,6 @@ if (!isset($_SESSION['nombre_usuario'])) {
     </body>
 
     </html>
-<?php
+    <?php
 }
-?>
+    ?>

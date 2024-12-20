@@ -1,7 +1,0 @@
-[26-Sep-2024 17:10:58 America/Mexico_City] PHP Deprecated:  strtotime(): Passing null to parameter #1 ($datetime) of type string is deprecated in /home/velormx/public_html/cosera/componentes/estructura/encabezado.php on line 18
-[27-Sep-2024 17:29:45 America/Mexico_City] PHP Warning:  Undefined variable $id_emisor in /home/velormx/public_html/cosera/sistema.php on line 182
-[27-Sep-2024 17:29:45 America/Mexico_City] PHP Fatal error:  Uncaught mysqli_sql_exception: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'AND YEAR(a.fecha_emision) = '2024' AND a.fecha_cita != 'NULL' AND a.fecha_cita !' at line 1 in /home/velormx/public_html/cosera/sistema.php:183
-Stack trace:
-#0 /home/velormx/public_html/cosera/sistema.php(183): mysqli_query(Object(mysqli), 'SELECT a.id_asi...')
-#1 {main}
-  thrown in /home/velormx/public_html/cosera/sistema.php on line 183
