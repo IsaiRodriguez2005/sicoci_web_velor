@@ -558,37 +558,67 @@ function obtenerTextosTicket($post, $idEmisor, $conexion)
     $idDocumento = $post['idDocumento'] ?? null;
     $folioTicket = $post['folioTicket'] ?? null;
 
-    $query = "SELECT
-                    es.serie AS clave_serie,
-                    COALESCE(ec.nombre_cliente, 'PÚBLICO EN GENERAL') AS nombre_cliente,
-                    et.folio_ticket,
-                    et.total,
-                    et.estatus,
-                    COALESCE(et.id_cliente, 0) AS id_cliente,
-                    COALESCE((
-                        SELECT SUM(cantidad) 
-                        FROM emisores_tickets_detalles 
-                        WHERE id_emisor = ? AND folio_ticket = ? AND id_documento = ?
-                    ), 0) AS total_articulos 
-                    FROM emisores_tickets et
-                        INNER JOIN emisores_series es ON es.id_partida = et.id_documento AND es.id_emisor = et.id_emisor
-                        LEFT JOIN emisores_agenda ea ON ea.id_folio = et.id_cita AND ea.id_emisor = et.id_emisor 
-                        LEFT JOIN emisores_clientes ec ON ec.id_cliente = et.id_cliente AND ec.id_emisor = et.id_emisor
-                        WHERE et.id_emisor = ? AND et.folio_ticket = ? AND et.id_documento = ?;";
+    $query = "SELECT 
+                    es.serie AS clave_serie, 
+                    COALESCE(ec.nombre_cliente, 'PÚBLICO EN GENERAL') AS nombre_cliente, 
+                    et.folio_ticket, 
+                    et.total, 
+                    et.estatus, 
+                    COALESCE(et.id_cliente, 0) AS id_cliente, 
+                    COALESCE((SELECT SUM(etd.cantidad)
+                        FROM emisores_tickets_detalles etd
+                        WHERE etd.folio_ticket = et.folio_ticket 
+                                AND etd.id_emisor = et.id_emisor 
+                                AND etd.id_documento = et.id_documento
+                    ),0) AS total_articulos,
+                    COALESCE((SELECT SUM(etd.descuento)
+                        FROM emisores_tickets_detalles etd
+                        WHERE etd.folio_ticket = et.folio_ticket 
+                                AND etd.id_emisor = et.id_emisor 
+                                AND etd.id_documento = et.id_documento
+                    ),0) AS total_descuento,
+                    SUM(CASE WHEN tp.forma_pago_id = 1 THEN tp.monto ELSE 0 END) AS tcefect,
+                    SUM(CASE WHEN tp.forma_pago_id = 3 THEN tp.monto ELSE 0 END) AS tctrans,
+                    COALESCE(SUM(tp.monto), 0) AS total_cobrado
+                FROM emisores_tickets et
+                    INNER JOIN emisores_series es 
+                        ON es.id_partida = et.id_documento 
+                            AND es.id_emisor = et.id_emisor 
+                    LEFT JOIN emisores_agenda ea 
+                        ON ea.id_folio = et.id_cita 
+                            AND ea.id_emisor = et.id_emisor 
+                    LEFT JOIN emisores_clientes ec 
+                        ON ec.id_cliente = et.id_cliente 
+                            AND ec.id_emisor = et.id_emisor
+                    LEFT JOIN emisores_tickets_detalles etd 
+                        ON etd.folio_ticket = et.folio_ticket 
+                            AND etd.id_emisor = et.id_emisor 
+                            AND etd.id_documento = et.id_documento
+                    LEFT JOIN emisores_tickets_pagos tp 
+                        ON tp.folio_ticket = et.folio_ticket 
+                            AND tp.id_emisor = et.id_emisor 
+                            AND tp.id_documento = et.id_documento
+                WHERE et.id_emisor = ? AND et.folio_ticket = ? AND et.id_documento = ?
+                    GROUP BY es.serie, ec.nombre_cliente, et.folio_ticket, 
+                                et.total, et.estatus, et.id_cliente;";
+
     $stmt = mysqli_prepare($conexion, $query);
+    if (!$stmt) {
+        return ['error' => 'Error en la preparación de la consulta: ' . mysqli_error($conexion)];
+    }
     mysqli_stmt_bind_param(
         $stmt,
-        "iiiiii",
-        $idEmisor,
-        $folioTicket,
-        $idDocumento,
+        "iii",
         $idEmisor,
         $folioTicket,
         $idDocumento
     );
-    mysqli_stmt_execute($stmt);
-    $result = mysqli_stmt_get_result($stmt);
 
+    if (!mysqli_stmt_execute($stmt)) {
+        return ['error' => 'Error al ejecutar la consulta: ' . mysqli_stmt_error($stmt)];
+    }
+
+    $result = mysqli_stmt_get_result($stmt);
     if (!$result) {
         return ['error' => 'Error al obtener los resultados: ' . mysqli_error($conexion)];
     }
@@ -781,7 +811,6 @@ function obtenerDatosPorducto($idProducto, $idEmisor, $conexion)
     mysqli_stmt_close($stmt);
     return $datos ?: [];
 }
-
 function calcularMontoIVA($iva, $precio)
 {
     return ($iva * $precio) / 100;

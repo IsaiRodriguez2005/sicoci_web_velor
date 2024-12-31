@@ -38,3 +38,7 @@ function cerrar_modal(modal1, modal2) {
     }
 }
 
+function recargarIgnorandoCache() {
+    // Recargar la página ignorando la caché
+    location.reload(true);
+}

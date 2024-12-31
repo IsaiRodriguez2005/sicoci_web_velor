@@ -11,10 +11,10 @@ function pantallaCarga(title, text) {
         },
     });
 }
-function mensajeSuccess(mensaje) {
+function mensajeSuccess(mensaje, title = "Éxito") {
     return Swal.fire({
         icon: "success",
-        title: "Éxito",
+        title: title,
         text: mensaje,
     });
 }
@@ -46,8 +46,8 @@ async function procesarDatosTicket() {
         return;
     }
 
-    cargarDatosTicket(folioTicket, idDocumento);
     await cargarTablaProductosTicket();
+    cargarDatosTicket(folioTicket, idDocumento);
 
     const data_productos = await cargar_productos_servicios();
 
@@ -67,7 +67,6 @@ async function procesarDatosTicket() {
 
 async function cargarDatosTicket(folio, idDocumento) {
     const datosTicket = await obtenerDatosTicket(folio, idDocumento);
-
     const { estatus } = datosTicket;
 
     //? diferentes acciones dependiendo el estatus:
@@ -83,16 +82,12 @@ async function cargarDatosTicket(folio, idDocumento) {
             ticketCancelado(datosTicket);
             break;
         case 4:
-            textEstatus = "COBRADO";
-            bgColorClass = "bg-success";
+            ticketPagado(datosTicket);
             break;
         default:
             textEstatus = "DESCONOCIDO";
             bgColorClass = "bg-secondary";
     }
-    /* 
-    
-            */
 }
 
 async function obtenerDatosTicket(folioTicket, idDocumento) {
@@ -161,33 +156,131 @@ function ticketAperturado(datos) {
         total,
         total_articulos,
         estatus,
-        id_cliente
+        id_cliente,
+        tctrans,
+        tcefect,
+        total_cobrado,
+        total_descuento,
     } = datos;
+
+    let totalPorCobrar = parseFloat(total) - parseFloat(total_cobrado);
 
     let { textEstatus, bgColorClass } = obtenerTxtEstatus(estatus);
 
-    //* folios
+    //* cabecera
     $("#text_serie").html(`Serie: ${clave_serie}`);
     $("#text_folio_ticket").html(folio_ticket);
-    $("#text_folio_href").html(`#${clave_serie}${folio_ticket}`);
-    //* datos del cliente
-    $("#btn_eliminar_cliente").addClass("hidden");
-    if (id_cliente !== 0){
-        $("#btn_eliminar_cliente").removeClass('hidden');
-    }
-    $("#text_cliente").html("<b>CLIENTE: </b>" + nombre_cliente);
-
-    //* datos totales
-    $("#total_articulos").text(`${Number(total_articulos)}`);
-    $("#text_total").text(`$${total}`);
-    $("#text_cobrar").text(`$${total}`);
-    $("#text_total_tabla").text(`$${total}`);
 
     //* datos estados
     $("#texto_estado")
         .removeClass("bg-primary bg-warning bg-danger bg-success bg-secondary")
         .addClass(bgColorClass)
         .html(`<span class="font-weight-bold">Estado:</span> ${textEstatus}`);
+
+    //* cliente
+    $("#text_cliente").html("<b>CLIENTE: </b>" + nombre_cliente);
+    $("#btn_eliminar_cliente").addClass("hidden");
+    if (id_cliente !== 0) {
+        $("#btn_eliminar_cliente").removeClass("hidden");
+    }
+    //* Tarjeta de datos de la compra
+    $("#text_folio_href").html(`#${clave_serie}${folio_ticket}`);
+    $("#total_articulos").text(`${Number(total_articulos)}`);
+    $("#total_articulos").text(`${Number(total_articulos)}`);
+    $("#tot_descuento").text(`$${total_descuento}`);
+    $("#text_total").text(`$${total}`);
+    // si ya abono
+    if (parseFloat(tcefect) > 0 || parseFloat(tctrans) > 0)
+        $(".separadores_pagos").removeClass("hidden");
+    if (parseFloat(tcefect) > 0) {
+        $("#cantidad_efectivo").text(`$${tcefect}`);
+        $("#tr_efectivo").removeClass();
+    }
+    if (parseFloat(tctrans) > 0) {
+        $("#cantidad_transferencia").text(`$${tctrans}`);
+        $("#tr_transferencia").removeClass();
+    }
+    $("#total_cobrado").text(`$${parseFloat(total_cobrado).toFixed(2)}`);
+    $("#text_cobrar").text(`$${totalPorCobrar.toFixed(2)}`);
+    $("#text_total_tabla").text(`$${total}`);
+}
+function ticketPagado(datos) {
+    //? deshabilitamos campos
+    const inputSearch = $("#search");
+    const inputCantidad = $("#cantidad_producto");
+    const botonesAcciones = $("#botones_acciones");
+    const btnCnvenio = $("#btn_convenio");
+    const contAgregarProductos = $("#cont_agregar_productos");
+    const btnsCanbiarClientes = $("#cont-buttons-clientes");
+
+    inputSearch.prop("disabled", true);
+    inputCantidad.prop("disabled", true);
+    botonesAcciones.addClass("hidden");
+    btnCnvenio.addClass("hidden");
+    contAgregarProductos.addClass("hidden");
+    btnsCanbiarClientes.addClass("hidden");
+
+    $("#table_productos_ticket tbody .btn_acciones_tabla").each(function () {
+        console.log(this);
+            $(this).prop("disabled", true).css({
+            opacity: "0.5",
+            cursor: "not-allowed",
+        });
+    });
+
+    const {
+        clave_serie,
+        folio_ticket,
+        nombre_cliente,
+        total,
+        total_articulos,
+        estatus,
+        id_cliente,
+        tctrans,
+        tcefect,
+        total_cobrado,
+        total_descuento,
+    } = datos;
+
+    let { textEstatus, bgColorClass } = obtenerTxtEstatus(estatus);
+
+    //* cabecera
+    $("#text_serie").html(`Serie: ${clave_serie}`);
+    $("#text_folio_ticket").html(folio_ticket);
+
+    //* datos estados
+    $("#texto_estado")
+        .removeClass("bg-primary bg-warning bg-danger bg-success bg-secondary")
+        .addClass(bgColorClass)
+        .html(`<span class="font-weight-bold">Estado:</span> ${textEstatus}`);
+
+    //* cliente
+    $("#text_cliente").html("<b>CLIENTE: </b>" + nombre_cliente);
+    $("#btn_eliminar_cliente").addClass("hidden");
+    if (id_cliente !== 0) {
+        $("#btn_eliminar_cliente").removeClass("hidden");
+    }
+    //* Tarjeta de datos de la compra
+    $("#text_folio_href").html(`#${clave_serie}${folio_ticket}`);
+    $("#total_articulos").text(`${Number(total_articulos)}`);
+    $("#total_articulos").text(`${Number(total_articulos)}`);
+    $("#tot_descuento").text(`$${total_descuento}`);
+    $("#text_total").text(`$${total}`);
+    // si ya abono
+    if (parseFloat(tcefect) > 0 || parseFloat(tctrans) > 0)
+        $(".separadores_pagos").removeClass("hidden");
+    if (parseFloat(tcefect) > 0) {
+        $("#cantidad_efectivo").text(`$${tcefect}`);
+        $("#tr_efectivo").removeClass();
+    }
+    if (parseFloat(tctrans) > 0) {
+        $("#cantidad_transferencia").text(`$${tctrans}`);
+        $("#tr_transferencia").removeClass();
+    }
+    $("#total_cobrado").text(`$${parseFloat(total_cobrado).toFixed(2)}`);
+    $("#text_total_cobrar").text(`PAGO:`);
+    $("#text_cobrar").text(`$${total}`);
+    $("#text_total_tabla").text(`$${total}`);
 }
 function ticketCancelado(datos) {
     //? deshabilitamos campos
@@ -196,12 +289,22 @@ function ticketCancelado(datos) {
     const botonesAcciones = $("#botones_acciones");
     const btnCnvenio = $("#btn_convenio");
     const contAgregarProductos = $("#cont_agregar_productos");
+    const btnsCanbiarClientes = $("#cont-buttons-clientes");
 
     inputSearch.prop("disabled", true);
     inputCantidad.prop("disabled", true);
     botonesAcciones.addClass("hidden");
     btnCnvenio.addClass("hidden");
     contAgregarProductos.addClass("hidden");
+    btnsCanbiarClientes.addClass("hidden");
+
+    $("#table_productos_ticket tbody .btn_acciones_tabla").each(function () {
+        console.log(this);
+        $(this).prop("disabled", true).css({
+            opacity: "0.5",
+            cursor: "not-allowed",
+        });
+    }); 
 
     const {
         clave_serie,
@@ -667,7 +770,7 @@ function agregarTuplaTablaTicket(producto, tbody = null) {
 
     //? agregar convenio
     let btnConvenio = `
-            <button class="btn btn-warning btn-sm" 
+            <button class="btn btn-warning btn-sm btn_acciones_tabla" 
                     style="cursor: pointer;" 
                     producto="${id_producto}" 
                     title="Agregar convenio"
@@ -679,7 +782,7 @@ function agregarTuplaTablaTicket(producto, tbody = null) {
     if (parseFloat(descuento) > 0) {
         //? eliminar convenio
         btnConvenio = `
-            <button class="btn btn-secondary btn-sm" 
+            <button class="btn btn-secondary btn-sm btn_acciones_tabla" 
                     style="cursor: pointer;" 
                     producto="${id_producto}" 
                     title="Borrar convenio" 
@@ -692,7 +795,7 @@ function agregarTuplaTablaTicket(producto, tbody = null) {
     let fila = `
                     <tr id="pro_tick_${id_producto}" class="gradeX">
                         <td class="p-t-0 p-b-0 text-center">
-                            <button class="btn btn-danger btn-sm" 
+                            <button class="btn btn-danger btn-sm btn_acciones_tabla" 
                                     style="cursor: pointer;" 
                                     title="Borrar producto"
                                     producto="${id_producto}" 
@@ -856,8 +959,194 @@ document.addEventListener("keydown", function (event) {
         event.preventDefault();
         activarModalCancelarTicket();
     }
+    if (event.key === "F7") {
+        event.preventDefault();
+        activarModalCobrar();
+    }
 });
 
 function activarModalCancelarTicket() {
     $("#borrarcancelar").modal("show");
 }
+async function activarModalCobrar() {
+    $("#cobrar").modal("show");
+    await cargar_select_metodos_pagos();
+}
+
+//todo: funciones para cobrar [tickets]
+
+async function cobrar_ticket() {
+    if (!validar_form_cobrar()) return;
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const folioTicket = urlParams.get("folio_ticket");
+    const idDocumento = urlParams.get("id_documento");
+    const metoPag = $("#select_metodo_pago").val();
+    const cantPago = $("#input_efectivo").val();
+
+    try {
+        const respuesta = await $.ajax({
+            cache: false,
+            url: "componentes/tickets/pagos/cobrar_ticket.php",
+            type: "POST",
+            dataType: "json",
+            data: {
+                funcion: "registrarPago",
+                metoPago: metoPag,
+                cantPago: cantPago,
+                folioTicket: folioTicket,
+                idDocumento: idDocumento,
+            },
+        });
+
+        let { success, data, mensaje } = respuesta;
+
+        if (success) {
+            let { cambio, message } = data;
+            // cargamos los datos
+            cargarDatosTicket(folioTicket, idDocumento);
+            limpiar_form_cobrar();
+            rellenar_tabla_pagos();
+
+            Swal.close();
+            mensajeSuccess(message);
+            return;
+        }
+
+        mensajeError("", mensaje);
+        return;
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+async function cargar_select_metodos_pagos() {
+    const metodosPago = await traer_metodos_pago();
+    const selectMetPag = $("#select_metodo_pago");
+    await rellenar_tabla_pagos();
+
+    let options =
+        "<option value='' selected disabled>Selecciona un m&eacute;todo</option>";
+
+    metodosPago.forEach((mp) => {
+        let { clave_forma, descripcion, id_forma } = mp;
+
+        options += `
+            <option value="${id_forma}">[${clave_forma}] ${descripcion}</option>
+        `;
+    });
+
+    selectMetPag.html(options);
+}
+
+async function traer_metodos_pago() {
+    try {
+        const respuesta = await $.ajax({
+            cache: false,
+            url: "componentes/tickets/pagos/cobrar_ticket.php",
+            type: "POST",
+            dataType: "json",
+            data: {
+                funcion: "traerFormasPago",
+            },
+        });
+
+        const { success, data, mensaje } = respuesta;
+
+        if (!success) {
+            throw new Error(mensaje);
+        }
+
+        return data;
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+function validar_form_cobrar() {
+    let selectMetoPag = $("#select_metodo_pago");
+    let inpCantPago = $("#input_efectivo");
+    let metoPag = selectMetoPag.val();
+    let cantPago = inpCantPago.val();
+
+    if (!metoPag) {
+        selectMetoPag.addClass("is-invalid");
+    }
+    if (!cantPago) {
+        inpCantPago.addClass("is-invalid");
+    }
+
+    if (!metoPag || !cantPago) {
+        return false;
+    }
+
+    return true;
+}
+
+async function rellenar_tabla_pagos() {
+    const pagos = await cargar_pagos_ticket();
+    const tablaPagosBody = $("#tabla_pagos tbody");
+
+    tablaPagosBody.empty();
+
+    pagos.forEach((pago) => {
+        // Crear fila con los datos del pago
+        const fila = `
+                <tr>
+                    <td>
+                        <button class="btn btn-danger btn-sm" onclick="eliminarPago(${
+                            pago.id_pago
+                        })">
+                            Eliminar
+                        </button>
+                    </td>
+                    <td>${pago.descripcion}</td>
+                    <td>$${parseFloat(pago.monto).toFixed(2)}</td>
+                    <td>${pago.fecha_pago}</td>
+                </tr>
+            `;
+        // Agregar la fila al cuerpo de la tabla
+        tablaPagosBody.append(fila);
+    });
+}
+
+async function cargar_pagos_ticket() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const folioTicket = urlParams.get("folio_ticket");
+    const idDocumento = urlParams.get("id_documento");
+    try {
+        const respuesta = await $.ajax({
+            cache: false,
+            url: "componentes/tickets/pagos/cobrar_ticket.php",
+            type: "POST",
+            dataType: "json",
+            data: {
+                funcion: "traerPagosTicket",
+                folioTicket: folioTicket,
+                idDocumento: idDocumento,
+            },
+        });
+
+        const { success, data, mensaje } = respuesta;
+
+        if (!success) {
+            throw new Error(mensaje);
+        }
+
+        return data;
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+function limpiar_form_cobrar() {
+    $("#select_metodo_pago").val("");
+    $("#input_efectivo").val("");
+}
+// // ? validacion en select, por datos, antes de cobrar
+// // ? hacer tabla de pagos por ticket
+//? validaciones en pago para no sobrepasar el total
+//? boton con confirmacion de borrar pago
+//? agregar funcion para [cambio] de dinero, despues de cobrar el ticket
+//? ya que el ticket este cobrado, habilitar boton para impimir ticket
+//? formato de tickets

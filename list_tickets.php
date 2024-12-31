@@ -14,7 +14,6 @@ if (!isset($_SESSION['nombre_usuario'])) {
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Intranet Velor Innovation</title>
-
         <!-- Google Font: Source Sans Pro -->
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
         <!-- Font Awesome -->
@@ -129,12 +128,12 @@ if (!isset($_SESSION['nombre_usuario'])) {
 
             <!-- Modales -->
             <?php
-            include("componentes/modales/pagos/modales_tickets.php");
+                include("componentes/modales/pagos/modales_tickets.php");
             ?>
 
             <!-- Componentes -->
             <?php
-            include("componentes/estructura/pie.php");
+                include("componentes/estructura/pie.php");
             ?>
 
             <!-- Control Sidebar -->
