@@ -14,6 +14,25 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
 
     if (isset($_POST['funcion'])) {
         //todo: pagos
+        if ($_POST['funcion'] == 'traerFaltanteCobrar') {
+
+            $idEmisor = $_SESSION['id_emisor'];
+            $respuesta = obtenerFaltanteCobrar($_POST, $_SESSION,$conexion);
+
+            if (!isset($respuesta['success'])) {
+                echo json_encode([
+                    'success' => false,
+                    'mensaje' => $respuesta['error']
+                ]);
+                exit;
+            }
+
+            echo json_encode([
+                'success' => true,
+                'data' => $respuesta['data']
+            ]);
+            exit;
+        }
         if ($_POST['funcion'] == 'traerFormasPago') {
             $idEmisor = $_SESSION['id_emisor'];
             $respuesta = traerFormasPago($conexion);
@@ -265,6 +284,50 @@ function obtenerUltimoIDpago($post, $idEmisor, $conexion){
     mysqli_stmt_close($stmt);
 
     return $ultimo;
+}
+function obtenerFaltanteCobrar($post, $idEmisor, $conexion){
+
+    $idDocumento = $post['idDocumento'];
+    $folioTicket = $post['folioTicket'];
+
+    $query = "SELECT 
+                    (t.total - COALESCE(SUM(tp.monto), 0)) AS falta_cobrar 
+                FROM emisores_tickets t
+                LEFT JOIN emisores_tickets_pagos tp 
+                    ON t.id_emisor = tp.id_emisor 
+                    AND t.id_documento = tp.id_documento 
+                    AND t.folio_ticket = tp.folio_ticket 
+                WHERE t.id_emisor = ? AND t.id_documento = ? AND t.folio_ticket = ?;";
+    $resultado = ejecutarConsultaPreparada(
+        $conexion,
+        $query,
+        "iii",
+        [$idEmisor, $idDocumento, $folioTicket]
+    );
+
+    if (!$resultado['success']) {
+        return $resultado; // Devolver el error de `ejecutarConsultaPreparada`
+    }
+
+    $result = $resultado['data'];
+
+    if ($fila = mysqli_fetch_assoc($result)) {
+
+        $faltaCobrar = floatval($fila['falta_cobrar']);
+
+
+        return [
+            'success' => true,
+            'data' => [
+                'falta_cobrar' => $faltaCobrar,
+            ]
+        ];
+    }
+
+    return [
+        'success' => false,
+        'error' => 'No se encontró información para el ticket especificado.'
+    ];
 }
 
 //! funciones formas de pago

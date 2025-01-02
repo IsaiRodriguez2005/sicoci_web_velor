@@ -11,6 +11,9 @@ function pantallaCarga(title, text) {
         },
     });
 }
+function ocultarPantallaCarga() {
+    Swal.close();
+}
 function mensajeSuccess(mensaje, title = "Éxito") {
     return Swal.fire({
         icon: "success",
@@ -27,19 +30,33 @@ function mensajeError(mensaje, title = null) {
         text: mensaje,
     });
 }
-
 //todo: Ejecutar la función automáticamente al cargar la página
-document.addEventListener("DOMContentLoaded", procesarDatosTicket);
+//* Declarar variables globales
+let folioTicket = null;
+let idDocumento = null;
+//* Inicializar las variables globales al cargar la página
+document.addEventListener("DOMContentLoaded", () => {
+
+    const urlParams = new URLSearchParams(window.location.search);
+    folioTicket = urlParams.get("folio_ticket");
+    idDocumento = urlParams.get("id_documento");
+
+    if (!folioTicket || !idDocumento) {
+        console.error("Faltan parámetros en la URL.");
+        Swal.fire({
+            icon: "error",
+            title: "Error",
+            text: "Parámetros de ticket no encontrados en la URL.",
+        });
+    } else {
+        procesarDatosTicket();
+    }
+});
 
 async function procesarDatosTicket() {
     //* Obtener los parámetros de la URL
 
     pantallaCarga("Cargando datos...");
-
-    const urlParams = new URLSearchParams(window.location.search);
-
-    const folioTicket = urlParams.get("folio_ticket");
-    const idDocumento = urlParams.get("id_documento");
 
     if (!folioTicket || !idDocumento) {
         console.error("Faltan parámetros en la URL.");
@@ -62,7 +79,7 @@ async function procesarDatosTicket() {
         });
     }
 
-    Swal.close();
+    ocultarPantallaCarga();
 }
 
 async function cargarDatosTicket(folio, idDocumento) {
@@ -149,6 +166,7 @@ async function cargar_productos_servicios() {
 //TODO: formatos de ticket dependiendo del estado del mismo
 
 function ticketAperturado(datos) {
+    pantallaCarga("Cargando datos ticket...", "");
     const {
         clave_serie,
         folio_ticket,
@@ -203,30 +221,25 @@ function ticketAperturado(datos) {
     $("#total_cobrado").text(`$${parseFloat(total_cobrado).toFixed(2)}`);
     $("#text_cobrar").text(`$${totalPorCobrar.toFixed(2)}`);
     $("#text_total_tabla").text(`$${total}`);
+
+    ocultarPantallaCarga();
 }
 function ticketPagado(datos) {
+    pantallaCarga("Cargando datos ticket...", "");
+
+    //?  oculatamos el modal
+    $("#cobrar").modal('hide');
+
+    //? habilitar campos
+    const btnImprimirTicket = $("#btn_impirmir_ticket");
+    const btnFacturarTicket = $("#btn_facturar_ticket");
+
+    btnImprimirTicket.removeClass("hidden");
+    btnFacturarTicket.removeClass("hidden");
+
     //? deshabilitamos campos
-    const inputSearch = $("#search");
-    const inputCantidad = $("#cantidad_producto");
-    const botonesAcciones = $("#botones_acciones");
-    const btnCnvenio = $("#btn_convenio");
-    const contAgregarProductos = $("#cont_agregar_productos");
-    const btnsCanbiarClientes = $("#cont-buttons-clientes");
-
-    inputSearch.prop("disabled", true);
-    inputCantidad.prop("disabled", true);
-    botonesAcciones.addClass("hidden");
-    btnCnvenio.addClass("hidden");
-    contAgregarProductos.addClass("hidden");
-    btnsCanbiarClientes.addClass("hidden");
-
-    $("#table_productos_ticket tbody .btn_acciones_tabla").each(function () {
-        console.log(this);
-            $(this).prop("disabled", true).css({
-            opacity: "0.5",
-            cursor: "not-allowed",
-        });
-    });
+    deshabilitarCamposTicket();
+    borrar_columna_acciones();
 
     const {
         clave_serie,
@@ -244,29 +257,30 @@ function ticketPagado(datos) {
 
     let { textEstatus, bgColorClass } = obtenerTxtEstatus(estatus);
 
-    //* cabecera
+    //? cabecera
     $("#text_serie").html(`Serie: ${clave_serie}`);
     $("#text_folio_ticket").html(folio_ticket);
 
-    //* datos estados
+    //? datos estados
     $("#texto_estado")
         .removeClass("bg-primary bg-warning bg-danger bg-success bg-secondary")
         .addClass(bgColorClass)
         .html(`<span class="font-weight-bold">Estado:</span> ${textEstatus}`);
 
-    //* cliente
+    //? cliente
     $("#text_cliente").html("<b>CLIENTE: </b>" + nombre_cliente);
     $("#btn_eliminar_cliente").addClass("hidden");
     if (id_cliente !== 0) {
         $("#btn_eliminar_cliente").removeClass("hidden");
     }
-    //* Tarjeta de datos de la compra
+    //? Tarjeta de datos de la compra
     $("#text_folio_href").html(`#${clave_serie}${folio_ticket}`);
     $("#total_articulos").text(`${Number(total_articulos)}`);
     $("#total_articulos").text(`${Number(total_articulos)}`);
     $("#tot_descuento").text(`$${total_descuento}`);
     $("#text_total").text(`$${total}`);
-    // si ya abono
+
+    //? si ya abono
     if (parseFloat(tcefect) > 0 || parseFloat(tctrans) > 0)
         $(".separadores_pagos").removeClass("hidden");
     if (parseFloat(tcefect) > 0) {
@@ -281,30 +295,15 @@ function ticketPagado(datos) {
     $("#text_total_cobrar").text(`PAGO:`);
     $("#text_cobrar").text(`$${total}`);
     $("#text_total_tabla").text(`$${total}`);
+
+    ocultarPantallaCarga();
 }
 function ticketCancelado(datos) {
+    pantallaCarga("Cargando datos ticket...", "");
+
     //? deshabilitamos campos
-    const inputSearch = $("#search");
-    const inputCantidad = $("#cantidad_producto");
-    const botonesAcciones = $("#botones_acciones");
-    const btnCnvenio = $("#btn_convenio");
-    const contAgregarProductos = $("#cont_agregar_productos");
-    const btnsCanbiarClientes = $("#cont-buttons-clientes");
-
-    inputSearch.prop("disabled", true);
-    inputCantidad.prop("disabled", true);
-    botonesAcciones.addClass("hidden");
-    btnCnvenio.addClass("hidden");
-    contAgregarProductos.addClass("hidden");
-    btnsCanbiarClientes.addClass("hidden");
-
-    $("#table_productos_ticket tbody .btn_acciones_tabla").each(function () {
-        console.log(this);
-        $(this).prop("disabled", true).css({
-            opacity: "0.5",
-            cursor: "not-allowed",
-        });
-    }); 
+    deshabilitarCamposTicket();
+    borrar_columna_acciones();
 
     const {
         clave_serie,
@@ -336,6 +335,49 @@ function ticketCancelado(datos) {
         .removeClass("bg-primary bg-warning bg-danger bg-success bg-secondary")
         .addClass(bgColorClass)
         .html(`<span class="font-weight-bold">Estado:</span> ${textEstatus}`);
+
+    ocultarPantallaCarga();
+}
+function deshabilitarCamposTicket() {
+    //? deshabilitamos campos
+    const inputSearch = $("#search");
+    const inputCantidad = $("#cantidad_producto");
+    const botonesAcciones = $("#botones_acciones");
+    const btnCnvenio = $("#btn_convenio");
+    const contAgregarProductos = $("#cont_agregar_productos");
+    const btnsCanbiarClientes = $("#cont-buttons-clientes");
+
+    inputSearch.prop("disabled", true);
+    inputCantidad.prop("disabled", true);
+    botonesAcciones.addClass("hidden");
+    btnCnvenio.addClass("hidden");
+    contAgregarProductos.addClass("hidden");
+    btnsCanbiarClientes.addClass("hidden");
+}
+function borrar_columna_acciones() {
+    //? se deshabilitan los botones de acciones y se esconden
+    $("#table_productos_ticket tbody .btn_acciones_tabla").each(function () {
+        $(this).addClass("hidden");
+        $(this).prop("disabled", true).css({
+            opacity: "0.5",
+            cursor: "not-allowed",
+        });
+    });
+
+    const columAcciones = $("#btn_acciones_productos").index();
+
+    //? se borra encabezado de la columna
+    $("#table_productos_ticket thead tr th").eq(columAcciones).remove();
+
+    //? se borran los td de la columna
+    $("#table_productos_ticket tbody tr").each(function () {
+        $(this).find("td").eq(columAcciones).remove();
+    });
+
+    //? se borran las celdas de la columna
+    $("#table_productos_ticket tfoot tr").each(function () {
+        $(this).find("td, th").eq(columAcciones).remove();
+    });
 }
 
 function obtenerTxtEstatus(estatus) {
@@ -369,9 +411,6 @@ function obtenerTxtEstatus(estatus) {
 
 //TODO: funciones para agregar o modificar el cliente
 async function eliminar_cliente_ticket() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const folioTicket = urlParams.get("folio_ticket");
-    const idDocumento = urlParams.get("id_documento");
     try {
         const respuesta = await $.ajax({
             cache: false,
@@ -387,7 +426,7 @@ async function eliminar_cliente_ticket() {
 
         const { success, mensaje } = respuesta;
 
-        Swal.close();
+        ocultarPantallaCarga();
 
         if (!success) {
             mensajeError("Error inesperado", mensaje);
@@ -410,9 +449,6 @@ async function eliminar_cliente_ticket() {
 
 async function cambiar_cliente() {
     const idCliente = $("#id_cliente_modal").val();
-    const urlParams = new URLSearchParams(window.location.search);
-    const folioTicket = urlParams.get("folio_ticket");
-    const idDocumento = urlParams.get("id_documento");
 
     try {
         const respuesta = await $.ajax({
@@ -430,7 +466,7 @@ async function cambiar_cliente() {
 
         const { success, mensaje } = respuesta;
 
-        Swal.close();
+        ocultarPantallaCarga();
 
         if (!success) {
             mensajeError("Error inesperado", mensaje);
@@ -565,9 +601,6 @@ async function traer_convenios() {
 }
 
 async function agregar_convenio() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const folioTicket = urlParams.get("folio_ticket");
-    const idDocumento = urlParams.get("id_documento");
     const idConvenio = $("#listConvenios").val();
     const idProducto = $("#id_producto_convenio").val();
 
@@ -592,7 +625,7 @@ async function agregar_convenio() {
 
         const { success, mensaje } = respuesta;
 
-        Swal.close();
+        ocultarPantallaCarga();
 
         if (!success) {
             mensajeError("Revisa la tabla de articulos", mensaje);
@@ -608,7 +641,7 @@ async function agregar_convenio() {
         // oculatamos modal
         $("#agregarConvenio").modal("hide");
     } catch (error) {
-        Swal.close();
+        ocultarPantallaCarga();
         mensajeError(
             "Ocurrió un error inesperado. Verifica tu conexión o inténtalo nuevamente."
         );
@@ -617,10 +650,6 @@ async function agregar_convenio() {
 }
 
 async function borrar_convenio(idProducto) {
-    const urlParams = new URLSearchParams(window.location.search);
-    const folioTicket = urlParams.get("folio_ticket");
-    const idDocumento = urlParams.get("id_documento");
-
     try {
         pantallaCarga(
             "Cargando...",
@@ -641,7 +670,7 @@ async function borrar_convenio(idProducto) {
 
         const { success, mensaje } = respuesta;
 
-        Swal.close();
+        ocultarPantallaCarga();
 
         if (!success) {
             mensajeError("Revisa la tabla de articulos", mensaje);
@@ -653,7 +682,7 @@ async function borrar_convenio(idProducto) {
 
         mensajeSuccess(mensaje);
     } catch (error) {
-        Swal.close();
+        ocultarPantallaCarga();
         mensajeError(
             "Ocurrió un error inesperado. Verifica tu conexión o inténtalo nuevamente."
         );
@@ -663,11 +692,8 @@ async function borrar_convenio(idProducto) {
 
 //TODO: funciones para agregar productos
 async function agregarProducto() {
-    const urlParams = new URLSearchParams(window.location.search);
     const productoId = $("#id_producto").val();
     const cantidad = $("#cantidad_producto").val();
-    const folioTicket = urlParams.get("folio_ticket");
-    const idDocumento = urlParams.get("id_documento");
 
     try {
         pantallaCarga(
@@ -689,7 +715,6 @@ async function agregarProducto() {
         });
 
         const { success, producto, mensaje } = respuesta;
-        Swal.close();
 
         if (!success) {
             mensajeError("Revisa la tabla de articulos", mensaje);
@@ -700,10 +725,11 @@ async function agregarProducto() {
         agregarTuplaTablaTicket(producto);
         await limpiarInputsProductos();
         await cargarDatosTicket(folioTicket, idDocumento);
-
         mensajeSuccess("El producto se agregó correctamente al ticket.");
+
+        ocultarPantallaCarga();
     } catch (error) {
-        Swal.close();
+        ocultarPantallaCarga();
         mensajeError(
             "Ocurrió un error inesperado. Verifica tu conexión o inténtalo nuevamente."
         );
@@ -723,10 +749,6 @@ async function cargarTablaProductosTicket() {
 }
 
 async function obtenerProdutosTicket() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const folioTicket = urlParams.get("folio_ticket");
-    const idDocumento = urlParams.get("id_documento");
-
     try {
         const respuesta = await $.ajax({
             url: "componentes/tickets/peticiones/tickets.php",
@@ -746,7 +768,7 @@ async function obtenerProdutosTicket() {
         }
         return productTicket;
     } catch (error) {
-        Swal.close();
+        ocultarPantallaCarga();
         mensajeError(
             "Ocurrió un error inesperado. Verifica tu conexión o inténtalo nuevamente."
         );
@@ -855,10 +877,6 @@ function limpiarInputsProductos() {
 //TODO: eliminar productos y cancelaciones
 
 async function eliminar_producto(idProducto) {
-    const urlParams = new URLSearchParams(window.location.search);
-    const folioTicket = urlParams.get("folio_ticket");
-    const idDocumento = urlParams.get("id_documento");
-
     try {
         pantallaCarga(
             "Cargando...",
@@ -879,8 +897,6 @@ async function eliminar_producto(idProducto) {
 
         const { success, borrado } = respuesta;
 
-        Swal.close();
-
         if (!success && !borrado) {
             mensajeError("Revisa la tabla de articulos", mensaje);
             return;
@@ -888,8 +904,10 @@ async function eliminar_producto(idProducto) {
         eliminar_tupla_tabla_ticket(idProducto);
         await cargarDatosTicket(folioTicket, idDocumento);
         mensajeSuccess("Producto eliminado del ticket corretamente.");
+
+        ocultarPantallaCarga();
     } catch (error) {
-        Swal.close();
+        ocultarPantallaCarga();
         mensajeError(
             "Ocurrió un error inesperado. Verifica tu conexión o inténtalo nuevamente."
         );
@@ -908,9 +926,6 @@ async function cancelar_ticket() {
     let modalCancelar = $("#borrarcancelar");
     modalCancelar.modal("hide");
 
-    const urlParams = new URLSearchParams(window.location.search);
-    const folioTicket = urlParams.get("folio_ticket");
-    const idDocumento = urlParams.get("id_documento");
     const claveTrab = $("#contrasenia_cancelacion").val();
 
     try {
@@ -933,18 +948,19 @@ async function cancelar_ticket() {
 
         const { success, cancelado, mensaje } = respuesta;
 
-        Swal.close();
-
         if (!success && !cancelado) {
-            mensajeError("Error al cancelar el ticket:", mensaje);
+            // mensajeError("Error al cancelar el ticket:", mensaje);
+            mensajeError("Error al cancelar el ticket", mensaje);
             return;
         }
 
         mensajeSuccess("Ticket cancelado correctamente");
 
         await cargarDatosTicket(folioTicket, idDocumento);
+
+        ocultarPantallaCarga();
     } catch (error) {
-        Swal.close();
+        ocultarPantallaCarga();
         mensajeError(
             "Ocurrió un error inesperado. Verifica tu conexión o inténtalo nuevamente."
         );
@@ -975,12 +991,14 @@ async function activarModalCobrar() {
 
 //todo: funciones para cobrar [tickets]
 
+async function cargar_datos_cobrar_ticket() {
+    await cargar_select_metodos_pagos();
+    await cargar_faltante_cobrar();
+}
+
 async function cobrar_ticket() {
     if (!validar_form_cobrar()) return;
 
-    const urlParams = new URLSearchParams(window.location.search);
-    const folioTicket = urlParams.get("folio_ticket");
-    const idDocumento = urlParams.get("id_documento");
     const metoPag = $("#select_metodo_pago").val();
     const cantPago = $("#input_efectivo").val();
 
@@ -1007,8 +1025,7 @@ async function cobrar_ticket() {
             cargarDatosTicket(folioTicket, idDocumento);
             limpiar_form_cobrar();
             rellenar_tabla_pagos();
-
-            Swal.close();
+            
             mensajeSuccess(message);
             return;
         }
@@ -1037,6 +1054,38 @@ async function cargar_select_metodos_pagos() {
     });
 
     selectMetPag.html(options);
+}
+
+async function cargar_faltante_cobrar() {
+    let dataCobrar = await obtener_faltante_cobrar();
+    let { falta_cobrar } = dataCobrar;
+    $("#input_efectivo").val(falta_cobrar.toFixed(2));
+
+}
+async function obtener_faltante_cobrar() {
+    try {
+        const respuesta = await $.ajax({
+            cache: false,
+            url: "componentes/tickets/pagos/cobrar_ticket.php",
+            type: "POST",
+            dataType: "json",
+            data: {
+                funcion: "traerFaltanteCobrar",
+                idDocumento: idDocumento,
+                folioTicket: folioTicket,
+            },
+        });
+
+        const { success, data, mensaje } = respuesta;
+
+        if (!success) {
+            throw new Error(mensaje);
+        }
+
+        return data;
+    } catch (error) {
+        console.error(error);
+    }
 }
 
 async function traer_metodos_pago() {
@@ -1084,6 +1133,7 @@ function validar_form_cobrar() {
 }
 
 async function rellenar_tabla_pagos() {
+    await cargar_faltante_cobrar();
     const pagos = await cargar_pagos_ticket();
     const tablaPagosBody = $("#tabla_pagos tbody");
 
@@ -1111,9 +1161,6 @@ async function rellenar_tabla_pagos() {
 }
 
 async function cargar_pagos_ticket() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const folioTicket = urlParams.get("folio_ticket");
-    const idDocumento = urlParams.get("id_documento");
     try {
         const respuesta = await $.ajax({
             cache: false,
@@ -1145,8 +1192,8 @@ function limpiar_form_cobrar() {
 }
 // // ? validacion en select, por datos, antes de cobrar
 // // ? hacer tabla de pagos por ticket
-//? validaciones en pago para no sobrepasar el total
+// // ? validaciones en pago para no sobrepasar el total
 //? boton con confirmacion de borrar pago
-//? agregar funcion para [cambio] de dinero, despues de cobrar el ticket
-//? ya que el ticket este cobrado, habilitar boton para impimir ticket
+// // ? agregar funcion para [cambio] de dinero, despues de cobrar el ticket
+// // ? ya que el ticket este cobrado, habilitar boton para impimir ticket
 //? formato de tickets

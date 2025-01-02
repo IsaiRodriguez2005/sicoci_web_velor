@@ -59,7 +59,7 @@ if (!isset($_SESSION['nombre_usuario'])) {
                         <!-- ============================================================== -->
                         <!-- Bread crumb and right sidebar toggle -->
                         <!-- ============================================================== -->
-                        <div ss="row page-titles justify-content-between">
+                        <div class="row page-titles justify-content-between">
                             <!-- Breadcrumb y título a la izquierda -->
                             <div class="col-8 align-self-center mt-3">
                                 <ol class="breadcrumb">
@@ -72,14 +72,25 @@ if (!isset($_SESSION['nombre_usuario'])) {
 
                             <!-- Botones a la derecha -->
                             <div class="col-4 align-self-center text-right pr-3">
-                                <!-- Borrar pedido -->
-                                <!-- <a href="#borrarcancelar"
-                                class="btn btn-success ml-1 mt-2"
-                                data-toggle="modal"
-                                title="Borrar ticket">
-                                <i class="fas fa-trash-alt"></i>
-                            </a> -->
+                                <!-- Imprimir ticket -->
+                                <a 
+                                id="btn_impirmir_ticket"
+                                class="btn btn-primary ml-1 mt-2 hidden"
+                                title="Imprimir ticket"
+                                onclick="imprimirTicket()">
+                                    <i class="fas fa-print"></i>
+                                </a>
+
+                                <!-- Facturar ticket -->
+                                <a 
+                                id="btn_facturar_ticket"
+                                class="btn btn-warning ml-1 mt-2 hidden"
+                                title="Facturar ticket"
+                                onclick="facturarTicket()">
+                                    <i class="fas fa-file-invoice"></i>
+                                </a>
                             </div>
+
                         </div>
 
                         <!-- Modal cambiar cliente-->
@@ -227,7 +238,7 @@ if (!isset($_SESSION['nombre_usuario'])) {
                                                 <table id="table_productos_ticket" class="ticket-table">
                                                     <thead>
                                                         <tr>
-                                                            <th>Borrar</th>
+                                                            <th id="btn_acciones_productos">Acciones</th>
                                                             <th>Cantidad</th>
                                                             <th>Producto</th>
                                                             <th>Precio</th>
@@ -293,8 +304,8 @@ if (!isset($_SESSION['nombre_usuario'])) {
                                                 </tr>
                                                 <tr>
                                                     <td><b>FOLIO</b></td>
-                                                    <td class="text-right"><a href="index.php/pedidos/pedido/15864"
-                                                            id="text_folio_href"></a></td>
+                                                    <td class="text-right"><span
+                                                            id="text_folio_href"><span/></td>
                                                 </tr>
                                                 <tr>
                                                     <td><b>ARTICULOS</b></td>
@@ -352,7 +363,7 @@ if (!isset($_SESSION['nombre_usuario'])) {
                                         </div> -->
                                             <div class="col-lg-4 col-md-4">
                                                 <button type="button" data-toggle="modal" data-target="#cobrar"
-                                                    id="btn_cobrar" onclick="cargar_select_metodos_pagos()"
+                                                    id="btn_cobrar" onclick="cargar_datos_cobrar_ticket()"
                                                     class="btn btn-success btn-block">Cobrar (F7)</button>
                                             </div>
                                         </div>
@@ -532,7 +543,7 @@ if (!isset($_SESSION['nombre_usuario'])) {
                                             <table id="tabla_pagos" class="table table-bordered table-striped">
                                                 <thead class="thead-light">
                                                     <tr>
-                                                        <th id="btn_acciones_convenio">Acciones</th>
+                                                        <th>Acciones</th>
                                                         <th>Método de Pago</th>
                                                         <th>Monto</th>
                                                         <th>Fecha</th>

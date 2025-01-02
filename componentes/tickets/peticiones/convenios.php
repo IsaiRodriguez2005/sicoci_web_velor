@@ -172,7 +172,7 @@ function agregarConvenioProducto($post, $idEmisor, $conexion)
     if($tipoConvenio == 2) {
         //! porcentaje
         $cantidadDescuento = $infoConvenio['data']['pct_consul'];
-        $descuento = ($cantidadDescuento / 100) * $infoProductoTicket['importe'];
+        $descuento = (($cantidadDescuento / 100) * $infoProductoTicket['importe']);
     }
     
 
