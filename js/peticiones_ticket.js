@@ -1197,3 +1197,9 @@ function limpiar_form_cobrar() {
 // // ? agregar funcion para [cambio] de dinero, despues de cobrar el ticket
 // // ? ya que el ticket este cobrado, habilitar boton para impimir ticket
 //? formato de tickets
+//todo: impresiones de tickets
+
+function imprimirTicket() {
+    const url = `componentes/formatos_pdf/ventas/ticket.php?folio_ticket=${folioTicket}&id_documento=${idDocumento}`;
+    window.open(url, '_blank');
+}

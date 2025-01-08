@@ -6,7 +6,7 @@ if (!isset($_SESSION['nombre_usuario'])) {
     session_destroy();
     header('location: index.php');
 } else {
-    ?>
+?>
     <!DOCTYPE html>
     <htmlg="es">
 
@@ -73,20 +73,27 @@ if (!isset($_SESSION['nombre_usuario'])) {
                             <!-- Botones a la derecha -->
                             <div class="col-4 align-self-center text-right pr-3">
                                 <!-- Imprimir ticket -->
-                                <a 
-                                id="btn_impirmir_ticket"
-                                class="btn btn-primary ml-1 mt-2 hidden"
-                                title="Imprimir ticket"
-                                onclick="imprimirTicket()">
+                                <!-- <a
+                                    id="btn_impirmir_ticket"
+                                    class="btn btn-primary ml-1 mt-2 hidden"
+                                    title="Imprimir ticket"
+                                    onclick="imprimirTicket()">
+                                    <i class="fas fa-print"></i>
+                                </a> -->
+                                <a
+                                    id="btn_impirmir_ticket"
+                                    class="btn btn-primary ml-1 mt-2 hidden"
+                                    title="Imprimir ticket"
+                                    onclick="imprimirTicket()">
                                     <i class="fas fa-print"></i>
                                 </a>
 
                                 <!-- Facturar ticket -->
-                                <a 
-                                id="btn_facturar_ticket"
-                                class="btn btn-warning ml-1 mt-2 hidden"
-                                title="Facturar ticket"
-                                onclick="facturarTicket()">
+                                <a
+                                    id="btn_facturar_ticket"
+                                    class="btn btn-warning ml-1 mt-2 hidden"
+                                    title="Facturar ticket"
+                                    onclick="facturarTicket()">
                                     <i class="fas fa-file-invoice"></i>
                                 </a>
                             </div>
@@ -305,7 +312,7 @@ if (!isset($_SESSION['nombre_usuario'])) {
                                                 <tr>
                                                     <td><b>FOLIO</b></td>
                                                     <td class="text-right"><span
-                                                            id="text_folio_href"><span/></td>
+                                                            id="text_folio_href"><span /></td>
                                                 </tr>
                                                 <tr>
                                                     <td><b>ARTICULOS</b></td>
@@ -601,7 +608,7 @@ if (!isset($_SESSION['nombre_usuario'])) {
                                         </div>
 
                                     </form>
-                                    
+
                                 </div>
                             </div>
                         </div>
@@ -612,7 +619,7 @@ if (!isset($_SESSION['nombre_usuario'])) {
                         <!-- ============================================================== -->
                     </div>
                 </div>
-                
+
                 <?php
                 include("componentes/estructura/pie.php");
                 ?>
@@ -680,6 +687,6 @@ if (!isset($_SESSION['nombre_usuario'])) {
         </body>
 
         </html>
-        <?php
+    <?php
 }
-?>
+    ?>

@@ -212,7 +212,7 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
 }
 
 
-//! funciones de lsta de tickets
+//! funciones de lista de tickets
 function aperturarTicketSinCita($post, $idEmisor, $conexion)
 {
     $idDocumento = $post['serieTicket'];
@@ -1069,5 +1069,76 @@ function comprobarExistenciaTicketCita($conexion, $idEmisor, $idSerieTicket, $id
     return [
         'exists' => !empty($datos),
         'ticket' => $datos ?: null
+    ];
+}
+
+
+//! datos de emisores
+function obtenerDatosDeEmisores($idEmisor, $conexion){
+    
+    $query = "SELECT 
+                    e.rfc,
+                    e.nombre_social,
+                    e.nombre_comercial,
+                    e.calle,
+                    e.exterior,
+                    e.interior,
+                    e.codigo_postal,
+                    e.telefono,
+                    c.nombre_colonia AS colonia,
+                    es.nombre_estado AS estado,
+                    m.nombre_municipio AS municipio,
+                    p.descripcion AS pais
+                FROM emisores e
+                INNER JOIN _cat_sat_pais p
+                    ON p.clave_pais = e.clave_pais
+                INNER JOIN _cat_sat_municipios m
+                    ON m.clave_municipio = e.clave_municipio AND m.clave_estado = e.clave_estado
+                INNER JOIN _cat_sat_colonias c
+                    ON c.clave_colonia = e.clave_colonia AND c.codigo_postal = e.codigo_postal
+                INNER JOIN _cat_sat_estados es
+                    ON es.clave_estado = e.clave_estado
+                WHERE e.id_emisor = ?;";
+    $resultado = ejecutarConsultaPreparada(
+        $conexion,
+        $query,
+        "i",
+        [$idEmisor]
+    );
+
+    if (!$resultado['success']) {
+        return $resultado; // Devolver el error de `ejecutarConsultaPreparada`
+    }
+
+    // Obtener los datos
+    $result = $resultado['data'];
+
+    if ($fila = mysqli_fetch_assoc($result)) {
+        // Devolver todos los datos relevantes del emisor
+        return [
+            'success' => true,
+            'data' => [
+                'rfc' => $fila['rfc'],
+                'nombre_social' => $fila['nombre_social'],
+                'nombre_comercial' => $fila['nombre_comercial'],
+                'direccion' => [
+                    'calle' => $fila['calle'],
+                    'exterior' => $fila['exterior'],
+                    'interior' => $fila['interior'],
+                    'codigo_postal' => $fila['codigo_postal'],
+                    'colonia' => $fila['colonia'],
+                    'municipio' => $fila['municipio'],
+                    'estado' => $fila['estado'],
+                    'pais' => $fila['pais']
+                ]
+            ]
+        ];
+    }
+
+    // Si no se encontraron resultados
+    return [
+        'success' => false,
+        'error' => 'No se encontró información para el emisor especificado.',
+        'id_emisor' => $idEmisor
     ];
 }
