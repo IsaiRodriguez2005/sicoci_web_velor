@@ -65,7 +65,6 @@ async function procesarDatosTicket() {
 
     await cargarTablaProductosTicket();
     cargarDatosTicket(folioTicket, idDocumento);
-
     const data_productos = await cargar_productos_servicios();
 
     const { productos, success } = data_productos;
@@ -85,6 +84,7 @@ async function procesarDatosTicket() {
 async function cargarDatosTicket(folio, idDocumento) {
     const datosTicket = await obtenerDatosTicket(folio, idDocumento);
     const { estatus } = datosTicket;
+    // console.log(datosTicket);
 
     //? diferentes acciones dependiendo el estatus:
     switch (estatus) {
@@ -232,9 +232,11 @@ function ticketPagado(datos) {
 
     //? habilitar campos
     const btnImprimirTicket = $("#btn_impirmir_ticket");
+    const btnImprimirNota = $("#btn_imprimir_nota_venta");
     const btnFacturarTicket = $("#btn_facturar_ticket");
 
     btnImprimirTicket.removeClass("hidden");
+    btnImprimirNota.removeClass("hidden");
     btnFacturarTicket.removeClass("hidden");
 
     //? deshabilitamos campos
@@ -1025,7 +1027,7 @@ async function cobrar_ticket() {
             cargarDatosTicket(folioTicket, idDocumento);
             limpiar_form_cobrar();
             rellenar_tabla_pagos();
-            
+
             mensajeSuccess(message);
             return;
         }
@@ -1144,9 +1146,8 @@ async function rellenar_tabla_pagos() {
         const fila = `
                 <tr>
                     <td>
-                        <button class="btn btn-danger btn-sm" onclick="eliminarPago(${
-                            pago.id_pago
-                        })">
+                        <button class="btn btn-danger btn-sm" onclick="eliminarPago(${pago.id_pago
+            })">
                             Eliminar
                         </button>
                     </td>
@@ -1201,5 +1202,9 @@ function limpiar_form_cobrar() {
 
 function imprimirTicket() {
     const url = `componentes/formatos_pdf/ventas/ticket.php?folio_ticket=${folioTicket}&id_documento=${idDocumento}`;
+    window.open(url, '_blank');
+}
+function imprimirNotaVenta() {
+    const url = `componentes/formatos_pdf/ventas/nota_venta.php?folio_ticket=${folioTicket}&id_documento=${idDocumento}`;
     window.open(url, '_blank');
 }

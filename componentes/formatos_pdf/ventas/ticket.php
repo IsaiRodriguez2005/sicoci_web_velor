@@ -1,32 +1,32 @@
 <?php
-    require("../../tickets/peticiones/tickets.php");
+require("../../tickets/peticiones/tickets.php");
 
-    $idEmisor = $_SESSION['id_emisor'];
+$idEmisor = $_SESSION['id_emisor'];
 
-    $folioTicket = isset($_GET['folio_ticket']) ? intval($_GET['folio_ticket']) : null;
-    $idDocumento = isset($_GET['id_documento']) ? intval($_GET['id_documento']) : null;
-    $datos = ['folioTicket' => $folioTicket, 'idDocumento' => $idDocumento];
+$folioTicket = isset($_GET['folio_ticket']) ? intval($_GET['folio_ticket']) : null;
+$idDocumento = isset($_GET['id_documento']) ? intval($_GET['id_documento']) : null;
+$datos = ['folioTicket' => $folioTicket, 'idDocumento' => $idDocumento];
 
-    $datosTicket = obtenerTextosTicket($datos, $idEmisor, $conexion);
-    $productos = obtenerProductosTicket($datos, $idEmisor, $conexion);
-    $resEmisores = obtenerDatosDeEmisores($idEmisor, $conexion);
-    if (!$resEmisores['success']) return;
-    $dataEmisores = $resEmisores['data'];
+$datosTicket = obtenerTextosTicket($datos, $idEmisor, $conexion);
+$productos = obtenerProductosTicket($datos, $idEmisor, $conexion);
+$resEmisores = obtenerDatosDeEmisores($idEmisor, $conexion);
+if (!$resEmisores['success']) return;
+$dataEmisores = $resEmisores['data'];
 
-    //? DOMICILIO
-    $domicilio = $dataEmisores['direccion']['calle'] . ' #' . $dataEmisores['direccion']['exterior'];
-    if (!empty($dataEmisores['direccion']['interior'])) {
-        $domicilio .= ' Int. ' . $dataEmisores['direccion']['interior'];
-    }
-    $domicilio .= ', Colonia ' . $dataEmisores['direccion']['colonia'] . ', ' . $dataEmisores['direccion']['municipio'] . ', ' . $dataEmisores['direccion']['estado'] . '.';
-    $domicilio = strtoupper($domicilio);
+//? DOMICILIO
+$domicilio = $dataEmisores['direccion']['calle'] . ' #' . $dataEmisores['direccion']['exterior'];
+if (!empty($dataEmisores['direccion']['interior'])) {
+    $domicilio .= ' Int. ' . $dataEmisores['direccion']['interior'];
+}
+$domicilio .= ', Colonia ' . $dataEmisores['direccion']['colonia'] . ', ' . $dataEmisores['direccion']['municipio'] . ', ' . $dataEmisores['direccion']['estado'] . '.';
+$domicilio = strtoupper($domicilio);
 
-    //? FOLIO
-    $folio = '#' . $datosTicket['folio_ticket'] . $datosTicket['clave_serie'];
+//? FOLIO
+$folio = '#' . $datosTicket['folio_ticket'] . $datosTicket['clave_serie'];
 
-    // echo '<pre>';
-    // print_r(['datosTicket' => $datosTicket]);
-    // echo '</pre>';
+// echo '<pre>';
+// print_r(['datosTicket' => $datosTicket]);
+// echo '</pre>';
 ?>
 
 <!DOCTYPE html>
@@ -40,16 +40,23 @@
 </head>
 
 <body>
-    <div class="ticket">
+    <div style="
+        width: 58mm;
+        margin-top: 2.5mm;
+        margin-right: 2.5mm;
+        margin-bottom: 2.5mm;
+        margin-left: 2.5mm;
+        padding: 12px;
+        font-size: 10px;
+        color: #000;">
         <!-- Encabezado -->
         <div class="ticket-header">
             <!-- Espacio para el logo -->
             <div style="margin-bottom: 10px;">
-                <img 
-                    src="../../../emisores/1/archivos/generales/logo.jpg" 
-                    alt="Logo del Negocio" 
-                    style="max-width: 120px; height: auto;"
-                >
+                <img
+                    src="../../../emisores/1/archivos/generales/logo.jpg"
+                    alt="Logo del Negocio"
+                    style="max-width: 120px; height: auto;">
             </div>
 
             <!-- Información del negocio -->
@@ -82,14 +89,14 @@
         <hr class="divider">
         <hr class="divider">
         <!-- Detalle de productos -->
-        <table style="width: 100%; border-collapse: collapse; font-size: 12px;">
+        <table style="width: 100%; border-collapse: collapse; font-size: 9.5px;">
             <!-- Encabezado de la tabla -->
             <thead>
                 <tr>
-                    <th style="text-align: left;">Cant</th>
-                    <th style="text-align: left;">Producto</th>
-                    <th style="text-align: right;">P.Unit</th>
-                    <th style="text-align: right;">Total</th>
+                    <th style="text-align: left; font-size: 9.5px; font-weight: bold;">Cant</th>
+                    <th style="text-align: left; font-size: 9.5px; font-weight: bold;">Producto</th>
+                    <th style="text-align: right; font-size: 9.5px; font-weight: bold;">P.Unit</th>
+                    <th style="text-align: right; font-size: 9.5px; font-weight: bold;">Total</th>
                 </tr>
             </thead>
 
@@ -97,10 +104,10 @@
             <tbody>
                 <?php foreach ($productos as $producto): ?>
                     <tr>
-                        <td style="text-align: left;"><?= $producto['cantidad']; ?></td>
-                        <td style="text-align: left;"><?= $producto['nombreProducto']; ?></td>
-                        <td style="text-align: right;">$<?= number_format($producto['precio'], 2); ?></td>
-                        <td style="text-align: right;">$<?= number_format($producto['cantidad'] * $producto['precio'], 2); ?></td>
+                        <td style="text-align: left; font-size: 9.5px;"><?= $producto['cantidad']; ?></td>
+                        <td style="text-align: left; font-size: 9.5px;"><?= $producto['nombreProducto']; ?></td>
+                        <td style="text-align: right; font-size: 9.5px;">$<?= number_format($producto['precio'], 2); ?></td>
+                        <td style="text-align: right; font-size: 9.5px;">$<?= number_format($producto['cantidad'] * $producto['precio'], 2); ?></td>
                     </tr>
                 <?php endforeach; ?>
             </tbody>

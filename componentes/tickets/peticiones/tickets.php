@@ -150,7 +150,7 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
 
         //todo: aperturar ticket
         if ($_POST['funcion'] == 'getURLticketSinCita') {
-            
+
             if (!isset($_SESSION['id_emisor'], $_POST['serieTicket'])) {
                 echo json_encode([
                     'success' => false,
@@ -577,10 +577,31 @@ function obtenerTextosTicket($post, $idEmisor, $conexion)
                                 AND etd.id_emisor = et.id_emisor 
                                 AND etd.id_documento = et.id_documento
                     ),0) AS total_descuento,
-                    SUM(CASE WHEN tp.forma_pago_id = 1 THEN tp.monto ELSE 0 END) AS tcefect,
-                    SUM(CASE WHEN tp.forma_pago_id = 3 THEN tp.monto ELSE 0 END) AS tctrans,
-                    COALESCE(SUM(tp.monto), 0) AS total_cobrado
-                FROM emisores_tickets et
+                    COALESCE(
+                    (SELECT SUM(tp.monto)
+                        FROM emisores_tickets_pagos tp
+                        WHERE tp.folio_ticket = et.folio_ticket 
+                            AND tp.id_emisor = et.id_emisor 
+                            AND tp.id_documento = et.id_documento
+                            AND tp.forma_pago_id = 1
+                    ), 0) AS tcefect,
+                    COALESCE(
+                    (SELECT SUM(tp.monto)
+                        FROM emisores_tickets_pagos tp
+                        WHERE tp.folio_ticket = et.folio_ticket 
+                            AND tp.id_emisor = et.id_emisor 
+                            AND tp.id_documento = et.id_documento
+                            AND tp.forma_pago_id = 3
+                    ), 0) AS tctrans,
+                    COALESCE(
+                    (SELECT SUM(tp.monto)
+                        FROM emisores_tickets_pagos tp
+                        WHERE tp.folio_ticket = et.folio_ticket 
+                            AND tp.id_emisor = et.id_emisor 
+                            AND tp.id_documento = et.id_documento
+                    ), 0) AS total_cobrado,
+                    DATE_FORMAT(et.fecha_emision, '%d/%m/%Y') as fecha_emision
+                FROM emisores_tickets et 
                     INNER JOIN emisores_series es 
                         ON es.id_partida = et.id_documento 
                             AND es.id_emisor = et.id_emisor 
@@ -1074,8 +1095,9 @@ function comprobarExistenciaTicketCita($conexion, $idEmisor, $idSerieTicket, $id
 
 
 //! datos de emisores
-function obtenerDatosDeEmisores($idEmisor, $conexion){
-    
+function obtenerDatosDeEmisores($idEmisor, $conexion)
+{
+
     $query = "SELECT 
                     e.rfc,
                     e.nombre_social,
@@ -1141,4 +1163,42 @@ function obtenerDatosDeEmisores($idEmisor, $conexion){
         'error' => 'No se encontró información para el emisor especificado.',
         'id_emisor' => $idEmisor
     ];
+}
+
+function obtenerDatosLogotipo($idEmisor, $conexion){
+
+    $query = "SELECT 
+                    logo, 
+                    tipo_logo, 
+                    marca, 
+                    tipo_marca 
+                FROM emisores_configuraciones 
+                WHERE id_emisor = ?";
+
+    $resultado = ejecutarConsultaPreparada(
+        $conexion,
+        $query,
+        "i",
+        [$idEmisor]
+    );
+
+    if (!$resultado['success']) {
+        return $resultado; // Devolver el error de `ejecutarConsultaPreparada`
+    }
+
+    // Obtener los datos
+    $result = $resultado['data'];
+
+    if ($fila = mysqli_fetch_assoc($result)) {
+        // Devolver todos los datos relevantes del emisor
+        return [
+            'success' => true,
+            'data' => [
+                'logo' => $fila['logo'],
+                'tipoLogo' => $fila['tipo_logo'],
+                'marca' => $fila['marca'],
+                'tipoMarca' => $fila['tipo_marca']
+            ]
+        ];
+    }
 }

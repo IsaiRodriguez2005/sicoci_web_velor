@@ -73,19 +73,21 @@ if (!isset($_SESSION['nombre_usuario'])) {
                             <!-- Botones a la derecha -->
                             <div class="col-4 align-self-center text-right pr-3">
                                 <!-- Imprimir ticket -->
-                                <!-- <a
-                                    id="btn_impirmir_ticket"
-                                    class="btn btn-primary ml-1 mt-2 hidden"
-                                    title="Imprimir ticket"
-                                    onclick="imprimirTicket()">
-                                    <i class="fas fa-print"></i>
-                                </a> -->
                                 <a
                                     id="btn_impirmir_ticket"
                                     class="btn btn-primary ml-1 mt-2 hidden"
                                     title="Imprimir ticket"
                                     onclick="imprimirTicket()">
                                     <i class="fas fa-print"></i>
+                                </a>
+
+                                <!-- Imprimir nota de venta -->
+                                <a
+                                    id="btn_imprimir_nota_venta"
+                                    class="btn btn-secondary ml-1 mt-2 hidden"
+                                    title="Imprimir nota de venta"
+                                    onclick="imprimirNotaVenta()">
+                                    <i class="fas fa-file-alt"></i>
                                 </a>
 
                                 <!-- Facturar ticket -->
@@ -213,6 +215,11 @@ if (!isset($_SESSION['nombre_usuario'])) {
                                                 <label class="form-label font-weight-bold d-block">Cantidad</label>
                                                 <input type="text" name="cantidad" class="form-control text-center"
                                                     value="1" style="font-size: 1.5rem;" id="cantidad_producto">
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col text-right">
+                                                <button class="btn btn-primary" onclick="agregarProducto()">Agregar</button>
                                             </div>
                                         </div>
                                     </div>
@@ -378,9 +385,9 @@ if (!isset($_SESSION['nombre_usuario'])) {
                                 </div>
                             </div>
                         </div>
-                        <button onclick="recargarIgnorandoCache()" class="btn btn-primary btn-lg rounded-pill shadow">
+                        <!-- <button onclick="recargarIgnorandoCache()" class="btn btn-primary btn-lg rounded-pill shadow">
                             <i class="fas fa-sync-alt"></i> Reload
-                        </button>
+                        </button> -->
 
 
 
