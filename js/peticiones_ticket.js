@@ -31,9 +31,11 @@ function mensajeError(mensaje, title = null) {
     });
 }
 //todo: Ejecutar la función automáticamente al cargar la página
+
 //* Declarar variables globales
 let folioTicket = null;
 let idDocumento = null;
+
 //* Inicializar las variables globales al cargar la página
 document.addEventListener("DOMContentLoaded", () => {
 

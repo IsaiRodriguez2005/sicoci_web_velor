@@ -35,7 +35,7 @@ function traer_productos_servicios($idEmisor, $conexion)
                             precio,
                             iva
                         FROM productos_servicios 
-                        WHERE id_emisor = ? AND estatus = 1 AND ((tipo = 2 AND stock < 0) OR (tipo != 2));";
+                        WHERE id_emisor = ? AND estatus = 1 AND ((tipo = 2 AND stock > 0) OR (tipo != 2));";
     $stmt = mysqli_prepare($conexion, $sqlCliente);
     mysqli_stmt_bind_param($stmt, "i", $idEmisor);
     mysqli_stmt_execute($stmt);
