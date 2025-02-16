@@ -102,6 +102,7 @@ function gestionar_producto() {
     const stock_minimo = $("#stock_minimo").val();
     const precio = $("#precio").val();
     const iva = $("#iva").val();
+    const cobrarAutomatico = $("#cobrarAutomatico").prop('checked');
     const camposFaltantes = [];
 
     const claveProductoServicio = $("#clave_sat").val();
@@ -174,6 +175,7 @@ function gestionar_producto() {
             'iva': iva,
             'clave_producto': claveProductoServicio,
             'clave_medida': claveUnidadMedida,
+            'cobrarAutomatico': cobrarAutomatico,
         },
     }).done(function (resultado) {
         if (resultado == "ok") {
@@ -209,7 +211,7 @@ function gestionar_producto() {
     });
 }
 
-async function editar_producto(id_producto, nombre, tipo, stock, stock_minimo, precio, iva, claveProSAT, claveMedSAT) {
+async function editar_producto(id_producto, nombre, tipo, stock, stock_minimo, precio, iva, claveProSAT, claveMedSAT, cobrarAutomatico) {
     $("#leyenda").html("Modificar datos del producto/servicio");
     $("html, body").animate({ scrollTop: 0 }, 600);
 
@@ -222,6 +224,7 @@ async function editar_producto(id_producto, nombre, tipo, stock, stock_minimo, p
     $("#stock_minimo").val(stock_minimo);
     $("#precio").val(precio);
     $("#iva").val(iva);
+    $("#cobrarAutomatico").prop('checked', cobrarAutomatico == 1 ? true : false);
 
     await cargar_para_editar_claves(claveProSAT, claveMedSAT);
 

@@ -85,7 +85,7 @@ if (!isset($_SESSION['nombre_usuario'])) {
                                     <div class="col-8">
                                         <div class="input-group mb-3">
                                             <div class="input-group-prepend">
-                                                <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                                <span class="input-group-text"><i class="fas fa-box"></i></span>
                                             </div>
                                             <input type="text" class="form-control" placeholder="Nombre del producto o servicio" id="nombre" onfocus="resetear('nombre')" maxlength="150" require>
                                         </div>
@@ -147,9 +147,26 @@ if (!isset($_SESSION['nombre_usuario'])) {
                                             <input type="number" class="form-control" placeholder="Stock minimo" id="stock_minimo" onfocus="resetear('stock_minimo')">
                                         </div>
                                     </div>
-
                                 </div>
                             </div>
+                            <div class="card-body">
+                                <h6><i class="fas fa-university"></i> Datos del SAT</h6>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-4">
+                                        <div class="form-group d-flex justify-content-between align-items-center">
+                                            <label class="font-weight-bold mb-0" for="cobrarAutomatico">
+                                                ¿El producto se cobrará automáticamente al cobrar la cita?
+                                            </label>
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" class="custom-control-input" id="cobrarAutomatico">
+                                                <label class="custom-control-label" for="cobrarAutomatico"></label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                             <div class="card-body">
                                 <h6><i class="fas fa-university"></i> Datos del SAT</h6>
                                 <hr>
@@ -161,10 +178,10 @@ if (!isset($_SESSION['nombre_usuario'])) {
                                                 <span class="input-group-text"><i class="fas fa-store"></i></span>
                                             </div>
                                             <div class="search-container">
-                                                <input type="hidden" id="clave_sat"/>
-                                                <input type="text" id="search_clave_sat" class="form-control" placeholder="Buscar clave SAT del Producto/Servicio" 
-                                                onfocus="resetear('search_clave_sat')"
-                                                oninput="filtrar_lista_clave_sat()" />
+                                                <input type="hidden" id="clave_sat" />
+                                                <input type="text" id="search_clave_sat" class="form-control" placeholder="Buscar clave SAT del Producto/Servicio"
+                                                    onfocus="resetear('search_clave_sat')"
+                                                    oninput="filtrar_lista_clave_sat()" />
                                                 <ul id="suggestions_calve_sat" class="suggestions hidden">
 
                                                 </ul>
@@ -178,10 +195,10 @@ if (!isset($_SESSION['nombre_usuario'])) {
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text"><i class="fas fa-store"></i></span>
                                             </div>
-                                            <input type="hidden" id="clave_unidad_medida"/>
-                                            <input type="text" id="search_clave_unidad_medida" class="form-control" placeholder="Buscar clave SAT de la unidad de medida" 
-                                            onfocus="resetear('search_clave_unidad_medida')"
-                                            oninput="filtrar_lista_unidad_medida_sat()" />
+                                            <input type="hidden" id="clave_unidad_medida" />
+                                            <input type="text" id="search_clave_unidad_medida" class="form-control" placeholder="Buscar clave SAT de la unidad de medida"
+                                                onfocus="resetear('search_clave_unidad_medida')"
+                                                oninput="filtrar_lista_unidad_medida_sat()" />
                                             <ul id="suggestions_clave_unidad_medida" class="suggestions hidden"></ul>
                                         </div>
                                     </div>

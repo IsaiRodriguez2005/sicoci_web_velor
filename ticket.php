@@ -102,7 +102,7 @@ if (!isset($_SESSION['nombre_usuario'])) {
 
                         </div>
 
-                        <!-- Modal cambiar cliente-->
+                        <!-- Modal agregar convenio -->
                         <div id="agregarConvenio" class="modal fade top20" role="dialog" aria-labelledby="agregarConvenio"
                             aria-hidden="true" style="display: none;">
                             <div class="modal-dialog">
@@ -172,9 +172,15 @@ if (!isset($_SESSION['nombre_usuario'])) {
 
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal"
+                                        <button type="button"
+                                            class="btn btn-secondary waves-effect"
+                                            data-dismiss="modal"
+                                            id="btnCerrarClientesCambiar"
                                             onclick="btn_cerrar_cliente()">Cerrar</button>
-                                        <button type="button" class="btn btn-info waves-effect waves-light"
+                                        <button
+                                            id="btn_cambiar_cliente_modal"
+                                            type="button"
+                                            class="btn btn-info waves-effect waves-light"
                                             onclick="cambiar_cliente()">Cambiar</button>
                                     </div>
                                 </div>
@@ -389,8 +395,6 @@ if (!isset($_SESSION['nombre_usuario'])) {
                             <i class="fas fa-sync-alt"></i> Reload
                         </button> -->
 
-
-
                         <!-- Modal delete producto-->
                         <div id="deleteProducto" class="modal fade" tabindex="-1" role="dialog"
                             aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
@@ -450,75 +454,302 @@ if (!isset($_SESSION['nombre_usuario'])) {
                             </div>
                         </div>
                         <!-- /.modal -->
+
+
                         <div id="generaFactura" class="modal fade" role="dialog" aria-labelledby="myModalLabel"
                             aria-hidden="true" style="display: none;">
-                            <div class="modal-dialog">
-                                <div class="modal-content modal-lg">
+                            <div class="modal-dialog modal-xl">
+                                <div class="modal-content">
                                     <div class="modal-header">
                                         <h4 class="modal-title text-center">Confirmar datos de facturación</h4>
-                                        <button type="button" class="close" data-dismiss="modal"
+                                        <button type="button" class="close" data-dismiss="modal" onclick="limpiarBackdrops()"
                                             aria-hidden="true">×</button>
                                     </div>
-                                    <form method="post" name="timbrado" action="index.php/cfdi/timbrar/15864">
-                                        <div class="modal-body">
-                                            <div class="row">
-                                                <div class="form-group col-6">
-                                                    <label for="recipient-name1" class="form-label">Cliente:</label>
-                                                    <input type="text" class="form-control" id="recipient-name1"
-                                                        name="cliente" value="Ab Abasolo " required="">
+                                    <div class="modal-body">
+                                        <div class="card-body">
+                                            <div id="modal_factura">
+                                                <div id="modal_factura">
+                                                    <!--DATOS DEL CLIENTE-->
+                                                    <strong class="mr-3">Cliente:</strong>
+                                                    <button
+                                                        class="btn btn-warning btn-sm"
+                                                        onclick="modalCambiarCliente();">Buscar</button>
+                                                    <hr>
+                                                    <div class="row">
+                                                        <!-- Campo para el cliente -->
+                                                        <div class="col-12 mb-3">
+                                                            <div class="input-group">
+                                                                <span class="input-group-text">Cliente</span>
+                                                                <input
+                                                                    type="text"
+                                                                    disabled
+                                                                    class="form-control"
+                                                                    id="cliente_factura_editar"
+                                                                    placeholder="Escribe el nombre del cliente"
+                                                                    list="list-clientes"
+                                                                    data-value-property="value"
+                                                                    data-min-length="1"
+                                                                    onchange="seleccionar_cliente_factura(543483, 42);"
+                                                                    spellcheck="false"
+                                                                    data-ms-editor="true" />
+                                                            </div>
+                                                        </div>
+
+                                                        <!-- Campo para seleccionar perfiles -->
+                                                        <div class="col-12 mb-3">
+                                                            <div class="input-group-prepend">
+                                                                <span class="input-group-text">Perfiles</span>
+                                                                <select
+                                                                    id="perfiles_facturacion"
+                                                                    class="form-control"
+                                                                    onchange="cargarInformacionPerfil();"
+                                                                    onfocus="resetear('perfiles_facturacion')">
+                                                                    <!-- Opciones dinámicas aquí -->
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <br>
+                                                    <div id="mostrarCliente" hidden=""></div>
+
+                                                    <strong>Datos del cliente seleccionado</strong>
+                                                    <hr>
+                                                    <form id="form-facturar">
+                                                        <div id="datos_cliente">
+                                                            <div class="row">
+                                                                <div class="col-12">
+                                                                    <div class="input-group mb-3">
+                                                                        <span class="input-group-text" id="estilo">Cliente:</span>
+                                                                        <input
+                                                                            type="text"
+                                                                            class="form-control"
+                                                                            placeholder="Ingresa el Nombre del cliente"
+                                                                            name="cliente"
+                                                                            id="nombre_cliente_dg"
+                                                                            required=""
+                                                                            disabled=""
+                                                                            value="PUBLICO EN GENERAL">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="input-group mb-3">
+                                                                <input type="hidden" id="id_cliente_dg" name="id_cliente">
+                                                                <span class="input-group-text" id="estilo">RFC:</span>
+                                                                <input
+                                                                    type="text"
+                                                                    class="form-control"
+                                                                    placeholder="Ingresa el Registro Federal de Contribuyentes (RFC) *"
+                                                                    name="rfc"
+                                                                    id="rfc_cliente_dg"
+                                                                    maxlength="13"
+                                                                    required=""
+                                                                    disabled=""
+                                                                    value="XAXX010101000">
+
+                                                                <span class="input-group-text" id="estilo">Régimen:</span>
+                                                                <input
+                                                                    type="hidden"
+                                                                    name="regimen_cliente"
+                                                                    name="clave_regimen_cliente_dg"
+                                                                    id="clave_regimen_cliente_dg">
+                                                                <input
+                                                                    type="text"
+                                                                    class="form-control"
+                                                                    placeholder="Régimen Persona"
+                                                                    id="regimen_cliente"
+                                                                    maxlength="13"
+                                                                    required=""
+                                                                    disabled=""
+                                                                    value="MORAL">
+                                                            </div>
+                                                            <div class="input-group mb-3">
+                                                                <span class="input-group-text" id="estilo">Domicilio:</span>
+                                                                <input type="hidden" name="calle" id="calle_dg">
+                                                                <input type="hidden" name="no_exterior" id="no_exterior_dg">
+                                                                <input type="hidden" name="no_interior" id="no_interior_dg">
+                                                                <input type="hidden" name="colonia" id="colonia_dg">
+                                                                <input type="hidden" name="codigo_postal" id="codigo_postal_dg">
+                                                                <input type="hidden" name="localidad" id="localidad_dg">
+                                                                <input type="hidden" name="municipio" id="municipio_dg">
+                                                                <input type="hidden" name="estado" id="estado_dg">
+                                                                <input type="hidden" name="pais" id="pais_dg">
+                                                                <textarea
+                                                                    id="direccion_dg"
+                                                                    rows="2"
+                                                                    cols="50"
+                                                                    placeholder="Ingresa Domicilio"
+                                                                    class="form-control"
+                                                                    disabled=""></textarea>
+                                                            </div>
+                                                        </div>
+
+                                                        <!-- RELACION DE CFDI -->
+                                                        <br><strong>Información General</strong>
+                                                        <hr>
+                                                        <div class="card shadow mb-4">
+                                                            <div class="card-body">
+                                                                <!-- Nav Tabs -->
+                                                                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                                                    <li class="nav-item">
+                                                                        <a
+                                                                            class="nav-link active"
+                                                                            id="info-general-unidad-cliente"
+                                                                            data-toggle="tab"
+                                                                            href="#info_general_cliente"
+                                                                            role="tab"
+                                                                            aria-controls="info_general_cliente"
+                                                                            aria-selected="true">1. Datos Generales</a>
+                                                                    </li>
+                                                                    <!-- <li class="nav-item">
+                                                                        <a
+                                                                            class="nav-link"
+                                                                            id="cliente-tab"
+                                                                            data-toggle="tab"
+                                                                            href="#elegir_cliente"
+                                                                            role="tab"
+                                                                            aria-controls="elegir_cliente"
+                                                                            aria-selected="false">2. Relacionar CFDI Previamente Generado</a>
+                                                                    </li> -->
+                                                                    <!-- <li class="nav-item">
+                                                                    <a class="nav-link" id="info-general-unidad-tab" data-toggle="tab" href="#info_general_unidad" role="tab" aria-controls="info_general_unidad" aria-selected="false">3. Información Global y Exportación</a>
+                                                                </li>
+                                                                <li class="nav-item">
+                                                                    <a class="nav-link" id="info-general-comisionistas-tab" data-toggle="tab" href="#info_general_comisionistas" role="tab" aria-controls="info_general_comisionistas" aria-selected="false">4. Comisionistas</a>
+                                                                </li>
+                                                                <li class="nav-item">
+                                                                    <a class="nav-link" id="info-contenedores-tab" data-toggle="tab" href="#info_contenedores" role="tab" aria-controls="info_contenedores" aria-selected="false">5. Contenedores</a>
+                                                                </li> -->
+                                                                </ul>
+
+                                                                <!-- Tab Content -->
+                                                                <div class="tab-content" id="myTabContent">
+                                                                    <!-- Tab 1: Datos Generales -->
+                                                                    <div class="tab-pane fade show active" id="info_general_cliente" role="tabpanel" aria-labelledby="info-general-unidad-cliente">
+                                                                        <br>
+                                                                        <div id="datos_generales_cliente">
+                                                                            <div class="input-group mb-3">
+                                                                                <div class="input-group-prepend">
+                                                                                    <span class="input-group-text">Uso CFDI:</span>
+                                                                                </div>
+                                                                                <select
+                                                                                    id="uso_cfdi"
+                                                                                    class="form-control"
+                                                                                    name="uso_cfdi"
+                                                                                    onchange="cargarUsoCFDI()">
+
+                                                                                </select>
+
+                                                                                <div class="input-group-prepend">
+                                                                                    <span class="input-group-text">Método Pago:</span>
+                                                                                </div>
+                                                                                <select
+                                                                                    id="metodo_pago_dg"
+                                                                                    class="form-control"
+                                                                                    name="metodo_pago">
+                                                                                </select>
+                                                                            </div>
+
+                                                                            <div class="input-group mb-3">
+                                                                                <div class="input-group-prepend">
+                                                                                    <span class="input-group-text">Forma de Pago:</span>
+                                                                                </div>
+                                                                                <select
+                                                                                    id="forma_pago_dg" .
+                                                                                    class="form-control"
+                                                                                    name="forma_pago">
+                                                                                </select>
+
+                                                                                <div class="input-group-prepend">
+                                                                                    <span class="input-group-text">Moneda:</span>
+                                                                                </div>
+                                                                                <select
+                                                                                    id="tipo_moneda"
+                                                                                    class="form-control"
+                                                                                    name="tipo_moneda"
+                                                                                    onclick="cambiarTipoMoneda();">
+                                                                                    <option value="MXN">[MXN] PESO MEXICANO</option>
+                                                                                    <option value="CAD">[CAD] DOLAR CANADIENSE</option>
+                                                                                    <option value="USD">[USD] DOLAR AMERICANO</option>
+                                                                                </select>
+                                                                            </div>
+
+                                                                            <div class="input-group mb-3">
+                                                                                <div class="input-group-prepend">
+                                                                                    <span class="input-group-text">Tipo Cambio:</span>
+                                                                                </div>
+                                                                                <input
+                                                                                    type="number"
+                                                                                    class="form-control"
+                                                                                    id="tipo_cambio"
+                                                                                    placeholder="Ingresa Tipo de Cambio de la Moneda" name="tipo_cambio" value="1" disabled>
+
+                                                                                <div class="input-group-prepend">
+                                                                                    <span class="input-group-text">Días Crédito:</span>
+                                                                                </div>
+                                                                                <input type="number" class="form-control" placeholder="Ingrese Días Crédito" name="dias_credito" id="dias_credito" value="0">
+
+                                                                                <div class="input-group-prepend">
+                                                                                    <span class="input-group-text">Referencia:</span>
+                                                                                </div>
+                                                                                <input type="text" class="form-control" placeholder="Ingrese Referencia" name="referencia" id="referencia">
+                                                                            </div>
+
+                                                                            <div class="input-group mb-3">
+                                                                                <div class="input-group-prepend">
+                                                                                    <span class="input-group-text">Observaciones:</span>
+                                                                                </div>
+                                                                                <textarea rows="2" class="form-control" placeholder="Ingresa Observaciones" name="observaciones" id="observaciones"></textarea>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <!-- Tab 2: Relacionar CFDI -->
+                                                                    <!-- <div class="tab-pane fade" id="elegir_cliente" role="tabpanel" aria-labelledby="cliente-tab">
+                                                                        <br>
+                                                                        <div id="relacionar_cfdi">
+                                                                            <div class="form-group">
+                                                                                <label for="cfdi_previo">Seleccionar CFDI Previo:</label>
+                                                                                <select id="cfdi_previo" class="form-control" name="cfdi_previo">
+                                                                                    <option value="" selected disabled>Seleccione una opción</option>
+                                                                                    <option value="cfdi_1">CFDI 1</option>
+                                                                                    <option value="cfdi_2">CFDI 2</option>
+                                                                                    <option value="cfdi_3">CFDI 3</option>
+                                                                                </select>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div> -->
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <br>
+                                                        <div class="d-flex justify-content-end align-items-center" id="btnCCPcompleto">
+                                                            <!-- Botón Proforma Factura Manual -->
+                                                            <button
+                                                                class="btn btn-secondary mr-2 "
+                                                                data-dismiss="modal"
+                                                                onclick="limpiarBackdrops();">
+                                                                Cancelar
+                                                            </button>
+
+                                                            <!-- Botón Timbrar Factura Manual -->
+                                                            <button
+                                                                class="btn btn-primary "
+                                                                name="timbrarFacturaManual"
+                                                                id="timbrarFacturaManual"
+                                                                onclick="timbrarFactura();">
+                                                                Timbrar
+                                                            </button>
+                                                        </div>
+                                                    </form>
+
+
+
                                                 </div>
-                                                <div class="form-group col-6">
-                                                    <label for="recipient-name2" class="form-label">RFC:</label>
-                                                    <input type="text" class="form-control" id="recipient-name2" name="rfc"
-                                                        value="XAXX010101000" required="">
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="recipient-name3" class="form-label">Domicilio:</label>
-                                                <input type="text" class="form-control" id="recipient-name3"
-                                                    name="domicilio" value="Conocido  El moralete Colima Colima"
-                                                    required="">
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="recipient-name4" class="form-label">Método Pago:</label>
-                                                <select name="metodo_pago" class="form-control metodopago" id="metodo_pago">
-                                                    <option value="PUE">Pago en una sola exhibición</option>
-                                                    <option value="PPD">Pago en parcialidades o diferido</option>
-                                                </select>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="recipient-name3" class="form-label">Forma de pago:</label>
-                                                <select name="forma_pago" class="form-control" id="forma_pago">
-                                                    <option value="01">Efectivo</option>
-                                                    <option value="02">Cheque nominativo</option>
-                                                    <option value="03">Transferencia electrónica de fondos</option>
-                                                    <option value="04">Tarjeta de crédito</option>
-                                                    <option value="28">Tarjeta de débito</option>
-                                                </select>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="recipient-name4" class="form-label">Uso CFDI:</label>
-                                                <select name="uso_cfdi" class="form-control">
-                                                </select>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="recipient-name5" class="form-label">Correo:</label>
-                                                <input type="mail" class="form-control" id="recipient-name5" name="correo"
-                                                    value="">
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="recipient-name6" class="form-label">OTROS:</label>
-                                                <input type="text" class="form-control" id="recipient-name6" name="otros"
-                                                    value="">
                                             </div>
                                         </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary waves-effect"
-                                                data-dismiss="modal">Cerrar</button>
-                                            <button type="submit" class="btn btn-info waves-effect waves-light"
-                                                name="timbrar">Timbrar</button>
-                                        </div>
-                                    </form>
+                                    </div>
+
                                 </div>
                             </div>
                         </div>
@@ -673,6 +904,7 @@ if (!isset($_SESSION['nombre_usuario'])) {
             <script src="js/peticiones_ticket.js"></script>
             <script src="js/search/clientes.js"></script>
             <script src="js/search/productos.js"></script>
+            <script src="js/apoyo/pila_modales.js"></script>
             <script src="js/peticiones_generales.js"></script>
             <!-- bs-custom-file-input -->
             <script src="plugins/bs-custom-file-input/bs-custom-file-input.min.js"></script>

@@ -3,6 +3,8 @@ session_start();
 require("../../conexion.php");
 date_default_timezone_set('America/Mexico_City');
 
+
+
 if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
     session_destroy();
     echo "

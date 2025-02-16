@@ -30,11 +30,32 @@ function mensajeError(mensaje, title = null) {
         text: mensaje,
     });
 }
+function cerrarModal(modal) {
+
+    $("#" + modal).modal().hide();
+}
+function abrirModal(modal) {
+    $("#" + modal).modal().show();
+}
+function limpiarBackdrops() {
+    $(".modal-backdrop").remove();
+    $("body").removeClass("modal-open");
+    $("body").css("padding-right", "");
+}
+
 //todo: Ejecutar la función automáticamente al cargar la página
 
 //* Declarar variables globales
 let folioTicket = null;
 let idDocumento = null;
+//? token para hacer consultas de tipos de cambio, siempre seran exactos
+//? https://www.banxico.org.mx/SieAPIRest/service/v1/token
+const tokenBM = `0bd8d4fa68bb29fc8f02b9c2d4a9a83919dfe423056179ef4851a05de2ceb78d`;
+const serieUSD = "SF43718";
+const serieCAD = "SF60632";
+const urlBancoMexicoFetch = (serie, token) => {
+    return `https://www.banxico.org.mx/SieAPIRest/service/v1/series/${serie}/datos/oportuno?token=${token}`;
+}
 
 //* Inicializar las variables globales al cargar la página
 document.addEventListener("DOMContentLoaded", () => {
@@ -66,7 +87,7 @@ async function procesarDatosTicket() {
     }
 
     await cargarTablaProductosTicket();
-    cargarDatosTicket(folioTicket, idDocumento);
+    await cargarDatosTicket(folioTicket, idDocumento);
     const data_productos = await cargar_productos_servicios();
 
     const { productos, success } = data_productos;
@@ -453,7 +474,6 @@ async function eliminar_cliente_ticket() {
 
 async function cambiar_cliente() {
     const idCliente = $("#id_cliente_modal").val();
-
     try {
         const respuesta = await $.ajax({
             cache: false,
@@ -1193,13 +1213,7 @@ function limpiar_form_cobrar() {
     $("#select_metodo_pago").val("");
     $("#input_efectivo").val("");
 }
-// // ? validacion en select, por datos, antes de cobrar
-// // ? hacer tabla de pagos por ticket
-// // ? validaciones en pago para no sobrepasar el total
-//? boton con confirmacion de borrar pago
-// // ? agregar funcion para [cambio] de dinero, despues de cobrar el ticket
-// // ? ya que el ticket este cobrado, habilitar boton para impimir ticket
-//? formato de tickets
+
 //todo: impresiones de tickets
 
 function imprimirTicket() {
@@ -1209,4 +1223,626 @@ function imprimirTicket() {
 function imprimirNotaVenta() {
     const url = `componentes/formatos_pdf/ventas/nota_venta.php?folio_ticket=${folioTicket}&id_documento=${idDocumento}`;
     window.open(url, '_blank');
+}
+
+//todo: generar factura
+function modalCambiarCliente() {
+
+    cerrarModal('generaFactura');
+
+    modificarModalCambiarCliente();
+
+    btn_cambiar_cliente();
+
+    abrirModal('cambiarCliente');
+}
+
+function facturarTicket() {
+    abrirModal('generaFactura');
+}
+
+function modificarModalCambiarCliente() {
+    const btnModificar = $("#btn_cambiar_cliente_modal");
+    const btnCancelar = $("#btnCerrarClientesCambiar");
+
+    if (btnModificar.length) {
+        btnModificar.removeAttr("onclick");
+
+        btnModificar.off("click");
+        btnModificar.on("click", function () {
+            console.log("Nueva función");
+            cambiar_cliente_fac();
+        });
+    } else {
+        console.error("El botón #btn_cambiar_cliente_modal no existe");
+    }
+
+    if (btnCancelar.length) {
+
+        btnCancelar.removeAttr("onclick");
+
+        btnCancelar.off("click");
+        btnCancelar.on("click", function () {
+            regresarAModalFac();
+        });
+    } else {
+        console.error("El botón #btn_cambiar_cliente_modal no existe");
+    }
+}
+
+function regresarAModalFac() {
+    btn_cerrar_cliente()
+    cerrarModal('cambiarCliente');
+    abrirModal('generaFactura');
+}
+
+async function getClienteTicket() {
+
+    try {
+        const respuesta = await $.ajax({
+            cache: false,
+            url: "componentes/tickets/peticiones/clientes.php",
+            type: "POST",
+            dataType: "json",
+            data: {
+                funcion: "getClienteTicket",
+                folioTicket: folioTicket,
+                idDocumento: idDocumento,
+            },
+        });
+
+        const { success, error, data } = respuesta;
+
+        if (!success) {
+            mensajeError("Error inesperado", error);
+            return;
+        }
+
+        return data[0];
+
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+async function cambiarTextoCliente() {
+    const cliente = await getClienteTicket();
+
+    const txt = $("#text_cliente");
+    txt.html("<b>CLIENTE: </b>" + cliente.cliente);
+    cambiarValInpuitNombre(cliente.cliente);
+}
+
+function cambiarValInpuitNombre(cliente) {
+    const inputCliente = $("#cliente_factura_editar");
+    inputCliente.val(cliente);
+}
+
+async function cambiar_cliente_fac() {
+    const idCliente = $("#id_cliente_modal").val();
+
+    try {
+        const respuesta = await $.ajax({
+            cache: false,
+            url: "componentes/tickets/peticiones/clientes.php",
+            type: "POST",
+            dataType: "json",
+            data: {
+                funcion: "agregarClienteTicket",
+                idCliente: idCliente,
+                folioTicket: folioTicket,
+                idDocumento: idDocumento,
+            },
+        });
+
+        const { success, mensaje } = respuesta;
+
+        cargarInfoFormFac();
+        ocultarPantallaCarga();
+
+        if (!success) {
+            mensajeError("Error inesperado", mensaje);
+            return;
+        }
+
+        // cargamos los datos
+        await cambiarTextoCliente();
+
+        regresarAModalFac();
+
+        mensajeSuccess(mensaje);
+
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+$('#generaFactura').on('show.bs.modal', async function (e) {
+    await cargarInfoFormFac();
+});
+
+async function cargarInfoFormFac() {
+    await cargarNombreClienteInput();
+    await cargar_perfiles_facturacion_modal();
+    await cargar_cat_cfdi();
+    await cargar_cat_metodos_pago();
+    await cargar_cat_formas_pago();
+}
+
+async function cargarNombreClienteInput() {
+    const cliente = await getClienteTicket();
+    cambiarValInpuitNombre(cliente.cliente);
+}
+
+//? catalogo cfdi
+async function cargar_cat_cfdi() {
+    const data = await traer_cat_uso_cfdi();
+    const select = $("#uso_cfdi");
+    let options = '';
+
+    if (data.length == 0) {
+        options += `
+                    <option value=''>Sin opciones uso CFDI</option>
+                `;
+        select.html(options);
+        return;
+    }
+
+    options += `
+                    <option value="" selected disabled>Selecciona Uso CFDI</option>
+                `;
+
+    data.forEach(cfdi => {
+        options += `
+                    <option 
+                        value=${cfdi.clave_uso}
+                        data-id="${cfdi.id}" 
+                        data-descripcion="${cfdi.descripcion}" 
+                        data-fisica="${cfdi.fisica}" 
+                        data-moral="${cfdi.moral}" 
+                        data-regimen-fiscal="${cfdi.regimen_fiscal}" 
+                    >[${cfdi.clave_uso}] ${cfdi.descripcion}</option>
+                `;
+    });
+    select.html(options);
+}
+async function traer_cat_uso_cfdi() {
+    try {
+        const regimen = await $.ajax({
+            cache: false,
+            url: "componentes/tickets/factura/facturar_ticket.php",
+            type: "POST",
+            dataType: "json",
+            data: {
+                funcion: "traerCatUsoCFDI",
+            },
+        });
+        let { success, data, mensaje } = regimen;
+
+        if (success) {
+            return data;
+        }
+
+        mensajeError("", mensaje);
+        return;
+
+    } catch (error) {
+        console.error(error);
+    }
+}
+function obtenerAtributosUsoCFDI(selectId) {
+
+    const select = $(`#${selectId}`);
+
+    if (select.length === 0) {
+        return;
+    }
+
+    const selectedOption = select.find(":selected");
+
+    if (selectedOption.length === 0) {
+        console.error("No hay ninguna opción seleccionada.");
+        return null;
+    }
+
+    const atributos = {
+        clave: selectedOption.val(),
+        id: selectedOption.data('id'),
+        descripcion: selectedOption.data('descripcion'),
+        fisica: selectedOption.data('fisica'),
+        moral: selectedOption.data('moral'),
+        regimen_fiscal: selectedOption.data('regimen-fiscal'),
+    };
+
+    return atributos;
+
+}
+async function cargarUsoCFDI() {
+    const cfdi = obtenerAtributosUsoCFDI('uso_cfdi');
+}
+//? catalogo metodos pago
+async function cargar_cat_metodos_pago() {
+    const data = await traer_cat_metodos_pago();
+    const select = $("#metodo_pago_dg");
+    let options = '';
+
+    if (data.length == 0) {
+        options += `
+                    <option value=''>Sin opciones Metodos de Pago</option>
+                `;
+        select.html(options);
+        return;
+    }
+
+    options += `
+                    <option value="" selected disabled>Selecciona un metodo de pago</option>
+                `;
+
+    data.forEach(metodo => {
+        options += `
+                    <option 
+                        value=${metodo.clave_metodo}
+                        data-id="${metodo.id}" 
+                        data-descripcion="${metodo.descripcion}" 
+                    >[${metodo.clave_metodo}] ${metodo.descripcion}</option>
+                `;
+    });
+    select.html(options);
+}
+async function traer_cat_metodos_pago() {
+    try {
+        const regimen = await $.ajax({
+            cache: false,
+            url: "componentes/tickets/factura/facturar_ticket.php",
+            type: "POST",
+            dataType: "json",
+            data: {
+                funcion: "traerCatMetodosPago",
+            },
+        });
+        let { success, data, mensaje } = regimen;
+
+        if (success) {
+            return data;
+        }
+
+        mensajeError("", mensaje);
+        return;
+
+    } catch (error) {
+        console.error(error);
+    }
+}
+//? catalogo formas de pago
+async function cargar_cat_formas_pago() {
+    const data = await traer_cat_formas_pago();
+    const select = $("#forma_pago_dg");
+    let options = '';
+
+    if (data.length == 0) {
+        options += `
+                    <option value=''>Sin opciones Formas de Pago</option>
+                `;
+        select.html(options);
+        return;
+    }
+
+    options += `
+                    <option value="" selected disabled>Selecciona una forma de pago</option>
+                `;
+
+    data.forEach(formaPago => {
+        options += `
+                    <option 
+                        value=${formaPago.clave_forma}
+                        data-id="${formaPago.id}" 
+                        data-descripcion="${formaPago.descripcion}" 
+                    >[${formaPago.clave_forma}] ${formaPago.descripcion}</option>
+                `;
+    });
+    select.html(options);
+}
+async function traer_cat_formas_pago() {
+    try {
+        const regimen = await $.ajax({
+            cache: false,
+            url: "componentes/tickets/factura/facturar_ticket.php",
+            type: "POST",
+            dataType: "json",
+            data: {
+                funcion: "traerCatFormasPago",
+            },
+        });
+        let { success, data, mensaje } = regimen;
+
+        if (success) {
+            return data;
+        }
+
+        mensajeError("", mensaje);
+        return;
+
+    } catch (error) {
+        console.error(error);
+    }
+}
+//? perfiles facturacion
+async function traer_perfiles_facturacion() {
+    try {
+        const respuesta = await $.ajax({
+            cache: false,
+            url: "componentes/tickets/factura/facturar_ticket.php",
+            type: "POST",
+            dataType: "json",
+            data: {
+                funcion: "traerPerfilesFacturacionCliente",
+                folioTicket: folioTicket,
+                idDocumento: idDocumento,
+            },
+        });
+
+        let { success, data, mensaje } = respuesta;
+
+        if (success) {
+            return data;
+        }
+
+        mensajeError("", mensaje);
+        return;
+
+    } catch (error) {
+        console.error(error);
+    }
+}
+async function cargar_perfiles_facturacion_modal() {
+    const data = await traer_perfiles_facturacion();
+    const select = $("#perfiles_facturacion");
+    let options = '';
+
+    if (data.length == 0) {
+        options += `
+                    <option value=''>Sin perfiles de facturacion</option>
+                `;
+        select.html(options);
+        return;
+    }
+
+    options += `
+                    <option value='' selected disabled>Selecciona un perfil de facturacion</option>
+                `;
+
+    data.forEach(perfil => {
+        options += `
+                    <option 
+                        value=${perfil.id_perfil}
+                        data-rfc="${perfil.rfc}" 
+                        data-nombre-social="${perfil.nombre_social}" 
+                        data-calle="${perfil.calle}" 
+                        data-no-exterior="${perfil.no_exterior}" 
+                        data-no-interior="${perfil.no_interior}" 
+                        data-codigo-postal="${perfil.codigo_postal}" 
+                        data-colonia="${perfil.colonia}" 
+                        data-municipio="${perfil.municipio}" 
+                        data-estado="${perfil.estado}" 
+                        data-pais="${perfil.pais}" 
+                        data-regimen-fiscal="${perfil.regimen_fiscal}" 
+                        data-metodo-pago="${perfil.metodo_pago}" 
+                        data-forma-pago="${perfil.forma_pago}" 
+                        data-uso-cfdi="${perfil.uso_cfdi}"
+                        data-id-cliente="${perfil.id_cliente}"
+                    >${perfil.nombre_social}</option>
+                `;
+    });
+    select.html(options);
+}
+function obtenerAtributosPerfil(selectId) {
+    const select = $(`#${selectId}`);
+
+    if (select.length === 0) {
+        return;
+    }
+
+    const selectedOption = select.find(":selected");
+
+    if (selectedOption.length === 0) {
+        console.error("No hay ninguna opción seleccionada.");
+        return null;
+    }
+
+    const atributos = {
+        idPerfil: selectedOption.val(),
+        rfc: selectedOption.data('rfc'),
+        nombreSocial: selectedOption.data('nombre-social'),
+        calle: selectedOption.data('calle'),
+        noExterior: selectedOption.data('no-exterior'),
+        noInterior: selectedOption.data('no-interior'),
+        codigoPostal: selectedOption.data('codigo-postal'),
+        colonia: selectedOption.data('colonia'),
+        municipio: selectedOption.data('municipio'),
+        estado: selectedOption.data('estado'),
+        pais: selectedOption.data('pais'),
+        regimenFiscal: selectedOption.data('regimen-fiscal'),
+        metodoPago: selectedOption.data('metodo-pago'),
+        formaPago: selectedOption.data('forma-pago'),
+        usoCfdi: selectedOption.data('uso-cfdi'),
+        id_cliente: selectedOption.data('id-cliente')
+    };
+
+    return atributos;
+
+}
+//? cargar datos
+async function cargarInformacionPerfil() {
+    const perfil = obtenerAtributosPerfil('perfiles_facturacion');
+    const regimenDesc = await cargarRegimenFisacal(perfil.regimenFiscal);
+    const { calle, codigo_postal, colonia, estado, municipio, no_exterior, no_interior, pais, clave_localidad } = await traerDireccionFormText(perfil.idPerfil);
+    const direccion = `${calle} ${no_exterior} ${no_interior ? no_interior : ''}  COL. ${colonia} CP ${codigo_postal}, ${municipio}, ${estado}, ${pais}`
+
+    $("#nombre_cliente_dg").val(perfil.nombreSocial);
+    $("#id_cliente_dg").val(perfil.id_cliente);
+    $("#rfc_cliente_dg").val(perfil.rfc);
+    $("#clave_regimen_cliente_dg").val(perfil.regimenFiscal);
+    $("#regimen_cliente").val(regimenDesc);
+
+    $("#calle_dg").val(perfil.calle);
+    $("#no_exterior_dg").val(perfil.noExterior);
+    $("#no_interior_dg").val(perfil.noInterior);
+    $("#colonia_dg").val(perfil.colonia);
+    $("#codigo_postal_dg").val(perfil.codigoPostal);
+    $("#localidad_dg").val(clave_localidad);
+    $("#municipio_dg").val(perfil.municipio);
+    $("#estado_dg").val(perfil.estado);
+    $("#pais_dg").val(perfil.pais);
+    $("#direccion_dg").val(direccion);
+    $("#uso_cfdi").val(perfil.usoCfdi.toUpperCase());
+    $("#metodo_pago_dg").val(perfil.metodoPago.toUpperCase());
+    $("#forma_pago_dg").val(perfil.formaPago.toUpperCase());
+}
+const cargarRegimenFisacal = async (claveRegimen) => {
+    try {
+        const regimen = await $.ajax({
+            cache: false,
+            url: "componentes/tickets/factura/facturar_ticket.php",
+            type: "POST",
+            dataType: "json",
+            data: {
+                funcion: "traerRegimenFiscalPorClave",
+                claveRegimen: claveRegimen,
+            },
+        });
+        let { success, data: { descripcion }, mensaje } = regimen;
+
+        if (success) {
+            return descripcion;
+        }
+
+        mensajeError("", mensaje);
+        return;
+
+    } catch (error) {
+        console.error(error);
+    }
+}
+const traerDireccionFormText = async (perfilFac) => {
+    //? esta funcion, se basa mas que nada en claves, 
+    //? no en texto para devolver la cadena
+    try {
+        const respuesta = await $.ajax({
+            cache: false,
+            url: "componentes/tickets/factura/facturar_ticket.php",
+            type: "POST",
+            dataType: "json",
+            data: {
+                funcion: "traerDireccionFormText",
+                folioTicket: folioTicket,
+                idDocumento: idDocumento,
+                idPerfil: perfilFac,
+            },
+        });
+
+        let { success, data, mensaje } = respuesta;
+
+        if (success) {
+            return data[0];
+        }
+
+        mensajeError("", mensaje);
+        return;
+
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+//? tipos de cambio
+async function obtenerTipoCambioCAD() {
+    try {
+        const response = await fetch(urlBancoMexicoFetch(serieCAD, tokenBM));
+        const data = await response.json();
+
+        const tipoCambio = data.bmx.series[0].datos[0].dato;
+        return tipoCambio;
+    } catch (error) {
+        console.error("Error al obtener el tipo de cambio:", error);
+        return "No disponible";
+    }
+}
+async function obtenerTipoCambioUSD() {
+    try {
+        const response = await fetch(urlBancoMexicoFetch(serieUSD, tokenBM));
+        const data = await response.json();
+
+        const tipoCambio = data.bmx.series[0].datos[0].dato;
+        return tipoCambio;
+    } catch (error) {
+        console.error("Error al obtener el tipo de cambio:", error);
+        return "No disponible";
+    }
+}
+async function cambiarTipoMoneda() {
+    const tipoMoneda = $("#tipo_moneda").val();
+    let tipoCambio = 1;
+
+    if (tipoMoneda === 'CAD') {
+        tipoCambio = await obtenerTipoCambioCAD();
+    }
+    if (tipoMoneda === 'USD') {
+        tipoCambio = await obtenerTipoCambioUSD();
+    }
+
+    $("#tipo_cambio").val(tipoCambio);
+}
+
+//?funcion de timbrar
+function validarForm(){
+    let perfil = $("#perfiles_facturacion");
+
+    if(!perfil.val() || perfil.val() == ''){
+        perfil.addClass("is-invalid");
+    }
+}
+async function timbrarFactura() {
+
+    validarForm();
+
+    $("form").submit(async function (event) {
+        event.preventDefault();
+        const datos = $("#form-facturar").serializeArray();
+        let datosObjeto = {};
+
+        $.each(datos, function(_, campo){
+            datosObjeto[campo.name] = campo.value;
+        });
+        await fetchTimbrarFactura(datosObjeto);
+        console.log(datos);
+    });
+}
+
+async function fetchTimbrarFactura(datos){
+    try {
+        const respuesta = await $.ajax({
+            cache: false,
+            url: "componentes/tickets/factura/facturar_ticket.php",
+            type: "POST",
+            dataType: "json",
+            data: {
+                funcion: "facturarTicket",
+                folioTicket: folioTicket,
+                idDocumento: idDocumento,
+                dataTim: datos,
+            },
+        });
+
+        let { success, data, mensaje } = respuesta;
+
+        if (success) {
+            return data;
+        }
+
+        mensajeError("", mensaje);
+        return;
+
+    } catch (error) {
+        console.error(error);
+    }
 }

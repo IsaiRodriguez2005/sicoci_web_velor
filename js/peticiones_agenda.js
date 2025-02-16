@@ -609,7 +609,7 @@ async function cobrar_cita(folio_cita, idCliene) {
 
             $("#modal_opciones_series_tickets").modal("show");
             rellenar_tbody_seies_tickets(seriesTickets, folio_cita, idCliene);
-
+            return;
         }
 
         console.error('No existen series de tickets')
@@ -803,7 +803,7 @@ async function get_url_ticket(serieTicket, folioCita, idCliente) {
 
 }
 
-function redieccionarURL(url){
+function redieccionarURL(url) {
     Swal.fire({
         title: 'Cargando...',
         html: 'Espere un momento mientras procesamos su solicitud.',

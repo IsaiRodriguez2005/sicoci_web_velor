@@ -34,7 +34,7 @@ function cargarSeriesSelect($idEmisor, $conexion)
                     id_partida,
                     serie
                 FROM emisores_series 
-                WHERE id_emisor = ? AND id_documento = ?;";
+                WHERE id_emisor = ? AND id_documento = ? AND estatus = 1;";
     $stmt = mysqli_prepare($conexion, $query);
     mysqli_stmt_bind_param(
         $stmt,
@@ -71,7 +71,7 @@ function existenciaSeriesTickets($idEmisor, $idDocumento, $conexion)
                             s.estatus,
                             d.nombre_documento as documento
                         FROM emisores_series s INNER JOIN _cat_erp_documentos d ON d.id_documento = s.id_documento
-                        WHERE s.id_emisor = ? AND s.id_documento = ? AND d.estatus = 1;";
+                        WHERE s.id_emisor = ? AND s.id_documento = ? AND d.estatus = 1 AND s.estatus = 1;";
     $stmt = mysqli_prepare($conexion, $sqlCliente);
     mysqli_stmt_bind_param($stmt, "ii", $idEmisor, $idDocumento);
     mysqli_stmt_execute($stmt);

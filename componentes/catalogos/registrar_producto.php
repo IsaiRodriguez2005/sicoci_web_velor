@@ -28,6 +28,7 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
         $iva = floatval($_POST['iva']);
         $claveProducto = $_POST['clave_producto'];
         $claveMedida = $_POST['clave_medida'];
+        $cobroAutomatico = $_POST['cobrarAutomatico'];
 
         $sqlMedida = "INSERT INTO productos_servicios (
                                                         id_emisor, 
@@ -40,14 +41,15 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
                                                         precio, 
                                                         iva, 
                                                         clave_producto_sat, 
-                                                        clave_medida_sat
+                                                        clave_medida_sat,
+                                                        cobro_automatico
                                                         )
-                                                    VALUES (?,?,?,?,?,?,1,?,?,?,?);";
+                                                    VALUES (?,?,?,?,?,?,1,?,?,?,?, ?);";
 
         $stmt = mysqli_prepare($conexion, $sqlMedida);
         mysqli_stmt_bind_param(
             $stmt,
-            "iiisiiddss",
+            "iiisiiddssi",
             $idEmisor,
             $nuevo_id,
             $tipo,
@@ -55,9 +57,10 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
             $stock,
             $stockMinimo,
             $precio,
-            $iva, 
+            $iva,
             $claveProducto,
-            $claveMedida
+            $claveMedida,
+            $cobroAutomatico
         );
         $res = mysqli_stmt_execute($stmt);
 
@@ -67,13 +70,61 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
             echo "error";
         }
     } else {
-        $sqlUpdate = "UPDATE productos_servicios SET nombre='" . strtoupper($_POST['nombre']) . "', tipo=" . $_POST['tipo'] . ", stock=" . $_POST['stock'] . ", stock_minimo=" . $_POST['stock_minimo'] . ", precio=" . $_POST['precio'] . ", iva=" . $_POST['iva'] . " WHERE id_producto=" . $_POST['tipo_gestion'] . " AND id_emisor=" . $_SESSION['id_emisor'];
-        $res = mysqli_query($conexion, $sqlUpdate);
+        if (!$conexion) {
+            die("Error de conexión: " . mysqli_connect_error());
+        }
 
-        if ($res) {
+        // Preparar la consulta con placeholders
+        $sqlUpdate = "UPDATE productos_servicios 
+                      SET nombre = ?, 
+                          tipo = ?, 
+                          stock = ?, 
+                          stock_minimo = ?, 
+                          precio = ?, 
+                          iva = ?,
+                          cobro_automatico = ?
+                      WHERE id_producto = ? 
+                        AND id_emisor = ?";
+
+        $stmt = mysqli_prepare($conexion, $sqlUpdate);
+
+        if (!$stmt) {
+            die("Error al preparar la consulta: " . mysqli_error($conexion));
+        }
+
+        $nombre = strtoupper($_POST['nombre']);
+        $tipo = $_POST['tipo'];
+        $stock = $_POST['stock'];
+        $stockMinimo = $_POST['stock_minimo'];
+        $precio = $_POST['precio'];
+        $iva = $_POST['iva'];
+        $idProducto = $_POST['tipo_gestion'];
+        $idEmisor = $_SESSION['id_emisor'];
+        $cobroAutomatico = $_POST['cobrarAutomatico'] == true ? 1 : 0;
+
+
+        mysqli_stmt_bind_param(
+            $stmt,
+            "siiiddiii",
+            $nombre,
+            $tipo,
+            $stock,
+            $stockMinimo,
+            $precio,
+            $iva,
+            $cobroAutomatico,
+            $idProducto,
+            $idEmisor
+        );
+
+        // Ejecutar la consulta
+        if (mysqli_stmt_execute($stmt)) {
             echo "actualizado";
         } else {
             echo "error";
         }
+
+        // Cerrar el statement
+        mysqli_stmt_close($stmt);
     }
 }

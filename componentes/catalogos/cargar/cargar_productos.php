@@ -28,6 +28,7 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
                         <th class="text-center">Precio Neto</th>
                         <th class="text-center">IVA</th>
                         <th class="text-center">Precio Bruto</th>
+                        <th class="text-center">Cobro automatico</th>
                         <th class="text-center">Estado</th>
                     </tr>
                 </thead>
@@ -86,7 +87,8 @@ function create_tr($res)
         }
 
 
-        $precioBruto = sprintf("%.2f",(($producto['precio'] * ($producto['iva'] + 100)) / 100));
+        $precioBruto = sprintf("%.2f", (($producto['precio'] * ($producto['iva'] + 100)) / 100));
+        $cobroAutomatico = $producto['cobro_automatico'] == 1 ? "Si" : "No";
         // contenido de la tabla
         $html .= "
                     <tr id='tr_prod_" . $producto['id_producto'] . "'>
@@ -100,7 +102,8 @@ function create_tr($res)
                                                                                                                                                                 " . $producto['precio'] . ", 
                                                                                                                                                                 " . $producto['iva'] . ",
                                                                                                                                                                 " . $producto['clave_producto_sat'] . ",
-                                                                                                                                                                " . $producto['clave_medida_sat'] . ",                                                                               
+                                                                                                                                                                &quot;" . $producto['clave_medida_sat'] . "&quot;, 
+                                                                                                                                                                " . $producto['cobro_automatico'] . "                                                                              
                                                                                                                                                                 )'>
                                     <i class='fas fa-edit'></i>
                                 </button>
@@ -118,6 +121,7 @@ function create_tr($res)
                         <td class='text-center'>$ " . $producto['precio'] . "</td>
                         <td class='text-center'>% " . $producto['iva'] . "</td>
                         <td class='text-center'>$ " . $precioBruto . "</td>
+                        <td class='text-center'> " . $cobroAutomatico . "</td>
                         <td class='text-center'>" . $estado . "</td>
                     </tr>
                 ";

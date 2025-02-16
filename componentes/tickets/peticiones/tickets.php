@@ -695,6 +695,133 @@ function obtenerProductosTicket($post, $idEmisor, $conexion)
 }
 
 //! Funciones para agregar productos
+function agregarProductosAutocobrablesTicketCita($folioTicket, $idDocumento, $idEmisor, $conexion)
+{
+
+    if (!$folioTicket || !$idDocumento) {
+        return [
+            'exists' => false,
+            'error' => 'Faltan datos requeridos para procesar la solicitud.'
+        ];
+    }
+
+    //* obtener PRODUTOS AUTOCOBRABLES
+    $datosProd = obtenerDatosPorductoAutocobrables($idEmisor, $conexion);
+
+    if (!$datosProd || empty($datosProd)) {
+        return [
+            'exists' => false,
+            'error' => 'No se encontraron productos autocobrables'
+        ];
+    }
+
+    $query = "INSERT INTO emisores_tickets_detalles (
+            `id_partida`, 
+            `id_emisor`, 
+            `id_documento`, 
+            `folio_ticket`, 
+            `id_producto`, 
+            `cantidad`,  
+            `precio_unitario`, 
+            `importe`, 
+            `iva_porcentaje`, 
+            `iva_monto`,
+            `descuento`
+          ) VALUES (?,?,?,?,?,?,?,?,?,?,?);";
+
+    $stmt = mysqli_prepare($conexion, $query);
+
+    if (!$stmt) {
+        return [
+            'exists' => false,
+            'error' => 'Error al preparar la consulta: ' . mysqli_error($conexion),
+            'ticket' => null
+        ];
+    }
+
+    $productosInsertados = [];
+    $errores = [];
+
+    // Iterar sobre los productos y ejecutar la inserción
+    foreach ($datosProd as $producto) {
+        $ultimo = obtenerUltimoIdTicketsDetalles($idEmisor, $conexion, $idDocumento, $folioTicket);
+        $idProducto = $producto['id_producto'];
+        $cantidad = 1;
+        $precio = $producto['precio'];
+        $ivaPorcentaje = $producto['iva'];
+        $ivaMonto = calcularMontoIVA($ivaPorcentaje, $precio);
+        $precioUnitario = $precio + $ivaMonto;
+        $importe = $precioUnitario * $cantidad;
+        $descuento = 0.00;
+
+        // Vincular los parámetros para la inserción
+        mysqli_stmt_bind_param(
+            $stmt,
+            "iiiiidddddd",
+            $ultimo,          // ID de partida
+            $idEmisor,       // ID del emisor
+            $idDocumento,     // ID del documento
+            $folioTicket,     // Folio del ticket
+            $idProducto,      // ID del producto
+            $cantidad,        // Cantidad
+            $precio,  // Precio unitario
+            $importe,         // Importe total
+            $ivaPorcentaje,   // IVA porcentaje
+            $ivaMonto,        // Monto de IVA
+            $descuento        // Descuento
+        );
+
+        if (mysqli_stmt_execute($stmt)) {
+            $productosInsertados[] = [
+                'id_producto' => $idProducto,
+                'cantidad' => $cantidad,
+                'precio_unitario' => $precioUnitario,
+                'importe' => $importe,
+                'iva_porcentaje' => $ivaPorcentaje,
+                'iva_monto' => $ivaMonto,
+                'descuento' => $descuento
+            ];
+        } else {
+            $errores[] = [
+                'id_producto' => $idProducto,
+                'error' => 'Error al insertar el producto: ' . mysqli_error($conexion)
+            ];
+        }
+    }
+
+    return obtenerProductoDeLaCompra($ultimo, $idDocumento, $folioTicket, $idEmisor, $conexion);
+}
+function obtenerDatosPorductoAutocobrables($idEmisor, $conexion)
+{
+    $cobroAuto = 1;
+    $query = "SELECT 
+                    id_producto,
+                    precio, 
+                    iva 
+                FROM productos_servicios WHERE cobro_automatico = ? AND id_emisor = ?;";
+    $stmt = mysqli_prepare($conexion, $query);
+    mysqli_stmt_bind_param(
+        $stmt,
+        "ii",
+        $cobroAuto,
+        $idEmisor
+    );
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
+
+    if (!$result) {
+        return ['error' => 'Error al obtener los resultados: ' . mysqli_error($conexion)];
+    }
+
+    $datos = [];
+    while ($row = mysqli_fetch_assoc($result)) {
+        $datos[] = $row;
+    }
+
+
+    mysqli_stmt_close($stmt);
+    return $datos ?: [];
+}
 function agregarPorductoATicket($post, $idEmisor, $conexion)
 {
     $folioTicket = $post['folioTicket'] ?? null;
@@ -812,7 +939,10 @@ function obtenerUltimoIdTicketsDetalles($idEmisor, $conexion, $idDocumento, $fol
 }
 function obtenerDatosPorducto($idProducto, $idEmisor, $conexion)
 {
-    $query = "SELECT precio, iva FROM productos_servicios WHERE id_producto = ? AND id_emisor = ?;";
+    $query = "SELECT 
+                    precio, 
+                    iva 
+                    FROM productos_servicios WHERE id_producto = ? AND id_emisor = ?;";
     $stmt = mysqli_prepare($conexion, $query);
     mysqli_stmt_bind_param(
         $stmt,
@@ -980,7 +1110,17 @@ function aperturarTicket($idDocumento, $folioCita, $idCliente, $idEmisor, $conex
     }
 
     //* Obtener la tupla recién creada
-    return obtenerDatosTicketAperturado($ultimoFolioTicket, $idDocumento, $conexion, $idEmisor);
+    $datosTicketAperturado = obtenerDatosTicketAperturado($ultimoFolioTicket, $idDocumento, $conexion, $idEmisor);
+    // var_dump($datosTicketAperturado);
+    if ($datosTicketAperturado['id_cita']) {
+        agregarProductosAutocobrablesTicketCita(
+            $datosTicketAperturado['folio_ticket'],
+            $datosTicketAperturado['id_documento'],
+            $idEmisor,
+            $conexion
+        );
+    }
+    return $datosTicketAperturado;
 }
 function obtenerUltimoId($conexion, $idEmisor, $folioTicket, $idSerieTicket)
 {
@@ -1165,7 +1305,8 @@ function obtenerDatosDeEmisores($idEmisor, $conexion)
     ];
 }
 
-function obtenerDatosLogotipo($idEmisor, $conexion){
+function obtenerDatosLogotipo($idEmisor, $conexion)
+{
 
     $query = "SELECT 
                     logo, 

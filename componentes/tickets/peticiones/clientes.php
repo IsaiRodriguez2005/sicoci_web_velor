@@ -74,6 +74,26 @@ if (empty($_SESSION['id_usuario']) || empty($_SESSION['nombre_usuario'])) {
             exit;
         }
 
+        if ($_POST['funcion'] == 'getClienteTicket'){
+
+            $idEmisor = $_SESSION['id_emisor'];
+            $respuesta = getClienteTicket($_POST, $idEmisor, $conexion);
+
+            if (!isset($respuesta['success'])) {
+                echo json_encode([
+                    'success' => false,
+                    'mensaje' => $respuesta['error']
+                ]);
+                exit;
+            }
+
+            echo json_encode([
+                'success' => true,
+                'data' => $respuesta['data']
+            ]);
+            exit;
+        }
+
     }
 }
 
@@ -194,6 +214,60 @@ function traerClientes($idEmisor, $conexion)
             'success' => false,
             'error' => 'Error al ejecutar la consulta: ' . mysqli_stmt_error($stmt),
             'data' => null
+        ];
+    }
+
+    $result = mysqli_stmt_get_result($stmt);
+
+    $datos = [];
+    if ($result) {
+        while ($fila = mysqli_fetch_assoc($result)) {
+            $datos[] = $fila;
+        }
+    }
+
+    mysqli_stmt_close($stmt);
+
+    return [
+        'success' => !empty($datos),
+        'data' => $datos,
+        'error' => null
+    ];
+}
+function getClienteTicket($post, $idEmisor, $conexion){
+    
+    $folioTicket = $post['folioTicket'] ?? null;
+    $idDocumento = $post['idDocumento'] ?? null;
+
+    $query = "SELECT 
+                    t.id_cliente,
+                    c.nombre_cliente as cliente
+                FROM emisores_tickets t
+                LEFT JOIN emisores_clientes c ON c.id_cliente = t.id_cliente AND c.id_emisor = t.id_emisor  
+                WHERE t.id_emisor = ? AND t.folio_ticket = ? AND t.id_documento = ? ;";
+    $stmt = mysqli_prepare($conexion, $query);
+
+    if (!$stmt) {
+        return [
+            'exists' => false,
+            'error' => 'Error al preparar la consulta: ' . mysqli_error($conexion),
+            'ticket' => null
+        ];
+    }
+
+    mysqli_stmt_bind_param(
+        $stmt,
+        "iii",
+        $idEmisor,
+        $folioTicket,
+        $idDocumento
+    );
+    //* Ejecutar la consulta de inserción
+    if (!mysqli_stmt_execute($stmt)) {
+        mysqli_stmt_close($stmt);
+        return [
+            'success' => false,
+            'error' => 'Error al ejecutar la consulta: ' . mysqli_stmt_error($stmt)
         ];
     }
 
