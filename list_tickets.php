@@ -40,6 +40,7 @@ if (!isset($_SESSION['nombre_usuario'])) {
         <link rel="icon" type="image/icon" href="favicon.ico" />
         <!-- Sweet Alerts-->
         <script src="js/sweetalert2@11.js"></script>
+        <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.dataTables.min.css">
 
         <link rel="stylesheet" href="./css/estilos_search.css">
     </head>
@@ -116,8 +117,14 @@ if (!isset($_SESSION['nombre_usuario'])) {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        
+
                                     </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <th colspan="4" class="text-right">Total cobrado:</th>
+                                            <th class="text-center text-sm" id="total_tickets"></th>
+                                        </tr>
+                                    </tfoot>
                                 </table>
                             </div>
                         </div>
@@ -128,12 +135,12 @@ if (!isset($_SESSION['nombre_usuario'])) {
 
             <!-- Modales -->
             <?php
-                include("componentes/modales/pagos/modales_tickets.php");
+            include("componentes/modales/pagos/modales_tickets.php");
             ?>
 
             <!-- Componentes -->
             <?php
-                include("componentes/estructura/pie.php");
+            include("componentes/estructura/pie.php");
             ?>
 
             <!-- Control Sidebar -->
@@ -193,6 +200,7 @@ if (!isset($_SESSION['nombre_usuario'])) {
         <script src="plugins/datatables-buttons/js/buttons.print.min.js"></script>
         <script src="plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
         <!-- Page specific script -->
+
 
     </body>
 

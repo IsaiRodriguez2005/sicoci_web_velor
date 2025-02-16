@@ -116,17 +116,23 @@ function traerTicketsTabla($idEmisor, $conexion)
     }
 
     $tickets = [];
+    $sumaTotales = 0.00;
+
     while ($row = mysqli_fetch_assoc($result)) {
         $url = construct_URL_ticket($row);
         $row['urlTicket'] = $url;
         $tickets[] = $row;
+        if($row['estatus'] == 4){
+            $sumaTotales += (float) $row['total'];
+        }
     }
 
     mysqli_stmt_close($stmt);
 
     return [
         'success' => !empty($tickets),
-        'tickets' => $tickets
+        'tickets' => $tickets,
+        'suma_totales' => $sumaTotales
     ];
 }
 

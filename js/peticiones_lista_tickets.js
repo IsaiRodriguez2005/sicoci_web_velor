@@ -77,6 +77,7 @@ function mensajeError(mensaje, title = null,) {
     });
 }
 
+
 //todo: [Cagar automaticamente]
 document.addEventListener('DOMContentLoaded', async () => {
     pantallaCarga('Cargando datos...');
@@ -136,9 +137,9 @@ function rellenar_tbody_seies_tickets(series) {
     inizializar_tabla('tabla_series_tickets');
 }
 
-function inizializar_tabla(idTabla) {
+function inizializar_tabla(idTabla, config = {}) {
     $('#' + idTabla).DataTable().destroy();
-    $('#' + idTabla).DataTable({
+    let defaultConfig = {
         paging: true,
         lengthChange: false,
         searching: true,
@@ -150,7 +151,10 @@ function inizializar_tabla(idTabla) {
         language: {
             url: "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
         }
-    });
+    };
+
+    let finalConfig = $.extend({}, defaultConfig, config);
+    $('#' + idTabla).DataTable(finalConfig);
 }
 
 async function seleccionar_serie(idSerie) {
@@ -202,8 +206,10 @@ async function get_url_ticket(serieTicket) {
 }
 //todo: [Tickets]
 async function cargar_tickets_tabla() {
-    const tickets = await cargar_tickets_hoy();
+    const { tickets, suma_totales } = await cargar_tickets_hoy();
     const tbody = document.querySelector('table tbody');
+    const totalTicketsElement = $('#total_tickets');
+
     let filas = '';
 
     if (!tickets) {
@@ -213,13 +219,12 @@ async function cargar_tickets_tabla() {
                 <td colspan="100%" class="text-center">No hay tickets</td>
             </tr>
         `;
+
         tbody.innerHTML = filas;
 
         Swal.close();
         return;
     }
-
-
 
     tickets.forEach(ticket => {
         let { fecha_emision, estatus, folio_ticket, id_documento, total, urlTicket, nombre_cliente, clave_serie } = ticket;
@@ -236,9 +241,48 @@ async function cargar_tickets_tabla() {
     });
     tbody.innerHTML = filas;
 
-    inizializar_tabla('table_tickets_list');
-    
+    totalTicketsElement.html(`$${Number(suma_totales).toFixed(2)}`);
+
+    const configTablaTickets = {
+        dom: 'Bfrtip',
+        buttons: [
+            {
+                extend: 'excelHtml5',
+                text: 'Exportar a Excel',
+                titleAttr: 'Exportar a Excel',
+                className: 'btn btn-success',
+                // footer: true,
+                customize: formatoFooterExel,
+            }
+        ]
+    }
+
+    inizializar_tabla('table_tickets_list', configTablaTickets);
+
 }
+
+const formatoFooterExel = (xlsx) => {
+    let sheet = xlsx.xl.worksheets['sheet1.xml'];
+    let totalSuma = $('#total_tickets').text().trim();
+
+    let $xml = $(sheet);
+    let lastRow = $xml.find('row').last();
+    let lastRowIndex = parseInt(lastRow.attr('r'));
+    let newRowIndex = lastRowIndex + 1;
+
+    let totalRow = `
+                    <row r="${newRowIndex}">
+                        <c t="inlineStr" r="A${newRowIndex}"><is><t></t></is></c>
+                        <c t="inlineStr" r="B${newRowIndex}"><is><t></t></is></c>
+                        <c t="inlineStr" r="C${newRowIndex}"><is><t></t></is></c>
+                        <c t="inlineStr" r="D${newRowIndex}"><is><t>Total cobrado:</t></is></c>
+                        <c t="inlineStr" r="E${newRowIndex}"><is><t>${totalSuma}</t></is></c>
+                    </row>
+                `;
+
+    $xml.find('sheetData').append(totalRow);
+}
+
 async function cargar_tickets_hoy() {
     try {
 
@@ -250,15 +294,17 @@ async function cargar_tickets_hoy() {
             },
             dataType: "json",
         });
-
-        const { success, tickets } = respuesta;
+        const { success, tickets, suma_totales } = respuesta;
 
         if (!success) {
             // mensajeError('Aún no hay tickets.', 'Vaya!')
             return;
         }
 
-        return tickets;
+        return {
+            'tickets': tickets,
+            'suma_totales': suma_totales
+        };
 
     } catch (e) {
         mensajeError('Ocurrió un error inesperado. Verifica tu conexión o inténtalo nuevamente.')
